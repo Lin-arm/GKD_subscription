@@ -60,6 +60,7 @@ export default defineGkdApp({
       desc: '点击[今天不要再显示]',
       rules: [
         {
+          key: 0,
           fastQuery: true,
           activityIds:
             'com.sec.android.app.samsungapps.SamsungAppsMainActivity',
