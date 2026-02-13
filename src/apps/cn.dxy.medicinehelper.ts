@@ -12,12 +12,14 @@ export default defineGkdApp({
           fastQuery: true,
           activityIds: 'cn.dxy.medicinehelper.activity.MainComposeActivity',
           matches: '[vid="blankForClose"] + [vid="iv_close"]',
+          snapshotUrls: 'https://i.gkd.li/i/25292995',
         },
       ],
     },
     {
       key: 2,
-      name: '分段广告',
+      name: '分段广告-自动领取每日叮当奖励',
+      desc: '点击带有叮当+x的去学习并返回',
       rules: [
         {
           key: 0,
@@ -29,13 +31,18 @@ export default defineGkdApp({
         {
           preKeys: [0],
           key: 1,
+          activityIds:
+            'cn.dxy.drugscomm.business.guide.simple.GuideSimpleComposeActivity',
+          matches: 'View[childCount=5][clickable=false][visibleToUser=true]',
           action: 'back',
+          snapshotUrls: 'https://i.gkd.li/i/25292779',
         },
       ],
     },
     {
       key: 3,
-      name: '局部广告',
+      name: '局部广告-自动展开详细信息',
+      desc: '药品说明书点击[展开]',
       rules: [
         {
           key: 0,
@@ -56,6 +63,7 @@ export default defineGkdApp({
     {
       key: 4,
       name: '功能类-药品说明书-表格全屏自动横屏观看',
+      desc: '全屏表格自动横屏观看',
       rules: [
         {
           key: 0,
