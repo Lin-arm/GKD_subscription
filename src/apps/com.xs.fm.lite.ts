@@ -71,8 +71,11 @@ export default defineGkdApp({
           fastQuery: true,
           activityIds: 'com.xs.fm.karaoke.impl.cover.KaraokeCoverActivity',
           matches:
-            '@ViewGroup[clickable=true] > TextView[text^="展开"][text$="回复"][visibleToUser=true]',
-          snapshotUrls: 'https://i.gkd.li/i/25246736',
+            '@ViewGroup[clickable=true] > TextView[text^="展开"][text$="回复"][text!*="展开更多回复"][visibleToUser=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/25246736',
+            'https://i.gkd.li/i/25282147',
+          ],
         },
       ],
     },
