@@ -188,6 +188,7 @@ export const blackListAppIDs: string[] = [
   'io.nekohasekai.sfa', // sing-box
   'com.binance.dev', // 币安
   'com.superproductivity.superproductivity', // Super Productivity
+  'org.isoron.uhabits', // Loop Habits 开屏广告误触 https://i.gkd.li/i/25312905
 
   'com.canghai.haoka',
   'com.xy.td',
