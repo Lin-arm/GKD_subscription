@@ -135,6 +135,7 @@ export default defineGkdApp({
             'https://i.gkd.li/i/13522625',
             'https://i.gkd.li/i/13522577',
             'https://i.gkd.li/i/22356438',
+            'https://i.gkd.li/i/25315046', //zh_TW
           ],
         },
       ],
@@ -233,6 +234,7 @@ export default defineGkdApp({
           snapshotUrls: [
             'https://i.gkd.li/i/18134828',
             'https://i.gkd.li/i/21177180',
+            'https://i.gkd.li/i/25315061', //zh_TW
           ],
           excludeSnapshotUrls: 'https://i.gkd.li/i/12567698', // 金币动画的快照
         },
@@ -247,6 +249,7 @@ export default defineGkdApp({
             'https://i.gkd.li/i/18135031',
             'https://i.gkd.li/i/23825631',
             'https://i.gkd.li/i/24414957',
+            'https://i.gkd.li/i/25315062', //zh_TW
           ],
         },
       ],
