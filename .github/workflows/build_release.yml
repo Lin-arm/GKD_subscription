@@ -75,47 +75,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
           tags: true
-      
-#      - name: Generate Contributors HTML
-#        id: contributors_html
-#        run: |
-#          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
-#          
-#          # 创建贡献者文件
-#          echo "## 🥇 贡献者" > ./dist/CONTRIBUTORS.md
-#          echo "" >> ./dist/CONTRIBUTORS.md
-#          echo "感谢本期开发人员: " >> ./dist/CONTRIBUTORS.md
-#          echo "" >> ./dist/CONTRIBUTORS.md
-#          
-#          # 开始HTML表格
-#          echo "<table>" >> ./dist/CONTRIBUTORS.md
-#          echo "  <tr>" >> ./dist/CONTRIBUTORS.md
-#          
-#          # 获取贡献者列表
-#          if [ -z "$PREV_TAG" ]; then
-#            # 第一个版本：所有贡献者
-#            CONTRIBUTORS=$(git log --format="%aN" | sort -u | grep -v "github-actions\|GitHub" | head -6)
-#          else
-#            # 非第一个版本：两个版本之间的贡献者
-#            CONTRIBUTORS=$(git log --format="%aN" $PREV_TAG..HEAD | sort -u | grep -v "github-actions\|GitHub")
-#          fi
-#          
-#          # 为每个贡献者生成头像单元格
-#          for AUTHOR in $CONTRIBUTORS; do
-#            echo "    <td align='center'>" >> ./dist/CONTRIBUTORS.md
-#            echo "      <a href='https://github.com/$AUTHOR'>" >> ./dist/CONTRIBUTORS.md
-#            echo "        <img src='https://github.com/$AUTHOR.png?size=80' width='60' height='60' style='border-radius:50%; margin-bottom:8px'/><br />" >> ./dist/CONTRIBUTORS.md
-#            echo "        <sub><b>$AUTHOR</b></sub>" >> ./dist/CONTRIBUTORS.md
-#            echo "      </a>" >> ./dist/CONTRIBUTORS.md
-#            echo "    </td>" >> ./dist/CONTRIBUTORS.md
-#          done
-#          
-#          echo "  </tr>" >> ./dist/CONTRIBUTORS.md
-#          echo "</table>" >> ./dist/CONTRIBUTORS.md
-#          echo "" >> ./dist/CONTRIBUTORS.md
-#          
-#          # 合并文件
-#          cat ./dist/CHANGELOG.md ./dist/CONTRIBUTORS.md > ./dist/RELEASE_WITH_CONTRIBUTORS.md
 
       - name: Create Release
         id: create_release
