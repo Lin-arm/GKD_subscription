@@ -13,9 +13,9 @@ export default defineGkdApp({
         {
           key: 0,
           activityIds: '.feature.detail.NewShortVideoDetailActivity',
-          matches: 
+          matches:
             '[vid="pause_ad_close_img" || vid="iv_ad" || vid="v_banner_bottom_right"][clickable=true][visibleToUser=true]',
-          exampleUrls: 
+          exampleUrls:
             'https://m.gkd.li/57941037/cd25f4a5-64db-4471-8eea-3d84a34ffb72',
           snapshotUrls: [
             'https://i.gkd.li/i/16044569',
