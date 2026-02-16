@@ -675,11 +675,13 @@ export default defineGkdApp({
         {
           fastQuery: true,
           position: {
-            "left": "width * 0.1",
-            "bottom": "height * 0.1"
+            left: 'width * 0.1',
+            bottom: 'height * 0.1',
           },
-          activityIds: 'com.bilibili.ship.theseus.detail.UnitedBizDetailsActivity',
-          matches: '[vid="comment_message"][clickable=true][visibleToUser=true][text$="\\n展开"]',
+          activityIds:
+            'com.bilibili.ship.theseus.detail.UnitedBizDetailsActivity',
+          matches:
+            '[vid="comment_message"][clickable=true][visibleToUser=true][text$="\\n展开"]',
           snapshotUrls: 'https://i.gkd.li/i/25314489',
         },
       ],
