@@ -667,5 +667,22 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 26,
+      name: '功能类-折叠评论自动展开',
+      desc: '字数太多的评论自动点击展开',
+      rules: [
+        {
+          fastQuery: true,
+          position: {
+            "left": "width * 0.1",
+            "bottom": "height * 0.1"
+          },
+          activityIds: 'com.bilibili.ship.theseus.detail.UnitedBizDetailsActivity',
+          matches: '[vid="comment_message"][clickable=true][visibleToUser=true][text$="\\n展开"]',
+          snapshotUrls: 'https://i.gkd.li/i/25314489',
+        },
+      ],
+    },
   ],
 });
