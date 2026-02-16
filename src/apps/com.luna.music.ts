@@ -101,6 +101,7 @@ export default defineGkdApp({
     {
       key: 8,
       name: '功能类-全自动看广告获取听歌时长',
+      desc: '广告一直看下去直到手动干预退出,适合需要领多天vip的用户⚠️不要同时开启下面单日规则',
       rules: [
         {
           key: 0,
@@ -211,6 +212,70 @@ export default defineGkdApp({
             '@[desc="关闭"][clickable=true] <n RelativeLayout + FrameLayout >4 [text="更多直播"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/148466b5-9769-4b79-b648-f2cf7719e3e7',
           snapshotUrls: 'https://i.gkd.li/i/22922565',
+        },
+      ],
+    },
+    {
+      key: 13,
+      name: '功能类-全自动看广告获取听歌时长(领到1天VIP收手)',
+      desc: '领到今天vip收手退出,适合只想领一天vip的用户⚠️不要同时开启上面多日规则',
+      rules: [
+        {
+          key: 0,
+          fastQuery: true,
+          actionDelay: 12000,
+          position: {
+            left: 'width * 7.45',
+            top: 'height * 0.5',
+          },
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          matches:
+            '@FlattenUIText[text="广告"] + [text$="声音"] + [text="反馈"][visibleToUser=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/24521423',
+            'https://i.gkd.li/i/24521440',
+          ],
+        },
+        {
+          key: 1,
+          activityIds:
+            'com.bytedance.sdk.openadsdk.core.component.reward.activity.TTRewardVideoActivity',
+          matches: '[visibleToUser=true][text="奖励已领取"]',
+          snapshotUrls: 'https://i.gkd.li/i/24522627',
+        },
+        {
+          preKeys: [0, 1],
+          fastQuery: true,
+          actionDelay: 500,
+          activityIds: [
+            'com.bytedance.sdk.openadsdk.core.component.reward.activity.TTRewardVideoActivity',
+            'com.bytedance.sdk.openadsdk.stub.activity.Stub_Standard_Portrait_Activity',
+          ],
+          matches:
+            '[text="领取奖励" || text^="再看一个" || text="继续观看"][visibleToUser=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/15140816',
+            'https://i.gkd.li/i/24521446',
+          ],
+        },
+        {
+          key: 2, //今天vip领到了，收手
+          fastQuery: true,
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          matches:
+            '@[text="坚持退出"][visibleToUser=true][childCount=0] -(6,8) [text="明日免费听"][visibleToUser=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/24521516',
+            'https://i.gkd.li/i/24521416',
+          ],
+        },
+        {
+          key: 99,
+          fastQuery: true,
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          matches:
+            '@[clickable=true][width<120 && height<120] + LinearLayout > [text="当前无新视频"][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/24522244',
         },
       ],
     },
