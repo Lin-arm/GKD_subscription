@@ -447,9 +447,12 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.detail.ui.DetailActivity',
-          matches:
+          matches: 
             '[text!="展开更多"][text^="展开"][text$="条回复"][visibleToUser=true][childCount=0]',
-          snapshotUrls: 'https://i.gkd.li/i/25356027',
+          snapshotUrls: [
+            'https://i.gkd.li/i/25356027',
+            'https://i.gkd.li/i/25356355',
+          ],
         },
       ],
     },
