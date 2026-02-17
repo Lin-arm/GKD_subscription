@@ -28,3 +28,5 @@
 [key 值规范](docs/key-usage.md)
 
 [优先选择 clickable=true 的节点](docs/preferred-clickable-node.md)
+
+快速查询优化 // TODO
