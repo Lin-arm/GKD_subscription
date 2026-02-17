@@ -38,7 +38,7 @@ export default defineGkdApp({
         {
           key: 2,
           matches:
-            '[vid="tweet_curation_action"] - [vid="tweet_ad_badge_top_right"][visibleToUser=true]',
+            '@[vid="tweet_curation_action"] - [vid="tweet_ad_badge_top_right"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/705dd827-ff04-4233-af38-60d92439e1f3',
           snapshotUrls: 'https://i.gkd.li/i/24359526',
         },
