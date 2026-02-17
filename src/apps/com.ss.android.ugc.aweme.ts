@@ -446,9 +446,10 @@ export default defineGkdApp({
       desc: '只展开一级评论，不点击展示更多',
       rules: [
         {
+          fastQuery: true,
           activityIds: '.detail.ui.DetailActivity',
           matches:
-            '[text!="展开更多"][text^="展开"][text$="条回复"][visibleToUser=true][childCount=0]',
+            '[text^="展开"][text$="条回复"][visibleToUser=true][childCount=0]',
           snapshotUrls: [
             'https://i.gkd.li/i/25356027',
             'https://i.gkd.li/i/25356355',
