@@ -22,8 +22,7 @@ export default defineGkdApp({
           key: 1,
           preKeys: [0],
           fastQuery: true,
-          matches:
-            '@[clickable=true] >2 [text="Hide ad" || text="隐藏广告"]',
+          matches: '@[clickable=true] >2 [text="Hide ad" || text="隐藏广告"]',
           snapshotUrls: ['https://i.gkd.li/i/25366119'],
         },
       ],
