@@ -330,13 +330,14 @@ export default defineGkdApp({
           activityIds: '.main.MainActivity',
           matches: [
             '[desc^="已选中"] > [text="推荐"][visibleToUser=true]', // 其他页面可能会误触回到推荐页
-            '([text$="广告"][vid="desc"][visibleToUser=true]) || (ImageView[childCount=0] + [text="应用" || text="购物" || text="游戏"][visibleToUser=true])',
+            '([text$="广告"][vid="desc"][visibleToUser=true]) || (ImageView[childCount=0] + [text="应用" || text="购物" || text="游戏" || text="咨询"][visibleToUser=true])',
           ],
           snapshotUrls: [
             'https://i.gkd.li/i/21142063',
             'https://i.gkd.li/i/21142589',
             'https://i.gkd.li/i/21142249',
             'https://i.gkd.li/i/21142871',
+            'https://i.gkd.li/i/25355868',
           ],
         },
       ],
