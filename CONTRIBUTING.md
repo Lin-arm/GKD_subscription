@@ -21,6 +21,8 @@
 > - 选择器语法介绍
 > - GKD 文件的字段介绍
 
+[@adproqwq 编写的教程（更加偏向理论和概念）](https://blog.adproqwq.top/categories?category=%E6%95%99%E7%A8%8B/GKD)
+
 [官方使用文档](https://gkd.li/guide/what-is-gkd)
 
 [API 文档](https://gkd.li/api/)
