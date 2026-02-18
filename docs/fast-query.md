@@ -1,0 +1,86 @@
+## 快速查询优化
+
+> [!NOTE]
+> 这部分内容可能不适合新手学习，但是很重要。
+> 
+> 在学会此内容前请务必将你的代码通过 PR 方式提交，维护者可能会对你的代码进行优化。
+
+首先我们需要理解：**选择器是从右往左查询的**。[^1]
+
+### 全局快速查询
+
+在快照中，有一部分节点可以直接通过 `id` / `vid` / `name` 定位，不需要遍历就能获取。[^2] 这部分节点在树形图中是加粗显示的。
+
+![可以快速查询的节点在树形图中加粗显示](images/fast-queryable-bold-style.png)
+
+选中这些节点，查看属性面板，可以快速查询的属性在名称右侧有一个勾。
+
+![id和vid属性可以快速查询的示例](images/attribute-id-vid-fast-queryable.png)
+
+![text属性可以快速查询的示例](images/attribute-text-fast-queryable.png)
+
+由于选择器是从右往左查询的，所以满足快速查询的选择器 `末尾属性选择器` 的 `第一个属性选择表达式` 应该符合下面的结构之一：[^2]
+
+```ts
+[id='abc']
+[vid='abc']
+[text='abc']
+[text^='abc']
+[text*='abc']
+[text$='abc']
+```
+
+或者使用 `||` 将它们连接形成的逻辑表达式也符合条件，即如下格式：
+
+```ts
+[id='abc' || id='abc2']
+[id='abc' || vid='abc' || text='abc' || text^='abc' || text*='abc' || text$='abc']
+```
+
+下面给出实际示例：✅ 表示符合格式，❎ 表示不符合格式
+
+```ts
+A > B + C[id='x'][childCount=2] ✅
+A > B + C[childCount=2][id='x'] ❎
+A > B + C[id='x' || text='manbaout' || text*='ikun'][childCount=2] ✅
+A > B + C[childCount=2][id='x' || text='manbaout' || text*='ikun'] ❎
+```
+
+最后，还需要对规则（推荐）或规则组设置 `fastQuery: true` 才会启用快速查询。不符合快速查询格式的规则设置此属性也不会影响查询速度。
+
+如果节点无法快速查询，即使选择器符合快速查询格式，也不要设置 `fastQuery: true`，会查询不到。
+
+#### 实践示例
+
+对于快照 https://i.gkd.li/i/14033859
+
+我们需要点击的节点如图所示：
+
+![需要点击的节点](images/fast-query-example-target-node.png)
+
+在学习快速查询之前，我们可能会写出这样的选择器：
+
+```ts
+@[text="关闭"][clickable=true] + [text="活动"]
+```
+
+注意到该节点附近有一个可以快速查询的节点，如图所示：
+
+![中转节点](images/fast-query-example-transit-node.png)
+
+可以使用这个节点进行中转查询。
+
+优化后的选择器如下：
+
+```ts
+@[text="关闭"][clickable=true] + [text="活动"] <<n [vid="browser_fragment_layout"]
+```
+
+### 避免快速查询
+
+### 局部快速查询
+
+
+[^1]: https://gkd.li/guide/selector#match-order
+
+[^2]: https://gkd.li/guide/optimize#fast-query
