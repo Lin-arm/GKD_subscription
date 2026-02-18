@@ -25,7 +25,7 @@
 
 [官方使用文档](https://gkd.li/guide/what-is-gkd)
 
-[API 文档](https://gkd.li/api/)
+[官方 API 文档](https://gkd.li/api/)
 
 [一些比较通用的规则以及适用场景](docs/Selectors.md)
 
