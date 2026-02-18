@@ -2,7 +2,7 @@
 
 很高兴能有更多人参与到本项目的开发中
 
-[快速入门](docs/quick-start.md)
+[快速入门](./docs/quick-start.md)
 
 > 目录
 > 
@@ -27,14 +27,14 @@
 
 [官方 API 文档](https://gkd.li/api/)
 
-[一些比较通用的规则以及适用场景](docs/Selectors.md)
+[一些比较通用的规则以及适用场景](./docs/Selectors.md)
 
 ## 一些规范和技巧
 
-[key 值规范](docs/key-usage.md)
+[key 值规范](./docs/key-usage.md)
 
-[优先选择 clickable=true 的节点](docs/preferred-clickable-node.md)
+[优先选择 clickable=true 的节点](./docs/preferred-clickable-node.md)
 
-[复选框的勾选状态](docs/checkbox-state.md)
+[复选框的勾选状态](./docs/checkbox-state.md)
 
-[快速查询优化](docs/fast-query.md)
+[快速查询优化](./docs/fast-query.md)
