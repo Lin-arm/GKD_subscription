@@ -61,7 +61,7 @@ A > B + C[childCount=2][id='x' || text='manbaout' || text*='ikun'] ❎
 在学习快速查询之前，我们可能会写出这样的选择器：
 
 ```ts
-@[text="关闭"][clickable=true] + [text="活动"]
+[text="活动"] - [text="关闭"][clickable=true]
 ```
 
 注意到该节点附近有一个可以快速查询的节点，如图所示：
@@ -70,10 +70,21 @@ A > B + C[childCount=2][id='x' || text='manbaout' || text*='ikun'] ❎
 
 可以使用这个节点进行中转查询。
 
-优化后的选择器如下：
+第一次优化后的选择器如下：
 
 ```ts
-@[text="关闭"][clickable=true] + [text="活动"] <<n [vid="browser_fragment_layout"]
+[text="活动"] - @[text="关闭"][clickable=true] <<n [vid="browser_fragment_layout"]
+```
+
+虽然 `<<n` 用起来适配性很广，但点进 **选择器路径视图** 会发现，从节点 `[vid="browser_fragment_layout"]` 找到目标节点 `@[text="关闭"][clickable=true]` 需要遍历 304 次，这种情况下不建议使用 `<<n` 。
+
+<!-- 后续修改请换成白色的截图 -->
+![选择器路径视图](images/fast-query-4.png)
+
+这时我们应该换一种写法，先选中节点树里的 `[text="关闭"]` 节点，再点击属性面板的左下角 **自动生成选择器** 复制，放进选择器查询那里，稍微改一下就得到第二次优化后的选择器：
+
+```ts
+[text="活动"] - @[text="关闭"][clickable=true] <<3 View <2 View <2 WebView <<3 [vid="browser_fragment_layout"]
 ```
 
 ### 局部快速查询
