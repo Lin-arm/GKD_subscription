@@ -113,7 +113,7 @@ A + B[id='x'] <<n C[id='y']
 A + B[childCount!=null][id='x'] <<n C[id='y']
 ```
 
-表达式 `childCount!=null` 始终为 true，但是可以使规则不满足快速查询格式。
+表达式 `childCount!=null` 始终为 true，但是 `B[childCount!=null][id='x'] <<n` 不满足快速查询格式，不会触发局部快速查询。
 
 [^1]: https://gkd.li/guide/selector#match-order
 
