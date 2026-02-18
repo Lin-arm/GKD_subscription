@@ -33,6 +33,6 @@
 
 [优先选择 clickable=true 的节点](docs/preferred-clickable-node.md)
 
-[巧用 checked 做限制](docs/node-checked.md)
+[复选框的勾选状态](docs/checkbox-state.md)
 
 快速查询优化 // TODO
