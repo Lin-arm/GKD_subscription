@@ -21,26 +21,31 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 
 有 2 种常用的打快照方式：
 
-- 悬浮窗服务: 在 APP-高级设置 中开启悬浮窗服务, 此时界面会出现一个截屏按钮, 点击这个按钮即可打快照
-- 网页端审查工具: 打开网页端审查工具-连接设备-点击快照按钮即可打快照, 网页端审查工具的使用在下面说明
+- 悬浮窗服务
+  - 在 **APP-高级设置-快照按钮** 点击弹窗授权开启**悬浮窗服务权限**后, 此时界面会出现一个**快照按钮**![00_Snapshot-button](./images/quick-start/00_Snapshot-button.webp), 点击这个按钮即可**截取目标应用快照**
+  - 当然你也可以开启**音量快照**选项使用音量键方式来截取快照
+- Web审查工具
+  - 在**高级设置**里打开HTTP服务后，打开网页端审查工具-连接设备-点击快照按钮即可打快照, 网页端审查工具的使用在下面说明
+
+<details close>
+  <summary>Web端示例</summary>
+<img src="./images/quick-start/05_Snapshot-Web.webp" alt="image" style="zoom:67%;" />
+</details>
 
 我们以 WPS 为例子, WPS 首页文档列表有一个广告, 我们先给 WPS 打一个快照, 然后使用 网页审查工具 编写测试规则订阅 关闭这个广告
 
 打开 WPS, 然后使用上面 2 种方式之一打快照, 然后打开设置-高级设置-快照记录, 可以看到已经有了一个快照记录
 
 <details close>
-  <summary>截图: 快照记录</summary>
-
-![image](https://github.com/gkd-kit/subscription/assets/38517192/ea86d3eb-00c4-44aa-b4a8-a42c08052404)
-
+  <summary>快照记录截取示例</summary>
+<img src="./images/quick-start/01_Snapshot-acquisition.webp" alt="image" style="zoom:67%;" />
 </details>
 
-如果你没有电脑, 可以点击快照-分享，此时会分享一个 zip 文件, 截图和节点信息全在里面, 可以分享到某个云盘或者保存到本地, 然后在 [GKD_subscription/issues/new](https://github.com/Lin-arm/GKD_subscription/issues) 上传这个 zip 或者填写分享链接, 然后提出问题, 项目维护者会帮助你处理这个快照
+如果你没有电脑, 可以点击快照-分享，此时会分享一个 zip 文件, 截图和节点信息全在里面, 可以分享到某个云盘或者保存到本地下载（路径: /storage/emulated/0/Download/）, 然后在 [GKD_subscription/issues/new](https://github.com/Lin-arm/GKD_subscription/issues) 上传这个 zip 或者填写分享链接, 然后提出问题, 项目维护者会帮助你处理这个快照
 
 <details close>
-  <summary>截图: 分享快照</summary>
-
-![image](https://github.com/gkd-kit/subscription/assets/38517192/8f37ce6b-4027-4679-988f-27730f60c971)
+  <summary>分享快照示例</summary>
+<img src="./images/quick-start/02_Share.webp" alt="02_Share" style="zoom:50%;" /><img src="./images/quick-start/03_Save-download.webp" alt="image" style="zoom:50%;" />
 
 </details>
 
@@ -51,14 +56,18 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 打开 APP-设置-高级设置-HTTP服务, 此时 HTTP 服务底部出现若干条地址，一般情况下，我们只需要关注类似 `http://192.168.1.3:8888` 这样的地址即可。
 
 > [!NOTE]
->
+> 
 > 地址不一定总是 `192.168.1.3` 这种形式，具体情况取决于局域网内的网关设置，如果当前局域网的网关地址被设置为 `192.168.31.1`
 > 那么你可能会看到类似 `http://192.168.31.3:8888` 的地址，请自行举一反三。
+
+> [!TIP]
+> 
+> 你可以在**APP-高级设置-HTTP服务**下面看到你的IP访问地址
 
 <details close>
   <summary>示例: HTTP服务</summary>
 
-![image](https://github.com/gkd-kit/subscription/assets/38517192/27aa1a3a-4096-4a0e-97ca-27a709645bba)
+![image](./images/quick-start/06_HTTP-server.webp)
 
 </details>
 
@@ -66,9 +75,9 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 
 浏览器打开 <https://i.gkd.li/>, 然后在这个网站启用油猴脚本的注入功能, 然后点击右上角 `连接设备` 图标去连接设备
 
-在设置页面左上角输入上述地址 `http://192.168.1.3:8888`, 然后点击 `刷新连接`, 即可成功连接设备
+在设置页面左上角输入上述地址 `http://192.168.2.3:8888`, 然后点击 `刷新连接`, 即可成功连接设备
 
-![image](https://github.com/gkd-kit/subscription/assets/38517192/d3a956ca-f54b-4d9d-a2ae-3792b5a18aa4)
+![image](./images/quick-start/08_Connect-device.webp)
 
 可以看到第一个项目就是我们刚刚在 WPS 打的快照, 点击这个项目右侧的 `查看` 按钮
 
@@ -92,7 +101,7 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 
 这里点击右侧的 `分享`-`复制链接-快照` 才能获取快照链接（以/i/开头）
 
-![image](https://github.com/gkd-kit/subscription/assets/38517192/3aea04fd-da91-4f43-a79e-e40fdad4a5d4)
+![image](./images/quick-start/09_Selector- writ.webp)
 
 很明显这个选择器是有效的, 那么我们去真机测试这个选择器到底行 8 行
 
@@ -152,9 +161,9 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 }
 ```
 
-此时回到APP首页-订阅, 会发现多了一条订阅
+此时回到APP首页-订阅, 会发现多了一条**内存订阅**
 
-![image](https://github.com/gkd-kit/subscription/assets/38517192/89413281-4ad3-4c9c-aee5-97eb9da4bcd0)
+<img src="./images/quick-start/04_MumSub.webp" alt="image" style="zoom:50%;" />
 
 接下来把 WPS 清除全部数据后重新打开, 可以看到规则已经生效, 广告已经被自动关闭
 
@@ -164,6 +173,9 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 >
 > 当你关闭 HTTP 服务器时, 默认情况下，这个内存订阅也会被清除，所以，请不要将内存订阅当作本地订阅使用。
 > 如果你出于某种目的确实需要保留内存订阅中的内容，请在 APP-设置-高级设置中，关闭 `清除订阅` 功能。
+>
+
+![内存订阅位置](./images/quick-start/10_Mum-sub2.webp)
 
 ## 提交代码
 
@@ -218,14 +230,42 @@ export default defineGkdApp({
 });
 ```
 
-注意每个规则一定要添加快照链接, 否则后期维护根本不知道这个规则到底点的是啥
+> [!TIP]
+> 
+> 可以使用 [GKD网页审查工具增强脚本](https://github.com/adproqwq/MakeGKDInspectBetter)快速高效复制出TS代码
+
+<details close>
+  <summary>示例: 快速复制规则示例</summary>
+
+![video](./images/quick-start/12_Fast-copy-rules.mp4)
+
+</details>
+
+> [!NOTE]
+> 
+> 每个规则一定要添加**快照链接**, 否则**后期维护根本不知道**这个规则到底点的是啥
+
+<details close>
+  <summary>示例: 获取快照链接示例</summary>
+
+![video](./images/quick-start/11_URL-copy.mp4)
+
+</details>
 
 然后运行校验命令 `npm run check`, 它会检测你的规则是否书写正确, 也会检测每个选择器语法是否正确
+
+- 检查通过
+
+![image](./images/quick-start/13_Check-pass.webp)
+
+- 检查不通过**红色波浪线指明具体错误**（示例中第19行代码''键''不对 少了个s）
+
+![image](./images/quick-start/14_Check-fall.webp)
 
 然后提交这个文件发起 pr 即可
 
 > [!NOTE]
->
+> 
 > 通常不建议直接在 `main` 分支上修改内容进行提交，你应该针对每个要提交规则的 APP 单独创建新的分支，然后在每个 APP 的分支上分别发起各自的 pr
 > 也就是说，如果你想提交 N 个 APP, 你应该分别创建 N 个分支，发起 N 个 pr
 
