@@ -79,7 +79,13 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 
 安装油猴脚本 <https://github.com/gkd-kit/network-extension>, 因为浏览器不允许 https 去连接 http 域名, 可以通过油猴脚本绕过这个限制
 
-浏览器打开 <https://i.gkd.li/>, 然后在这个网站启用油猴脚本的注入功能, 然后点击右上角 `连接设备` 图标去连接设备
+浏览器打开 https://i.gkd.li/ , 这个页面会显示当前浏览器中存储的所有快照。
+
+在这个网站启用油猴脚本的注入功能
+
+![注入油猴脚本](images/quick-start/14_Injecting-Tampermonkey-script.png)
+
+点击右上角 `连接设备` 图标去连接设备 (或者直接访问 https://i.gkd.li/device)
 
 在设置页面左上角输入上述地址 `http://192.168.2.3:8888`, 然后点击 `刷新连接`, 即可成功连接设备
 
