@@ -237,7 +237,9 @@ export default defineGkdApp({
 <details close>
   <summary>示例: 快速复制规则示例</summary>
 
-![video](./images/quick-start/12_Fast-copy-rules.mp4)
+![快速复制规则示例](./images/quick-start/12_Fast-copy-rules.mp4) # 兼容本地正常显示
+
+https://github.com/user-attachments/assets/4778654c-aa82-4ac7-8aa1-bd3a37040d3f
 
 </details>
 
@@ -248,7 +250,9 @@ export default defineGkdApp({
 <details close>
   <summary>示例: 获取快照链接示例</summary>
 
-![video](./images/quick-start/11_URL-copy.mp4)
+![获取快照链接示例](./images/quick-start/11_URL-copy.mp4) # 兼容本地正常显示
+
+https://github.com/user-attachments/assets/2e90caf2-960c-4f58-898c-b15461decc5b
 
 </details>
 
@@ -256,7 +260,7 @@ export default defineGkdApp({
 
 - 检查通过
 
-![image](./images/quick-start/13_Check-pass.webp)
+![image](./images/quick-start/13_Check-pass.webp) 
 
 - 检查不通过**红色波浪线指明具体错误**（示例中第19行代码''键''不对 少了个s）
 
