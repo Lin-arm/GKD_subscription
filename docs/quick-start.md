@@ -22,14 +22,14 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 有 2 种常用的打快照方式：
 
 - 悬浮窗服务
-  - 在 **APP-高级设置-快照按钮** 点击弹窗授权开启**悬浮窗服务权限**后, 此时界面会出现一个**快照按钮**![00_Snapshot-button](./images/quick-start/00_Snapshot-button.webp), 点击这个按钮即可**截取目标应用快照**
+  - 在 **APP-高级设置-快照按钮** 点击弹窗授权开启**悬浮窗服务权限**后, 此时界面会出现一个**快照按钮**![00_Snapshot-button](./images/quick-start/00_Get-snapshot-by-float-button.webp), 点击这个按钮即可**截取目标应用快照**
   - 当然你也可以开启**音量快照**选项使用音量键方式来截取快照
 - Web审查工具
   - 通过浏览器中连接手机上的 GKD 抓取快照, 具体使用方法在下面说明
 
 <details close>
   <summary>Web端示例</summary>
-<img src="./images/quick-start/05_Snapshot-Web.webp" alt="image" style="zoom:67%;" />
+<img src="./images/quick-start/05_Get-snapshot-by-website.webp" alt="image" style="zoom:67%;" />
 </details>
 
 我们以 WPS 为例子, WPS 首页文档列表有一个广告, 我们先给 WPS 打一个快照, 然后使用 网页审查工具 编写测试规则订阅 关闭这个广告
@@ -38,14 +38,17 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 
 <details close>
   <summary>快照记录截取示例</summary>
-<img src="./images/quick-start/01_Snapshot-acquisition.webp" alt="image" style="zoom:67%;" />
+<img src="./images/quick-start/01_Get-snapshot-by-volume.webp" alt="Get-snapshot-by-volume" style="zoom:67%;" />
 </details>
 
 如果你没有电脑, 可以点击快照-分享，此时会分享一个 zip 文件, 截图和节点信息全在里面, 可以分享到某个云盘或者保存到本地下载（路径: /storage/emulated/0/Download/）, 然后在 [GKD_subscription/issues/new](https://github.com/Lin-arm/GKD_subscription/issues) 上传这个 zip 或者填写分享链接, 然后提出问题, 项目维护者会帮助你处理这个快照
 
 <details close>
   <summary>分享快照示例</summary>
-<img src="./images/quick-start/02_Share.webp" alt="02_Share" style="zoom:50%;" /><img src="./images/quick-start/03_Save-download.webp" alt="image" style="zoom:50%;" />
+
+<img src="./images/quick-start/02_Share-snapshot.webp" alt="Share-snapshot" style="zoom:50%;" />
+
+<img src="./images/quick-start/03_Save-snapshot-to-download.webp" alt="image" style="zoom:50%;" />
 
 </details>
 
@@ -70,7 +73,7 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 <details close>
   <summary>示例: HTTP服务</summary>
 
-![image](./images/quick-start/06_HTTP-server.webp)
+![image](./images/quick-start/06_HTTP-service.webp)
 
 </details>
 
@@ -80,7 +83,7 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 
 在设置页面左上角输入上述地址 `http://192.168.2.3:8888`, 然后点击 `刷新连接`, 即可成功连接设备
 
-![image](./images/quick-start/08_Connect-device.webp)
+![image](./images/quick-start/07_Connect-to-device.webp)
 
 可以看到第一个项目就是我们刚刚在 WPS 打的快照, 点击这个项目右侧的 `查看` 按钮
 
@@ -104,7 +107,7 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 
 这里点击右侧的 `分享`-`复制链接-快照` 才能获取快照链接（以/i/开头）
 
-![image](./images/quick-start/09_Selector- writ.webp)
+![image](./images/quick-start/08_Write-a-selector.webp)
 
 很明显这个选择器是有效的, 那么我们去真机测试这个选择器到底行 8 行
 
@@ -166,7 +169,7 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 
 此时回到APP首页-订阅, 会发现多了一条**内存订阅**
 
-![image](./images/quick-start/04_MumSub.webp)
+![image](./images/quick-start/04_Memory-subscribe.webp)
 
 接下来把 WPS 清除全部数据后重新打开, 可以看到规则已经生效, 广告已经被自动关闭
 
@@ -176,9 +179,8 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 >
 > 当你关闭 HTTP 服务器时, 默认情况下，这个内存订阅也会被清除，所以，请不要将内存订阅当作本地订阅使用。
 > 如果你出于某种目的确实需要保留内存订阅中的内容，请在 APP-设置-高级设置中，关闭 `清除订阅` 功能。
->
-
-![内存订阅位置](./images/quick-start/10_Mum-sub2.webp)
+> 
+> ![内存订阅位置](./images/quick-start/09_Keep-memory-subscribe.webp)
 
 ## 提交代码
 
@@ -240,7 +242,7 @@ export default defineGkdApp({
 <details close>
   <summary>示例: 快速复制规则示例</summary>
 
-![快速复制规则示例](./images/quick-start/12_Fast-copy-rules.mp4) # 兼容本地正常显示
+![快速复制规则示例](./images/quick-start/11_Fast-copy-rules.mp4) # 兼容本地正常显示
 
 https://github.com/user-attachments/assets/4778654c-aa82-4ac7-8aa1-bd3a37040d3f
 
@@ -253,7 +255,7 @@ https://github.com/user-attachments/assets/4778654c-aa82-4ac7-8aa1-bd3a37040d3f
 <details close>
   <summary>示例: 获取快照链接示例</summary>
 
-![获取快照链接示例](./images/quick-start/11_URL-copy.mp4) # 兼容本地正常显示
+![获取快照链接示例](./images/quick-start/10_Copy-URL.mp4) # 兼容本地正常显示
 
 https://github.com/user-attachments/assets/2e90caf2-960c-4f58-898c-b15461decc5b
 
@@ -263,11 +265,11 @@ https://github.com/user-attachments/assets/2e90caf2-960c-4f58-898c-b15461decc5b
 
 - 检查通过
 
-![image](./images/quick-start/13_Check-pass.webp) 
+![image](./images/quick-start/12_Check-pass.webp) 
 
 - 检查不通过**红色波浪线指明具体错误**（示例中第19行代码''键''不对 少了个s）
 
-![image](./images/quick-start/14_Check-fall.webp)
+![image](./images/quick-start/13_Check-fail.webp)
 
 然后提交这个文件发起 pr 即可
 
