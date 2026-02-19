@@ -77,6 +77,10 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 
 在设置页面左上角输入上述地址 `http://192.168.2.3:8888`, 然后点击 `刷新连接`, 即可成功连接设备
 
+> [!NOTE]
+>
+> 你不能图方便直接输入IP地址，必须前面加`http://`![07_Web-wornIP](./images/quick-start/07_Web-wornIP.webp)否则**无法连接**
+
 ![image](./images/quick-start/08_Connect-device.webp)
 
 可以看到第一个项目就是我们刚刚在 WPS 打的快照, 点击这个项目右侧的 `查看` 按钮
@@ -163,7 +167,7 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 
 此时回到APP首页-订阅, 会发现多了一条**内存订阅**
 
-<img src="./images/quick-start/04_MumSub.webp" alt="image" style="zoom:50%;" />
+![image](./images/quick-start/04_MumSub.webp)
 
 接下来把 WPS 清除全部数据后重新打开, 可以看到规则已经生效, 广告已经被自动关闭
 
