@@ -254,7 +254,7 @@ https://github.com/user-attachments/assets/4778654c-aa82-4ac7-8aa1-bd3a37040d3f
 
 </details>
 
-> [!NOTE]
+> [!IMPORTANT]
 > 
 > 每个规则一定要添加**快照链接**, 否则**后期维护根本不知道**这个规则到底点的是啥
 
