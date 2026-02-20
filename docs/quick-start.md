@@ -293,26 +293,6 @@ https://github.com/user-attachments/assets/2e90caf2-960c-4f58-898c-b15461decc5b
 > [!TIP]
 > 
 > 有一些高级技巧，例如 [快速查询](./fast-query.md)，在本文不展开讲解。你可以阅读 [CONTRIBUTING.md](../CONTRIBUTING.md) 中提到的其他文档或网站了解它们。
-> 简单说一句：快速查询对性能优化非常重要。
-像抖音这类 App，无障碍节点和事件数量非常多，如果没有使用快速查询，每次匹配都会遍历大量节点，时间一长就会明显增加耗电和卡顿。
-
-<details close>
-  <summary>举个栗子：没有使用“快速查询”会发生什么?”</summary>
-
-![不要学我哈](./images/quick-start/16_Non-fast-query-example.webp)
-
-可以把它想象成：
-你在一个大盒子里找东西，一直翻到里面第 452 层盒子才找到目标。
-
-而问题是——你刷视频并不是只停在一个页面。
-页面在不停刷新，节点在不断增加，每一条视频都是一个大盒子，它就得一次次从头开始翻。
-
-你可以想象一下，这样循环下来，对性能和耗电的影响会有多明显。快速查找就像你打开文档直接使用搜索关键字一样直接定位到它利用它找关系定位目标，不用像翻书一样一页页翻看，更快更省电还更省性能
-
-#### 引用
-_Originally posted by @AIsouler in https://github.com/AIsouler/GKD_subscription/issues/1836#issuecomment-3860258648_
-
-</details>
 
 ## 检测修复代码
 
