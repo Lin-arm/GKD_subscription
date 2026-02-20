@@ -248,7 +248,7 @@ export default defineGkdApp({
 <details close>
   <summary>示例: 快速复制规则示例</summary>
 
-<video src="./images/quick-start/11_Fast-copy-rules.mp4" controls autoplay loop muted width="100%"></video>
+<video src="./images/quick-start/11_Fast-copy-rules.mp4" controls autoplay loop muted width="100%"></video> <!-- 兼容本地正常显示 -->
 
 https://github.com/user-attachments/assets/4778654c-aa82-4ac7-8aa1-bd3a37040d3f
 
@@ -261,7 +261,7 @@ https://github.com/user-attachments/assets/4778654c-aa82-4ac7-8aa1-bd3a37040d3f
 <details close>
   <summary>示例: 获取快照链接示例</summary>
 
-<video src="./images/quick-start/10_Copy-URL.mp4" controls autoplay loop muted width="100%"></video>
+<video src="./images/quick-start/10_Copy-URL.mp4" controls autoplay loop muted width="100%"></video> <!-- 兼容本地正常显示 -->
 
 https://github.com/user-attachments/assets/2e90caf2-960c-4f58-898c-b15461decc5b
 
