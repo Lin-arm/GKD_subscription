@@ -79,19 +79,27 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 
 安装油猴脚本 <https://github.com/gkd-kit/network-extension>, 因为浏览器不允许 https 去连接 http 域名, 可以通过油猴脚本绕过这个限制
 
-浏览器打开 https://i.gkd.li/ , 这个页面会显示当前浏览器中存储的所有快照。
+在浏览器访问刚才看到的 HTTP 服务地址 `http://192.168.2.3:8888`
 
 在这个网站启用油猴脚本的注入功能
 
-![注入油猴脚本](images/quick-start/14_Injecting-Tampermonkey-script.png)
+![注入油猴脚本](./images/quick-start/14_Injecting-Tampermonkey-script.png)
 
-点击右上角 `连接设备` 图标去连接设备 (或者直接访问 https://i.gkd.li/device)
+对弹出的授权点击 `临时允许` 或 `总是允许`
 
-在设置页面左上角输入上述地址 `http://192.168.2.3:8888`, 然后点击 `刷新连接`, 对弹出的授权点击允许, 即可成功连接设备
+![授予权限](images/quick-start/15_Grant-premission.png)
 
-![连接到设备](./images/quick-start/07_Connect-to-device.webp)
+> [!TIP]
+> 
+> 不使用 `允许一次` 是因为接下来每次打开快照都会弹出授权请求
+>
+> 不使用 `总是允许全部域名` 是因为权限太高，有风险
+>
+> 每次连接的地址可能会更换，使用新地址需要重新授权
 
-可以看到第一个项目就是我们刚刚在 WPS 打的快照, 点击这个项目右侧的 `查看` 按钮
+然后点击 `刷新连接` , 可以看到第一个条就是我们刚刚在 WPS 打的快照, 点击这个项目右侧的 `查看` 按钮
+
+![连接到设备](./images/quick-start/07_Connect-to-device.png)
 
 我们就能在电脑上审查 <https://i.gkd.li/i/12505286> 这个快照
 
