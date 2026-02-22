@@ -8,6 +8,7 @@ export const blackListAppIDs: string[] = [
   'com.tmri.app.main', // 交管12123
   'com.github.android', // GitHub
   'org.telegram.messenger', // Telegram
+  'org.telegram.plus', // Plus Messenger
   'com.twitter.android', // X(推特)
   'com.aistra.hail', // 雹
   'com.heyanle.easybangumi4', // 纯纯看番
@@ -31,6 +32,8 @@ export const blackListAppIDs: string[] = [
   'com.mxtech.videoplayer', // MX播放器
   'com.mxtech.videoplayer.pro', // MX播放器专业版
   'com.github.kr328.clash', // Clash for Android
+  'com.github.kr328.clash.foss', // Clash for Android
+  'com.github.metacubex.clash.meta', // Clash Meta for Android
   'com.x8bit.bitwarden', // Bitwarden
   'org.localsend.localsend_app', // LocalSend
   'moe.shizuku.privileged.api', // Shizuku
@@ -39,10 +42,11 @@ export const blackListAppIDs: string[] = [
   'com.accessibilitymanager', // 无障碍管理器
   'me.tasy5kg.cutegif', // 小萌GIF
   'com.absinthe.libchecker', // LibChecker
-  'com.github.metacubex.clash.meta', // Clash Meta for Android
   'io.github.jd1378.otphelper', // 短信验证码自动复制
   'com.valvesoftware.android.steam.community', // Steam
   'io.legado.app.release', // 阅读
+  'com.legado.app.release', // 阅读
+  'com.legado.app.releaseA', // 阅读·A
   'com.getsurfboard', // Surfboard
   'moe.nb4a', // NekoBox
   'com.v2ray.ang', // v2rayNG
@@ -136,11 +140,14 @@ export const blackListAppIDs: string[] = [
   'com.fankes.tsbattery', // TSBattery
   'top.trangle.mbga', // MBGA
   'cc.microblock.TGStickerProvider', // TGStickerProvider
+  'top.ltfan.notdeveloper', // 我不是开发者
   'xyz.xfqlittlefan.notdeveloper', // 我不是开发者
   'com.zhenxi.hunter', // Hunter
+  'io.github.vvb2060.mahoshojo', // Momo
+  'io.github.vvb2060.keyattestation', // 密钥认证
+  'com.byxiaorun.detector', // Ruru
   'com.reveny.nativecheck', // Native Detector
   'cn.lyric.getter', // 酒域-歌词获取
-  'io.github.vvb2060.keyattestation', // 密钥认证
   'com.google.android.hmal', // 隐藏应用列表（@pumPCin fork）
   'com.adguard.android', // AdGuard
   'com.spotify.music', // Spotify
@@ -171,6 +178,42 @@ export const blackListAppIDs: string[] = [
   'com.jiaohua_browser', // JMComic2
   'com.picacomic.fregata', // PicACG
   'com.rosan.installer.x.revived', // installerX Revived
+  'com.modosa.apkinstaller', // 安装狮
+  'com.coderstory.toolkit', // 核心破解
+  'com.microfield.dingskip', // 叮小跳
+  'com.close.hook.ads', // AdClose
+  'leo.xposed.sesameX', // 芝麻糊SSVIP
+  'fansirsqi.xposed.sesame', // 芝麻粒-TK
+  'com.jozein.xedgepro', // Xposed Edge Pro
+  'com.rong862.bear', // 逗音小手
+  'o.dyoo', // Dyoo
+  'com.skyhand.sinahelper', // 微博猪手
+  'com.omarea.vtools', // Scene
+  'top.hookvip.pro', // HookVIP
+  'Hook.JiuWu.Xp', // HookVIP
+  'com.bug.hookvip', // HookVIP
+  'github.tornaco.android.thanos', // Thanox
+  'github.tornaco.android.thanos.pro', // Thanox Pro
+  'com.kulipai.luahook', // LuaHook
+  'com.f0x1d.logfox', // LogFox
+  'com.kieronquinn.app.darq', // DarQ
+  'com.sevtinge.cemiuiler', // (米西露)
+  'com.oasisfeng.island', // 炼妖壶
+  'com.dc16.sms', // 短信清理
+  'com.yangdai.calc', // 多功能计算器
+  'com.junkfood.seal', // Seal
+  'com.cz.GJ2X', // 搞机工具箱
+  'com.x1y9.probe', // 隐秘参数
+  'moe.haruue.wadb', // 无线 adb
+  'in.hridayan.ashell', // aShell You
+  'org.autojs.autojs6', // AutoJs6
+  'org.lsposed.lspatch', // LSPatch
+  'fun.fpa', // FPA
+  'fun.upup.musicfree', // MusicFree
+  'own.moderpach.extinguish', // Extinguish
+  'dev.legendsayantan.extendroid', // Extendroid
+  'com.github.nrfr', // Nrfr
+  'io.github.samolego.canta', // Canta
   'com.android.gpstest', // GPSTest
   'com.positron_it.zlib', // Z-Lib
   'org.sunsetware.phocid', // Phocid
@@ -192,7 +235,6 @@ export const blackListAppIDs: string[] = [
 
   'com.canghai.haoka',
   'com.xy.td',
-  'com.bug.hookvip',
   'one.yufz.hmspush',
   'io.github.huskydg.magisk',
   'xzr.konabess',
@@ -212,17 +254,13 @@ export const blackListAppIDs: string[] = [
   'com.Wecrane.Scar.pubg',
   'me.bmax.apatch',
   'com.tubevpn.client',
-  'github.tornaco.android.thanos.pro',
-  'com.omarea.vtools',
   'com.litebyte.samhelper',
   'com.nurke.perfectone',
   'qlenlen.OneDesign',
   'icu.nullptr.nativetest',
   'icu.nullptr.applistdetector',
-  'io.github.vvb2060.mahoshojo',
   'com.samsung.android.memoryguardian',
   'com.music.khkj',
-  'Hook.JiuWu.Xp',
   'me.weishu.kernelsu',
   'com.franco.kernel',
   'com.samsung.android.themedesigner',
@@ -249,8 +287,6 @@ export const blackListAppIDs: string[] = [
   'qyz.onedesign',
   'com.samsung.android.app.repaircal',
   'com.yhchat.app',
-  'com.skyhand.sinahelper',
-  'com.rong862.bear',
   'be.mygod.vpnhotspot',
   'com.samsung.android.bixby.agent',
   'com.reveny.vbmetafix.service',
@@ -287,6 +323,7 @@ export const blackListAppIDs: string[] = [
   'com.mi.car.padapp', // 小米汽车扩展屏
   'com.android.calendar', // 日历
   'com.mi.earphone', // 小米耳机
+  'com.xiaomi.mibrain.speech', // 系统语音引擎
 
   // 三星
   'com.samsung.android.app.cameraassistant',
