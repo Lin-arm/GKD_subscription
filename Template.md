@@ -4,10 +4,10 @@
 
 [![SVG Banners](https://svg-banners.vercel.app/api?type=origin&text1=GKD第三方订阅规则&text2=💖%20GKD_subscription&width=800&height=350)](https://github.com/Lin-arm/GKD_subscription)
 
-[![Release](https://img.shields.io/badge/release-v--VERSION---blue)](https://github.com/Lin-arm/GKD_subscription/releases/latest)
-[![已适配应用](https://img.shields.io/badge/已适配应用---APP_SIZE---brightgreen)](./dist/README.md#应用规则)
-[![全局规则组](https://img.shields.io/badge/全局规则组---GLOBALGROUP_SIZE---blueviolet)](./dist/README.md#全局规则)
-[![应用规则组](https://img.shields.io/badge/应用规则组---GROUP_SIZE---orange)](./dist/README.md#应用规则)
+[![Release](https://img.shields.io/badge/release-v{{VERSION}}-blue)](https://github.com/Lin-arm/GKD_subscription/releases/latest)
+[![已适配应用](https://img.shields.io/badge/已适配应用-{{APP_SIZE}}-brightgreen)](./dist/README.md#应用规则)
+[![全局规则组](https://img.shields.io/badge/全局规则组-{{GLOBALGROUP_SIZE}}-blueviolet)](./dist/README.md#全局规则)
+[![应用规则组](https://img.shields.io/badge/应用规则组-{{GROUP_SIZE}}-orange)](./dist/README.md#应用规则)
 [![Telegram Chat](https://img.shields.io/badge/Telegram-Chat-blue.svg?logo=telegram)](https://t.me/+8L4eHePgYEZmY2M9)
 
 ## 📢声明
@@ -70,9 +70,9 @@ https://raw.bgithub.xyz/Lin-arm/GKD_subscription/main/dist/gkd.json5
 
 </details><br>
 
-- 当前版本: v--VERSION--
+- 当前版本: v{{VERSION}}
 
-- 当前订阅文件已适配 --APP_SIZE-- 个应用，共有 --GROUP_SIZE-- 应用规则组，--GLOBALGROUP_SIZE-- 全局规则组
+- 当前订阅文件已适配 {{APP_SIZE}} 个应用，共有 {{GROUP_SIZE}} 应用规则组，{{GLOBALGROUP_SIZE}} 全局规则组
 
 - 查看 [适配 APP 列表](./dist/README.md)
 
@@ -100,7 +100,7 @@ https://raw.bgithub.xyz/Lin-arm/GKD_subscription/main/dist/gkd.json5
 
 ## 🥇感谢以下开发者的贡献
 
-![img](https://contrib.rocks/image?repo=Lin-arm/GKD_subscription&_v=--VERSION--)
+![img](https://contrib.rocks/image?repo=Lin-arm/GKD_subscription&_v={{VERSION}})
 
 ## 📈Star History
 

@@ -32,10 +32,10 @@ export const updateReadMeMd = async () => {
 
   // 替换模板中的占位符
   const readMeMdText = mdTemplate
-    .replace('--APP_SIZE--', APP_SIZE)
-    .replace('--GROUP_SIZE--', GROUP_SIZE)
-    .replace('--GLOBALGROUP_SIZE--', GLOBALGROUP_SIZE)
-    .replaceAll('--VERSION--', VERSION);
+    .replaceAll('{{APP_SIZE}}', APP_SIZE)
+    .replaceAll('{{GROUP_SIZE}}', GROUP_SIZE)
+    .replaceAll('{{GLOBALGROUP_SIZE}}', GLOBALGROUP_SIZE)
+    .replaceAll('{{VERSION}}', VERSION);
 
   // 写入 README.md 文件
   await fs.writeFile(readmeMdPath, readMeMdText);
