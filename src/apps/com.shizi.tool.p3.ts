@@ -18,9 +18,12 @@ export default defineGkdApp({
           key: 0,
           fastQuery: true,
           matches:
-            '[text*="跳过"][text.length<10][width<500 && height<300][visibleToUser=true]',
+            '[text*="跳过"][vid!="tobid_splash_skip_text"][text.length<10][width<500 && height<300][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/b10db699-ed34-4619-b3ca-5821321f4b58',
           snapshotUrls: 'https://i.gkd.li/i/22136545',
+          excludeSnapshotUrls: [
+            'https://i.gkd.li/i/25509864', // 用户反馈该广告的跳过按钮是假的，点击无法跳过 https://github.com/Lin-arm/GKD_subscription/issues/32
+          ],
         },
         {
           key: 1,
