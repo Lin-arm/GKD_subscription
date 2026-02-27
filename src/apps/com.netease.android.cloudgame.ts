@@ -10,7 +10,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.netease.android.cloudgame.activity.MainActivity',
+          activityIds: '.activity.MainActivity',
           matches:
             '@[vid="guide_close_btn"][clickable=true][visibleToUser=true] - [vid="content_container"]',
           snapshotUrls: 'https://i.gkd.li/i/25573586',
@@ -25,7 +25,7 @@ export default defineGkdApp({
           key: 0,
           fastQuery: true,
           activityIds: '.activity.MainActivity',
-          matches: [
+          anyMatches: [
             '@ImageView[clickable=true][visibleToUser=true] -n RelativeLayout > [text*="广告"]',
             'ViewGroup[childCount=2] > [vid="banner_content"] + [vid="close_btn"][clickable=true][visibleToUser=false]',
             '@ImageView[clickable=true][visibleToUser=true] -2 ImageView < RelativeLayout[childCount=3] <<n [vid="sign_ad_card"]',
