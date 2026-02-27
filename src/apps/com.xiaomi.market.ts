@@ -142,5 +142,21 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 15,
+      name: '功能类-[安装新版本需要关闭应用商店]弹窗',
+      desc: '点击[现在安装]',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: '.ui.TranslucentActivityInner',
+          matches: [
+            '[text^="安装新版本需要关闭应用商店"]',
+            '[text="现在安装"][clickable=true]',
+          ],
+          snapshotUrls: 'https://i.gkd.li/i/25607662',
+        },
+      ],
+    },
   ],
 });
