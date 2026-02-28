@@ -44,6 +44,15 @@ export default defineGkdApp({
             'https://i.gkd.li/i/15858008',
           ],
         },
+        {
+          key: 3,
+          fastQuery: true,
+          activityIds: '.media.browse.MediaActivity',
+          matches:
+            'RelativeLayout[childCount=7] > @[vid="ms_skipView"][visibleToUser=true] + LinearLayout[vid="ms_shakeRoot"] > [text*="点击按钮"] ',
+          exampleUrls: 'https://e.gkd.li/4958c49b-32d2-4b99-865a-e39fb7183b98',
+          snapshotUrls: 'https://i.gkd.li/i/25619083',
+        },
       ],
     },
     {
