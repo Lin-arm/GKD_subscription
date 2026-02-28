@@ -149,6 +149,32 @@ export default defineGkdApp({
       ],
     },
     {
+      key: 4,
+      name: '局部广告-横幅广告',
+      rules: [
+        {
+          key: 0,
+          name: '商品详情页面',
+          fastQuery: true,
+          activityIds: 'com.taobao.android.detail.alittdetail.TTDetailActivity',
+          matches:
+            '@FrameLayout[desc="关闭"][clickable=true][visibleToUser=true] -3 ImageView <<n [vid="bottom_float_dx"]',
+          snapshotUrls: 'https://i.gkd.li/i/25639274',
+          exampleUrls: 'https://e.gkd.li/4e46df5e-3123-4dd2-a441-2be6770f9638',
+        },
+        {
+          key: 1,
+          name: '订单页',
+          fastQuery: true,
+          activityIds: 'com.taobao.android.order.bundle.TBOrderListActivity',
+          matches:
+            '@TextView[clickable=true][visibleToUser=true][text.length=1] -4 ImageView < LinearLayout[childCount=5] <<n [vid="recycler_view"]',
+          snapshotUrls: 'https://i.gkd.li/i/25639650',
+          exampleUrls: 'https://e.gkd.li/e86fb61e-d4ed-4862-b677-86ddf45c9b77',
+        },
+      ],
+    },
+    {
       key: 8,
       name: '权限提示-通知权限',
       desc: '点击关闭',
