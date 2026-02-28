@@ -26,7 +26,7 @@ export default defineGkdApp({
         {
           key: 0,
           name: '底部横幅广告',
-          anyMatches:
+          matches:
             'ViewGroup[childCount=2] > [vid="banner_content"] + [vid="close_btn"][clickable=true][visibleToUser=false]',
           snapshotUrls: 'https://i.gkd.li/i/25573674',
           exampleUrls: 'https://e.gkd.li/bfe2d2a2-2199-425c-9729-9176aa4fb5bf',
