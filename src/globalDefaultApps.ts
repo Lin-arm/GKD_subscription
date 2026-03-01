@@ -74,7 +74,6 @@ export const blackListAppIDs: string[] = [
   'xyz.adproqwq.GKDTool', // GKDTool
   'com.alibaba.aliyun', // 阿里云
   'com.alicloud.databox', // 阿里云盘
-  'xyz.nextalone.nagram', // Nagram
   'com.openai.chatgpt', // ChatGPT
   'org.telegram.group', // Turrit
   'com.android.chrome', // Chrome
@@ -360,6 +359,7 @@ export const openAdBlackListAppIDs = new Set([
   ...blackListAppIDs,
   'com.taptap', // TapTap
   'com.sankuai.meituan', // 美团 误触 https://i.gkd.li/i/17827264
+  'xyz.nextalone.nagram', // Nagram (单独禁用[开屏]和[青少年],需解开[更新提示] https://i.gkd.li/i/25640114 )
 ]);
 
 // 更新提示黑名单
@@ -409,6 +409,7 @@ export const yongBlackListAppIDs = new Set([
   'com.ct.client', // 中国电信
   'me.ele', // 饿了么
   'com.tencent.qqmusic', // QQ音乐
+  'xyz.nextalone.nagram', // Nagram
 ]);
 
 // 全局规则白名单（由于系统应用默认禁用全局规则，所以对系统应用启用白名单模式）
