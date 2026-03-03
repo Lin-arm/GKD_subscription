@@ -127,15 +127,20 @@ export default defineGkdApp({
           activityIds: [
             '.tblauncher.MainTabActivity',
             '.pb.pb.main.PbActivity',
+            '.forum.ForumActivity',
           ],
           matches:
-            'ImageView[childCount=0] < @FrameLayout[clickable=true][childCount=1][visibleToUser=true] <(3,4) RelativeLayout + FrameLayout >9 [text="广告"]',
-          exampleUrls: 'https://e.gkd.li/0ac82700-02f3-40c6-bf45-b21e365ac84c',
+            'ImageView[index=parent.childCount.minus(1)] < @[vid="obfuscated"][clickable=true] -n * < RelativeLayout + FrameLayout >n [text="广告"]',
+          exampleUrls: [
+            'https://e.gkd.li/0ac82700-02f3-40c6-bf45-b21e365ac84c',
+            'https://e.gkd.li/511c57bc-e11a-43b3-b4a3-9b49cf79d509',
+          ],
           snapshotUrls: [
             'https://i.gkd.li/i/21524232',
             'https://i.gkd.li/i/21529443',
             'https://i.gkd.li/i/21556758',
             'https://i.gkd.li/i/24520138',
+            'https://i.gkd.li/i/25710401',
           ],
         },
         {
@@ -434,14 +439,6 @@ export default defineGkdApp({
             'https://i.gkd.li/i/17943902',
             'https://i.gkd.li/i/18217417',
           ],
-        },
-        {
-          key: 3,
-          activityIds: '.forum.ForumActivity',
-          matches:
-            'ImageView[index=parent.childCount.minus(1)] < @[vid="obfuscated"][clickable=true] -n * < RelativeLayout + FrameLayout [text="广告"]',
-          snapshotUrls: 'https://i.gkd.li/i/25710401',
-          exampleUrls: 'https://e.gkd.li/511c57bc-e11a-43b3-b4a3-9b49cf79d509',
         },
       ],
     },
