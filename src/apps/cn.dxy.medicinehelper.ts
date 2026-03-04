@@ -91,9 +91,15 @@ export default defineGkdApp({
         {
           key: 1,
           matches: '[text="展开" || text="展开全部"][visibleToUser=true]',
+          excludeMatches:
+            '@[text="展开" || text="展开全部"][visibleToUser=true] - * << View +n View >n [text*="会员"]',
           snapshotUrls: [
             'https://i.gkd.li/i/25247361',
             'https://i.gkd.li/i/25604253', // 临床决策处方点评
+          ],
+          excludeSnapshotUrls: [
+            'https://i.gkd.li/i/25742110', // 渲染完但没会员遮挡住的'展开全部'
+            'https://i.gkd.li/i/25742101', // 实际能使用选中光标拉出来
           ],
           exampleUrls: [
             'https://e.gkd.li/35e39eb1-960d-4108-b688-1248856107e7', // 点击前
