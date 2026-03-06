@@ -221,7 +221,7 @@ export default defineGkdApp({
   groups: [
     {
       key: 1,
-      name: '首页-文档列表广告',
+      name: '局部广告-首页文档列表广告',
       exampleUrls: [
         'https://github.com/gkd-kit/subscription/assets/38517192/57787554-0443-4bc0-9f29-1759aae07b9b',
       ],
@@ -272,6 +272,9 @@ https://github.com/user-attachments/assets/4778654c-aa82-4ac7-8aa1-bd3a37040d3f
 https://github.com/user-attachments/assets/2e90caf2-960c-4f58-898c-b15461decc5b
 
 </details>
+
+> [!WARNING]
+> 在规则组`name`必须根据实际情况以`src\categories.ts`中列出的类别开头, 例如 `局部广告-首页文档列表广告`
 
 然后运行校验命令 `npm run check`, 它会检测你的规则是否书写正确, 也会检测每个选择器语法是否正确
 
