@@ -14,7 +14,7 @@ export default defineGkdApp({
           key: 0,
           activityIds: [
             '.activity.more.MoreMainActivity',
-            '.home.activity.HomeActivity'
+            '.home.activity.HomeActivity',
           ],
           matches:
             'Button[text*="立即更新"] <n LinearLayout + ImageView[vid="close_btn"]',
