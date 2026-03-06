@@ -27,6 +27,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
+          keys: 0,
+          activityIds: '.home.activity.HomeActivity',
           matches: '[text="去评价"] - [text="取消"]',
           snapshotUrls: 'https://i.gkd.li/i/25789452',
         },
