@@ -13,10 +13,9 @@ export default defineGkdApp({
         {
           key: 0,
           activityIds: '.activity.more.MoreMainActivity',
-          matches: 'Button[text*="立即更新"] <n LinearLayout + ImageView[vid="close_btn"]',,
-          snapshotUrls: [
-            'https://i.gkd.li/i/25789427',
-          ],
+          matches:
+            'Button[text*="立即更新"] <n LinearLayout + ImageView[vid="close_btn"]',
+          snapshotUrls: ['https://i.gkd.li/i/25789427'],
         },
       ],
     },
@@ -28,8 +27,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          matches:
-            '[text="去评价"] - [text="取消"]',
+          matches: '[text="去评价"] - [text="取消"]',
           snapshotUrls: 'https://i.gkd.li/i/25789452',
         },
       ],
