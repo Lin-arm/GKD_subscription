@@ -221,7 +221,7 @@ export default defineGkdApp({
   groups: [
     {
       key: 1,
-      name: '局部广告-首页文档列表广告',
+      name: '分段广告-首页文档列表广告',
       exampleUrls: [
         'https://github.com/gkd-kit/subscription/assets/38517192/57787554-0443-4bc0-9f29-1759aae07b9b',
       ],
