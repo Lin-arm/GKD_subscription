@@ -21,7 +21,7 @@ export default defineGkdApp({
     },
     {
       key: 2,
-      name: '去评价提示',
+      name: '评价提示',
       fastQuery: true,
       actionMaximum: 1,
       resetMatch: 'app',
