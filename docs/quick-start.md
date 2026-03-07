@@ -179,6 +179,9 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 }
 ```
 
+> [!IMPORTANT]
+> 在规则组的 `name` 属性必须根据规则作用以 [src\categories.ts](../src/categories.ts) 中列出的类别开头, 例如 `局部广告-首页文档列表广告`
+
 此时回到APP首页-订阅, 会发现多了一条**内存订阅**
 
 ![内存订阅](./images/quick-start/04_Memory-subscribe.webp)
@@ -272,9 +275,6 @@ https://github.com/user-attachments/assets/4778654c-aa82-4ac7-8aa1-bd3a37040d3f
 https://github.com/user-attachments/assets/2e90caf2-960c-4f58-898c-b15461decc5b
 
 </details>
-
-> [!WARNING]
-> 在规则组`name`必须根据实际情况以`src\categories.ts`中列出的类别开头, 例如 `局部广告-首页文档列表广告`
 
 然后运行校验命令 `npm run check`, 它会检测你的规则是否书写正确, 也会检测每个选择器语法是否正确
 
