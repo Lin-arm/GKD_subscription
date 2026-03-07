@@ -151,7 +151,7 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 
 打开浏览器设备连接页面-点击修改内存订阅, 输入如下内容, 然后点击确认
 
-```text
+```ts
 // 订阅使用 JSON5 语法, 根节点可以是数组也可以是对象
 {
   id: 'cn.wps.moffice_eng',
@@ -159,12 +159,15 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
   groups: [
     {
       key: 1,
-      name: '首页-文档列表广告',
-      activityIds: ['cn.wps.moffice.main.StartPublicActivity', 'cn.wps.moffice.main.local.HomeRootActivity'],
+      name: '分段广告-文档列表广告',
+      activityIds: [
+        'cn.wps.moffice.main.StartPublicActivity',
+        'cn.wps.moffice.main.local.HomeRootActivity',
+      ],
       rules: [
         {
           matches: '[text="关闭当前广告"]',
-          snapshotUrls: 'https://i.gkd.li/i/12505365',//获取链接的方法在上一步有说明
+          snapshotUrls: 'https://i.gkd.li/i/12505365', //获取链接的方法在上一步有说明
         },
         {
           matches: '[id$="/nativeclose"]',
