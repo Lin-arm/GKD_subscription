@@ -105,7 +105,11 @@ export default defineGkdApp({
       key: 4,
       name: '功能类-勾选[已了解应用风险检测结果]',
       fastQuery: true,
-      activityIds: ['.PackageInterceptActivity', '.PackageInstallerActivity'],
+      activityIds: [
+        '.PackageInterceptActivity',
+        '.PackageInstallerActivity',
+        '.InstallStart',
+      ],
       rules: [
         {
           key: 0,
