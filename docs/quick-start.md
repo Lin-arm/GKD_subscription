@@ -167,7 +167,7 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
       rules: [
         {
           matches: '[text="关闭当前广告"]',
-          snapshotUrls: 'https://i.gkd.li/i/12505365', //获取链接的方法在上一步有说明
+          snapshotUrls: 'https://i.gkd.li/i/12505365', // 获取链接的方法在上一步有说明
         },
         {
           matches: '[id$="/nativeclose"]',
@@ -183,7 +183,7 @@ Android>=11 的无障碍可以自己截屏, 所以如果你的设备不满足 An
 ```
 
 > [!IMPORTANT]
-> 在规则组的 `name` 属性必须根据规则作用以 [src\categories.ts](../src/categories.ts) 中列出的类别开头, 例如 `局部广告-首页文档列表广告`
+> 规则组的 `name` 属性必须以 [src\categories.ts](../src/categories.ts) 中列出的类别开头, 例如 `局部广告-首页文档列表广告`
 
 此时回到APP首页-订阅, 会发现多了一条**内存订阅**
 
