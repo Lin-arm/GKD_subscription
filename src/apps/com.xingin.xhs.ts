@@ -184,10 +184,19 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.xingin.matrix.notedetail.NoteDetailActivity',
+          activityIds: [
+            'com.xingin.matrix.notedetail.NoteDetailActivity',
+            'com.xingin.matrix.detail.activity.DetailFeedActivity',
+          ],
           matches:
             '@[clickable=true] > [vid="loadMoreTV"][text^="展开"][text$="回复"]',
-          snapshotUrls: 'https://i.gkd.li/i/25048251',
+          snapshotUrls: [
+            'https://i.gkd.li/i/25048251',
+            'https://i.gkd.li/i/25823242',
+          ],
+          exampleUrls: [
+            'https://e.gkd.li/a211ebb1-2177-4264-9a60-280a5f8e2777',
+          ],
         },
       ],
     },
