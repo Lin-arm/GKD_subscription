@@ -26,5 +26,20 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 2,
+      name: '功能类-通话时自动开[免提]',
+      desc: '适合老人用',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: '.InCallActivity',
+          matches:
+            '@[vid="audioButton"][checkable=true][checked=false] >2 [text="免提"]',
+          snapshotUrls: 'https://i.gkd.li/i/25824399', //未开[免提]
+          excludeSnapshotUrls: 'https://i.gkd.li/i/25824401', //已开[免提] [checked=true]
+        },
+      ],
+    },
   ],
 });
