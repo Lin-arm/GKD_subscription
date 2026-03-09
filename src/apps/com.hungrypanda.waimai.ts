@@ -17,10 +17,9 @@ export default defineGkdApp({
             '[vid="iv_home_ad_close" || vid="iv_close"][clickable=true][visibleToUser=true]',
           ],
           snapshotUrls: [
-            'https://i.gkd.li/i/25813448',
-            'https://i.gkd.li/i/25822079',
-            'https://i.gkd.li/i/25822081',
-            'https://i.gkd.li/i/25813449',
+            'https://i.gkd.li/i/25813448', // iv_home_ad_close
+            'https://i.gkd.li/i/25822079', // iv_home_ad_close
+            'https://i.gkd.li/i/25813449', // iv_close
           ],
         },
       ],
