@@ -10,11 +10,9 @@ export default defineGkdApp({
       matchTime: 10000,
       actionMaximum: 1,
       resetMatch: 'app',
-      actionMaximumKey: 0,
       priorityTime: 10000,
       rules: [
         {
-          key: 0,
           fastQuery: true,
           excludeActivityIds: '.activity.NewPageActivity',
           matches:
