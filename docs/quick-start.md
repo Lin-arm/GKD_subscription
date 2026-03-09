@@ -7,16 +7,9 @@
 本项目基于 nodejs + typescript
 
 - 安装 [nodejs](https://nodejs.org/) 或者 [volta](https://volta.sh/)
-- 安装 [pnpm](https://pnpm.io/zh/installation)
+- 安装 [pnpm](https://pnpm.io/zh/installation) (推荐使用 [Corepack](https://pnpm.io/zh/installation#使用-corepack) 或者 [npm](https://pnpm.io/zh/installation#使用-npm) 方式安装)
 - 建议安装 [Visual Studio Code](https://code.visualstudio.com/)
 - Fork 本项目, 然后 Clone 至本地, 切换到项目根目录，安装依赖 `pnpm install`
-
-> [!TIP]
-> 
-> 如果你已在系统安装Node.js_v18.12+，可直接使用下面命令安装pnpm
-```.bash
-npm install -g pnpm
-```
 
 ## 开始
 
