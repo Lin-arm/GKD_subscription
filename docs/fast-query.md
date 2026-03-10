@@ -32,7 +32,7 @@
 
 > [!TIP]
 > 
-> 只有 `text` 属性支持使用运算符 `^=` 、 `$=` 、 `*=` 快速查询，`id` 和 `vid` 不支持，因为调用相关接口通过 `id` 快速查询时必须传入完整的 `id`。
+> 只有 `text` 属性支持使用运算符 `^=` 、 `$=` 、 `*=` 快速查询，`id` 和 `vid` 不支持，因为调用相关接口通过 `id` 快速查询时必须传入完整的 `id`。[^3]
 
 或者使用 `||` 将它们连接形成的逻辑表达式也符合条件，即如下格式：
 
@@ -128,3 +128,5 @@ A + B[childCount!=null][id='x'] <<n C[id='y']
 [^1]: https://gkd.li/guide/selector#match-order
 
 [^2]: https://gkd.li/guide/optimize#fast-query
+
+[^3]: https://developer.android.google.cn/reference/android/view/accessibility/AccessibilityNodeInfo#findAccessibilityNodeInfosByViewId(java.lang.String)
