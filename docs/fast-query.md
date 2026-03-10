@@ -125,23 +125,6 @@ A + B[childCount!=null][id='x'] <<n C[id='y']
 
 表达式 `childCount!=null` 始终为 true，但是 `B[childCount!=null][id='x'] <<n` 不满足快速查询格式，不会触发局部快速查询。
 
-### id 和 vid
-
-
-`vid` 属性是2023年12月14日引进的([cc5d6197](https://github.com/gkd-kit/gkd/commit/cc5d619737454a8ca1c995c66ac13224d9455674))，在此之前截的快照的节点是没有 `vid` 的，所以在维护此项目时遇到旧快照的 `id` 符合 `应用包名:id/` + `vid` 这种格式，可以直接简写用 `vid` ，例如：
-
-快照 <https://i.gkd.li/i/13255698> （包名：com.google.android.gm）的选择器
-
-```ts
-[id="com.google.android.gm:id/button_chip_ad_teaser_info_icon"][clickable=true]
-```
-
-可以换成下面这种写法（也支持快速查询）
-
-```ts
-[vid="button_chip_ad_teaser_info_icon"][clickable=true]
-```
-
 [^1]: https://gkd.li/guide/selector#match-order
 
 [^2]: https://gkd.li/guide/optimize#fast-query
