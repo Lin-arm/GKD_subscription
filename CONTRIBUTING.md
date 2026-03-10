@@ -38,3 +38,5 @@
 [复选框的勾选状态](./docs/checkbox-state.md)
 
 [快速查询优化](./docs/fast-query.md)
+
+[id 和 vid 的区别](./docs/difference-between-id-and-vid.md)
