@@ -191,8 +191,11 @@ export default defineGkdApp({
         {
           activityIds: 'com.twitter.app.main.MainActivity',
           matches:
-            '@[clickable=true] > [visibleToUser=true][text="Not now"] <<n [vid="half_cover_recycler_view_holder"]',
-          snapshotUrls: 'https://i.gkd.li/i/13930126',
+            '@[clickable=true] > [visibleToUser=true][text="Not now" || text="暂时不用"] <<n [vid="half_cover_recycler_view_holder"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/13930126', // 英文
+            'https://i.gkd.li/i/25903854', // 中文
+          ],
         },
       ],
     },
