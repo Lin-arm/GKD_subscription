@@ -132,5 +132,20 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 8,
+      name: '功能类-关闭自动更新提示',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: '.service.appmgr.view.activity.AppUpdateActivity',
+          matches: [
+            '[text="WLAN 闲时自动更新"]',
+            '[text="不用了"][clickable=true]',
+          ],
+          snapshotUrls: 'https://i.gkd.li/i/25933091',
+        },
+      ],
+    },
   ],
 });
