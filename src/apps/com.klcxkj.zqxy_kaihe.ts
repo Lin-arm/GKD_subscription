@@ -1,4 +1,3 @@
-
 import { defineGkdApp } from '@gkd-kit/define';
 
 export default defineGkdApp({
@@ -6,67 +5,71 @@ export default defineGkdApp({
   name: '悦享校园',
   groups: [
     {
-      "key": 0,          
-      "name": "悦享校园",
-      "rules": [
+      key: 1,
+      name: '局部广告',
+      rules: [
+        {
+          key: 0,
+          fastQuery: true,
+          activityIds: '.ui.MainUserActivity',
+          anyMatches: [
+            '@ImageView[visibleToUser=true] < FrameLayout -3 ImageView < FrameLayout[childCount=4] <<n [vid="adv_container_layout"]',
+            'LinearLayout[childCount=2] - @ImageView[clickable=true][visibleToUser=true] <2 FrameLayout[childCount=3] < [vid="adv_container_layout"]',
+            'ImageView[index=parent.childCount.minus(1)] < @[clickable=true] <<n ViewGroup <3 ViewGroup - ViewGroup >3 [text="广告"][visibleToUser=true] <<n [vid="adv_container_layout"]',
+          ],
+          snapshotUrls: [
+            'https://i.gkd.li/i/25928209',
+            'https://i.gkd.li/i/25928092',
+            'https://i.gkd.li/i/25929445',
+          ],
+          exampleUrls: [
+            'https://e.gkd.li/526e700e-018e-4642-a89e-e7936b17dd2a',
+            'https://e.gkd.li/341cfc8b-b625-4ee0-9928-f4a302f491fe',
+            'https://e.gkd.li/22de1939-c412-40ce-a979-4aeb3f7f5923',
+          ],
+        },
+      ],
+    },
+    {
+      key: 2,
+      name: '全屏广告',
+      rules: [
+        {
+          key: 0,
+          fastQuery: true,
+          activityIds: '.ui.ConsumeActivity',
+          anyMatches: [
+            'ImageView[visibleToUser=true] < @[clickable=true] < ViewGroup + *[childCount=2] > [text="广告"]',
+            '@ImageView[visibleToUser=true] < * <<n FrameLayout[childCount=3] < * +7 ImageView -3 * > [text$="查看详情"]',
+          ],
+          snapshotUrls: [
+            'https://i.gkd.li/i/25931841',
+            'https://i.gkd.li/i/25929002',
+          ],
+          exampleUrls: [
+            'https://e.gkd.li/578f3304-96d8-4e43-bfa9-07cd85ca6f8d',
+            'https://e.gkd.li/06e41609-81a1-4b71-bd32-d83b66afe247',
+          ],
+        },
         {
           key: 1,
-          name: "局部广告-关闭按钮-FrameLayout",
-          matches: ["[vid='adv_container_layout'] > FrameLayout > ImageView[index=1]"],
-          action: "clickNode",
-          snapshotUrls: "https://i.gkd.li/i/25928092"
+          fastQuery: true,
+          activityIds:
+            'com.bytedance.sdk.openadsdk.stub.activity.Stub_Standard_Activity_T',
+          matches:
+            '@ImageView[index=parent.childCount.minus(1)] < FrameLayout <n * + * > ImageView - * > [text^="应​用​名​称​"]',
+          snapshotUrls: 'https://i.gkd.li/i/25935365',
+          exampleUrls: 'https://e.gkd.li/029e1258-ef6c-4474-991b-7925d9e73e9e',
         },
         {
           key: 2,
-          name: "局部广告-关闭按钮-33x33",
-          matches: ["[vid='adv_container_layout'] ImageView[width=33][height=33][visibleToUser=true]"],
-          action: "clickCenter",
-          snapshotUrls: "https://i.gkd.li/i/25928209"
+          fastQuery: true,
+          activityIds: 'com.beizi.ad.v2.activity.BeiZiNewInterstitialActivity',
+          matches: '@[clickable=true] > [vid="beizi_interstitial_ad_close_iv"]',
+          snapshotUrls: 'https://i.gkd.li/i/25929116',
+          exampleUrls: 'https://e.gkd.li/cca3f65f-1441-4bd6-88da-e61c325f6340',
         },
-        {
-          "key": 4,
-          "name": "全屏广告-关闭按钮",
-          "matches": ["[id='android:id/content'] ImageView[width=55][height=55][visibleToUser=true]"],
-          "action": "clickCenter",
-          "snapshotUrls": "https://i.gkd.li/i/25929002",
-          "excludeMatches": ["[vid='my_account_layout']"],
-          "actionCd": 1500,
-          "actionDelay": 800
-        },
-        {
-          "key": 5,
-          "name": "全屏广告-关闭按钮",
-          "matches": ["[vid='beizi_interstitial_ad_close_iv']"],
-          "action": "clickCenter",
-          "snapshotUrls": "https://i.gkd.li/i/25929116",
-          "actionCd": 1500,
-          "actionDelay": 800
-        },
-        {
-          "key": 6,
-          "name": "局部广告-关闭按钮",
-          "matches": ["[vid='adv_container_layout'] ImageView[width=32][height=33][visibleToUser=true]"],
-          "action": "clickCenter",
-          "snapshotUrls": "https://i.gkd.li/i/25929445",
-          "actionCd": 1500
-        },
-        {
-          "key": 7,
-          "name": "全屏广告-关闭按钮",
-          "matches": ["[id='android:id/content'] [desc='top_close_button'][clickable=true]"],
-          "action": "clickNode",
-          "actionCd": 1500,
-          "snapshotUrls": "https://i.gkd.li/i/25931841"
-        },
-        {
-          "key": 8,
-          "name": "全屏广告-关闭按钮",
-          "matches": ["[id='android:id/content'] ImageView[width=58][height=58][visibleToUser=true]"],
-          "action": "clickCenter",
-          "actionCd": 1500,
-          "snapshotUrls": "https://i.gkd.li/i/25935365"
-        }
-      ]
-    }
+      ],
+    },
   ],
 });
