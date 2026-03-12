@@ -1,6 +1,4 @@
-import { defineGkdApp } from '@gkd-kit/define';
 
-export default defineGkdApp({
   id: 'com.klcxkj.zqxy_kaihe',
   name: '悦享校园',
   groups: [
@@ -66,6 +64,4 @@ export default defineGkdApp({
           "snapshotUrls": "https://i.gkd.li/i/25935365"
         }
       ]
-    },
-  ],
-}); 
+    }
