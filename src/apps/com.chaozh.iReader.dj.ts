@@ -164,8 +164,8 @@ export default defineGkdApp({
     },
     {
       key: 4,
-      name: '分段广告-弹窗诱导开通会员',
-      desc: '取消',
+      name: '分段广告-开通会员',
+      desc: '点击取消',
       fastQuery: true,
       activityIds: 'com.zhangyue.iReader.online.ui.ActivityFee',
       rules: [
