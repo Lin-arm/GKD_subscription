@@ -55,11 +55,11 @@ export default defineGkdApp({
           exampleUrls: 'https://e.gkd.li/06e41609-81a1-4b71-bd32-d83b66afe247',
         },
         {
-          key: 2,
+          key: 2, //字节sdk
           activityIds:
             'com.bytedance.sdk.openadsdk.stub.activity.Stub_Standard_Activity_T',
           matches:
-            '@ImageView[index=parent.childCount.minus(1)] < FrameLayout <n * + * > ImageView - * > [text^="应​用​名​称​"]',
+            '@ImageView < * - FrameLayout >(2,3) [text*="第三方应用" || text*="扭动手机" || text*="点击" && text*="上滑" || text*="省钱好物" || text*="扭一扭"]',
           snapshotUrls: 'https://i.gkd.li/i/25935365',
           exampleUrls: 'https://e.gkd.li/029e1258-ef6c-4474-991b-7925d9e73e9e',
         },
