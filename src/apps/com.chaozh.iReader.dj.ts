@@ -77,8 +77,8 @@ export default defineGkdApp({
     },
     {
       key: 2,
-      name: '全屏广告-小说内自动划走广告', //通过各种办法触发划走而非点击关闭
-      desc: '点击空白地跳过广告非关闭策略',
+      name: '局部广告-小说内自动划走广告',
+      desc: '点击空白区域触发翻页而非关闭广告',
       fastQuery: true,
       actionDelay: 600,
       actionCd: 8000, //加cd等加载过去防止循环触发,如p2,测试如果点击后用户不再继续翻页触发节点刷新会点回来，所以说依赖用户看小说有多快
@@ -165,8 +165,7 @@ export default defineGkdApp({
     },
     {
       key: 4,
-      name: '分段广告-要米组合',
-      desc: '关闭广告&假广告引发的被动技能反制',
+      name: '全屏广告-会员广告',
       fastQuery: true,
       rules: [
         {
@@ -174,7 +173,7 @@ export default defineGkdApp({
           activityIds: 'com.zhangyue.iReader.online.ui.ActivityFee',
           matches:
             '@Image[text.length=36][visibleToUser=true] + [text="纯净阅读免广告"] <<11 [vid="online_layout"]',
-          snapshotUrls: 'https://i.gkd.li/i/25243163', //要米第一步
+          snapshotUrls: 'https://i.gkd.li/i/25243163',
           exampleUrls: 'https://e.gkd.li/11170624-a19c-4502-a982-9402a291eba6',
         },
         {
@@ -183,7 +182,7 @@ export default defineGkdApp({
           activityIds: 'com.zhangyue.iReader.online.ui.ActivityFee',
           matches:
             '[text="别走！送你限时优惠"] - @TextView < *[childCount=8] -3 * <<2 [text="纯净阅读免广告"] <<6 [vid="online_layout"]',
-          snapshotUrls: 'https://i.gkd.li/i/25243375', //球球给点米好不好嘛~
+          snapshotUrls: 'https://i.gkd.li/i/25243375',
           exampleUrls: 'https://e.gkd.li/422276f9-670c-450f-8fa7-33ab61e98882',
         },
       ],
