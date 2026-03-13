@@ -156,8 +156,10 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: 'com.zhangyue.iReader.bookshelf.ui.ActivityBookShelf',
-          matches:
-            '[text="立即升级"][clickable=true][visibleToUser=true] -4 [vid="dialog_public_top_bar_title_close"]',
+          matches: [
+            '[text="立即升级"]',
+            '[vid="dialog_public_top_bar_title_close"][clickable=true][visibleToUser=true]',
+          ],
           snapshotUrls: 'https://i.gkd.li/i/25121594',
           exampleUrls: 'https://e.gkd.li/a61a7c35-67f2-4294-bd89-cd12e4cb8b6c',
         },
@@ -196,7 +198,7 @@ export default defineGkdApp({
         {
           activityIds: 'com.zhangyue.iReader.read.ui.Activity_BookBrowser_TXT',
           matches:
-            '[vid="tv_add_book_self"] + [text="退出阅读"][clickable=true][visibleToUser=true][index=parent.childCount.minus(1)]',
+            '[text="加入书架"] + [text="退出阅读"][clickable=true][visibleToUser=true][index=parent.childCount.minus(1)]',
           snapshotUrls: 'https://i.gkd.li/i/25244345',
           exampleUrls: 'https://e.gkd.li/942bc38e-ca66-4f64-b37a-a5930b5c145a',
         },
