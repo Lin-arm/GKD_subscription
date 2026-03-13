@@ -100,8 +100,11 @@ export default defineGkdApp({
           key: 1,
           activityIds: 'com.qq.e.ads.PortraitADActivity',
           matches:
-            '@[text=""][visibleToUser=true][index=parent.childCount.minus(1)] <<2 View <3 WebView[childCount=4] < * - RelativeLayout >3 [text="秒后即可获得奖励"]',
-          snapshotUrls: 'https://i.gkd.li/i/25118663',
+            '@[text=""][visibleToUser=true][index=parent.childCount.minus(1)] <<2 View <3 WebView[childCount=4] < * - RelativeLayout >3 [text="秒后即可获得奖励" || text="恭喜获得奖励！"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/25118663',
+            'https://i.gkd.li/i/25967375',
+          ],
           exampleUrls: 'https://e.gkd.li/3ce04d0a-c2b9-4087-8af6-541a2178eedb',
         },
         {
