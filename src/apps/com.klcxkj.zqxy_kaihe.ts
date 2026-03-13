@@ -42,7 +42,7 @@ export default defineGkdApp({
           key: 0,
           activityIds: '.ui.ConsumeActivity',
           matches:
-            'ImageView[visibleToUser=true] < @[clickable=true] < ViewGroup + *[childCount=2] > [text="广告"]',
+            'ImageView[childCount=0] < @[desc="top_close_button"][childCount=1][clickable=true] < ViewGroup + * > [text="广告"]',
           snapshotUrls: 'https://i.gkd.li/i/25931841',
           exampleUrls: 'https://e.gkd.li/578f3304-96d8-4e43-bfa9-07cd85ca6f8d',
         },
@@ -50,7 +50,7 @@ export default defineGkdApp({
           key: 1,
           activityIds: '.ui.ConsumeActivity',
           matches:
-            '@ImageView[visibleToUser=true] < [index=parent.childCount.minus(1)] <n FrameLayout[childCount=3] < * +4 * > [text$="查看详情"]',
+            '@ImageView[childCount=0][visibleToUser=true] < [index=parent.childCount.minus(1)][childCount=1] <n FrameLayout[childCount=3] < * +4 * > [text$="查看详情"]',
           snapshotUrls: 'https://i.gkd.li/i/25929002',
           exampleUrls: 'https://e.gkd.li/06e41609-81a1-4b71-bd32-d83b66afe247',
         },
