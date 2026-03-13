@@ -100,7 +100,7 @@ export default defineGkdApp({
           key: 1,
           activityIds: 'com.qq.e.ads.PortraitADActivity',
           matches:
-            '@[text=""][visibleToUser=true][index=parent.childCount.minus(1)] <<2 View <3 WebView[childCount=4] < * - RelativeLayout >3 [text="秒后即可获得奖励" || text="恭喜获得奖励！"]',
+            '@[text=""][visibleToUser=true][index=parent.childCount.minus(1)] <<2 View <3 WebView[childCount=4] < * - RelativeLayout >3 [text*="获得奖励"]',
           snapshotUrls: [
             'https://i.gkd.li/i/25118663',
             'https://i.gkd.li/i/25967375',
