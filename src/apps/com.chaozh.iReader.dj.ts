@@ -45,14 +45,14 @@ export default defineGkdApp({
             'com.zhangyue.iReader.read.ui.Activity_BookBrowser_TXT',
           ],
           matches:
-            '@[text="关闭"][clickable=true] <<n [id="com.zhangyue.module.ad:id/mix_ad_view" || id="com.zhangyue.module.ad:id/ad_splash_ad_layout"]',
+            '[id$="mix_ad_view" || id$="ad_splash_ad_layout"] >(1,2) [text="关闭"][clickable=true]',
           snapshotUrls: [
-            'https://i.gkd.li/i/24884414', //听书播放器底部广告
-            'https://i.gkd.li/i/24882622',
-            'https://i.gkd.li/i/24883183', //京东广告_小说中途插入
+            'https://i.gkd.li/i/24884414', //听书界面广告
+            'https://i.gkd.li/i/24882622', //听书界面广告
+            'https://i.gkd.li/i/24883183', //阅读界面广告
           ],
           exampleUrls: [
-            'https://e.gkd.li/a6490889-0795-406c-a794-a83b19a4bd5b',
+            'https://e.gkd.li/59c890e2-6732-47cf-b102-cbd896de27f1',
             'https://e.gkd.li/47d13bd7-9a4b-4c34-9d46-0e4e264eab41',
           ],
         },
@@ -78,7 +78,7 @@ export default defineGkdApp({
     {
       key: 2,
       name: '局部广告-阅读界面遇到广告自动翻页',
-      desc: '点击空白区域触发翻页而非关闭广告',
+      desc: '(⚠️有概率误触)点击空白区域触发翻页而非关闭广告',
       fastQuery: true,
       actionDelay: 600,
       actionCd: 8000, //加cd等加载过去防止循环触发,如p2,测试如果点击后用户不再继续翻页触发节点刷新会点回来，所以说依赖用户看小说有多快
@@ -87,7 +87,7 @@ export default defineGkdApp({
           key: 0,
           activityIds: 'com.zhangyue.iReader.read.ui.Activity_BookBrowser_TXT',
           matches:
-            '@FrameLayout - [text^="广告" || text$="赞助作者" || text$="正版内容" || text$="奖励" || text$="耕耘" || text^="助力作者"] <<(9,10) [vid="bookview"]',
+            '[vid="bookview"] >8 @FrameLayout - [text^="广告" || text$="赞助作者" || text$="正版内容" || text$="奖励" || text$="耕耘" || text^="助力作者"]',
           snapshotUrls: [
             'https://i.gkd.li/i/25118364',
             'https://i.gkd.li/i/25307532',
@@ -99,28 +99,22 @@ export default defineGkdApp({
         {
           key: 1,
           activityIds: 'com.qq.e.ads.PortraitADActivity',
-          matches: [
+          matches:
             '@[text=""][visibleToUser=true][index=parent.childCount.minus(1)] <<2 View <3 WebView[childCount=4] < * - RelativeLayout >3 [text="秒后即可获得奖励"]',
-            '[text^="广告" || text$="赞助作者" || text$="正版内容" || text$="奖励" || text$="耕耘" || text^="助力作者"][clickable=true][visibleToUser=true]',
-            '@FrameLayout[index=parent.childCount.minus(1)] -2 FrameLayout > [text="关闭"][clickable=true][visibleToUser=true]', //兜底规则
-          ],
-          snapshotUrls: [
-            'https://i.gkd.li/i/25118663',
-            'https://i.gkd.li/i/24909685',
-            'https://i.gkd.li/i/25943380',
-          ],
-          exampleUrls: [
-            'https://e.gkd.li/3ce04d0a-c2b9-4087-8af6-541a2178eedb',
-            'https://e.gkd.li/d3f1a844-57a3-432e-b642-dbd6c751858e',
-          ],
+          snapshotUrls: 'https://i.gkd.li/i/25118663',
+          exampleUrls: 'https://e.gkd.li/3ce04d0a-c2b9-4087-8af6-541a2178eedb',
         },
         {
           key: 2,
-          activityIds:
+          activityIds: [
+            'com.qq.e.ads.PortraitADActivity',
             'com.bytedance.sdk.openadsdk.stub.activity.Stub_Standard_Portrait_Activity',
+          ],
           matches:
             '@FrameLayout[index=parent.childCount.minus(1)] -2 FrameLayout > [text="关闭"][clickable=true][visibleToUser=true]',
           snapshotUrls: [
+            'https://i.gkd.li/i/25943380',
+            'https://i.gkd.li/i/24909685',
             'https://i.gkd.li/i/25314833', //广告现行
             'https://i.gkd.li/i/25118774',
           ],
@@ -167,23 +161,23 @@ export default defineGkdApp({
     },
     {
       key: 4,
-      name: '全屏广告-会员广告',
+      name: '分段广告-弹窗诱导开通会员',
+      desc: '取消',
       fastQuery: true,
+      activityIds: 'com.zhangyue.iReader.online.ui.ActivityFee',
       rules: [
         {
           key: 0,
-          activityIds: 'com.zhangyue.iReader.online.ui.ActivityFee',
           matches:
-            '@Image[text.length=36][visibleToUser=true] + [text="纯净阅读免广告"] <<11 [vid="online_layout"]',
+            '[text="纯净阅读免广告"] - @Image[width<62][height<62][visibleToUser=true] < View <2 View < WebView <<6 [vid="online_layout"]',
           snapshotUrls: 'https://i.gkd.li/i/25243163',
           exampleUrls: 'https://e.gkd.li/11170624-a19c-4502-a982-9402a291eba6',
         },
         {
           preKeys: [0],
           actionCd: 300,
-          activityIds: 'com.zhangyue.iReader.online.ui.ActivityFee',
           matches:
-            '[text="别走！送你限时优惠"] - @TextView < *[childCount=8] -3 * <<2 [text="纯净阅读免广告"] <<6 [vid="online_layout"]',
+            '[text="别走！送你限时优惠"] - @TextView < [childCount=8] -3 * <<2 [text="纯净阅读免广告"] <<6 [vid="online_layout"]',
           snapshotUrls: 'https://i.gkd.li/i/25243375',
           exampleUrls: 'https://e.gkd.li/422276f9-670c-450f-8fa7-33ab61e98882',
         },
