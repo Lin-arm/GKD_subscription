@@ -77,7 +77,7 @@ export default defineGkdApp({
     },
     {
       key: 2,
-      name: '局部广告-小说内自动划走广告',
+      name: '局部广告-阅读界面遇到广告自动翻页',
       desc: '点击空白区域触发翻页而非关闭广告',
       fastQuery: true,
       actionDelay: 600,
