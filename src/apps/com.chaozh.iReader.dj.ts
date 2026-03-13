@@ -78,7 +78,7 @@ export default defineGkdApp({
     {
       key: 2,
       name: '局部广告-阅读界面遇到广告自动翻页',
-      desc: '(⚠️有概率误触)点击空白区域触发翻页而非关闭广告',
+      desc: '点击空白区域翻页。注意：翻页之后无法翻回去',
       fastQuery: true,
       actionDelay: 600,
       actionCd: 8000, //加cd等加载过去防止循环触发,如p2,测试如果点击后用户不再继续翻页触发节点刷新会点回来，所以说依赖用户看小说有多快
