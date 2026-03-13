@@ -194,8 +194,10 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.zhangyue.iReader.read.ui.Activity_BookBrowser_TXT',
-          matches:
-            '[text="加入书架"] + [text="退出阅读"][clickable=true][visibleToUser=true][index=parent.childCount.minus(1)]',
+          matches: [
+            '[text="加入书架，方便下次阅读"]',
+            '[text="退出阅读"][clickable=true]',
+          ],
           snapshotUrls: 'https://i.gkd.li/i/25244345',
           exampleUrls: 'https://e.gkd.li/942bc38e-ca66-4f64-b37a-a5930b5c145a',
         },
