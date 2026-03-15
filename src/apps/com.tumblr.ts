@@ -15,8 +15,11 @@ export default defineGkdApp({
           key: 0,
           name: '点击菜单',
           matches:
-            '[vid="client_side_header_container"] > [vid="menu_button"][clickable=true][visibleToUser=true]',
-          snapshotUrls: 'https://i.gkd.li/i/25996699',
+            'ViewGroup > @[desc="更多"][clickable=true] -(1,2) [text^="赞助"][visibleToUser=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/25996699',
+            'https://i.gkd.li/i/26002004',
+          ],
           exampleUrls: 'https://e.gkd.li/932873cc-13e0-4c87-a518-dab86c5949e1',
         },
         {
