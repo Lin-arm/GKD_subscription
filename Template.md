@@ -78,7 +78,7 @@
 
 - 使用 [GKD网页审查工具增强脚本](https://github.com/adproqwq/MakeGKDInspectBetter) 可以高度自定义从网页复制出来的规则，提高规则编写效率
 
-- 在 VScode 安装插件 [GKD Toolkit](https://github.com/tianfangyetan1/vscode-gkd-toolkit) ，以方便跳转浏览器打开快照
+- 安装 VS Code 插件 [GKD Toolkit](https://github.com/tianfangyetan1/vscode-gkd-toolkit) ，可以更方便的一次性打开多个快照
 
 - 体验 Plus 版的快照审查工具 [inspect-plus](https://github.com/cjy0812/inspect-plus)
 
