@@ -211,12 +211,11 @@ export default defineGkdApp({
         },
         {
           key: 1,
+          fastQuery: true,
           matches:
-            '@ImageView[clickable=true][childCount=0][parent.childCount<4][index=parent.childCount.minus(1)][width<60 && height<60] - [!(text=null)]',
-          snapshotUrls: [
-            'https://i.gkd.li/i/25021318',
-            'https://i.gkd.li/i/25021659',
-          ],
+            '@ImageView[clickable=true][parent.childCount<4][index=parent.childCount.minus(1)] <3 LinearLayout +(6,7) LinearLayout > [text="评论"][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/25021318',
+          excludeSnapshotUrls: 'https://i.gkd.li/i/25021659', // 给key6活路
         },
       ],
     },
