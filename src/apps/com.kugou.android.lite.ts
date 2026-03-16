@@ -139,8 +139,11 @@ export default defineGkdApp({
         {
           key: 2,
           matches:
-            '@[clickable=true][visibleToUser=true] - FrameLayout <<2 [id="android:id/content"]',
-          snapshotUrls: 'https://i.gkd.li/i/25640086',
+            'ViewGroup > [text="狠心拒绝"][clickable=true][visibleToUser=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/25640086',
+            'https://i.gkd.li/i/26031222',
+          ],
           exampleUrls: 'https://e.gkd.li/1a5e5107-8e05-4031-873c-d3feed467cd7',
         },
       ],
