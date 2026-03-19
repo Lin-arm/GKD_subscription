@@ -162,11 +162,11 @@ export default defineGkdApp({
       key: 16,
       name: '功能类-启动后自动打开更新页面',
       desc: '仅开屏触发一次',
+      fastQuery: true,
+      activityIds: '.business_ui.main.MarketTabActivity',
       rules: [
         {
           key: 0,
-          fastQuery: true,
-          activityIds: '.business_ui.main.MarketTabActivity',
           matches:
             '@[clickable=true] > [text="我的"] <<n [vid="tab_container_layout"]',
           snapshotUrls: 'https://i.gkd.li/i/26096077',
@@ -174,8 +174,6 @@ export default defineGkdApp({
         {
           key: 1,
           preKeys: [0],
-          fastQuery: true,
-          activityIds: '.business_ui.main.MarketTabActivity',
           matches: '@[clickable=true] >2 [text="应用升级"]',
           snapshotUrls: 'https://i.gkd.li/i/26096406',
         },
