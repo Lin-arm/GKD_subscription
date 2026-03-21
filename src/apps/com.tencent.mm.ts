@@ -929,7 +929,7 @@ export default defineGkdApp({
     {
       key: 47,
       name: '功能类-自动清缓存',
-      desc: '存储空间页-清理x2-完成',
+      desc: '存储空间页-清理x2-完成⚠️小程序重要数据慎用',
       actionMaximum: 1,
       resetMatch: 'app',
       fastQuery: true,
