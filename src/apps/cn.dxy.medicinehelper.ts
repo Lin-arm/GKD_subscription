@@ -185,6 +185,15 @@ export default defineGkdApp({
           snapshotUrls: 'https://i.gkd.li/i/26178988',
           exampleUrls: 'https://e.gkd.li/3795ef23-bcb4-48ac-a60b-52c49c6a3d67',
         },
+        {
+          key: 4,
+          fastQuery: true,
+          activityIds: '.activity.MainComposeActivity',
+          matches:
+            '@ImageView[index=parent.childCount.minus(1)] -2 * < View < ScrollView < * < ComposeView <2 ScrollView < * < View < * < * < ComposeView < [id="android:id/content"]',
+          snapshotUrls: 'https://i.gkd.li/i/26179229',
+          exampleUrls: 'https://e.gkd.li/f2ac7d23-43a1-4729-b6fa-f45584afb395',
+        },
       ],
     },
     {
