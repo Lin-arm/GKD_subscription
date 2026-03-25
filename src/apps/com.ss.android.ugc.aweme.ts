@@ -472,11 +472,13 @@ export default defineGkdApp({
             '.detail.ui.DetailActivity',
             '.main.MainActivity',
             'com.bytedance.ies.ugc.aweme.photos.detail.flow.page.FlowPageActivity',
+            '.searcharticle.detail.ArticleDetailActivity',
           ],
           matches: '@[clickable=true] > [text^="展开"][text$="回复"]',
           snapshotUrls: [
             'https://i.gkd.li/i/25356027',
             'https://i.gkd.li/i/26240597',
+            'https://i.gkd.li/i/26240834',
           ],
           excludeSnapshotUrls: 'https://i.gkd.li/i/25356355', // 排除 [展开更多]
           exampleUrls: [
@@ -497,6 +499,7 @@ export default defineGkdApp({
             '.detail.ui.DetailActivity',
             '.main.MainActivity',
             'com.bytedance.ies.ugc.aweme.photos.detail.flow.page.FlowPageActivity',
+            '.searcharticle.detail.ArticleDetailActivity',
           ],
           matches: '@[clickable=true] > [text^="展开更多"]',
           snapshotUrls: [
