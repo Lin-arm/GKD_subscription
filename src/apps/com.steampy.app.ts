@@ -9,6 +9,9 @@ export default defineGkdApp({
       name: '开屏广告',
       fastQuery: true,
       activityIds: '.activity.common.splash.SplashActivity',
+      matchTime: 10000,
+      actionMaximum: 1,
+      resetMatch: 'app',
       rules: [
         {
           matches:
