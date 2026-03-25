@@ -5,6 +5,18 @@ export default defineGkdApp({
   name: 'SteamPY',
   groups: [
     {
+      key: 0,
+      name: '开屏广告',
+      fastQuery: true,
+      activityIds: '.activity.common.splash.SplashActivity',
+      rules: [
+        {
+          matches: '[vid="pyAdLayout"] > [vid="img_ad"] + [vid="count_down_view"][clickable=true][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/26231218',
+        },
+      ],
+    },
+    {
       key: 1,
       name: '更新提示',
       fastQuery: true,
