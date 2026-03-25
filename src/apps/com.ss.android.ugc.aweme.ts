@@ -468,9 +468,16 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: ['.detail.ui.DetailActivity', '.main.MainActivity'],
+          activityIds: [
+            '.detail.ui.DetailActivity',
+            '.main.MainActivity',
+            'com.bytedance.ies.ugc.aweme.photos.detail.flow.page.FlowPageActivity',
+          ],
           matches: '@[clickable=true] > [text^="展开"][text$="回复"]',
-          snapshotUrls: 'https://i.gkd.li/i/25356027',
+          snapshotUrls: [
+            'https://i.gkd.li/i/25356027',
+            'https://i.gkd.li/i/26240597',
+          ],
           excludeSnapshotUrls: 'https://i.gkd.li/i/25356355', // 排除 [展开更多]
           exampleUrls: [
             'https://e.gkd.li/e9ca5fe1-a60c-4ed8-9974-9d79e32c71d7',
@@ -486,7 +493,11 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: ['.detail.ui.DetailActivity', '.main.MainActivity'],
+          activityIds: [
+            '.detail.ui.DetailActivity',
+            '.main.MainActivity',
+            'com.bytedance.ies.ugc.aweme.photos.detail.flow.page.FlowPageActivity',
+          ],
           matches: '@[clickable=true] > [text^="展开更多"]',
           snapshotUrls: [
             'https://i.gkd.li/i/25619324',
