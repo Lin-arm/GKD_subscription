@@ -60,7 +60,7 @@ export default defineGkdApp({
         {
           activityIds: '.MainActivity',
           matches:
-            '[text^="立即了解"] -3 @View[clickable=true] <<n [vid="webContainer"]',
+            '[text*="新版本"] -n @[clickable=true][getChild(0).name$="Image"] <<4 [id="root"] <<3 [vid="webContainer"]',
           snapshotUrls: 'https://i.gkd.li/i/13806865',
         },
       ],
@@ -100,7 +100,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.alicloud.databox.MainActivity',
+          activityIds: '.MainActivity',
           matches: ['[text="容量使用超限"]', '[vid="layout_close"]'],
           exampleUrls:
             'https://m.gkd.li/57941037/a219a480-c0a3-4064-832d-533f66995fed',
@@ -118,7 +118,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.alicloud.databox.transferpage.TransferListActivity',
+          activityIds: '.transferpage.TransferListActivity',
           matches: '[vid="close"]',
           snapshotUrls: 'https://i.gkd.li/i/15433289',
         },
