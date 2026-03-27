@@ -56,5 +56,32 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 4,
+      name: '功能类-上传后自动修改处方',
+      desc: 'OCR识别后-修改处方(补充信息)',
+      fastQuery: true,
+      activityIds: '.home.MainActivity',
+      rules: [
+        {
+          matches:
+            '[text="开始点评"] - @[text="修改处方"][visibleToUser=true] -n [text="处方信息"] < * < [id="root"] <<5 * - View <<4 [id="android:id/content"]',
+          excludeMatches: [
+            '[text="已完成处方点评"] - [text="开始点评"] - @[text="修改处方"][visibleToUser=true] -n [text="处方信息"] < * < [id="root"] <<5 * - View <<4 [id="android:id/content"]', // 已完成处方点评
+            '[text="修改处方信息"] < View[childCount=2] < * <2 * - [id="root"] <<5 * - View <<4 [id="android:id/content"]', // 遮罩层
+          ],
+          snapshotUrls: 'https://i.gkd.li/i/26309504',
+          excludeSnapshotUrls: [
+            'https://i.gkd.li/i/26309528',
+            'https://i.gkd.li/i/26309912',
+          ],
+          exampleUrls: [
+            'https://e.gkd.li/8733fcdb-1938-4d86-bac6-0f9a7a36078c',
+            'https://e.gkd.li/edb0d201-e2c2-40fc-b5ff-3ecb1d4e9737',
+            'https://e.gkd.li/5e21f21d-aeb9-4184-a65d-77f3eb47e408',
+          ],
+        },
+      ],
+    },
   ],
 });
