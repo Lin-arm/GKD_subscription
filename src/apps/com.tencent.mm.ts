@@ -917,6 +917,7 @@ export default defineGkdApp({
       name: '功能类-文件自动app打开',
       desc: '办公文档点下面第一个(默认)app打开',
       fastQuery: true,
+      actionCd: 2000, // 防止点击跳转太快，控制速率
       rules: [
         {
           activityIds: '.ui.chatting.AppAttachNewDownloadUI',
