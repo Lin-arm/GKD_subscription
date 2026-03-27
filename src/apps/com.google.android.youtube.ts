@@ -37,10 +37,10 @@ export default defineGkdApp({
       rules: [
         {
           matches:
-            '@[desc="关闭广告面板" || desc="Close ad panel"] <<n [vid="panel_header"]',
+            '@[desc="关闭广告面板" || desc="Close ad panel"][clickable=true] - ImageView <<3 FrameLayout < [vid="panel_header"][visibleToUser=true]',
           snapshotUrls: [
             'https://i.gkd.li/i/13797491',
-            'https://i.gkd.li/i/13705106',
+            'https://i.gkd.li/i/13705106', // 纯id？
             'https://i.gkd.li/i/14784199',
           ],
         },
@@ -49,21 +49,34 @@ export default defineGkdApp({
     {
       key: 3,
       name: '全屏广告-会员广告',
+      fastQuery: true,
+      activityIds:
+        'com.google.android.apps.youtube.app.watchwhile.MainActivity',
       rules: [
         {
-          fastQuery: true,
-          activityIds:
-            'com.google.android.apps.youtube.app.watchwhile.MainActivity',
+          key: 0,
+          name: '视频',
           matches:
-            '[!(getChild(0).getChild(0).desc="Image attachment")] + @[desc="不用了，谢谢" || desc="关闭" || desc="我暂时不要" || desc="Close" || desc="No thanks"][visibleToUser=true] <<n [vid="bottom_ui_container" || vid="custom"]',
+            '[!(getChild(0).getChild(0).desc="Image attachment")] + @[desc="不用了，谢谢" || desc="关闭" || desc="我暂时不要" || desc="Close" || desc="No thanks"][visibleToUser=true] <3 ViewGroup <<(-n+8) [vid="bottom_ui_container" || vid="custom"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13797512',
-            'https://i.gkd.li/i/18017075',
-            'https://i.gkd.li/i/18549944',
             'https://i.gkd.li/i/19578085',
             'https://i.gkd.li/i/25865404',
           ],
-          excludeSnapshotUrls: 'https://i.gkd.li/i/21978683',
+          // excludeSnapshotUrls: 'https://i.gkd.li/i/21978683',
+          exampleUrls: 'https://e.gkd.li/1292c8c9-26e3-4053-bec4-e5ebe50cde8e',
+        },
+        {
+          key: 1,
+          name: '开屏', // 疑似开屏，但有可能不是
+          matches:
+            '[!(getChild(0).getChild(0).desc="Image attachment")] + @[desc="不用了，谢谢" || desc="关闭" || desc="我暂时不要" || desc="Close" || desc="No thanks"][visibleToUser=true] -n ImageView < * < [vid="custom"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/18017075',
+            'https://i.gkd.li/i/18549944',
+          ],
+          // excludeSnapshotUrls: 'https://i.gkd.li/i/21978683',
+          exampleUrls: 'https://e.gkd.li/11cdf5b2-97a8-42f0-a2eb-dc1cb2c98ac1',
         },
       ],
     },
@@ -93,7 +106,7 @@ export default defineGkdApp({
           activityIds:
             'com.google.android.apps.youtube.app.watchwhile.MainActivity',
           matches:
-            '@Button[desc^="翻译成"||desc^="Translate to"][clickable=true][visibleToUser=true] <<n [vid="results" || vid="section_list"]',
+            '@Button[desc^="翻译成"||desc^="Translate to"][clickable=true][visibleToUser=true] -n [desc^="@"] <<3 ViewGroup -n * < [vid="results" || vid="section_list"]',
           exampleUrls: 'https://e.gkd.li/e9d6eaa8-9fbf-4b16-8f0c-50239597c687',
           snapshotUrls: [
             'https://i.gkd.li/i/17068544', // 翻译前
@@ -153,11 +166,9 @@ export default defineGkdApp({
           activityIds:
             'com.google.android.apps.youtube.app.watchwhile.MainActivity',
           matches:
-            '[desc="更多选项"] + @ImageView[clickable=true][width<100 && height<100] <<n [vid="panel_header"]',
-          snapshotUrls: [
-            'https://i.gkd.li/i/23787178',
-            'https://i.gkd.li/i/25461943', // 误触(已修复)
-          ],
+            '@ImageView[clickable=true][index=parent.childCount.minus(1)] - [desc="更多选项"] < ViewGroup[childCount=2] < * < [vid="panel_header"]',
+          snapshotUrls: 'https://i.gkd.li/i/23787178',
+          excludeSnapshotUrls: 'https://i.gkd.li/i/25461943', // 误触(已修复)
         },
       ],
     },
@@ -171,7 +182,7 @@ export default defineGkdApp({
           activityIds:
             'com.google.android.apps.youtube.app.watchwhile.MainActivity',
           matches:
-            '@[vid="overflow_button"][clickable=true] <<n [vid="collapsible_ad_cta_overlay_container"]',
+            '[vid="layout_container"] >n LinearLayout > GridLayout > [vid="overflow_button"][index=parent.childCount.minus(1)][clickable=true][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/23790199',
         },
         {
@@ -199,9 +210,9 @@ export default defineGkdApp({
           activityIds:
             'com.google.android.apps.youtube.app.watchwhile.MainActivity',
           matches:
-            'Button[childCount=3] < @ViewGroup[clickable=true][visibleToUser=true] <<n [vid="section_list"]',
+            'Button[childCount=3] < @ViewGroup[clickable=true][visibleToUser=true] -n ViewGroup < [vid="section_list"]',
           snapshotUrls: [
-            'https://i.gkd.li/i/25462396',
+            'https://i.gkd.li/i/25462396', // 中文
             'https://i.gkd.li/i/25466817', // En
           ],
         },
