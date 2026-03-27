@@ -264,5 +264,20 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 10,
+      name: '功能类-‘保存’图片帖子',
+      desc: '展开菜单自动点击保存图片',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: 'com.twitter.app.gallery.GalleryActivity',
+          matches:
+            '@LinearLayout[clickable=true] >3 [text="保存" || text="Save"][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/26303860',
+          exampleUrls: 'https://e.gkd.li/552c4889-e994-4082-8229-d5c5b37e4c6b',
+        },
+      ],
+    },
   ],
 });
