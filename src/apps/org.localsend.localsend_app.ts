@@ -14,7 +14,7 @@ export default defineGkdApp({
           activityIds: '.MainActivity',
           matches:
             '@Button[index=0] < View[childCount=2][desc*="%"][desc.length<20] - * <<5 [id="android:id/content"]',
-          snapshotUrls: 'https://i.gkd.li/i/26314722',
+          snapshotUrls: 'https://i.gkd.li/i/26321028',
           excludeSnapshotUrls: 'https://i.gkd.li/i/26314724', // 高级信息已显示
           exampleUrls: [
             'https://e.gkd.li/54a7208c-03b2-4e74-a8ed-99829d72c8c5',
