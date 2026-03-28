@@ -14,8 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.ui.activity.MainActivity',
-          matches:
-            '[vid="buttonPanel"] >2 [text="取消"]',
+          matches: '[vid="buttonPanel"] >2 [text="取消"]',
           snapshotUrls: 'https://i.gkd.li/i/14035154',
         },
       ],

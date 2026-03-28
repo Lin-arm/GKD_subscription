@@ -11,10 +11,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: [
-            '.business.',
-            '.activity.',
-          ],
+          activityIds: ['.business.', '.activity.'],
           matches: '[vid="adOptionEntry" || vid="adClose"][visibleToUser=true]',
           snapshotUrls: [
             'https://i.gkd.li/i/14232228',
