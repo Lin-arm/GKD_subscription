@@ -18,7 +18,7 @@ export default defineGkdApp({
           key: 1,
           matches: '@Image < View -2 View > View > View TextView[text="广告"]',
           snapshotUrls: [
-            'https://i.gkd.li/i/12910419', //activityIds: '.ui.activity.main.MainActivity',
+            'https://i.gkd.li/i/12910419', //activityIds: 'com.gspace.android.ui.activity.main.MainActivity',
             'https://i.gkd.li/i/12910935', //activityIds: 'com.huawei.android.launcher.unihome.UniHomeLauncher',
           ],
         },

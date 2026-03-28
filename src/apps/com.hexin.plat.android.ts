@@ -67,7 +67,7 @@ export default defineGkdApp({
     {
       key: 10,
       name: '局部广告-底部产品广告',
-      activityIds: [''],
+      activityIds: '.Hexin',
       rules: [
         {
           matches: '[vid="prod_ad"] + [vid="prod_close_image"]',

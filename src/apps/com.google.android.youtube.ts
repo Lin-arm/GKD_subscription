@@ -14,7 +14,6 @@ export default defineGkdApp({
           activityIds: [
             'com.google.android.apps.youtube.app.watchwhile.WatchWhileActivity',
             'com.google.android.apps.youtube.app.watchwhile.MainActivity',
-            '',
           ],
           matches: '[vid="skip_ad_button" || vid="modern_skip_ad_text"]',
           snapshotUrls: [
