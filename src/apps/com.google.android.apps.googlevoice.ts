@@ -18,8 +18,8 @@ export default defineGkdApp({
       rules: [
         {
           matches: [
-            '[id="com.google.android.apps.googlevoice:id/title_view"][text="Link this device to Google Voice" || text="将此设备与 Google Voice 关联" || text="將這個裝置連結到 Google Voice"]',
-            '[id="com.google.android.apps.googlevoice:id/skip_button"]',
+            '[vid="title_view"][text="Link this device to Google Voice" || text="将此设备与 Google Voice 关联" || text="將這個裝置連結到 Google Voice"]',
+            '[vid="skip_button"]',
           ],
           snapshotUrls: [
             'https://i.gkd.li/i/13314255',

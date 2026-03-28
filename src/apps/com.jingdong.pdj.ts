@@ -16,12 +16,12 @@ export default defineGkdApp({
         {
           key: 0,
           matches:
-            'WebView[text="京东到家"] >5 @View[clickable=true][childCount=1][visibleToUser=true] > View[childCount=1] > TextView[childCount=0] <<n [id="com.jingdong.pdj:id/mWebView"]',
+            'WebView[text="京东到家"] >5 @View[clickable=true][childCount=1][visibleToUser=true] > View[childCount=1] > TextView[childCount=0] <<n [vid="mWebView"]',
           snapshotUrls: 'https://i.gkd.li/i/13217796',
         },
         {
           key: 1,
-          matches: '[id="com.jingdong.pdj:id/ivClose"][desc="关闭"]',
+          matches: '[vid="ivClose"][desc="关闭"]',
           snapshotUrls: 'https://i.gkd.li/i/13223282',
         },
       ],

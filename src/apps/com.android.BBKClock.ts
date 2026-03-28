@@ -10,8 +10,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds:
-            'com.android.BBKClock.alarmclock.view.activity.AlarmAlertFullScreen',
+          activityIds: '.alarmclock.view.activity.AlarmAlertFullScreen',
           matches:
             '[vid="snooze_clock_view"] + [vid="close_button"][clickable=true][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/25462593',

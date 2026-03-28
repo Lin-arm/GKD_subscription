@@ -11,7 +11,7 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: 'com.zdyl.mfood.ui.home.MainActivity',
-          matches: '[id="com.m.mfood:id/close"]',
+          matches: '[vid="close"]',
           snapshotUrls: 'https://i.gkd.li/i/13350787',
         },
       ],

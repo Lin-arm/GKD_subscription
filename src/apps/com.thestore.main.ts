@@ -13,7 +13,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.thestore.main.app.home.HomeActivity',
+          activityIds: '.app.home.HomeActivity',
           matches:
             '@TextView[clickable=true][childCount=0] <2 RelativeLayout[childCount=2] < FrameLayout < [parent=null]',
           snapshotUrls: 'https://i.gkd.li/i/13163686',

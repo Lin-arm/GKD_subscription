@@ -9,8 +9,7 @@ export default defineGkdApp({
       name: '局部广告-自选页面广告',
       rules: [
         {
-          activityIds:
-            'com.eastmoney.android.fund.centralis.activity.FundRootActivity',
+          activityIds: '.centralis.activity.FundRootActivity',
           matches:
             'FrameLayout > FrameLayout > ImageView + FrameLayout[childCount=1] > ImageView',
           snapshotUrls: 'https://i.gkd.li/i/12642387',
@@ -22,8 +21,7 @@ export default defineGkdApp({
       name: '其他-自选页面缩写提示信息',
       rules: [
         {
-          activityIds:
-            'com.eastmoney.android.fund.centralis.activity.FundRootActivity',
+          activityIds: '.centralis.activity.FundRootActivity',
           matches:
             '[desc="表示场内基金的最新价和折价率"] -(2) FrameLayout < FrameLayout + ImageView',
           snapshotUrls: 'https://i.gkd.li/i/12642387',
@@ -41,7 +39,7 @@ export default defineGkdApp({
         {
           activityIds: '.centralis.activity.FundRootActivity',
           matches:
-            '@FrameLayout[clickable=true] - * >2 [desc="立即升级"] <<n [id="com.eastmoney.android.fund:id/container"]',
+            '@FrameLayout[clickable=true] - * >2 [desc="立即升级"] <<n [vid="container"]',
           snapshotUrls: 'https://i.gkd.li/i/13546927',
         },
       ],
@@ -54,8 +52,8 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: [
-            'com.eastmoney.android.fund.centralis.activity.FundRootActivity',
-            'com.eastmoney.android.fund.activity.FundSplashActivity',
+            '.centralis.activity.FundRootActivity',
+            '.activity.FundSplashActivity',
           ],
           matches:
             'ImageView[childCount=0] < @FrameLayout[clickable=true][childCount=1] <2 FrameLayout < FrameLayout < FrameLayout < FrameLayout < [vid="container"]',

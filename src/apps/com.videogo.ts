@@ -8,16 +8,16 @@ export default defineGkdApp({
       key: 1,
       name: '分段广告-主页广告',
       fastQuery: true,
-      activityIds: 'com.videogo.main.MainTabActivity',
+      activityIds: '.main.MainTabActivity',
       rules: [
         {
           key: 0,
-          matches: '[id="com.videogo:id/ad_close"]',
+          matches: '[vid="ad_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13255684',
         },
         {
           preKeys: [0],
-          matches: '[id="com.videogo:id/ad_closead_nointerest"]',
+          matches: '[vid="ad_closead_nointerest"]',
           snapshotUrls: 'https://i.gkd.li/i/13255697',
         },
       ],

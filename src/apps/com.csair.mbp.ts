@@ -15,7 +15,7 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: '.CSMBPActivity',
-          matches: '[id="com.csair.mbp:id/close_btn"]',
+          matches: '[vid="close_btn"]',
           exampleUrls: 'https://e.gkd.li/c6aeaf1c-e4d6-4b9c-a4bf-ee5b05d2bb30',
           snapshotUrls: 'https://i.gkd.li/i/13197497',
         },
@@ -31,7 +31,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.csair.mbp.CSMBPActivity',
+          activityIds: '.CSMBPActivity',
           matches: '[text="开启长辈版"] -2 [text="暂不开启"]',
           exampleUrls:
             'https://m.gkd.li/57941037/8744f8c6-7f9a-4f7b-a5c7-68de1701cd7b',

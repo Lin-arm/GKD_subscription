@@ -11,7 +11,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.android.documentsui.picker.PickActivity',
+          activityIds: '.picker.PickActivity',
           matches: [
             '[text^="要允许"][visibleToUser=true]',
             '[text="允许"][visibleToUser=true]',
@@ -26,7 +26,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.android.documentsui.picker.PickActivity',
+          activityIds: '.picker.PickActivity',
           matches: '[text="使用此文件夹"]',
           snapshotUrls: 'https://i.gkd.li/i/13916082',
         },

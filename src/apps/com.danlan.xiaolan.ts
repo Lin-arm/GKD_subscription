@@ -15,7 +15,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          matches: '[id="com.danlan.xiaolan:id/img_close"][clickable=true]',
+          matches: '[vid="img_close"][clickable=true]',
           snapshotUrls: [
             'https://i.gkd.li/i/13421613',
             'https://i.gkd.li/i/13421923',

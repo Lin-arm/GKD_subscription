@@ -13,11 +13,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.cctv.cctv5ultimate.activity.MainActivity',
-          matches: [
-            '[text="广告"]',
-            '[id="com.cctv.cctv5ultimate:id/iv_close"]',
-          ],
+          activityIds: '.activity.MainActivity',
+          matches: ['[text="广告"]', '[vid="iv_close"]'],
           snapshotUrls: 'https://i.gkd.li/i/13405159',
         },
       ],
@@ -29,8 +26,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds:
-            'com.cctv.cctv5ultimate.videodetail.activity.VideoDetailActivity',
+          activityIds: '.videodetail.activity.VideoDetailActivity',
           matches:
             '@ImageView[clickable=true][childCount=0] + LinearLayout > [text="广告"]',
           exampleUrls: 'https://e.gkd.li/26bf9fcc-9dda-4465-a4d5-3fd56a3addde',

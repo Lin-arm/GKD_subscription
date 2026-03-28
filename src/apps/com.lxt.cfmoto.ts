@@ -16,7 +16,7 @@ export default defineGkdApp({
           name: '首页弹窗广告',
           fastQuery: true,
           activityIds: 'com.cfmoto.oilmoto.ui.MainCfActivity',
-          matches: '[id="com.lxt.cfmoto:id/closeClick"]',
+          matches: '[vid="closeClick"]',
           snapshotUrls: 'https://i.gkd.li/i/13401967',
         },
       ],

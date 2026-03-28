@@ -13,7 +13,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          matches: '[id="com.pandabus.android.zb:id/iv_native_dislike"]',
+          matches: '[vid="iv_native_dislike"]',
           snapshotUrls: 'https://i.gkd.li/i/13400177',
         },
       ],

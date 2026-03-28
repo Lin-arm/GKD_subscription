@@ -14,8 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.activity.MainActivity',
-          matches:
-            '[id="com.redfinger.app:id/btn_update"] + [id="com.redfinger.app:id/iv_close"]',
+          matches: '[vid="btn_update"] + [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13761821',
         },
       ],
@@ -30,8 +29,8 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds: 'com.redfinger.app.activity.MainActivity',
-          matches: '[id="com.redfinger.app:id/rl_screen_ad_close"]',
+          activityIds: '.activity.MainActivity',
+          matches: '[vid="rl_screen_ad_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13761825',
         },
       ],

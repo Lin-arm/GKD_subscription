@@ -38,7 +38,7 @@ export default defineGkdApp({
       desc: '点击X',
       rules: [
         {
-          activityIds: 'com.mxchip.petmarvel.device.panel.DevicePanelActivity',
+          activityIds: '.device.panel.DevicePanelActivity',
           matches:
             'View[childCount=19] > View[index=1] > Image[clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/13989316',
@@ -55,7 +55,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.mxchip.petmarvel.MainActivity',
+          activityIds: '.MainActivity',
           matches: '[vid="iv_close"]',
           exampleUrls:
             'https://m.gkd.li/57941037/de4ea9ad-c85f-4ace-bd4e-7b7fc9adbc2a',

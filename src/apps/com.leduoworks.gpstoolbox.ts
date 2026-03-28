@@ -10,8 +10,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.leduoworks.gpstoolbox.frmt.MainFrmtActivity',
-          matches: '[id="com.leduoworks.gpstoolbox:id/iv_close"]',
+          activityIds: '.frmt.MainFrmtActivity',
+          matches: '[vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13062612',
         },
       ],

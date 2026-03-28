@@ -22,7 +22,7 @@ export default defineGkdApp({
         {
           key: 1,
           matches:
-            '[id="com.juduoduo.app:id/ksad_tk_view"] @ViewGroup[clickable=true] > [text="跳过"]',
+            '[vid="ksad_tk_view"] @ViewGroup[clickable=true] > [text="跳过"]',
           snapshotUrls: 'https://i.gkd.li/i/13705662',
         },
       ],

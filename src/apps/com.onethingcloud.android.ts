@@ -31,7 +31,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.onethingcloud.android.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             '@ImageView[clickable=true][visibleToUser=true][index=parent.childCount.minus(1)] <(2,3) View[getChild(0).text=null] < View < View[childCount=2] < View < FrameLayout < [id="android:id/content"]',
           snapshotUrls: [

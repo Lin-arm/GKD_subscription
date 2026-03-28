@@ -41,7 +41,7 @@ export default defineGkdApp({
           key: 2,
           name: '评论区评论氛围满意度',
           fastQuery: true,
-          activityIds: 'com.ss.android.ugc.aweme.main.MainActivity',
+          activityIds: '.main.MainActivity',
           matches:
             'FrameLayout[childCount=7] > [text$="评论氛围是否满意？,匿名"] + UIImage[text="关闭,按钮"][clickable=true][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/25571238',
@@ -280,7 +280,7 @@ export default defineGkdApp({
           key: 0,
           name: '弹窗',
           action: 'back',
-          matches: '[id="com.ss.android.ugc.aweme:id/rootview"]',
+          matches: '[vid="rootview"]',
           snapshotUrls: 'https://i.gkd.li/i/13755373',
         },
         {

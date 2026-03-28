@@ -34,8 +34,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.xiaomi.fitness.main.MainActivity',
-          matches:
-            '[text="开启后台无限制"] + [id="com.mi.health:id/close_icon"]',
+          matches: '[text="开启后台无限制"] + [vid="close_icon"]',
           snapshotUrls: 'https://i.gkd.li/i/13495035',
         },
       ],
@@ -52,8 +51,7 @@ export default defineGkdApp({
           key: 0,
           name: '活动弹窗',
           activityIds: 'com.xiaomi.fitness.main.MainActivity',
-          matches:
-            '[id="com.mi.health:id/cardview"] + [id="com.mi.health:id/dialog_close"]',
+          matches: '[vid="cardview"] + [vid="dialog_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13537836',
         },
         {

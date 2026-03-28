@@ -15,7 +15,7 @@ export default defineGkdApp({
         {
           activityIds: '.ui.activity.MainActivity',
           matches:
-            '[id="com.fongmi.android.tv:id/buttonPanel"] >2 [text="取消"]',
+            '[vid="buttonPanel"] >2 [text="取消"]',
           snapshotUrls: 'https://i.gkd.li/i/14035154',
         },
       ],

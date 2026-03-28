@@ -31,11 +31,11 @@ export default defineGkdApp({
     {
       key: 2,
       name: '全屏广告-弹窗广告',
-      activityIds: 'com.babytree.apps.pregnancy.activity.SailfishActivity',
+      activityIds: '.activity.SailfishActivity',
       rules: [
         {
           matches:
-            'ImageView[id="com.babytree.apps.pregnancy:id/bb_referenced_active_dialog_img_2"] + ImageView[id!=null][clickable=true]',
+            'ImageView[vid="bb_referenced_active_dialog_img_2"] + ImageView[id!=null][clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/12614834',
         },
       ],
@@ -43,7 +43,7 @@ export default defineGkdApp({
     {
       key: 3,
       name: '局部广告-首页右侧悬浮广告',
-      activityIds: 'com.babytree.apps.pregnancy.activity.SailfishActivity',
+      activityIds: '.activity.SailfishActivity',
       rules: [
         {
           matches:

@@ -50,11 +50,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: [
-            'com.oray.sunlogin.application.Main',
-            '.dialog.ShareDialog',
-          ],
-          matches: '[id="com.oray.sunlogin:id/close"][text="关闭"]',
+          activityIds: ['.application.Main', '.dialog.ShareDialog'],
+          matches: '[vid="close"][text="关闭"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13195950',
             'https://i.gkd.li/i/12910411',
@@ -74,7 +71,7 @@ export default defineGkdApp({
         {
           activityIds: '.application.Main',
           matches:
-            '[text="立即更新"] <2 * > [id="com.oray.sunlogin:id/button_cancel"][text="以后再说"]',
+            '[text="立即更新"] <2 * > [vid="button_cancel"][text="以后再说"]',
           snapshotUrls: 'https://i.gkd.li/i/13195560',
         },
       ],
@@ -89,7 +86,7 @@ export default defineGkdApp({
           key: 0,
           action: 'clickCenter', // clickNode 可能无效
           matches:
-            '[id="com.oray.sunlogin:id/fl_close_advertise" || vid="iv_dislike"][visibleToUser=true]',
+            '[vid="fl_close_advertise" || vid="iv_dislike"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/2cad526b-1691-45e9-826b-eb92299cb8ee',
           snapshotUrls: [
             'https://i.gkd.li/i/13207785',

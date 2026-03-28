@@ -14,7 +14,7 @@ export default defineGkdApp({
           matchTime: 10000,
           actionMaximum: 1,
           resetMatch: 'app',
-          activityIds: 'com.pingan.smt.MainActivity',
+          activityIds: '.MainActivity',
           matches: '[vid="close_view"]',
           exampleUrls: 'https://e.gkd.li/97a058cf-0564-4194-b527-b2ec40233204',
           snapshotUrls: 'https://i.gkd.li/i/17011387',

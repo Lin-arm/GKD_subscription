@@ -61,7 +61,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'org.qiyi.android.video.MainActivity',
-          matches: '[id="com.qiyi.video:id/cancel_btn"][text="暂时不要"]',
+          matches: '[vid="cancel_btn"][text="暂时不要"]',
           snapshotUrls: 'https://i.gkd.li/i/12838152',
         },
       ],

@@ -14,7 +14,7 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds: 'com.feiyu.morin.view.main.MainActivity',
+          activityIds: '.view.main.MainActivity',
           matches:
             '@ImageView[childCount=0][text=null][desc=null][id=null][visibleToUser=true][width<90 && height<90] < FrameLayout[childCount=1][text=null][desc=null][id=null][parent.childCount>3] <n FrameLayout >(2,3) [text^="立即" || text$="详情" || text^="了解" || text="去微信看看" || text$="应用" || text="进入小程序" || text="领取优惠" || text="跳转微信"]',
           snapshotUrls: 'https://i.gkd.li/i/13521556',
@@ -23,14 +23,14 @@ export default defineGkdApp({
           key: 1,
           name: '快手广告',
           fastQuery: true,
-          activityIds: 'com.feiyu.morin.view.main.MainActivity',
+          activityIds: '.view.main.MainActivity',
           matches: ['[text="广告"]', '@ViewGroup > [text="跳过"]'],
           snapshotUrls: 'https://i.gkd.li/i/13546184',
         },
         {
           key: 2,
           fastQuery: true,
-          activityIds: 'com.feiyu.morin.view.main.MainActivity',
+          activityIds: '.view.main.MainActivity',
           matches:
             '@ViewGroup[clickable=true][childCount=1] < ViewGroup +2 ViewGroup > [text="广告"]',
           exampleUrls: 'https://e.gkd.li/52f8dddd-3604-4144-96ce-804c66e77a19',
@@ -56,8 +56,8 @@ export default defineGkdApp({
           name: '腾讯广告',
           fastQuery: true,
           activityIds: [
-            'com.feiyu.morin.view.main.MainActivity',
-            'com.feiyu.morin.view.main.PlayerBottomControlActivity',
+            '.view.main.MainActivity',
+            '.view.main.PlayerBottomControlActivity',
           ],
           matches:
             '@ImageView[childCount=0][visibleToUser=true] < FrameLayout[childCount=1] - LinearLayout[childCount=2] > [text="下载应用" || text="立即下载" || text="查看详情" || text="领取优惠" || text="进入小程序" || text="了解更多"][visibleToUser=true]',

@@ -8,17 +8,17 @@ export default defineGkdApp({
       key: 1,
       name: '分段广告-卡片广告',
       activityIds: [
-        'com.mygolbs.mybus.RTimeActivity',
-        'com.mygolbs.mybus.NewHomePageActivity',
-        'com.mygolbs.mybus.StationsResultActivityNew',
-        'com.mygolbs.mybus.mapsearch.poisearch.PoiSearchActivity',
+        '.RTimeActivity',
+        '.NewHomePageActivity',
+        '.StationsResultActivityNew',
+        '.mapsearch.poisearch.PoiSearchActivity',
       ],
       rules: [
         {
           key: 1,
           name: '点击底部中间x关闭图标',
           matches:
-            '[id="com.mygolbs.mybus:id/ad_frameLayout"] RelativeLayout[childCount=4] > TextView[text.length>0] + ImageView + ImageView[clickable=true][id=null]',
+            '[vid="ad_frameLayout"] RelativeLayout[childCount=4] > TextView[text.length>0] + ImageView + ImageView[clickable=true][id=null]',
           snapshotUrls: [
             'https://i.gkd.li/i/12790521',
             'https://i.gkd.li/i/12790706',
@@ -30,7 +30,7 @@ export default defineGkdApp({
           key: 2,
           name: '点击右上/下角x关闭图标',
           matches:
-            '[id="com.mygolbs.mybus:id/ad_frameLayout"] View[childCount=2||childCount=3] > View[childCount=4] > View[childCount=1] > Image[text=""]',
+            '[vid="ad_frameLayout"] View[childCount=2||childCount=3] > View[childCount=4] > View[childCount=1] > Image[text=""]',
           snapshotUrls: [
             'https://i.gkd.li/i/12790656',
             'https://i.gkd.li/i/12790903',
@@ -40,14 +40,14 @@ export default defineGkdApp({
           key: 3,
           name: '点击右上角x关闭图标-2',
           matches:
-            '[id="com.mygolbs.mybus:id/ad_frameLayout"] View[childCount=5] > View[childCount=2][index=4] > View[childCount=1] > Image[text=""]',
+            '[vid="ad_frameLayout"] View[childCount=5] > View[childCount=2][index=4] > View[childCount=1] > Image[text=""]',
           snapshotUrls: 'https://i.gkd.li/i/12790610',
         },
         {
           key: 4,
           name: '点击右上角x关闭图标-3',
           matches:
-            '[id="com.mygolbs.mybus:id/ad_frameLayout"] View[childCount=2] > View[childCount=6][index=0] > View[childCount=1][index=3] > Image[text=""]',
+            '[vid="ad_frameLayout"] View[childCount=2] > View[childCount=6][index=0] > View[childCount=1][index=3] > Image[text=""]',
           snapshotUrls: 'https://i.gkd.li/i/12790941',
         },
         {
@@ -81,8 +81,8 @@ export default defineGkdApp({
           key: 0,
           fastQuery: true,
           activityIds: [
-            'com.mygolbs.mybus.mapsearch.poisearch.PoiSearchActivity',
-            'com.mygolbs.mybus.LoginActivity',
+            '.mapsearch.poisearch.PoiSearchActivity',
+            '.LoginActivity',
           ],
           matches:
             '@ImageView[childCount=0][text=null][desc=null][id=null][visibleToUser=true][width<90 && height<90] < FrameLayout[childCount=1][text=null][desc=null][id=null][parent.childCount>3] <n FrameLayout >(2,3) [text^="立即" || text$="详情" || text^="了解" || text="去微信看看" || text$="应用" || text="进入小程序" || text="领取优惠" || text="跳转微信"]',
@@ -115,10 +115,7 @@ export default defineGkdApp({
         {
           key: 3,
           fastQuery: true,
-          activityIds: [
-            'com.mygolbs.mybus.NewHomePageActivity',
-            'com.mygolbs.mybus.RTimeActivity',
-          ],
+          activityIds: ['.NewHomePageActivity', '.RTimeActivity'],
           matches:
             '@ImageView[childCount=0][text=null][desc=null][id=null][visibleToUser=true][width<90 && height<90] < FrameLayout[childCount=1][text=null][desc=null][id=null][parent.childCount>3] <n FrameLayout >(2,3) [text^="立即" || text$="详情" || text^="了解" || text="去微信看看" || text$="应用" || text="进入小程序" || text="领取优惠" || text="跳转微信"]',
           snapshotUrls: [
@@ -131,11 +128,11 @@ export default defineGkdApp({
     {
       key: 3,
       name: '局部广告-顶栏小广告',
-      activityIds: 'com.mygolbs.mybus.RTimeActivity',
+      activityIds: '.RTimeActivity',
       rules: [
         {
           name: '点击右侧x关闭按钮',
-          matches: '[id="com.mygolbs.mybus:id/ad_close2"]',
+          matches: '[vid="ad_close2"]',
           snapshotUrls: 'https://i.gkd.li/i/12790841',
         },
       ],
@@ -161,9 +158,9 @@ export default defineGkdApp({
       desc: '点击关闭',
       rules: [
         {
-          activityIds: 'com.mygolbs.mybus.guligold.SignSuccessActivity',
+          activityIds: '.guligold.SignSuccessActivity',
           matches:
-            '@[id="com.mygolbs.mybus:id/iv_close"] < RelativeLayout - LinearLayout >n [text="签到成功"]',
+            '@[vid="iv_close"] < RelativeLayout - LinearLayout >n [text="签到成功"]',
           snapshotUrls: 'https://i.gkd.li/i/12716035',
         },
       ],

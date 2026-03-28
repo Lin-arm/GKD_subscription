@@ -12,7 +12,7 @@ export default defineGkdApp({
         {
           key: 1,
           fastQuery: true,
-          activityIds: 'com.wifitutu.ui.main.MainActivity',
+          activityIds: '.ui.main.MainActivity',
           matches:
             '@View[clickable=true][childCount=0][visibleToUser=true] < FrameLayout[desc^="dislike"] + FrameLayout >2 [text="广告"]',
           snapshotUrls: 'https://i.gkd.li/i/13233916',
@@ -20,9 +20,9 @@ export default defineGkdApp({
         {
           key: 2,
           fastQuery: true,
-          activityIds: 'com.wifitutu.ui.main.MainActivity',
+          activityIds: '.ui.main.MainActivity',
           matches:
-            '@Image[text=""] < View +n View > View > TextView[visibleToUser=true][text="广告"] <<n [id="com.wifitutu:id/ad_part"]',
+            '@Image[text=""] < View +n View > View > TextView[visibleToUser=true][text="广告"] <<n [vid="ad_part"]',
           snapshotUrls: 'https://i.gkd.li/i/13234048',
         },
       ],

@@ -33,7 +33,7 @@ export default defineGkdApp({
         {
           activityIds:
             'com.tencent.qt.module_appupdate.soft_update.impl.SoftUpdateConfirmActivity',
-          matches: '[id="com.tencent.qt.qtl:id/btn_update_cancel"]',
+          matches: '[vid="btn_update_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/13611286',
         },
       ],

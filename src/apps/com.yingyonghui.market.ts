@@ -12,7 +12,7 @@ export default defineGkdApp({
           key: 0,
           name: '快手广告',
           fastQuery: true,
-          activityIds: 'com.yingyonghui.market.ui.MainActivity',
+          activityIds: '.ui.MainActivity',
           matches: [
             '[text="广告"]',
             '@ImageView[clickable=true] - [text="|"] - [text$="s"]',

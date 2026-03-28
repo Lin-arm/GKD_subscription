@@ -15,8 +15,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          matches:
-            '[id="com.enflick.android.TextNow:id/btn_dismiss"][text="Not Now"]',
+          matches: '[vid="btn_dismiss"][text="Not Now"]',
           snapshotUrls: 'https://i.gkd.li/i/13630460',
         },
         {
@@ -34,9 +33,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.enflick.android.TextNow.activities.MainActivity',
-          matches:
-            '@ImageView[clickable=true] <2 [id="com.enflick.android.TextNow:id/calling_banner"]',
+          activityIds: '.activities.MainActivity',
+          matches: '@ImageView[clickable=true] <2 [vid="calling_banner"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13657279',
             'https://i.gkd.li/i/13657280',

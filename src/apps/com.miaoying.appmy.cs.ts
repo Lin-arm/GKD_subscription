@@ -27,7 +27,7 @@ export default defineGkdApp({
       actionMaximum: 1,
       resetMatch: 'app',
       actionDelay: 750,
-      activityIds: 'com.miaoying.appmy.cs.MainActivity',
+      activityIds: '.MainActivity',
       rules: [
         {
           key: 0,

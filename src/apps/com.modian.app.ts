@@ -10,9 +10,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.modian.app.ui.activity.MainActivity',
-          matches:
-            '[id="com.modian.app:id/fl_banner_layout"] > [id="com.modian.app:id/iv_close"]',
+          activityIds: '.ui.activity.MainActivity',
+          matches: '[vid="fl_banner_layout"] > [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13610188',
         },
       ],

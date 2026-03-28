@@ -26,9 +26,9 @@ export default defineGkdApp({
       key: 0,
       name: '局部广告-阅读页面广告',
       activityIds: [
-        'com.dragon.read.ad.banner.ui',
-        'com.dragon.read.reader.ReaderActivity',
-        'com.dragon.read.reader.ui.ReaderActivity',
+        '.ad.banner.ui',
+        '.reader.ReaderActivity',
+        '.reader.ui.ReaderActivity',
       ],
       rules: [
         {
@@ -48,7 +48,7 @@ export default defineGkdApp({
           key: 2,
           fastQuery: true,
           activityIds: '.reader.ui.ReaderActivity',
-          matches: '[id="com.dragon.read:id/close_button"][visibleToUser=true]',
+          matches: '[vid="close_button"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/3de0d5d9-0c02-4fe7-b5e8-b9fdb6688f8e',
           snapshotUrls: 'https://i.gkd.li/i/13520314',
         },
@@ -107,8 +107,8 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: [
-            'com.dragon.read.pages.main.MainFragmentActivity',
-            'com.dragon.read.ad.openingscreenad.OpeningScreenADActivity',
+            '.pages.main.MainFragmentActivity',
+            '.ad.openingscreenad.OpeningScreenADActivity',
           ],
           matches:
             '@ImageView[clickable=true][childCount=0][index=0][visibleToUser=true] < [childCount=3] < RelativeLayout < FrameLayout <2 [id="android:id/content"][childCount=3]',
@@ -126,7 +126,7 @@ export default defineGkdApp({
         {
           key: 0,
           name: '电商惊喜券',
-          activityIds: 'com.dragon.read.pages.main.MainFragmentActivity',
+          activityIds: '.pages.main.MainFragmentActivity',
           fastQuery: true,
           matches:
             '@LynxFlattenUI[id=null][text=""][clickable=true] - [text="去逛商城"] -4 [text$="电商惊喜券"]',
@@ -136,7 +136,7 @@ export default defineGkdApp({
           key: 1,
           name: '爆款好物一分购',
           fastQuery: true,
-          activityIds: 'com.dragon.read.pages.main.MainFragmentActivity',
+          activityIds: '.pages.main.MainFragmentActivity',
           matches:
             '@ImageView[clickable=true] <2 LinearLayout[childCount=2] < [id="android:id/content"][childCount=1]',
           snapshotUrls: 'https://i.gkd.li/i/12878266',
@@ -145,7 +145,7 @@ export default defineGkdApp({
           key: 2,
           name: '抽奖赢好礼',
           fastQuery: true,
-          activityIds: 'com.dragon.read.pages.main.MainFragmentActivity',
+          activityIds: '.pages.main.MainFragmentActivity',
           matches: '@LynxFlattenUI[clickable=true] - [text="前往抽奖"]',
           exampleUrls:
             'https://m.gkd.li/57941037/77c4098a-818f-4d0f-8492-e98818d0da27',
@@ -155,7 +155,7 @@ export default defineGkdApp({
           key: 3,
           name: '签到弹窗',
           fastQuery: true,
-          activityIds: 'com.dragon.read.pages.main.MainFragmentActivity',
+          activityIds: '.pages.main.MainFragmentActivity',
           matches:
             '@LynxFlattenUI[clickable=true][visibleToUser=true][text=""] -27 FlattenUIText[text^="立即签到"]',
           exampleUrls:
@@ -174,15 +174,14 @@ export default defineGkdApp({
         {
           key: 5,
           fastQuery: true,
-          activityIds: 'com.dragon.read.reader.ui.ReaderActivity',
-          matches:
-            'TextView[text="广告"] +2 Button[id="com.dragon.read:id/close"]',
+          activityIds: '.reader.ui.ReaderActivity',
+          matches: 'TextView[text="广告"] +2 Button[vid="close"]',
           snapshotUrls: 'https://i.gkd.li/i/13191156',
         },
         {
           key: 6,
           fastQuery: true,
-          activityIds: 'com.dragon.read.reader.ui.ReaderActivity',
+          activityIds: '.reader.ui.ReaderActivity',
           matches:
             '@ImageView[clickable=true][visibleToUser=true] +5 [text="领取限时福利"]',
           snapshotUrls: [
@@ -212,7 +211,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.dragon.read.reader.ui.ReaderActivity',
+          activityIds: '.reader.ui.ReaderActivity',
           matches: '@ImageView +2 FrameLayout >3 [text="关注"]',
           snapshotUrls: 'https://i.gkd.li/i/13399505',
         },
@@ -222,7 +221,7 @@ export default defineGkdApp({
       key: 5,
       name: '分段广告-阅读页面广告',
       fastQuery: true,
-      activityIds: 'com.dragon.read.reader.ui.ReaderActivity',
+      activityIds: '.reader.ui.ReaderActivity',
       rules: [
         {
           /*

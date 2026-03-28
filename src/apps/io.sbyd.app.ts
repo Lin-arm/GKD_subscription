@@ -7,7 +7,7 @@ export default defineGkdApp({
     {
       key: 0,
       name: '全屏广告-弹窗广告',
-      activityIds: 'io.sbyd.app.ui.book.read.ReadBookActivity',
+      activityIds: '.ui.book.read.ReadBookActivity',
       rules: [
         {
           key: 1,

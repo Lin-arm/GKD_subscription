@@ -12,7 +12,7 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds: 'com.liuzh.deviceinfo.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             'FrameLayout[childCount=3 || childCount=4] > ImageView[text=null] +(2,3) @FrameLayout[childCount=1] > ImageView[childCount=0] <<n [vid="ad_container"]',
           exampleUrls: 'https://e.gkd.li/250d3229-a933-410b-8a4a-daccb366558c',

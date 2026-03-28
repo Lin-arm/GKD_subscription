@@ -18,8 +18,7 @@ export default defineGkdApp({
             '.modules.base.FragmentContainerActivity',
             '.message.ChatDetailActivity',
           ],
-          matches:
-            '[id="com.jdd.motorfans:id/ad_content"] >n [id="com.jdd.motorfans:id/iv_close"]',
+          matches: '[vid="ad_content"] >n [vid="iv_close"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12733646',
             'https://i.gkd.li/i/12798654',
@@ -37,10 +36,7 @@ export default defineGkdApp({
         {
           key: 2,
           fastQuery: true,
-          activityIds: [
-            'com.jdd.motorfans.MTMainActivity',
-            '.modules.detail.DetailActivity2',
-          ],
+          activityIds: ['.MTMainActivity', '.modules.detail.DetailActivity2'],
           matches:
             '[vid="iv_right_top_close" || vid="ad_close"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/0f4b8d7d-fda4-43ee-b892-3a85d6dae278',
@@ -55,20 +51,20 @@ export default defineGkdApp({
     {
       key: 2,
       name: '分段广告-信息流广告',
-      activityIds: 'com.jdd.motorfans.MTMainActivity',
+      activityIds: '.MTMainActivity',
       rules: [
         {
           key: 0,
           name: '点关闭按钮',
           matches:
-            '[id="com.jdd.motorfans:id/recyclerView"] > FrameLayout[id="com.jdd.motorfans:id/container"] > FrameLayout[childCount=3] > ImageView[clickable=true][id=null] + ImageView[clickable=true][id=null]', //虽然在审查页面能匹配上，但是在“执行选择器”功能下一直处于搜索中，先添加后到真机测试
+            '[vid="recyclerView"] > FrameLayout[vid="container"] > FrameLayout[childCount=3] > ImageView[clickable=true][id=null] + ImageView[clickable=true][id=null]', //虽然在审查页面能匹配上，但是在“执行选择器”功能下一直处于搜索中，先添加后到真机测试
           snapshotUrls: 'https://i.gkd.li/i/12826382',
         },
         {
           preKeys: [0],
           name: '点击不感兴趣',
           matches:
-            'TextView[id="com.jdd.motorfans:id/beizi_dislike_item_multi_one_title"][text*="不感兴趣"]',
+            'TextView[vid="beizi_dislike_item_multi_one_title"][text*="不感兴趣"]',
           snapshotUrls: 'https://i.gkd.li/i/12829069',
         },
       ],
@@ -76,13 +72,12 @@ export default defineGkdApp({
     {
       key: 3,
       name: '全屏广告-文章内容页面弹窗广告',
-      activityIds:
-        'com.jdd.motorfans.modules.zone.search.ZoneInsideSearchActivity',
+      activityIds: '.modules.zone.search.ZoneInsideSearchActivity',
       rules: [
         {
           key: 0,
           name: '点x按钮',
-          matches: '[id="com.jdd.motorfans:id/iv_close"]',
+          matches: '[vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12888087',
         },
       ],

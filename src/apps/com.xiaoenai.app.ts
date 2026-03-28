@@ -39,10 +39,9 @@ export default defineGkdApp({
         {
           name: '字节广告SDK',
           fastQuery: true,
-          activityIds:
-            'com.xiaoenai.app.presentation.home.view.activity.HomeActivity',
+          activityIds: '.presentation.home.view.activity.HomeActivity',
           matches:
-            '@ImageView[clickable=true][width<90][height<90] -3 ImageView <<n [id="com.xiaoenai.app:id/view_ad_tpl"]',
+            '@ImageView[clickable=true][width<90][height<90] -3 ImageView <<n [vid="view_ad_tpl"]',
           snapshotUrls: 'https://i.gkd.li/i/13728026',
         },
       ],

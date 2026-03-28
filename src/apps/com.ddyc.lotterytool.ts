@@ -10,7 +10,7 @@ export default defineGkdApp({
       matchTime: 10000,
       actionMaximum: 1,
       resetMatch: 'app',
-      activityIds: 'com.ddyc.lotterytool.module.main.MainActivity',
+      activityIds: '.module.main.MainActivity',
       rules: [
         {
           matches:

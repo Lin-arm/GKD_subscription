@@ -18,7 +18,7 @@ export default defineGkdApp({
             '.module.bottomSheet.BottomSheetForFragment',
             '.WeReadFragmentActivity',
           ],
-          matches: '[id="com.tencent.weread:id/open_notification_close"]',
+          matches: '[vid="open_notification_close"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12642247',
             'https://i.gkd.li/i/13233735',

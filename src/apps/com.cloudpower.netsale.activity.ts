@@ -16,7 +16,7 @@ export default defineGkdApp({
         {
           activityIds:
             'com.picc.aasipods.module.versionupdate.controller.VersionUpdateActivity',
-          matches: '[id="com.cloudpower.netsale.activity:id/tvw_cancel"]',
+          matches: '[vid="tvw_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/14005533',
         },
       ],

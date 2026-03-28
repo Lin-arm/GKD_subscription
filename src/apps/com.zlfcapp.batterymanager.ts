@@ -70,7 +70,7 @@ export default defineGkdApp({
         {
           key: 6,
           fastQuery: true,
-          activityIds: 'com.zlfcapp.batterymanager.mvvm.main.MainActivity',
+          activityIds: '.mvvm.main.MainActivity',
           matches:
             '@ImageView[childCount=0][text=null][desc=null][id=null][visibleToUser=true][width<90 && height<90] < FrameLayout[childCount=1][text=null][desc=null][id=null] - FrameLayout[childCount>2] >3 [text^="立即" || text$="应用" || text="了解更多" || text="查看详情"]',
           exampleUrls: [
@@ -95,7 +95,7 @@ export default defineGkdApp({
         {
           key: 8,
           fastQuery: true,
-          activityIds: 'com.zlfcapp.batterymanager.mvvm.main.MainActivity',
+          activityIds: '.mvvm.main.MainActivity',
           matches:
             '@ImageView[childCount=0][text=null][visibleToUser=true] < FrameLayout[childCount=1] <3 FrameLayout[childCount=3] < FrameLayout[childCount=2] +5 FrameLayout[childCount=4] > [text^="扭动或点击"]',
           exampleUrls: 'https://e.gkd.li/2de28d35-4f2d-46c5-ab3e-d108013a10d0',

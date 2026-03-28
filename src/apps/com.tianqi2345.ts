@@ -30,7 +30,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.tianqi2345.activity.NewMainActivity',
+          activityIds: '.activity.NewMainActivity',
           matches:
             '@[id="com.biz2345.adware:id/native_express_close_iv"] + LinearLayout > [text="广告"]',
           exampleUrls:

@@ -38,7 +38,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'org.readera.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             '@[desc="关闭"][clickable=true] < * + * >5 [text="ReadEra Premium"]',
           snapshotUrls: 'https://i.gkd.li/i/24981838',

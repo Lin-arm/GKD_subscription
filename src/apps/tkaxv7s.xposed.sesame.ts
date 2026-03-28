@@ -14,7 +14,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'tkaxv7s.xposed.sesame.ui.MainActivity',
+          activityIds: '.ui.MainActivity',
           matches: '[text="我知道了"]',
           exampleUrls:
             'https://m.gkd.li/57941037/75d1d639-5234-4ad4-865d-2b1617994a16',

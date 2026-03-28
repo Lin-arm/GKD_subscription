@@ -11,7 +11,7 @@ export default defineGkdApp({
       matchTime: 10000,
       actionMaximum: 1,
       resetMatch: 'app',
-      activityIds: 'com.mosoink.teach.MainMenuActivity',
+      activityIds: '.MainMenuActivity',
       rules: [
         {
           key: 0,

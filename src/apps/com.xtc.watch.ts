@@ -15,10 +15,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.xtc.widget.phone.popup.activity.CustomActivity14',
-          matches: [
-            '[text="App功能更新了"]',
-            '[id="com.xtc.watch:id/iv_close"]',
-          ],
+          matches: ['[text="App功能更新了"]', '[vid="iv_close"]'],
           snapshotUrls: 'https://i.gkd.li/i/13197390',
         },
       ],
@@ -34,16 +31,13 @@ export default defineGkdApp({
         {
           key: 0,
           activityIds: 'com.xtc.widget.phone.popup.activity.CustomActivity13',
-          matches: [
-            '[text*="开启消息通知"]',
-            '[id="com.xtc.watch:id/iv_close"]',
-          ],
+          matches: ['[text*="开启消息通知"]', '[vid="iv_close"]'],
           snapshotUrls: 'https://i.gkd.li/i/13063274',
         },
         {
           key: 1,
           activityIds: '.view.home.activity.XtcHomeActivity',
-          matches: '[id="com.xtc.watch:id/iv_notify_permission_close"]',
+          matches: '[vid="iv_notify_permission_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13059965',
         },
       ],

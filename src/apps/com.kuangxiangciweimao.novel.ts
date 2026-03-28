@@ -23,7 +23,7 @@ export default defineGkdApp({
         },
         {
           key: 1,
-          matches: '[id="com.kuangxiangciweimao.novel:id/mTasksView"]',
+          matches: '[vid="mTasksView"]',
           snapshotUrls: 'https://i.gkd.li/i/13056248',
         },
         {

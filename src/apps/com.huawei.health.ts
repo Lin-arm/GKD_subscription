@@ -16,7 +16,7 @@ export default defineGkdApp({
         {
           key: 0,
           action: 'clickCenter',
-          matches: '[id="com.huawei.health:id/hiad_skip_text"]',
+          matches: '[vid="hiad_skip_text"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13215012',
             'https://i.gkd.li/i/13228290',
@@ -55,9 +55,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.huawei.health.MainActivity',
-          matches:
-            '[id="com.huawei.health:id/marketing_close_icon" || vid="close_button_layout"]',
+          activityIds: '.MainActivity',
+          matches: '[vid="marketing_close_icon" || vid="close_button_layout"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13587206',
             'https://i.gkd.li/i/23763115',
@@ -76,7 +75,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.huawei.health.MainActivity',
+          activityIds: '.MainActivity',
           matches: [
             '[text*="实时推送步数" || text*="通知栏实时显示步数"][visibleToUser=true]',
             '[text*="取消"][visibleToUser=true]',

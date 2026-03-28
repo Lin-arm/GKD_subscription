@@ -34,7 +34,7 @@ export default defineGkdApp({
             'com.tmri.app.ui.activity.main.MainTabHostNewActivity',
             'com.tmri.app.ui.activity.main.TmriNewActivity',
           ],
-          matches: 'ImageButton[id="com.tmri.app.main:id/btn_cancel"]',
+          matches: 'ImageButton[vid="btn_cancel"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13315944',
             'https://i.gkd.li/i/13779215',

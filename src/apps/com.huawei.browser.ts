@@ -28,7 +28,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          matches: '[id="com.huawei.browser:id/close_push_guide_window"]',
+          matches: '[vid="close_push_guide_window"]',
           exampleUrls:
             'https://m.gkd.li/87047583/3982b64a-15a7-4c0c-b179-2ed82d6ea18e',
           snapshotUrls: 'https://i.gkd.li/i/13692404',
@@ -43,8 +43,7 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds:
-            'com.huawei.browser.customtab.EmuiBrowserCustomTabActivity',
+          activityIds: '.customtab.EmuiBrowserCustomTabActivity',
           matches:
             'View[id="root"] > View[index=1] > @View[visibleToUser=true][id="logo-close-btn"] <<n [vid="web_view_container"]',
           snapshotUrls: 'https://i.gkd.li/i/13997759',

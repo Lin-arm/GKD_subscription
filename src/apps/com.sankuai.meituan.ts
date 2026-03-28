@@ -130,7 +130,7 @@ export default defineGkdApp({
           action: 'back',
           activityIds:
             'com.sankuai.waimai.bussiness.order.detail.WMOrderDetailActivity',
-          matches: '[id="com.sankuai.meituan:id/questionnaireTitle"]',
+          matches: '[vid="questionnaireTitle"]',
           snapshotUrls: 'https://i.gkd.li/i/13682336',
         },
       ],
@@ -206,14 +206,14 @@ export default defineGkdApp({
           key: 1,
           activityIds:
             'com.sankuai.waimai.business.page.homepage.TakeoutActivity',
-          matches: '[id="com.sankuai.meituan:id/location_layer_close"]',
+          matches: '[vid="location_layer_close"]',
           exampleUrls:
             'https://m.gkd.li/57941037/3071d3a4-f8ca-4c6f-8aa2-cf9573dbed3d',
           snapshotUrls: 'https://i.gkd.li/i/12910211',
         },
         {
           key: 2,
-          activityIds: 'com.sankuai.meituan.MPMainActivity',
+          activityIds: '.MPMainActivity',
           matches: '[text="定位服务尚未开启"] +3 TextView',
           exampleUrls:
             'https://m.gkd.li/57941037/3bb08a42-5d88-4f9d-8cbe-cb913e136ec6',

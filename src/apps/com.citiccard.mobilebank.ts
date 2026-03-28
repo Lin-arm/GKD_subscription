@@ -16,12 +16,12 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          matches: '[id="com.citiccard.mobilebank:id/btn_skip"]',
+          matches: '[vid="btn_skip"]',
           snapshotUrls: 'https://i.gkd.li/i/12684908',
         },
         {
           key: 1,
-          matches: '[id="com.citiccard.mobilebank:id/jump"]',
+          matches: '[vid="jump"]',
           snapshotUrls: 'https://i.gkd.li/i/13049013',
         },
       ],
@@ -32,9 +32,8 @@ export default defineGkdApp({
       fastQuery: true,
       rules: [
         {
-          activityIds:
-            'com.citiccard.mobilebank.card.activity.BillDetailHomeActivity',
-          matches: '[id="com.citiccard.mobilebank:id/iv_bill_home_cancel"]',
+          activityIds: '.card.activity.BillDetailHomeActivity',
+          matches: '[vid="iv_bill_home_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/13049284',
         },
       ],
@@ -49,8 +48,7 @@ export default defineGkdApp({
       fastQuery: true,
       rules: [
         {
-          matches:
-            '[id="com.citiccard.mobilebank:id/ll_app_upgrade_content"] + [id="com.citiccard.mobilebank:id/iv_close"]',
+          matches: '[vid="ll_app_upgrade_content"] + [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13049283',
         },
       ],

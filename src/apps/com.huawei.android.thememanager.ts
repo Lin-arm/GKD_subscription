@@ -31,7 +31,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.huawei.android.thememanager.HwThemeManagerActivity',
+          activityIds: '.HwThemeManagerActivity',
           matches: '[vid="iv_ad_close"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/2ca3890a-ef46-4f10-92ec-bfb921582a6a',
           snapshotUrls: 'https://i.gkd.li/i/16993275',
@@ -39,7 +39,7 @@ export default defineGkdApp({
         {
           key: 1,
           activityIds:
-            'com.huawei.android.thememanager.mvp.view.activity.onlinefont.OnlineFontPreviewActivity',
+            '.mvp.view.activity.onlinefont.OnlineFontPreviewActivity',
           matches: '[vid="iv_vip_close"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/5e5afbbf-b891-47f3-9543-48ceb3fd0104',
           snapshotUrls: 'https://i.gkd.li/i/16993276',
@@ -53,7 +53,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.huawei.android.thememanager.HwThemeManagerActivity',
+          activityIds: '.HwThemeManagerActivity',
           matches:
             '[vid="pps_label_ll" || vid="announce_ad_close_layout"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/04d831b8-0a98-4b3a-9ecc-f9026c1d7f2c',
@@ -65,7 +65,7 @@ export default defineGkdApp({
         {
           key: 1,
           activityIds:
-            'com.huawei.android.thememanager.mvp.view.activity.onlinetheme.OnlineThemePreviewActivity',
+            '.mvp.view.activity.onlinetheme.OnlineThemePreviewActivity',
           matches:
             '@LinearLayout[clickable=true] < LinearLayout -2 LinearLayout >2 [text="广告"]',
           exampleUrls: 'https://e.gkd.li/1f3cecca-2339-4271-873e-5ecb65263a8a',
@@ -74,7 +74,7 @@ export default defineGkdApp({
         {
           key: 2,
           activityIds:
-            'com.huawei.android.thememanager.mvp.view.activity.onlinefont.OnlineFontPreviewActivity',
+            '.mvp.view.activity.onlinefont.OnlineFontPreviewActivity',
           matches: '[vid="download_pps_close"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/8bace857-9eb3-4b6a-83b7-34328a3f96eb',
           snapshotUrls: 'https://i.gkd.li/i/16993406',
@@ -109,11 +109,10 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: [
-            'com.huawei.android.thememanager.HwThemeManagerActivity',
+            '.HwThemeManagerActivity',
             'com.huawei.android.launcher.unihome.UniHomeLauncher',
           ],
-          matches:
-            '[id="com.huawei.android.thememanager:id/campaign_dialog_close_image"]',
+          matches: '[vid="campaign_dialog_close_image"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12657939',
             'https://i.gkd.li/i/12667815',

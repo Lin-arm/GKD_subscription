@@ -13,8 +13,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.nowcasting.activity.WeatherActivity',
-          matches: '[id="com.nowcasting.activity:id/iv_close"]',
+          activityIds: '.WeatherActivity',
+          matches: '[vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13405130',
         },
       ],
@@ -23,7 +23,7 @@ export default defineGkdApp({
       key: 2,
       name: '全屏广告-弹窗广告',
       fastQuery: true,
-      activityIds: 'com.nowcasting.activity.WeatherActivity',
+      activityIds: '.WeatherActivity',
       rules: [
         {
           key: 0,
@@ -52,17 +52,17 @@ export default defineGkdApp({
       key: 3,
       name: '分段广告-卡片广告',
       fastQuery: true,
-      activityIds: 'com.nowcasting.activity.WeatherActivity',
+      activityIds: '.WeatherActivity',
       rules: [
         {
           key: 1,
-          matches: '[id="com.nowcasting.activity:id/ll_close"]',
+          matches: '[vid="ll_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13690822',
         },
         {
           preKeys: [1],
           key: 2,
-          matches: '[id="com.nowcasting.activity:id/ll_uninterested"]',
+          matches: '[vid="ll_uninterested"]',
           snapshotUrls: 'https://i.gkd.li/i/13690830',
         },
       ],
@@ -72,11 +72,11 @@ export default defineGkdApp({
       name: '局部广告-卡片广告',
       desc: '点击关闭',
       fastQuery: true,
-      activityIds: 'com.nowcasting.activity.WeatherActivity',
+      activityIds: '.WeatherActivity',
       rules: [
         {
           key: 0,
-          matches: '[id="com.nowcasting.activity:id/jad_feed_close"]',
+          matches: '[vid="jad_feed_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13690826',
         },
         {
@@ -93,7 +93,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.nowcasting.activity.WeatherActivity',
+          activityIds: '.WeatherActivity',
           matches:
             'ViewGroup[childCount=2][visibleToUser=true] > [vid="fl_arrow"][visibleToUser=true]',
           exampleUrls:

@@ -7,12 +7,12 @@ export default defineGkdApp({
     {
       key: 2,
       name: '局部广告-直播间悬浮广告',
-      activityIds: 'com.duowan.kiwi.liveroom.ChannelPage',
+      activityIds: '.liveroom.ChannelPage',
       rules: [
         {
           key: 0,
           fastQuery: true,
-          matches: '[id="com.duowan.kiwi:id/ad_close"]',
+          matches: '[vid="ad_close"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12901045',
             'https://i.gkd.li/i/12901044',
@@ -21,7 +21,7 @@ export default defineGkdApp({
         {
           key: 1,
           fastQuery: true,
-          matches: '[id="com.duowan.kiwi:id/game_header_close"]',
+          matches: '[vid="game_header_close"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13395604',
             'https://i.gkd.li/i/13395606',
@@ -30,15 +30,14 @@ export default defineGkdApp({
         {
           key: 2,
           fastQuery: true,
-          matches:
-            '[id="com.duowan.kiwi:id/popup_banner"] >2 [id="com.duowan.kiwi:id/ui_count_down"]',
+          matches: '[vid="popup_banner"] >2 [vid="ui_count_down"]',
           snapshotUrls: ['https://i.gkd.li/i/13417245'],
         },
         {
           key: 3,
           fastQuery: true,
           matches:
-            '@ViewGroup[clickable=true][visibleToUser=true] <2 ViewGroup < FrameLayout <2 FrameLayout < [id="com.duowan.kiwi:id/miniapp_content_container"]',
+            '@ViewGroup[clickable=true][visibleToUser=true] <2 ViewGroup < FrameLayout <2 FrameLayout < [vid="miniapp_content_container"]',
           snapshotUrls: 'https://i.gkd.li/i/13401266',
         },
       ],
@@ -53,7 +52,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.homepage.Homepage',
-          matches: '@ImageView[id="com.duowan.kiwi:id/upgrade_cancel"]',
+          matches: '@ImageView[vid="upgrade_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/13440833',
         },
       ],
@@ -69,8 +68,7 @@ export default defineGkdApp({
         {
           key: 0,
           activityIds: '.homepage.Homepage',
-          matches:
-            '[id="com.duowan.kiwi:id/animation_view"] + [id="com.duowan.kiwi:id/v_close"]',
+          matches: '[vid="animation_view"] + [vid="v_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13625453',
         },
       ],

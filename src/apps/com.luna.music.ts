@@ -192,8 +192,7 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: 'com.luna.biz.main.main.MainActivity',
-          matches:
-            '[id="com.luna.music:id/fl_pendant_container"] > [id="com.luna.music:id/view_close"]',
+          matches: '[vid="fl_pendant_container"] > [vid="view_close"]',
           exampleUrls:
             'https://m.gkd.li/57941037/8a427d5f-680b-4562-9cf3-90b1db82df0f',
           snapshotUrls: 'https://i.gkd.li/i/13674376',

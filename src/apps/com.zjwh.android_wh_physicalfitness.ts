@@ -12,8 +12,7 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          matches:
-            '[id="com.zjwh.android_wh_physicalfitness:id/iv_close" || vid="ad_close"][clickable=true]',
+          matches: '[vid="iv_close" || vid="ad_close"][clickable=true]',
           snapshotUrls: [
             'https://i.gkd.li/i/12673231',
             'https://i.gkd.li/i/12673523',
@@ -67,8 +66,7 @@ export default defineGkdApp({
         },
         {
           key: 4,
-          activityIds:
-            'com.zjwh.android_wh_physicalfitness.activity.SplashActivity',
+          activityIds: '.activity.SplashActivity',
           matches:
             '@[text="跳过"][clickable=true] +3 RelativeLayout >2 [text="点击跳转至第三方页面"]',
           snapshotUrls: 'https://i.gkd.li/i/12673349',
@@ -191,8 +189,7 @@ export default defineGkdApp({
         {
           key: 4,
           fastQuery: true,
-          activityIds:
-            'com.zjwh.android_wh_physicalfitness.mvi.home.HomeActivity',
+          activityIds: '.mvi.home.HomeActivity',
           matches:
             '@[id="com.kwad.dy.sdk:id/ksad_ad_dislike"][clickable=true] - * >2 [text="广告"]',
           snapshotUrls: 'https://i.gkd.li/i/23773011',

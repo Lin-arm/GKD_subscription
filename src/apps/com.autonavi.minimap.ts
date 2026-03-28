@@ -33,8 +33,8 @@ export default defineGkdApp({
           key: 1,
           activityIds: 'com.autonavi.map.activity.NewMapActivity',
           matches: [
-            '[text="版本升级" || id="com.autonavi.minimap:id/update_viewpager"][visibleToUser=true]',
-            '[text="取消" || id="com.autonavi.minimap:id/iv_close"][visibleToUser=true]',
+            '[text="版本升级" || vid="update_viewpager"][visibleToUser=true]',
+            '[text="取消" || vid="iv_close"][visibleToUser=true]',
           ],
           snapshotUrls: [
             'https://i.gkd.li/i/13379094',
@@ -53,7 +53,7 @@ export default defineGkdApp({
           fastQuery: true,
           activityIds: 'com.autonavi.map.activity.NewMapActivity',
           matches:
-            '[text="分享截图至"] < ViewGroup < ViewGroup + @ViewGroup[clickable=true] > ImageView <<n [id="com.autonavi.minimap:id/fragment_container"]',
+            '[text="分享截图至"] < ViewGroup < ViewGroup + @ViewGroup[clickable=true] > ImageView <<n [vid="fragment_container"]',
           snapshotUrls: 'https://i.gkd.li/i/13473388',
         },
       ],
@@ -68,8 +68,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 1,
-          matches:
-            'RelativeLayout[desc="弹窗"] > [id="com.autonavi.minimap:id/msgbox_popup_clear"]',
+          matches: 'RelativeLayout[desc="弹窗"] > [vid="msgbox_popup_clear"]',
           snapshotUrls: 'https://i.gkd.li/i/12642830',
           exampleUrls: 'https://e.gkd.li/a7f72c58-0b31-4b87-9839-567d4d74350a',
         },

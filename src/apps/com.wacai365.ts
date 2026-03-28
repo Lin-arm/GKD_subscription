@@ -14,11 +14,10 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: [
-            'com.wacai365.HomeActivity',
+            '.HomeActivity',
             'com.wacai.android.wind.splash.WindDialogActivity',
           ],
-          matches:
-            '@ImageView[id="com.wacai365:id/tv_cancel"] - TextView[text^="新版本"]',
+          matches: '@ImageView[vid="tv_cancel"] - TextView[text^="新版本"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13249620',
             'https://i.gkd.li/i/13772291',
@@ -35,7 +34,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.wacai365.HomeActivity',
+          activityIds: '.HomeActivity',
           matches: '[id^="com.wacai365:id/promote_banner_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13249666',
         },

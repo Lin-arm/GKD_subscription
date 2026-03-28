@@ -15,7 +15,7 @@ export default defineGkdApp({
           matchTime: 10000,
           actionMaximum: 1,
           resetMatch: 'app',
-          activityIds: 'com.baidu.homework.activity.index.IndexActivity',
+          activityIds: '.activity.index.IndexActivity',
           matches: '[vid="ad_dialog_close"]',
           snapshotUrls: 'https://i.gkd.li/i/15374440',
         },

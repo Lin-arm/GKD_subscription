@@ -14,14 +14,14 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.tuying.kuimg.rjm.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             'ImageView[childCount=0][text=null] < @ViewGroup[childCount=1][clickable=true][visibleToUser=true] < ViewGroup +n ViewGroup[childCount=2] > [text="广告"]',
           snapshotUrls: 'https://i.gkd.li/i/13166088',
         },
         {
           key: 1,
-          activityIds: 'com.tuying.kuimg.rjm.MainActivity',
+          activityIds: '.MainActivity',
           matches: ['[text="广告"]', '@ViewGroup > [text="跳过"]'],
           snapshotUrls: 'https://i.gkd.li/i/13166086',
         },

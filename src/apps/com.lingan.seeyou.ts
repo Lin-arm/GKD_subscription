@@ -11,9 +11,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds:
-            'com.lingan.seeyou.ui.activity.community.topicdetail.TopicDetailActivity',
-          matches: '[id="com.lingan.seeyou:id/v_close"]',
+          activityIds: '.ui.activity.community.topicdetail.TopicDetailActivity',
+          matches: '[vid="v_close"]',
           snapshotUrls: 'https://i.gkd.li/i/14034770',
         },
       ],

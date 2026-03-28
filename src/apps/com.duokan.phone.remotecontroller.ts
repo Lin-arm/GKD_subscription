@@ -15,8 +15,7 @@ export default defineGkdApp({
         {
           activityIds:
             'com.xiaomi.mitv.phone.remotecontroller.HoriWidgetMainActivityV2',
-          matches:
-            '[id="com.duokan.phone.remotecontroller:id/ll_permission"] >2 [text="取消"]',
+          matches: '[vid="ll_permission"] >2 [text="取消"]',
           snapshotUrls: 'https://i.gkd.li/i/13642080',
         },
       ],

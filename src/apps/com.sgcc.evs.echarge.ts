@@ -18,7 +18,7 @@ export default defineGkdApp({
             'com.evs.echarge.dev.ui.advertisement.SplashActivity',
             'com.evs.echarge.dev.ui.MainActivity',
           ],
-          matches: '[id="com.sgcc.evs.echarge:id/iv_close"]',
+          matches: '[vid="iv_close"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13958838',
             'https://i.gkd.li/i/14005508',

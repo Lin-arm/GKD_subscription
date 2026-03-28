@@ -11,7 +11,7 @@ export default defineGkdApp({
       actionMaximum: 1,
       resetMatch: 'app',
       activityIds: [
-        'com.ylmf.androidclient.UI.MainBossActivity',
+        '.UI.MainBossActivity',
         'com.main.world.equity.activity.SignInActivity',
         'com.main.world.equity.activity.SignInRewardActivity',
       ],
@@ -65,7 +65,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.ylmf.androidclient.UI.UpdateVersionActivity',
+          activityIds: '.UI.UpdateVersionActivity',
           matches: '@[desc="转到上一层级"] + [text="更新版本"]',
           exampleUrls:
             'https://m.gkd.li/57941037/43d4fa0c-789c-4cf7-aa12-7232e9d23e6d',

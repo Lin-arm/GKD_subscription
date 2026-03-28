@@ -13,10 +13,10 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: [
-            'com.lphtsccft.zhangle.startup.SplashScreenActivity',
-            'com.lphtsccft.zhangle.main.MainActivity',
+            '.zhangle.startup.SplashScreenActivity',
+            '.zhangle.main.MainActivity',
           ],
-          matches: '[id="com.lphtsccft:id/tv_never"][text="不再提醒"]',
+          matches: '[vid="tv_never"][text="不再提醒"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12646899',
             'https://i.gkd.li/i/12646925',
@@ -50,8 +50,8 @@ export default defineGkdApp({
       name: '局部广告-右侧悬浮广告',
       rules: [
         {
-          activityIds: 'com.lphtsccft.zhangle.main.MainActivity',
-          matches: '[id="com.lphtsccft:id/home_float_close"]',
+          activityIds: '.zhangle.main.MainActivity',
+          matches: '[vid="home_float_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12892821',
         },
       ],

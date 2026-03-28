@@ -28,8 +28,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.alibaba.android.rimet.biz.SplashActivity',
-          matches:
-            '[text^="开启消息通知"] +2 [id="cn.xuexi.android:id/layout_close"]',
+          matches: '[text^="开启消息通知"] +2 [vid="layout_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12715160',
         },
       ],

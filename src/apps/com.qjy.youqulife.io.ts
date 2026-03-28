@@ -15,7 +15,7 @@ export default defineGkdApp({
           key: 1,
           name: '快手广告',
           fastQuery: true,
-          activityIds: 'com.qjy.youqulife.io.MainActivity',
+          activityIds: '.MainActivity',
           matches: ['[text="广告"] ', '[text="跳过"]'],
           snapshotUrls: 'https://i.gkd.li/i/13378653',
         },

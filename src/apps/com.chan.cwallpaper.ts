@@ -29,7 +29,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.chan.cwallpaper.module.main.MainActivity',
+          activityIds: '.module.main.MainActivity',
           matches: '[vid="ivClose"]',
           exampleUrls:
             'https://m.gkd.li/57941037/8150c450-bcf8-4e8b-8236-4c3abebbeef3',

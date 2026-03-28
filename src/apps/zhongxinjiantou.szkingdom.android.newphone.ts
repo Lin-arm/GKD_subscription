@@ -15,8 +15,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.szkingdom.android.phone.ZXJTUserMainActivity',
-          matches:
-            '[id="zhongxinjiantou.szkingdom.android.newphone:id/tv_notify_confirm_off"][text="放弃通知"]',
+          matches: '[vid="tv_notify_confirm_off"][text="放弃通知"]',
           exampleUrls:
             'https://m.gkd.li/57941037/642582b1-f0f1-446c-b3f4-287eac62d108',
           snapshotUrls: 'https://i.gkd.li/i/12924466',

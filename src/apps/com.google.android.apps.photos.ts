@@ -35,10 +35,8 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds:
-            'com.google.android.apps.photos.cloudstorage.paidfeatures.PaidFeaturesActivity',
-          matches:
-            '@[desc="转到上一层级"] < ViewGroup[id="com.google.android.apps.photos:id/toolbar"]',
+          activityIds: '.cloudstorage.paidfeatures.PaidFeaturesActivity',
+          matches: '@[desc="转到上一层级"] < ViewGroup[vid="toolbar"]',
           snapshotUrls: 'https://i.gkd.li/i/13774247',
         },
         {

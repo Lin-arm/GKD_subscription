@@ -11,19 +11,19 @@ export default defineGkdApp({
       fastQuery: true,
       rules: [
         {
-          activityIds: 'com.baidu.searchbox.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             '@View[vid="obfuscated"][clickable=true][visibleToUser=false] +3 [text="看视频，领现金"]',
           snapshotUrls: 'https://i.gkd.li/i/13806848',
         },
         {
-          activityIds: 'com.baidu.searchbox.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             '@ImageView[vid="obfuscated"][text=null][childCount=0][clickable=true][visibleToUser=true][index=1] <2 LinearLayout[childCount=2] < FrameLayout[childCount=1] < [id="android:id/content"]',
           snapshotUrls: 'https://i.gkd.li/i/13988536',
         },
         {
-          activityIds: 'com.baidu.searchbox.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             '@ImageView[vid="obfuscated"][text=null][childCount=0][clickable=true][visibleToUser=true] +4 [text^="继续看视频"]',
           snapshotUrls: 'https://i.gkd.li/i/14034223',

@@ -11,7 +11,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'li.songe.gkd.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             '@[clickable=true] -3 [text="删除快照"] <<6 [id="android:id/content"]',
           snapshotUrls: 'https://i.gkd.li/i/25569635',

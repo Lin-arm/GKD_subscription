@@ -33,15 +33,14 @@ export default defineGkdApp({
             left: 'width * 0.9269',
             top: 'width * 0.113',
           },
-          activityIds:
-            'com.baidu.input.layout.store.subshop.activity.SkinShopActivity',
+          activityIds: '.layout.store.subshop.activity.SkinShopActivity',
           matches:
             '@[desc="开会员，全部皮肤免费用"] <<n [vid="shop_content_container"]',
           snapshotUrls: 'https://i.gkd.li/i/15320905',
         },
         {
           key: 1,
-          activityIds: 'com.baidu.input.ImeAppMainActivity',
+          activityIds: '.ImeAppMainActivity',
           matches: '[vid="close_btn"]',
           snapshotUrls: 'https://i.gkd.li/i/15320990',
         },

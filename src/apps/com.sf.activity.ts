@@ -22,7 +22,7 @@ export default defineGkdApp({
           key: 1,
           fastQuery: true,
           matches:
-            '@Button[desc="取消"] - ViewGroup >3 [visibleToUser=true][text="立即升级"] <<n [id="com.sf.activity:id/rnRootLayout"]',
+            '@Button[desc="取消"] - ViewGroup >3 [visibleToUser=true][text="立即升级"] <<n [vid="rnRootLayout"]',
           snapshotUrls: 'https://i.gkd.li/i/13291144',
         },
       ],
@@ -35,7 +35,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.sf.activity.MainActivity',
+          activityIds: '.MainActivity',
           matches: '[id="MonthReportDialogCloseBtn"] > ImageView',
           exampleUrls:
             'https://m.gkd.li/57941037/83023ed5-f143-4355-9fff-e078011dfa4a',
@@ -54,7 +54,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.sf.activity.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             '@Button[id="BmsAdDialogViewCloseButton"] <2 ViewGroup < ViewGroup <2 ViewGroup < ViewGroup <2 ViewGroup < ViewGroup < FrameLayout < [vid="rnRootLayout"]',
           exampleUrls: 'https://e.gkd.li/3be50f7b-5696-47c9-95cc-ef46f8531967',

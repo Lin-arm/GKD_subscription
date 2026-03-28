@@ -15,9 +15,8 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds:
-            'com.gotokeep.keep.refactor.business.main.activity.MainActivity',
-          matches: '[id="com.gotokeep.keep:id/imgCloseHomePageDialog"]',
+          activityIds: '.refactor.business.main.activity.MainActivity',
+          matches: '[vid="imgCloseHomePageDialog"]',
           snapshotUrls: 'https://i.gkd.li/i/13761641',
         },
       ],
@@ -25,10 +24,8 @@ export default defineGkdApp({
     {
       key: 3,
       name: '局部广告-首页信息流广告',
-      activityIds:
-        'com.gotokeep.keep.refactor.business.main.activity.MainActivity',
-      rules:
-        '[id="com.gotokeep.keep:id/textAdTag"] + [id="com.gotokeep.keep:id/imgClose"]',
+      activityIds: '.refactor.business.main.activity.MainActivity',
+      rules: '[vid="textAdTag"] + [vid="imgClose"]',
       snapshotUrls: 'https://i.gkd.li/i/12706115',
     },
     {
@@ -37,18 +34,15 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds:
-            'com.gotokeep.keep.refactor.business.main.activity.MainActivity',
+          activityIds: '.refactor.business.main.activity.MainActivity',
           matches:
             'ImageView + LinearLayout > ImageView[id=null][clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/12706111',
         },
         {
           key: 1,
-          activityIds:
-            'com.gotokeep.keep.refactor.business.main.activity.MainActivity',
-          matches:
-            '[id="com.gotokeep.keep:id/contentContainer"] + [id="com.gotokeep.keep:id/closeImageView"]',
+          activityIds: '.refactor.business.main.activity.MainActivity',
+          matches: '[vid="contentContainer"] + [vid="closeImageView"]',
           snapshotUrls: 'https://i.gkd.li/i/13766358',
         },
       ],
@@ -71,7 +65,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          matches: '[id="com.gotokeep.keep:id/text_secondary_action"]',
+          matches: '[vid="text_secondary_action"]',
           exampleUrls:
             'https://m.gkd.li/57941037/6b0091e9-1bf1-49bd-be5c-e6997bc9accb',
           snapshotUrls: 'https://i.gkd.li/i/14126005',

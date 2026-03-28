@@ -7,7 +7,7 @@ export default defineGkdApp({
     {
       key: 1,
       name: '全屏广告-弹窗广告',
-      activityIds: 'com.xinhang.mobileclient.home.activity.HomeActivity',
+      activityIds: '.home.activity.HomeActivity',
       rules: [
         {
           key: 0,
@@ -26,9 +26,8 @@ export default defineGkdApp({
       name: '局部广告-右侧悬浮广告',
       rules: [
         {
-          activityIds: 'com.xinhang.mobileclient.home.activity.HomeActivity',
-          matches:
-            '@[id="com.xinhang.mobileclient:id/iv_close"] + [id="com.xinhang.mobileclient:id/iv_advert"]',
+          activityIds: '.home.activity.HomeActivity',
+          matches: '@[vid="iv_close"] + [vid="iv_advert"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13024863',
             'https://i.gkd.li/i/13024872',

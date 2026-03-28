@@ -11,7 +11,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.xiaolan.tv.chat.MainActivity',
+          activityIds: '.MainActivity',
           matches: '[desc="确定"][visibleToUser=true]',
           exampleUrls:
             'https://m.gkd.li/57941037/884dc3b4-e60d-4b21-90c9-a68b96632070',
@@ -22,7 +22,7 @@ export default defineGkdApp({
           matchTime: 10000,
           actionMaximum: 1,
           resetMatch: 'app',
-          activityIds: 'com.xiaolan.tv.chat.MainActivity',
+          activityIds: '.MainActivity',
           matches: '[desc="我知道了"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/fe0403ee-0ffb-4921-a06a-ccefa5c26bcc',
           snapshotUrls: 'https://i.gkd.li/i/16476930',
@@ -57,7 +57,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.xiaolan.tv.chat.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             '@[desc$="dislike"][clickable=true] <2 FrameLayout +4 [text="立即下载"]',
           exampleUrls: 'https://e.gkd.li/ff11b8f3-16d8-4613-a113-827f6389c30e',

@@ -14,10 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.MainActivity',
-          matches: [
-            '[id="com.x2era.xcloud.app:id/tv_upgrade"]',
-            '[id="com.x2era.xcloud.app:id/iv_cancel"]',
-          ],
+          matches: ['[vid="tv_upgrade"]', '[vid="iv_cancel"]'],
           snapshotUrls: 'https://i.gkd.li/i/13420706',
         },
       ],

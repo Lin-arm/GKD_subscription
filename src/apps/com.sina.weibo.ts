@@ -11,7 +11,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 3,
-          activityIds: 'com.sina.weibo.feed.MPDialogActivity',
+          activityIds: '.feed.MPDialogActivity',
           matches:
             'WebView[text="Wbox"] > View[childCount=1] >(1,2) View[childCount=2] > @TextView[clickable=true][visibleToUser=true][childCount=0][index=1][width<200] <<n [vid="container"]',
           snapshotUrls: [
@@ -22,9 +22,9 @@ export default defineGkdApp({
         },
         {
           key: 4,
-          activityIds: 'com.sina.weibo.feed.MPDialogActivity',
+          activityIds: '.feed.MPDialogActivity',
           matches:
-            '@Image[text="close"] < View[childCount=4] <2 * <<n [id="com.sina.weibo:id/container"]',
+            '@Image[text="close"] < View[childCount=4] <2 * <<n [vid="container"]',
           snapshotUrls: 'https://i.gkd.li/i/14033735',
         },
       ],
@@ -63,8 +63,7 @@ export default defineGkdApp({
         {
           key: 1,
           activityIds: '.MainTabActivity',
-          matches:
-            '@[id="com.sina.weibo:id/btn_close"] +2 [text="使用您的位置信息"]',
+          matches: '@[vid="btn_close"] +2 [text="使用您的位置信息"]',
           snapshotUrls: 'https://i.gkd.li/i/13255595',
         },
       ],
@@ -173,7 +172,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.sina.weibo.photoalbum.imageviewer.ImageViewer',
+          activityIds: '.photoalbum.imageviewer.ImageViewer',
           matches: '@LinearLayout >3 [vid="tv_dialog_item"][text^="原图"]',
           snapshotUrls: 'https://i.gkd.li/i/13929119',
         },
@@ -187,7 +186,7 @@ export default defineGkdApp({
         {
           key: 0,
           name: '点击签到',
-          activityIds: 'com.sina.weibo.supergroup.SGPageActivity',
+          activityIds: '.supergroup.SGPageActivity',
           // excludeMatches: ['[text="关注"]', '[text="Follow"]'], 此写法会导致误触
           matches: [
             'ViewGroup[childCount=2] > [text="管理"][visibleToUser=true]',
@@ -202,14 +201,14 @@ export default defineGkdApp({
         {
           key: 1,
           name: '取消勾选[接收本超话签到提醒推送]',
-          activityIds: 'com.sina.weibo.supergroup.pagepop.PagePopActivity',
+          activityIds: '.supergroup.pagepop.PagePopActivity',
           matches: '@[checked=true] < * > [text="接收本超话签到提醒推送"]',
           snapshotUrls: 'https://i.gkd.li/i/15103524',
         },
         {
           key: 2,
           name: '关闭签到成功弹窗',
-          activityIds: 'com.sina.weibo.supergroup.pagepop.PagePopActivity',
+          activityIds: '.supergroup.pagepop.PagePopActivity',
           matches: ['[text^="连续签到"]', '[vid="iv_close_v2"]'],
           snapshotUrls: [
             'https://i.gkd.li/i/15103524',
@@ -226,8 +225,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds:
-            'com.sina.weibo.supergroup.generic.GenericChannelActivity',
+          activityIds: '.supergroup.generic.GenericChannelActivity',
           matches: [
             '[text*="一键签到"][visibleToUser=true]',
             '[vid="checkinBtn"][visibleToUser=true]',

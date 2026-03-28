@@ -13,7 +13,7 @@ export default defineGkdApp({
           fastQuery: true,
           activityIds: [
             'com.bytedance.sdk.openadsdk.stub.activity.Stub_Standard_Portrait_Activity',
-            'com.mfcloudcalculate.networkdisk.activity.AdFreeActivity',
+            '.activity.AdFreeActivity',
             '.activity.LauncherActivity',
             'com.adgain.sdk.base.activity.AdActivity',
           ],
@@ -32,8 +32,7 @@ export default defineGkdApp({
         {
           key: 1,
           fastQuery: true,
-          activityIds:
-            'com.mfcloudcalculate.networkdisk.activity.EmptyActivity',
+          activityIds: '.activity.EmptyActivity',
           matches:
             'ImageView < @ViewGroup[clickable=true] < ViewGroup <7 ViewGroup + ViewGroup [text="广告"]',
           exampleUrls:

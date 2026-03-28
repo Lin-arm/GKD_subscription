@@ -8,7 +8,7 @@ export default defineGkdApp({
       key: 2,
       name: '分段广告-支付完成界面卡片广告',
       fastQuery: true,
-      activityIds: 'com.unionpay.activity.react.UPActivityReactNative',
+      activityIds: '.activity.react.UPActivityReactNative',
       rules: [
         {
           key: 0,
@@ -35,7 +35,7 @@ export default defineGkdApp({
             left: 'width * 0.8893',
             top: 'width * 0.4607',
           },
-          activityIds: 'com.unionpay.activity.UPActivityMain',
+          activityIds: '.activity.UPActivityMain',
           matches:
             '@[vid="frog_float"][visibleToUser=true] >2 [vid="close_view"]',
           exampleUrls:
@@ -55,7 +55,7 @@ export default defineGkdApp({
         {
           key: 0,
           activityIds: '.activity.UPActivityMain',
-          matches: '[id="com.unionpay:id/view_locate_close"]',
+          matches: '[vid="view_locate_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13634882',
         },
         {
@@ -81,7 +81,7 @@ export default defineGkdApp({
         {
           activityIds: '.base.UPDialog',
           matches:
-            '[text="开启消息通知"] < * + [id="com.unionpay:id/view_alert_cancel"][visibleToUser=true]',
+            '[text="开启消息通知"] < * + [vid="view_alert_cancel"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/12695736',
         },
       ],
@@ -94,7 +94,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.unionpay.cordova.UPActivityCordovaWeb',
+          activityIds: '.cordova.UPActivityCordovaWeb',
           matches:
             'WebView[text="天天签到"] TextView[text="炫耀一下"] + TextView[clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/13440341',
@@ -108,7 +108,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.unionpay.cordova.UPActivityCordovaWeb',
+          activityIds: '.cordova.UPActivityCordovaWeb',
           matches:
             '@View[clickable=true][text="关闭按钮"] <<n [vid="view_content_container"]',
           snapshotUrls: 'https://i.gkd.li/i/13848688',

@@ -30,7 +30,7 @@ export default defineGkdApp({
       activityIds: 'org.geometerplus.android.fbreader.FBReader',
       rules: [
         {
-          matches: '[id="com.kmxs.reader:id/ad_direct_close"]',
+          matches: '[vid="ad_direct_close"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12640303',
             'https://i.gkd.li/i/13362269',
@@ -50,10 +50,9 @@ export default defineGkdApp({
     {
       key: 99,
       name: '局部广告-右侧悬浮红包',
-      activityIds: 'com.kmxs.reader.home.ui.HomeActivity',
+      activityIds: '.home.ui.HomeActivity',
       rules: {
-        matches:
-          '[id="com.kmxs.reader:id/red_packet_img"] + [id="com.kmxs.reader:id/close_red_packet"]',
+        matches: '[vid="red_packet_img"] + [vid="close_red_packet"]',
         action: 'clickCenter',
       },
       snapshotUrls: ['https://i.gkd.li/i/12640287'],
@@ -109,8 +108,8 @@ export default defineGkdApp({
         {
           key: 1,
           fastQuery: true,
-          activityIds: 'com.kmxs.reader.home.ui.HomeActivity',
-          matches: '[id="com.kmxs.reader:id/bookshelf_book_item_direct_close"]',
+          activityIds: '.home.ui.HomeActivity',
+          matches: '[vid="bookshelf_book_item_direct_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13489942',
         },
         {
@@ -133,7 +132,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          matches: '[id="com.kmxs.reader:id/close"]',
+          matches: '[vid="close"]',
           snapshotUrls: 'https://i.gkd.li/i/13941276',
         },
       ],

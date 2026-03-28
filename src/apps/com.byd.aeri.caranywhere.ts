@@ -14,8 +14,8 @@ export default defineGkdApp({
         {
           fastQuery: true,
           matches: [
-            '[id="com.byd.aeri.caranywhere:id/tv_determine"][text="立即安装"]',
-            '[id="com.byd.aeri.caranywhere:id/tv_cancel"]',
+            '[vid="tv_determine"][text="立即安装"]',
+            '[vid="tv_cancel"]',
           ],
           snapshotUrls: 'https://i.gkd.li/i/13348383',
         },

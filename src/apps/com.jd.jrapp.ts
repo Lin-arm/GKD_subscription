@@ -15,15 +15,14 @@ export default defineGkdApp({
         {
           key: 0,
           activityIds: '.bm.mainbox.main.MainActivity',
-          matches:
-            'TextView[text^="打开通知"] +2 [id="com.jd.jrapp:id/iv_close"]',
+          matches: 'TextView[text^="打开通知"] +2 [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13249998',
         },
         {
           key: 1,
           activityIds: '.bm.common.web.ui.WebActivity',
           matches:
-            '@View - * > [visibleToUser=true][text="开启并订阅通知"] <<n [id="com.jd.jrapp:id/webview"]',
+            '@View - * > [visibleToUser=true][text="开启并订阅通知"] <<n [vid="webview"]',
           snapshotUrls: 'https://i.gkd.li/i/13255656',
         },
       ],
@@ -39,7 +38,7 @@ export default defineGkdApp({
         {
           activityIds: '.bm.mainbox.main.MainActivity',
           matches:
-            '@ImageButton[id="com.jd.jrapp:id/ib_close"] + RelativeLayout [text^="发现新版本"]',
+            '@ImageButton[vid="ib_close"] + RelativeLayout [text^="发现新版本"]',
           snapshotUrls: 'https://i.gkd.li/i/13628364',
         },
       ],

@@ -28,7 +28,7 @@ export default defineGkdApp({
         {
           key: 1,
           matches:
-            '[id="com.cyl.musiccy.ou:id/ksad_splash_root_container"] [childCount=3] > @ImageView[clickable=true] - [text="|"]',
+            '[vid="ksad_splash_root_container"] [childCount=3] > @ImageView[clickable=true] - [text="|"]',
           snapshotUrls: 'https://i.gkd.li/i/12775919',
         },
       ],
@@ -55,10 +55,7 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds: [
-            'com.cyl.musiccy.ou.MainActivity',
-            'com.ksf.yyx.MainActivity',
-          ],
+          activityIds: ['.MainActivity', 'com.ksf.yyx.MainActivity'],
           name: '快手广告-1',
           matches:
             '[id$="ksad_container"] >n @ViewGroup[clickable=true] > [text="跳过"]',
@@ -71,10 +68,7 @@ export default defineGkdApp({
           key: 1,
           name: '快手广告-2',
           fastQuery: true,
-          activityIds: [
-            'com.ksf.yyx.MainActivity',
-            'com.cyl.musiccy.ou.MainActivity',
-          ],
+          activityIds: ['com.ksf.yyx.MainActivity', '.MainActivity'],
           matches:
             'ImageView[childCount=0][text=null] < @ViewGroup[childCount=1][clickable=true][visibleToUser=true] < ViewGroup +n ViewGroup[childCount=2] > [text="广告"]',
           snapshotUrls: [
@@ -86,7 +80,7 @@ export default defineGkdApp({
           key: 2,
           name: 'Sigmob广告',
           activityIds: [
-            'com.cyl.musiccy.ou.MainActivity',
+            '.MainActivity',
             'com.sigmob.sdk.base.common.TransparentAdActivity',
           ],
           matches: '[id="ad_area"] [id="close_btn"][clickable=true]',
@@ -119,7 +113,7 @@ export default defineGkdApp({
           key: 5,
           name: '腾讯广告-2',
           fastQuery: true,
-          activityIds: 'com.cyl.musiccy.ou.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             '@ImageView[childCount=0][text=null][desc=null][id=null][visibleToUser=true][width<90 && height<90] < FrameLayout[childCount=1][text=null][desc=null][id=null] <2 FrameLayout[childCount=5] + FrameLayout[childCount=2] > [text^="立即" || text$="详情" || text^="了解" || text="去逛逛" || text="去微信看看" || text$="应用" || text="进入小程序" || text="领取优惠" || text="跳转微信"]',
           snapshotUrls: 'https://i.gkd.li/i/13422363',

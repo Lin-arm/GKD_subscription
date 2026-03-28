@@ -12,8 +12,8 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: [
-            'com.qq.reader.activity.MainActivity',
-            'com.qq.reader.activity.MainFlutterActivity',
+            '.activity.MainActivity',
+            '.activity.MainFlutterActivity',
           ],
           matches: '[vid="operating_activity_close_view"]',
           exampleUrls: 'https://e.gkd.li/29b1cea7-6984-4d51-b1a0-f5ffd1b0d727',
@@ -46,7 +46,7 @@ export default defineGkdApp({
       name: '分段广告-阅读页面广告',
       desc: '点击关闭-点击[关闭本条广告]',
       fastQuery: true,
-      activityIds: 'com.qq.reader.activity.ReaderPageActivity',
+      activityIds: '.activity.ReaderPageActivity',
       rules: [
         {
           key: 0,

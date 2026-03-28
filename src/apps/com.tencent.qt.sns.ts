@@ -13,7 +13,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          matches: '[id="com.tencent.qt.sns:id/closebtn"]',
+          matches: '[vid="closebtn"]',
           snapshotUrls: 'https://i.gkd.li/i/13497978',
         },
       ],

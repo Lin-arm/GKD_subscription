@@ -12,8 +12,8 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.pcncn.jj.act.AnswerDetail2Activity',
-          matches: '[id="com.pcncn.jj:id/iv_close"]',
+          activityIds: '.act.AnswerDetail2Activity',
+          matches: '[vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13695874',
         },
         {

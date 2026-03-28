@@ -10,7 +10,7 @@ export default defineGkdApp({
       desc: '点击关闭',
       rules: [
         {
-          activityIds: 'org.daimhim.zzzfun.ui.home.video.VideoDetailsActivity',
+          activityIds: '.ui.home.video.VideoDetailsActivity',
           matches:
             '@ImageView[childCount=0][visibleToUser=true] < FrameLayout[childCount=1] <2 FrameLayout < FrameLayout < FrameLayout < FrameLayout < FrameLayout < [id="android:id/content"]',
           snapshotUrls: 'https://i.gkd.li/i/13402608',

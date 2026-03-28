@@ -14,8 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.sankuai.waimai.business.page.homepage.MainActivity',
-          matches:
-            '[id="com.sankuai.meituan.takeoutnew:id/wm_upgrade_force_cancel"]',
+          matches: '[vid="wm_upgrade_force_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/13415044',
         },
       ],

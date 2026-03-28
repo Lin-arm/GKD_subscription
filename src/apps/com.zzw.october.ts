@@ -15,8 +15,7 @@ export default defineGkdApp({
           actionMaximum: 1,
           resetMatch: 'app',
           activityIds: '.MainActivity',
-          matches:
-            '[id="com.zzw.october:id/interact_ad_root"] >n ImageView[id="com.zzw.october:id/iv_close"]',
+          matches: '[vid="interact_ad_root"] >n ImageView[vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12842675',
         },
         {
@@ -97,7 +96,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.zzw.october.MainActivity',
+          activityIds: '.MainActivity',
           matches: '[vid="channel_banner_close_iv"]',
           snapshotUrls: 'https://i.gkd.li/i/23003170',
         },

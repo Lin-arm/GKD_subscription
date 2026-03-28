@@ -9,7 +9,7 @@ export default defineGkdApp({
       name: '全屏广告-弹窗广告',
       desc: '点击关闭',
       fastQuery: true,
-      activityIds: 'com.zhl.bmi.MainActivity',
+      activityIds: '.MainActivity',
       rules: [
         {
           key: 0,

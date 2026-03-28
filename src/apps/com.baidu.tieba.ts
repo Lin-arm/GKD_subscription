@@ -215,7 +215,7 @@ export default defineGkdApp({
             '.LogoActivity',
           ],
           matches:
-            '@TextView[id="com.baidu.tieba:id/obfuscated"][clickable=true][childCount=0][visibleToUser=true] - FrameLayout[childCount=2][getChild(1).text="广告"] < RelativeLayout[childCount=2] < [parent=null]',
+            '@TextView[vid="obfuscated"][clickable=true][childCount=0][visibleToUser=true] - FrameLayout[childCount=2][getChild(1).text="广告"] < RelativeLayout[childCount=2] < [parent=null]',
           snapshotUrls: [
             'https://i.gkd.li/i/13168383',
             'https://i.gkd.li/i/13322120',

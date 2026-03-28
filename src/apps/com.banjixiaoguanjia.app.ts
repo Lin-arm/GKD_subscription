@@ -7,7 +7,7 @@ export default defineGkdApp({
     {
       key: 1,
       name: '分段广告-卡片广告',
-      activityIds: 'com.banjixiaoguanjia.app.MainActivity',
+      activityIds: '.MainActivity',
       rules: [
         {
           key: 0,

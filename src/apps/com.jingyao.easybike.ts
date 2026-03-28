@@ -82,8 +82,7 @@ export default defineGkdApp({
           resetMatch: 'app',
           activityIds:
             'com.hellobike.evehicle.business.main.EVehicleHomeManagerActivity',
-          matches:
-            '[id="com.jingyao.easybike:id/lottie_view"] < ViewGroup + [id="com.jingyao.easybike:id/btn_close"]',
+          matches: '[vid="lottie_view"] < ViewGroup + [vid="btn_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12650163',
         },
         {
@@ -116,8 +115,7 @@ export default defineGkdApp({
       name: '局部广告-右侧悬浮广告',
       fastQuery: true,
       activityIds: 'com.hellobike.atlas.business.portal.PortalActivity',
-      rules:
-        '@[id="com.jingyao.easybike:id/closeFloatArea"] + [id="com.jingyao.easybike:id/floatADContainer"]',
+      rules: '@[vid="closeFloatArea"] + [vid="floatADContainer"]',
       snapshotUrls: 'https://i.gkd.li/i/12650071',
     },
     {
@@ -129,7 +127,7 @@ export default defineGkdApp({
         {
           activityIds: 'com.alipay.mobile.nebulacore.ui.H5Activity',
           matches:
-            '@View[text="跳过"] <2 View <2 View <<n FrameLayout[id="com.jingyao.easybike:id/h5_pc_container"]',
+            '@View[text="跳过"] <2 View <2 View <<n FrameLayout[vid="h5_pc_container"]',
           snapshotUrls: 'https://i.gkd.li/i/13837543',
         },
       ],

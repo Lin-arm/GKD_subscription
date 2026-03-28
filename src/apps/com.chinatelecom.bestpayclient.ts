@@ -14,8 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.ui.MainActivity',
-          matches:
-            '[id="com.chinatelecom.bestpayclient:id/bupdate_tv_bottom_tip"]',
+          matches: '[vid="bupdate_tv_bottom_tip"]',
           snapshotUrls: 'https://i.gkd.li/i/13391544',
         },
       ],
@@ -61,7 +60,7 @@ export default defineGkdApp({
           resetMatch: 'app',
           activityIds: 'com.alipay.mobile.nebulacore.ui.H5Activity',
           matches:
-            '[text="甜橙信用卡"] >2  View[childCount=2] > @Image[clickable=true][text!=null] <<n [id="com.chinatelecom.bestpayclient:id/h5_pc_container"]',
+            '[text="甜橙信用卡"] >2  View[childCount=2] > @Image[clickable=true][text!=null] <<n [vid="h5_pc_container"]',
           snapshotUrls: 'https://i.gkd.li/i/13626324',
         },
         {
@@ -81,7 +80,7 @@ export default defineGkdApp({
           name: '信用卡页面',
           activityIds: 'com.alipay.mobile.nebulacore.ui.H5Activity',
           matches:
-            '[id="com.chinatelecom.bestpayclient:id/h5_pc_container"] >2 bc >5 View > View >3 View[childCount=3] > @[clickable=true][width<150 && height<150][visibleToUser=true] + * + View[childCount=0]',
+            '[vid="h5_pc_container"] >2 bc >5 View > View >3 View[childCount=3] > @[clickable=true][width<150 && height<150][visibleToUser=true] + * + View[childCount=0]',
           snapshotUrls: [
             'https://i.gkd.li/i/13696322',
             'https://i.gkd.li/i/13696323',
@@ -98,9 +97,9 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.chinatelecom.bestpayclient.ui.MainActivity',
+          activityIds: '.ui.MainActivity',
           matches:
-            '[id="com.chinatelecom.bestpayclient:id/best_h5_container"] View[childCount=2] > @View[clickable=true] + View[clickable=true] > Image[text!=null]',
+            '[vid="best_h5_container"] View[childCount=2] > @View[clickable=true] + View[clickable=true] > Image[text!=null]',
           exampleUrls:
             'https://m.gkd.li/57941037/4457a342-5750-45d8-ad8e-233dd1da3de3',
           snapshotUrls: 'https://i.gkd.li/i/13402711',
@@ -108,7 +107,7 @@ export default defineGkdApp({
         {
           key: 1,
           fastQuery: true,
-          activityIds: 'com.chinatelecom.bestpayclient.ui.MainActivity',
+          activityIds: '.ui.MainActivity',
           matches: '[vid="iv_market_close"]',
           exampleUrls:
             'https://m.gkd.li/57941037/14326e73-6c7c-4659-8493-d4b196746b2a',
@@ -126,7 +125,7 @@ export default defineGkdApp({
         {
           activityIds: 'com.alipay.mobile.nebulacore.ui.H5Activity',
           matches:
-            'View[childCount=2] > @View[index=1][clickable=true][childCount=1] > Image[childCount=0] <<n [id="com.chinatelecom.bestpayclient:id/h5_pc_container"]',
+            'View[childCount=2] > @View[index=1][clickable=true][childCount=1] > Image[childCount=0] <<n [vid="h5_pc_container"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13543032',
             'https://i.gkd.li/i/13625037', //修改规则，避免在此误触

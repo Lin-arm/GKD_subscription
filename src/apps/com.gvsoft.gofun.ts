@@ -13,9 +13,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.gvsoft.gofun.module.home.activity.HomeActivity',
-          matches:
-            '[id="com.gvsoft.gofun:id/cardView"] + [id="com.gvsoft.gofun:id/iv_close"]',
+          activityIds: '.module.home.activity.HomeActivity',
+          matches: '[vid="cardView"] + [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13497777',
         },
       ],

@@ -14,7 +14,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.woaika.kashen.ui.WIKHomeActivity',
+          activityIds: '.ui.WIKHomeActivity',
           matches: '[id="android:id/button2"][text="暂不"]',
           exampleUrls:
             'https://m.gkd.li/57941037/ae172e3f-42e2-4de2-8bd5-de7eb624c359',

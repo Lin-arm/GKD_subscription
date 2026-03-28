@@ -43,7 +43,7 @@ export default defineGkdApp({
       name: '局部广告-卡片广告',
       rules: [
         {
-          activityIds: 'com.tencent.docs.DocsFlutterActivity',
+          activityIds: '.DocsFlutterActivity',
           matches: '@ImageView[clickable=true] - [desc="限时购买"]',
           snapshotUrls: 'https://i.gkd.li/i/13198097',
         },
@@ -55,7 +55,7 @@ export default defineGkdApp({
       rules: [
         {
           actionDelay: 200,
-          activityIds: 'com.tencent.docs.DocsFlutterActivity',
+          activityIds: '.DocsFlutterActivity',
           matches:
             'View[childCount=2] > @TextView[id=null][clickable=true] + View',
           snapshotUrls: 'https://i.gkd.li/i/13242404',

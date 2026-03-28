@@ -10,7 +10,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.taobao.htao.android.detail.DetailActivity',
+          activityIds: '.detail.DetailActivity',
           matches:
             'WebView[text$="天猫Tmall.com"] >2 View[id=null][childCount=1] > @TextView[visibleToUser=true][text=""] <<n [vid="detail_swipe_to_refresher"]',
           exampleUrls: 'https://e.gkd.li/661fca21-45e3-4e89-8ccc-b8bafb1bab02',

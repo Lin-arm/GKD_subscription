@@ -13,8 +13,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'cn.thepaper.paper.ui.main.MainActivity',
-          matches:
-            '[id="com.wondertek.paper:id/relative_layout"] + [id="com.wondertek.paper:id/close_photo"]',
+          matches: '[vid="relative_layout"] + [vid="close_photo"]',
           snapshotUrls: 'https://i.gkd.li/i/12899226',
         },
       ],

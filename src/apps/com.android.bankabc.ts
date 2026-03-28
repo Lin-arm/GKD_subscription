@@ -17,7 +17,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          matches: '[id="com.android.bankabc:id/close"]',
+          matches: '[vid="close"]',
           exampleUrls:
             'https://m.gkd.li/57941037/67cfc2f8-a108-4382-976a-0da7d13764e9',
           snapshotUrls: 'https://i.gkd.li/i/14179162',

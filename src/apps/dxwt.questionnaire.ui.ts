@@ -15,7 +15,7 @@ export default defineGkdApp({
       rules: [
         {
           matches:
-            '@View[desc^="关闭"][visibleToUser=true] <3 FrameLayout < FrameLayout < FrameLayout < [id="dxwt.questionnaire.ui:id/container"]',
+            '@View[desc^="关闭"][visibleToUser=true] <3 FrameLayout < FrameLayout < FrameLayout < [vid="container"]',
           snapshotUrls: 'https://i.gkd.li/i/13255491',
           excludeSnapshotUrls: 'https://i.gkd.li/i/13259475', // 限制 visibleToUser=true 防止按钮未出现就触发规则
         },

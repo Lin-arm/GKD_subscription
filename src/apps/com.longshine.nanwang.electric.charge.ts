@@ -13,8 +13,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.android.app.station.NewMainAct',
-          matches:
-            '[id="com.longshine.nanwang.electric.charge:id/bodyFL"] + [id="com.longshine.nanwang.electric.charge:id/ivClose"]',
+          matches: '[vid="bodyFL"] + [vid="ivClose"]',
           snapshotUrls: 'https://i.gkd.li/i/12700011',
         },
       ],

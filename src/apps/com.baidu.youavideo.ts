@@ -57,8 +57,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.home.view.HomeActivity',
-          matches:
-            '[id="com.baidu.youavideo:id/tv_upgrade"] < LinearLayout +2 [id="com.baidu.youavideo:id/img_close"]',
+          matches: '[vid="tv_upgrade"] < LinearLayout +2 [vid="img_close"]',
           snapshotUrls: ['https://i.gkd.li/i/12597916'],
         },
       ],
@@ -71,7 +70,7 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: '.home.view.HomeActivity',
-          matches: '[id="com.baidu.youavideo:id/img_operation_close"]',
+          matches: '[vid="img_operation_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12970088',
         },
       ],
@@ -87,7 +86,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.home.view.HomeActivity',
-          matches: '[id="com.baidu.youavideo:id/tv_next_time"]',
+          matches: '[vid="tv_next_time"]',
           snapshotUrls: 'https://i.gkd.li/i/12970094',
         },
       ],
@@ -154,7 +153,7 @@ export default defineGkdApp({
         {
           activityIds: '.app.ui.HomeActivity',
           matches:
-            '[id="com.baidu.youavideo:id/dialog_open_guide_notification_root"] > [id="com.baidu.youavideo:id/img_close"]',
+            '[vid="dialog_open_guide_notification_root"] > [vid="img_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13413819',
         },
       ],
@@ -165,9 +164,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.baidu.youavideo.home.view.HomeActivity',
-          matches:
-            '[id="com.baidu.youavideo:id/cl_root"] + [id="com.baidu.youavideo:id/img_close"]',
+          activityIds: '.home.view.HomeActivity',
+          matches: '[vid="cl_root"] + [vid="img_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13711475',
         },
       ],

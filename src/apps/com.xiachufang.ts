@@ -41,13 +41,12 @@ export default defineGkdApp({
       rules: [
         {
           key: 1,
-          matches: '[id="com.xiachufang:id/ad_close"][visibleToUser=true]',
+          matches: '[vid="ad_close"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/13348710',
         },
         {
           key: 2,
-          matches:
-            '[id="com.xiachufang:id/jad_feed_close"][visibleToUser=true]',
+          matches: '[vid="jad_feed_close"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/13363079',
         },
         {

@@ -13,8 +13,8 @@ export default defineGkdApp({
           key: 0,
           fastQuery: true,
           activityIds: [
-            'com.zhengnengliang.precepts.ui.activity.MainActivity',
-            'com.zhengnengliang.precepts.ui.dialog.DialogTwoButton',
+            '.ui.activity.MainActivity',
+            '.ui.dialog.DialogTwoButton',
           ],
           matches:
             '@ImageView[childCount=0][text=null][desc=null][id=null][visibleToUser=true][width<90 && height<90] < FrameLayout[childCount=1][text=null][desc=null][id=null] <(2,3) FrameLayout[childCount=4] +(1,2) FrameLayout[childCount=2] >2 [text^="立即" || text="去逛逛"]',

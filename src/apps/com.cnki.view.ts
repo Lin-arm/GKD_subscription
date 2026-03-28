@@ -13,10 +13,10 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: [
-            'com.cnki.view.core.navigator.main.HomeActivity',
-            'com.cnki.view.core.tramp.main.SplashActivity',
+            '.core.navigator.main.HomeActivity',
+            '.core.tramp.main.SplashActivity',
           ],
-          matches: '[id="com.cnki.view:id/update_undo"]',
+          matches: '[vid="update_undo"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12755689',
             'https://i.gkd.li/i/12755700',

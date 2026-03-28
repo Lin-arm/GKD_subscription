@@ -12,15 +12,14 @@ export default defineGkdApp({
         {
           key: 1,
           activityIds: '.QTRadioActivity',
-          matches: '[id="fm.qingting.qtradio:id/view_ad_close"]',
+          matches: '[vid="view_ad_close"]',
           exampleUrls: 'https://e.gkd.li/bef1954c-a0c8-441e-ab77-6967089e906c',
           snapshotUrls: 'https://i.gkd.li/i/12640438',
         },
         {
           key: 2,
           activityIds: '.QTRadioActivity',
-          matches:
-            '@[id="fm.qingting.qtradio:id/iv_close"] + RelativeLayout >2 [text="广告"]',
+          matches: '@[vid="iv_close"] + RelativeLayout >2 [text="广告"]',
           exampleUrls: 'https://e.gkd.li/1562b618-074d-4f10-a1ae-c62c5390fd1a',
           snapshotUrls: 'https://i.gkd.li/i/12640981',
         },

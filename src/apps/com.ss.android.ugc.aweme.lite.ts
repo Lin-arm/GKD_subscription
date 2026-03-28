@@ -31,8 +31,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.ss.android.ugc.aweme.main.MainActivity',
-          matches:
-            '[text="朋友推荐"] +2 [id="com.ss.android.ugc.aweme.lite:id/close"][clickable=true]',
+          matches: '[text="朋友推荐"] +2 [vid="close"][clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/13650523',
         },
       ],

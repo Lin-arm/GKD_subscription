@@ -14,7 +14,7 @@ export default defineGkdApp({
       priorityTime: 10000,
       rules: [
         {
-          matches: '[id="com.fbank.mobile:id/iv_dumiao"]',
+          matches: '[vid="iv_dumiao"]',
           snapshotUrls: 'https://i.gkd.li/i/13797434',
         },
       ],

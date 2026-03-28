@@ -29,7 +29,7 @@ export default defineGkdApp({
       rules: [
         {
           matches:
-            'TextView[id="com.huawei.music:id/live_info"] < LinearLayout -2 [id="com.huawei.music:id/close_button"]',
+            'TextView[vid="live_info"] < LinearLayout -2 [vid="close_button"]',
           snapshotUrls: 'https://i.gkd.li/i/13067649',
         },
       ],

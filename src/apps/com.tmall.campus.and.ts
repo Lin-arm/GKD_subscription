@@ -11,7 +11,7 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: [
-            'com.tmall.campus.and.main.MainActivity',
+            '.main.MainActivity',
             'com.tmall.campus.bizwebview.ui.CampusWebActivity',
           ],
           matches: '[vid="close_btn" || vid="iv_close"][clickable=true]',
@@ -50,7 +50,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.tmall.campus.and.main.MainActivity',
+          activityIds: '.main.MainActivity',
           matches: '[vid="iv_top_scan"]',
           snapshotUrls: 'https://i.gkd.li/i/22871147',
         },

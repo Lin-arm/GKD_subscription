@@ -76,7 +76,7 @@ export default defineGkdApp({
       actionMaximum: 1,
       rules: [
         {
-          activityIds: 'com.mcdonalds.gma.cn.activity.LaunchActivity',
+          activityIds: '.activity.LaunchActivity',
           matches: '[text$="获取您的设备信息"] + * > [text="不允许"]',
           exampleUrls:
             'https://m.gkd.li/101449500/121c7e65-780e-41aa-acf8-34c491d4be41',

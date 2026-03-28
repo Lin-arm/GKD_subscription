@@ -10,7 +10,7 @@ export default defineGkdApp({
       matchTime: 10000,
       actionMaximum: 1,
       resetMatch: 'app',
-      activityIds: 'com.guwendao.gwd.MainActivity',
+      activityIds: '.MainActivity',
       rules: [
         {
           key: 2,
@@ -22,7 +22,7 @@ export default defineGkdApp({
           key: 3,
           fastQuery: true,
           activityIds: [
-            'com.guwendao.gwd.MainActivity',
+            '.MainActivity',
             'com.android.systemui.media.MediaProjectionPermissionActivity',
           ],
           matches:

@@ -145,7 +145,7 @@ export default defineGkdApp({
       desc: '点击关闭',
       rules: [
         {
-          activityIds: 'com.kugou.android.app.MediaActivity',
+          activityIds: '.app.MediaActivity',
           matches: '[desc="看广告，免费听会员歌"] +2 [desc="关闭"]',
           exampleUrls:
             'https://m.gkd.li/57941037/dfd70c7c-3200-493e-9afa-404de5fcd2ff',
@@ -188,7 +188,7 @@ export default defineGkdApp({
           matchTime: 10000,
           actionMaximum: 1,
           resetMatch: 'app',
-          activityIds: 'com.kugou.android.app.MediaActivity',
+          activityIds: '.app.MediaActivity',
           matches:
             'ViewGroup > FrameLayout >2 FrameLayout[childCount=2] > FrameLayout > FrameLayout[childCount=2] > ImageView[index=1][clickable=true][childCount=0][width<80&&height<80]',
           exampleUrls: 'https://e.gkd.li/2b240676-4dac-4375-b238-2d570962efd1',

@@ -14,8 +14,8 @@ export default defineGkdApp({
           fastQuery: true,
           actionDelay: 300, // 没有此字段会导致误触
           activityIds: [
-            'com.magicalstory.AppStore.appDetails.AppDetailsActivity',
-            'com.magicalstory.AppStore.main.fragments.square.section.forumDetailsActivity',
+            '.appDetails.AppDetailsActivity',
+            '.main.fragments.square.section.forumDetailsActivity',
           ],
           matches: [
             '[vid="itemUser"][visibleToUser=true]',
@@ -33,7 +33,7 @@ export default defineGkdApp({
         {
           key: 1,
           name: '搜索页面',
-          activityIds: 'com.magicalstory.AppStore.search.searchActivity',
+          activityIds: '.search.searchActivity',
           matches:
             'FrameLayout[childCount=5] > FrameLayout[childCount=1] > @ImageView < FrameLayout +2 *[visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/14771429',
@@ -42,7 +42,7 @@ export default defineGkdApp({
           key: 2,
           name: '首页',
           fastQuery: true,
-          activityIds: 'com.magicalstory.AppStore.main.MainActivity',
+          activityIds: '.main.MainActivity',
           matches: '[vid="button_close_ad"]',
           snapshotUrls: 'https://i.gkd.li/i/14668408',
         },
@@ -51,8 +51,7 @@ export default defineGkdApp({
           name: '评论区顶部',
           fastQuery: true,
           actionDelay: 300, // 没有此字段会导致误触
-          activityIds:
-            'com.magicalstory.AppStore.main.fragments.square.section.forumDetailsActivity',
+          activityIds: '.main.fragments.square.section.forumDetailsActivity',
           matches: [
             '[vid="title_browse"][visibleToUser=true]',
             'FrameLayout[childCount=5] > FrameLayout[childCount=1] > @ImageView <<n [vid="banner"]',
@@ -90,8 +89,7 @@ export default defineGkdApp({
         {
           activityIds:
             'com.cretin.www.cretinautoupdatelibrary.activity.UpdateType10Activity',
-          matches:
-            '[id="com.magicalstory.AppStore:id/tv_update"] <2 * + * > [id="com.magicalstory.AppStore:id/iv_close"]',
+          matches: '[vid="tv_update"] <2 * + * > [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13459373',
         },
       ],

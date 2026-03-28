@@ -12,13 +12,13 @@ export default defineGkdApp({
           key: 0,
           fastQuery: true,
           activityIds: 'com.fighter.loader.view.InteractTemplateAdDialog',
-          matches: '[id="com.estrongs.android.pop:id/iv_close"]',
+          matches: '[vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12509667',
         },
         {
           key: 1,
           fastQuery: true,
-          activityIds: 'com.estrongs.android.pop.view.FileExplorerActivity',
+          activityIds: '.view.FileExplorerActivity',
           matches:
             '@ImageView[childCount=0][text=null][desc=null][id=null][visibleToUser=true][width<90 && height<90] < FrameLayout[childCount=1][text=null][desc=null][id=null][parent.childCount>3] <n FrameLayout >(2,3) [text^="立即" || text$="详情" || text^="了解" || text="去微信看看" || text$="应用" || text="进入小程序" || text="领取优惠" || text="跳转微信"]',
           snapshotUrls: 'https://i.gkd.li/i/12509669',
@@ -45,18 +45,17 @@ export default defineGkdApp({
       key: 1,
       name: '局部广告',
       fastQuery: true,
-      activityIds: 'com.estrongs.android.pop.view.FileExplorerActivity',
+      activityIds: '.view.FileExplorerActivity',
       rules: [
         {
           key: 0,
           matches:
-            'ImageView - LinearLayout >2 ImageView[id="com.estrongs.android.pop:id/close"][clickable=true]',
+            'ImageView - LinearLayout >2 ImageView[vid="close"][clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/12674919',
         },
         {
           key: 1,
-          matches:
-            '@[id="com.estrongs.android.pop:id/close"] + [id="com.estrongs.android.pop:id/ad_flag_source"]',
+          matches: '@[vid="close"] + [vid="ad_flag_source"]',
           snapshotUrls: 'https://i.gkd.li/i/12818281',
         },
         {

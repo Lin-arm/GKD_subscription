@@ -33,9 +33,8 @@ export default defineGkdApp({
       matchTime: 10000,
       actionMaximum: 1,
       resetMatch: 'app',
-      activityIds: ['com.cmbchina.ccd.pluto.cmbActivity.CMBRootActivityV2'],
-      rules:
-        '[id="com.cmbchina.ccd.pluto.cmbActivity:id/lly_pop_shell"] > [id="com.cmbchina.ccd.pluto.cmbActivity:id/img_cf_view_close"]',
+      activityIds: ['.CMBRootActivityV2'],
+      rules: '[vid="lly_pop_shell"] > [vid="img_cf_view_close"]',
       snapshotUrls: [
         'https://i.gkd.li/i/12647000',
         'https://i.gkd.li/i/13360282',
@@ -51,12 +50,9 @@ export default defineGkdApp({
       rules: [
         {
           name: '信用卡、我的页面',
-          activityIds: [
-            'com.cmbchina.ccd.pluto.cmbActivity.CMBRootActivityV2',
-            'com.cmbchina.ccd.pluto.cmbActivity.secondNav',
-          ],
+          activityIds: ['.CMBRootActivityV2', '.secondNav'],
           matches:
-            '[id="com.cmbchina.ccd.pluto.cmbActivity:id/img_floating_ad_cmb"] - [id="com.cmbchina.ccd.pluto.cmbActivity:id/img_close_floating_ad_cmb"]',
+            '[vid="img_floating_ad_cmb"] - [vid="img_close_floating_ad_cmb"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12647039', // 信用卡页面
             'https://i.gkd.li/i/12647052', // 我的页面
@@ -65,9 +61,9 @@ export default defineGkdApp({
         {
           name: '查账页面',
           activityIds: [
-            'com.cmbchina.ccd.pluto.cmbActivity.CMBRootActivityV2',
-            'com.cmbchina.ccd.pluto.cmbActivity.repaymentBillv3.billRepay',
-            'com.cmbchina.ccd.pluto.cmbActivity.repaymentBillv3.billDetail.view',
+            '.CMBRootActivityV2',
+            '.repaymentBillv3.billRepay',
+            '.repaymentBillv3.billDetail.view',
           ],
           matches:
             '@[vid="img_cmb_drag_pendant_close"] + [vid="img_cmb_drag_pendant_bg"]',
@@ -78,9 +74,8 @@ export default defineGkdApp({
         },
         {
           name: '发现页',
-          activityIds: 'com.cmbchina.ccd.pluto.cmbActivity.CMBRootActivityV2',
-          matches:
-            '[id="com.cmbchina.ccd.pluto.cmbActivity:id/view_cat"] + [id="com.cmbchina.ccd.pluto.cmbActivity:id/view_close"]',
+          activityIds: '.CMBRootActivityV2',
+          matches: '[vid="view_cat"] + [vid="view_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13402782',
         },
       ],
@@ -93,8 +88,7 @@ export default defineGkdApp({
       matchTime: 10000,
       actionMaximum: 1,
       resetMatch: 'app',
-      rules:
-        '[id="com.cmbchina.ccd.pluto.cmbActivity:id/btn_open_notify"] + [id="com.cmbchina.ccd.pluto.cmbActivity:id/iv_delete"]',
+      rules: '[vid="btn_open_notify"] + [vid="iv_delete"]',
       snapshotUrls: ['https://i.gkd.li/i/12647068'],
     },
     {

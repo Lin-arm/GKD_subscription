@@ -11,7 +11,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'enfc.metro.session.web.rn.RPReactActivity',
+          activityIds: '.session.web.rn.RPReactActivity',
           matches: '@View[clickable=true] - * [text="扭动手机"]',
           snapshotUrls: 'https://i.gkd.li/i/13988597',
         },

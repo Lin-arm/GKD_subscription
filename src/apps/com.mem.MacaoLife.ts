@@ -14,7 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.mem.life.ui.launch.LaunchActivity',
-          matches: '[id="com.mem.MacaoLife:id/cancel"]',
+          matches: '[vid="cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/13350665',
         },
       ],
@@ -26,7 +26,7 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: 'com.mem.life.ui.home.HomeActivity',
-          matches: '[id="com.mem.MacaoLife:id/close"]',
+          matches: '[vid="close"]',
           snapshotUrls: 'https://i.gkd.li/i/13350685',
         },
       ],

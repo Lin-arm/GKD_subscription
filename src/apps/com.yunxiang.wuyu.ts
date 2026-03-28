@@ -25,7 +25,7 @@ export default defineGkdApp({
       matchTime: 10000,
       actionMaximum: 1,
       resetMatch: 'app',
-      activityIds: 'com.yunxiang.wuyu.MainActivity',
+      activityIds: '.MainActivity',
       rules: [
         {
           key: 1,

@@ -14,8 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.zui.launcher.drawer.NormalLauncher',
-          matches:
-            '@[id="com.lenovo.leos.appstore:id/dialog_cancel"] + [text$="版本更新"]',
+          matches: '@[vid="dialog_cancel"] + [text$="版本更新"]',
           snapshotUrls: 'https://i.gkd.li/i/13401992',
         },
       ],

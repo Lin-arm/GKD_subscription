@@ -13,7 +13,7 @@ export default defineGkdApp({
         {
           key: 0,
           matches:
-            '[id="com.huawei.search:id/iv_topic_close_in_image" || id="com.huawei.search:id/iv_topic_left_close" || id="com.huawei.search:id/iv_topic_close_in_pps"]',
+            '[vid="iv_topic_close_in_image" || vid="iv_topic_left_close" || vid="iv_topic_close_in_pps"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12667938',
             'https://i.gkd.li/i/12745008',

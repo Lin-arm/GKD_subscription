@@ -13,10 +13,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          matches: [
-            '[text="发现新版本"]',
-            '[id="com.daimajia.gold:id/iv_close"]',
-          ],
+          matches: ['[text="发现新版本"]', '[vid="iv_close"]'],
           snapshotUrls: 'https://i.gkd.li/i/13498703',
         },
       ],

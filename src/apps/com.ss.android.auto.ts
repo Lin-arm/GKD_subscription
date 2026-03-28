@@ -9,10 +9,7 @@ export default defineGkdApp({
       name: '分段广告-首页推荐卡片广告',
       desc: '需二次点击关闭原因',
       fastQuery: true,
-      activityIds: [
-        'com.ss.android.auto.activity.SplashActivity',
-        'com.ss.android.auto.policy.AutoPrivacyActivity',
-      ],
+      activityIds: ['.activity.SplashActivity', '.policy.AutoPrivacyActivity'],
       rules: [
         {
           key: 0,
@@ -66,8 +63,8 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: [
-            'com.ss.android.auto.activity.SplashActivity',
-            'com.ss.android.auto.activity.ConcernDetailActivity',
+            '.activity.SplashActivity',
+            '.activity.ConcernDetailActivity',
           ],
           matches:
             'FrameLayout > RelativeLayout[childCount=2] > RelativeLayout + ImageView[clickable=true]',
@@ -103,8 +100,8 @@ export default defineGkdApp({
         {
           activityIds: [
             'com.ss.android.article.base.feature.detail2.view.NewDetailActivity',
-            'com.ss.android.auto.ugc.video.activity.UgcLongPostActivity',
-            'com.ss.android.auto.ugc.video.activity.UgcNewDetailActivity',
+            '.ugc.video.activity.UgcLongPostActivity',
+            '.ugc.video.activity.UgcNewDetailActivity',
           ],
           matches: '@ImageView[clickable=true] - LinearLayout > [text="广告"]',
           snapshotUrls: [
@@ -144,7 +141,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.ss.android.auto.activity.ConcernDetailActivity',
+          activityIds: '.activity.ConcernDetailActivity',
           matches: '@FrameLayout[clickable=true][id!=null] -2 [text="广告"]',
           snapshotUrls: 'https://i.gkd.li/i/13686928',
         },
@@ -157,7 +154,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.ss.android.auto.activity.ConcernDetailActivity',
+          activityIds: '.activity.ConcernDetailActivity',
           matches: 'FrameLayout[childCount=8] > TextView[text=""]',
           snapshotUrls: 'https://i.gkd.li/i/14034740',
         },

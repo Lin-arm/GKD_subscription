@@ -14,7 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.youku.vip.wrapper.VipHomeActivity',
-          matches: '[id="com.youku.phone:id/closeView"][desc="关闭弹层"]',
+          matches: '[vid="closeView"][desc="关闭弹层"]',
           snapshotUrls: 'https://i.gkd.li/i/12701029',
         },
       ],

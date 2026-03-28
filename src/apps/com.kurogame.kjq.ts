@@ -11,7 +11,7 @@ export default defineGkdApp({
       matchTime: 10000,
       actionMaximum: 1,
       resetMatch: 'app',
-      activityIds: 'com.kurogame.kjq.MainActivity',
+      activityIds: '.MainActivity',
       rules: [
         {
           key: 0,
@@ -36,7 +36,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.kurogame.kjq.MainActivity',
+          activityIds: '.MainActivity',
           matches: '[vid="close"]',
           exampleUrls:
             'https://m.gkd.li/57941037/d9c598fc-5bd4-4773-8db1-316b8f7155c3',
@@ -47,7 +47,7 @@ export default defineGkdApp({
     {
       key: 3,
       name: '功能类-鸣潮自动签到',
-      activityIds: 'com.kurogame.kjq.profile.ui.activity.WebViewShareActivity',
+      activityIds: '.profile.ui.activity.WebViewShareActivity',
       rules: [
         {
           key: 0,

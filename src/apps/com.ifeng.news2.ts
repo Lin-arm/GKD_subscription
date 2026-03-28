@@ -51,9 +51,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.ifeng.news2.activity.IfengTabMainActivity',
-          matches:
-            '[text*="请求您的位置"] + [id="com.ifeng.news2:id/permission_cancel"]',
+          activityIds: '.activity.IfengTabMainActivity',
+          matches: '[text*="请求您的位置"] + [vid="permission_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/12705531',
         },
       ],

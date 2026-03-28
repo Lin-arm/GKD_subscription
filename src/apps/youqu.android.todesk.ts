@@ -12,12 +12,8 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds: [
-            'youqu.android.todesk.activity.WelcomeActivity',
-            'youqu.android.todesk.activity.MainActivity',
-          ],
-          matches:
-            '[id="youqu.android.todesk:id/ivAdClose" || id="youqu.android.todesk:id/llClose"]',
+          activityIds: ['.activity.WelcomeActivity', '.activity.MainActivity'],
+          matches: '[vid="ivAdClose" || vid="llClose"]',
           exampleUrls:
             'https://m.gkd.li/57941037/7535a849-b4a7-4dd5-a6c1-4d3def042d70',
           snapshotUrls: [

@@ -33,7 +33,7 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: '.sihp_homepage.module.main.Main2Activity',
-          matches: '[id="com.fiveplay:id/iv_ad_float_close"]',
+          matches: '[vid="iv_ad_float_close"]',
           snapshotUrls: 'https://i.gkd.li/i/16825082',
         },
       ],

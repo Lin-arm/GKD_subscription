@@ -14,7 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.dtchuxing.main.MainActivity',
-          matches: '[id="com.dtdream.publictransit:id/ifv_close"]',
+          matches: '[vid="ifv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12830113',
         },
       ],

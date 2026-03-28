@@ -12,7 +12,7 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: 'com.excelliance.kxqp.ui.activity.GameLaunchActivity',
-          matches: '[id="com.excean.na:id/iv_close_ad"]',
+          matches: '[vid="iv_close_ad"]',
           snapshotUrls: 'https://i.gkd.li/i/13931051',
         },
       ],

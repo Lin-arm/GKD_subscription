@@ -13,7 +13,7 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          matches: '[id="com.baidu.netdisk.samsung:id/iv_close"]',
+          matches: '[vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12738331',
         },
       ],
@@ -27,8 +27,7 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          matches:
-            '[id="com.baidu.netdisk.samsung:id/buy_product_root"] > [id="com.baidu.netdisk.samsung:id/iv_close"]',
+          matches: '[vid="buy_product_root"] > [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12738388',
         },
         {

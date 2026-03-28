@@ -13,7 +13,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          matches: '[text="去开启"] + [id="com.hupu.shihuo:id/ivClose"]',
+          matches: '[text="去开启"] + [vid="ivClose"]',
           snapshotUrls: 'https://i.gkd.li/i/13704887',
         },
       ],
@@ -27,7 +27,7 @@ export default defineGkdApp({
           activityIds:
             'com.shizhuang.duapp.modules.rn.mini.MiniReactActivity$MiniUITranslucentReactActivity',
           matches:
-            '[id="com.hupu.shihuo:id/fragment_container"] >11 @ViewGroup[clickable=true] > ImageView',
+            '[vid="fragment_container"] >11 @ViewGroup[clickable=true] > ImageView',
           snapshotUrls: 'https://i.gkd.li/i/13115664',
         },
       ],

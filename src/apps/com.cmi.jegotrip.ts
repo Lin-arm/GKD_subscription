@@ -14,7 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.ui.BottomTabsActivity',
-          matches: '[id="com.cmi.jegotrip:id/ig_ad_close"]',
+          matches: '[vid="ig_ad_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13631904',
         },
       ],
@@ -28,11 +28,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.cmi.jegotrip.ui.BottomTabsActivity',
-          matches: [
-            '[text="申请定位权限说明"]',
-            '[id="com.cmi.jegotrip:id/btn_cancel"]',
-          ],
+          activityIds: '.ui.BottomTabsActivity',
+          matches: ['[text="申请定位权限说明"]', '[vid="btn_cancel"]'],
           snapshotUrls: 'https://i.gkd.li/i/13232766',
         },
       ],

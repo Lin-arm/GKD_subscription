@@ -9,10 +9,10 @@ export default defineGkdApp({
       name: '全屏广告-会员提示',
       desc: '点击不需要',
       fastQuery: true,
-      activityIds: 'com.gkid.crazyrope.ui.member.MemberDiscountsActivity',
+      activityIds: '.ui.member.MemberDiscountsActivity',
       rules: [
         {
-          matches: '[id="com.gkid.crazyrope:id/btn_close"][text="暂不需要"]',
+          matches: '[vid="btn_close"][text="暂不需要"]',
           snapshotUrls: 'https://i.gkd.li/i/12916419',
         },
       ],
@@ -26,7 +26,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          matches: '[id="com.gkid.crazyrope:id/iv_close"]',
+          matches: '[vid="iv_close"]',
           exampleUrls: 'https://e.gkd.li/398c08eb-ebfb-4cf6-9349-0b0ad4b575c9',
           snapshotUrls: 'https://i.gkd.li/i/13262845',
         },

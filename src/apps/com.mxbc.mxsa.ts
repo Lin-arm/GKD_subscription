@@ -13,8 +13,8 @@ export default defineGkdApp({
       rules: [
         {
           key: 1,
-          activityIds: 'com.mxbc.mxsa.modules.main.MainActivity',
-          matches: '[id="com.mxbc.mxsa:id/close"]',
+          activityIds: '.modules.main.MainActivity',
+          matches: '[vid="close"]',
           snapshotUrls: 'https://i.gkd.li/i/12929345',
         },
       ],

@@ -18,15 +18,14 @@ export default defineGkdApp({
         },
         {
           key: 1,
-          activityIds: 'io.iftech.android.box.main.HomeActivity',
+          activityIds: '.main.HomeActivity',
           matches: 'ImageView - FrameLayout > ImageView[id=null]',
           snapshotUrls: 'https://i.gkd.li/i/12706209',
         },
         {
           key: 2,
           activityIds: 'com.anythink.basead.ui.ATPortraitTranslucentActivity',
-          matches:
-            '[id="io.iftech.android.box:id/anythink_myoffer_btn_close_id"]',
+          matches: '[vid="anythink_myoffer_btn_close_id"]',
           snapshotUrls: 'https://i.gkd.li/i/12706228',
         },
         {
@@ -53,9 +52,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'io.iftech.android.box.main.HomeActivity',
-          matches:
-            '@[id="io.iftech.android.box:id/ivClose"] + [text^="限时"][text$="特惠"]',
+          activityIds: '.main.HomeActivity',
+          matches: '@[vid="ivClose"] + [text^="限时"][text$="特惠"]',
           snapshotUrls: 'https://i.gkd.li/i/12706226',
         },
       ],

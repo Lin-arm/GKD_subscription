@@ -16,7 +16,7 @@ export default defineGkdApp({
             'com.vmall.client.base.fragment.VmallWapActivity',
             'com.vmall.client.splash.fragment.SplashActivity',
           ],
-          matches: '[id="com.hihonor.vmall:id/gift_close_iv"]',
+          matches: '[vid="gift_close_iv"]',
           snapshotUrls: 'https://i.gkd.li/i/13060881',
         },
       ],

@@ -13,7 +13,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.realtech.xiaocan.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             'View[childCount=3] > View + ImageView + ImageView[clickable=true][childCount=0]',
           snapshotUrls: 'https://i.gkd.li/i/13694864',
@@ -28,7 +28,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.realtech.xiaocan.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             '[id="android:id/content"] >5 View[childCount=6] > ImageView[index=5][clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/14290847',

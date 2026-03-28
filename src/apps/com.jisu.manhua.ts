@@ -14,8 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.ilike.cartoon.activities.HomeActivity',
-          matches:
-            '[id="com.jisu.manhua:id/iv_promotion"] + [id="com.jisu.manhua:id/iv_close"]',
+          matches: '[vid="iv_promotion"] + [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13688186',
         },
       ],

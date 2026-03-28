@@ -11,17 +11,15 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds: 'com.handsgo.jiakao.android.main.activity.MainActivity',
-          matches:
-            '[id="com.handsgo.jiakao.android:id/ivDelete"][visibleToUser=true]',
+          activityIds: '.main.activity.MainActivity',
+          matches: '[vid="ivDelete"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/13475994',
         },
         {
           key: 1,
           fastQuery: true,
           activityIds: '.main.activity.MainActivity',
-          matches:
-            '[id="com.handsgo.jiakao.android:id/adsdk__ids_component_close"][visibleToUser=true]',
+          matches: '[vid="adsdk__ids_component_close"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/a3ff6d58-4902-4ff4-a1dd-dbdb4a9ae38a',
           snapshotUrls: 'https://i.gkd.li/i/13475994',
         },
@@ -46,7 +44,7 @@ export default defineGkdApp({
         {
           key: 1,
           fastQuery: true,
-          activityIds: 'com.handsgo.jiakao.android.main.activity.MainActivity',
+          activityIds: '.main.activity.MainActivity',
           matches: [
             '[vid="adsdk__ids_cta_layout"][visibleToUser=true]',
             '[vid="close"][visibleToUser=true]',
@@ -72,7 +70,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.handsgo.jiakao.android.main.activity.MainActivity',
+          activityIds: '.main.activity.MainActivity',
           matches: '[text="开启专属学习资料推送"] + [vid="closeIv"]',
           exampleUrls: 'https://e.gkd.li/9a9aad9b-052b-4e00-9926-d4a213f96372',
           snapshotUrls: 'https://i.gkd.li/i/17001986',

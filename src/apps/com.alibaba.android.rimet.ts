@@ -14,8 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          matches:
-            '@FrameLayout > [id="com.alibaba.android.rimet:id/icft_close"]',
+          matches: '@FrameLayout > [vid="icft_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13325125',
         },
       ],
@@ -31,7 +30,7 @@ export default defineGkdApp({
         {
           key: 0,
           matches:
-            '@FrameLayout[id="com.alibaba.android.rimet:id/layout_close"] -2 TextView[text="文件即将过期请备份"]',
+            '@FrameLayout[vid="layout_close"] -2 TextView[text="文件即将过期请备份"]',
           action: 'clickCenter',
           snapshotUrls: 'https://i.gkd.li/i/13325125',
         },
@@ -47,8 +46,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          matches:
-            'CheckBox[id="com.alibaba.android.rimet:id/cb_send_origin"][text="原图"][checked=false]',
+          matches: 'CheckBox[vid="cb_send_origin"][text="原图"][checked=false]',
           snapshotUrls: [
             'https://i.gkd.li/i/13309648', //未选中 [checked=false]
             'https://i.gkd.li/i/13309845', //已选中 [checked=true]
@@ -70,8 +68,7 @@ export default defineGkdApp({
           snapshotUrls: 'https://i.gkd.li/i/13402478',
         },
         {
-          matches:
-            'TextView[id="com.alibaba.android.rimet:id/dialog_close_button"]',
+          matches: 'TextView[vid="dialog_close_button"]',
           snapshotUrls: 'https://i.gkd.li/i/13772151',
         },
       ],
@@ -86,7 +83,7 @@ export default defineGkdApp({
       activityIds: 'com.alibaba.android.user.qrcode.WebLoginActivity',
       rules: [
         {
-          matches: '[id="com.alibaba.android.rimet:id/btn_login"]',
+          matches: '[vid="btn_login"]',
           snapshotUrls: 'https://i.gkd.li/i/13433981',
         },
       ],

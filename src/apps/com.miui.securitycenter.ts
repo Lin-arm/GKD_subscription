@@ -27,10 +27,7 @@ export default defineGkdApp({
             'com.miui.securityscan.MainActivity',
             'com.miui.permcenter.permissions.SystemAppPermissionDialogActivity',
           ],
-          matches: [
-            '[id="com.miui.securitycenter:id/title"][text="获取位置信息"]',
-            '[text="不同意"]',
-          ],
+          matches: ['[vid="title"][text="获取位置信息"]', '[text="不同意"]'],
           snapshotUrls: [
             'https://i.gkd.li/i/13474517',
             'https://i.gkd.li/i/13476592',

@@ -7,10 +7,10 @@ export default defineGkdApp({
     {
       key: 1,
       name: '功能类-忽略授权提示',
-      activityIds: 'com.byyoung.setting.Welcome.PermissionActivity',
+      activityIds: '.Welcome.PermissionActivity',
       rules: [
         {
-          matches: '[id="com.byyoung.setting:id/tv_name"][text*="忽略授权"]',
+          matches: '[vid="tv_name"][text*="忽略授权"]',
           snapshotUrls: 'https://i.gkd.li/i/12829909',
         },
       ],

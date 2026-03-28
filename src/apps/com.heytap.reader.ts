@@ -25,7 +25,7 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: 'com.zhangyue.iReader.bookshelf.ui.ActivityBookShelf',
-          matches: '[id="com.heytap.reader:id/float_delete"]',
+          matches: '[vid="float_delete"]',
           exampleUrls:
             'https://m.gkd.li/6328439/860371ea-1f09-4f82-8ed6-1436eca4a50d',
           snapshotUrls: 'https://i.gkd.li/i/13387138',
@@ -42,7 +42,7 @@ export default defineGkdApp({
           actionMaximum: 1,
           resetMatch: 'app',
           activityIds: 'com.zhangyue.iReader.bookshelf.ui.ActivityBookShelf',
-          matches: '[id="com.heytap.reader:id/iv_float_read_continue_close"]',
+          matches: '[vid="iv_float_read_continue_close"]',
           exampleUrls:
             'https://m.gkd.li/6328439/3ee7210c-970e-4c9a-acb6-9254245c27a0',
           snapshotUrls: 'https://i.gkd.li/i/13387159',

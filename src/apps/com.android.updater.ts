@@ -32,7 +32,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.android.updater.UpdateActivity',
+          activityIds: '.UpdateActivity',
           matches: [
             '[text^="您当前正在使用数据网络，继续下载可能会产生流量费用"]',
             '[text="继续下载"]',
@@ -47,7 +47,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.android.updater.UpdateActivity',
+          activityIds: '.UpdateActivity',
           matches: ['[text="开启数据网络自动下载"]', '[text="不开启"]'],
           snapshotUrls: 'https://i.gkd.li/i/23182175',
         },

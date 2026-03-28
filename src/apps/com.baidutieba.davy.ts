@@ -10,11 +10,11 @@ export default defineGkdApp({
       activityIds: 'com.davy.commonlibrary.utils.DialogUtil',
       rules: [
         {
-          matches: '[id="com.baidutieba.davy:id/exit"]',
+          matches: '[vid="exit"]',
           snapshotUrls: 'https://i.gkd.li/i/12504289',
         },
         {
-          matches: '[id="com.baidutieba.davy:id/mimo_interstitial_close_img"]',
+          matches: '[vid="mimo_interstitial_close_img"]',
           snapshotUrls: 'https://i.gkd.li/i/12504291',
         },
       ],

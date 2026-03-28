@@ -14,8 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          matches:
-            'ImageView[id="com.sina.oasis:id/gdt_v2_banner_ad_close_btn"]',
+          matches: 'ImageView[vid="gdt_v2_banner_ad_close_btn"]',
           snapshotUrls: 'https://i.gkd.li/i/13434468',
         },
         {

@@ -11,7 +11,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.rarlab.rar.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             '[text="订购" || text="訂閱"] + [text="放弃" || text="解除"]',
           snapshotUrls: [

@@ -60,8 +60,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.mc10086.cmcc.view.tabs.AppTabFragment',
-          matches:
-            '[id="com.greenpoint.android.mc10086.activity:id/ad_image"] < RelativeLayout + [id="com.greenpoint.android.mc10086.activity:id/close_btn"]',
+          matches: '[vid="ad_image"] < RelativeLayout + [vid="close_btn"]',
           snapshotUrls: 'https://i.gkd.li/i/12662361',
         },
       ],
@@ -162,7 +161,7 @@ export default defineGkdApp({
         {
           activityIds: 'com.mc10086.cmcc.view.tabs.AppTabFragment',
           matches:
-            '@[id="com.greenpoint.android.mc10086.activity:id/close_img"][desc="关闭"] - RelativeLayout >(2) [text$="好评"]',
+            '@[vid="close_img"][desc="关闭"] - RelativeLayout >(2) [text$="好评"]',
           snapshotUrls: 'https://i.gkd.li/i/12662345',
         },
       ],

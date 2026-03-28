@@ -13,8 +13,8 @@ export default defineGkdApp({
           name: '腾讯广告',
           fastQuery: true,
           activityIds: [
-            'com.xyhui.start.PUMainActivity',
-            'com.xyhui.start.LoadingActivity',
+            '.start.PUMainActivity',
+            '.start.LoadingActivity',
             '.lut.act.LutMainActivity',
           ],
           matches:
@@ -29,10 +29,7 @@ export default defineGkdApp({
           key: 2,
           name: '快手广告',
           fastQuery: true,
-          activityIds: [
-            'com.xyhui.start.PUMainActivity',
-            'com.xyhui.start.LoadingActivity',
-          ],
+          activityIds: ['.start.PUMainActivity', '.start.LoadingActivity'],
           matches:
             'ImageView < @ViewGroup[clickable=true] < * <2 * +n * >(1,3) [text="广告"]',
           exampleUrls: 'https://e.gkd.li/1d51a37a-0444-4850-983c-3646b494204a',
@@ -56,7 +53,7 @@ export default defineGkdApp({
           name: '美数广告',
           fastQuery: true,
           activityIds: 'com.meishu.sdk.activity.SdkInterstitialActivity',
-          matches: '[id="com.xyhui:id/ms_activity_sdk_interstitial_cacel"]',
+          matches: '[vid="ms_activity_sdk_interstitial_cacel"]',
           snapshotUrls: 'https://i.gkd.li/i/13458692',
         },
         {
@@ -70,8 +67,8 @@ export default defineGkdApp({
           key: 6,
           fastQuery: true,
           activityIds: [
-            'com.xyhui.start.PUMainActivity',
-            'com.xyhui.start.LoadingActivity',
+            '.start.PUMainActivity',
+            '.start.LoadingActivity',
             '.lut.act.LutMainActivity',
           ],
           matches:
@@ -171,10 +168,10 @@ export default defineGkdApp({
         {
           activityIds: [
             '.lut.act.LutMainActivity',
-            'com.xyhui.start.PUMainActivity',
-            'com.xyhui.start.LoadingActivity',
+            '.start.PUMainActivity',
+            '.start.LoadingActivity',
           ],
-          matches: 'ImageView[id="com.xyhui:id/deleteIv"]',
+          matches: 'ImageView[vid="deleteIv"]',
           snapshotUrls: [
             'https://i.gkd.li/i/22863860',
             'https://i.gkd.li/i/12846543',

@@ -14,7 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'io.microshow.fm.ui.activity.MainActivity',
+          activityIds: '.ui.activity.MainActivity',
           matches:
             '@Button[childCount=0][clickable=true][visibleToUser=true] <2 FrameLayout < RelativeLayout < [id="android:id/content"]',
           snapshotUrls: 'https://i.gkd.li/i/14953007',

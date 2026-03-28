@@ -31,7 +31,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.coloros.gallery3d.app.MainActivity',
+          activityIds: '.app.MainActivity',
           matches:
             '[text="开启相册自动同步，保障相册数据安全"] + [text="忽略"]',
           snapshotUrls: 'https://i.gkd.li/i/13637185',

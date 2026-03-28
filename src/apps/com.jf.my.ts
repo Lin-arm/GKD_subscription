@@ -20,7 +20,7 @@ export default defineGkdApp({
             'com.lbe.security.ui.CountdownDialogActivity',
           ],
           matches:
-            '[id="com.jf.my:id/btn_ok"][text="更新"] - [id="com.jf.my:id/btn_cancel"][text="关闭"]',
+            '[vid="btn_ok"][text="更新"] - [vid="btn_cancel"][text="关闭"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12838034',
             'https://i.gkd.li/i/12840591',
@@ -28,8 +28,7 @@ export default defineGkdApp({
         },
         {
           key: 1,
-          matches:
-            '[id="com.jf.my:id/toUpgradeTv"] - [id="com.jf.my:id/cancelTv"]',
+          matches: '[vid="toUpgradeTv"] - [vid="cancelTv"]',
           snapshotUrls: 'https://i.gkd.li/i/13786867',
         },
       ],
@@ -42,8 +41,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.jf.my.main.ui.dialog.HomeRedPackageDialog',
-          matches: '[id="com.jf.my:id/iv_back"]',
+          activityIds: '.main.ui.dialog.HomeRedPackageDialog',
+          matches: '[vid="iv_back"]',
           snapshotUrls: 'https://i.gkd.li/i/12840619',
         },
       ],

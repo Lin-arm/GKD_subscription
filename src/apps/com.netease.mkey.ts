@@ -13,8 +13,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.netease.mkey.activity.NtSecActivity',
-          matches: '[id="com.netease.mkey:id/tv_cancel"]',
+          activityIds: '.activity.NtSecActivity',
+          matches: '[vid="tv_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/13421302',
         },
       ],

@@ -10,10 +10,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds:
-            'com.google.android.apps.youtube.music.activities.MusicActivity',
-          matches:
-            '[id="com.google.android.apps.youtube.music:id/skip_ad_button"]',
+          activityIds: '.activities.MusicActivity',
+          matches: '[vid="skip_ad_button"]',
           snapshotUrls: 'https://i.gkd.li/i/13196056',
         },
       ],

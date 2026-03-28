@@ -10,8 +10,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.module.main.MainActivity',
-          matches:
-            '[id="com.shark.jizhang:id/float_btn"] >2 [id="com.shark.jizhang:id/close_view"]',
+          matches: '[vid="float_btn"] >2 [vid="close_view"]',
           exampleUrls: 'https://e.gkd.li/b64da622-2632-4140-930b-89d0f8cbdee1',
           snapshotUrls: 'https://i.gkd.li/i/12518517',
         },
@@ -27,8 +26,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.module.main.MainActivity',
-          matches:
-            '[id="com.shark.jizhang:id/sdv_image"] + [id="com.shark.jizhang:id/close_view"]',
+          matches: '[vid="sdv_image"] + [vid="close_view"]',
           exampleUrls: 'https://e.gkd.li/1cad4c8f-fdb0-4608-8398-2c22d81d435d',
           snapshotUrls: 'https://i.gkd.li/i/12518500',
         },

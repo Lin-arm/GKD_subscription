@@ -60,7 +60,7 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds: 'com.tencent.wework.launch.WwMainActivity',
+          activityIds: '.launch.WwMainActivity',
           matches:
             'ImageView[clickable=true][childCount=0] < ViewFlipper[childCount=1] + @ImageView[clickable=true][visibleToUser=true][width<140 && height<140] <n RelativeLayout <<n RecyclerView[childCount>10] <n FrameLayout <n ViewGroup - RelativeLayout >4 [text="工作台"]',
           exampleUrls: 'https://e.gkd.li/e0c4aa4a-fd8b-4440-920b-f96eec60baa1',
@@ -72,7 +72,7 @@ export default defineGkdApp({
         {
           preKeys: [0],
           fastQuery: true,
-          activityIds: 'com.tencent.wework.launch.WwMainActivity',
+          activityIds: '.launch.WwMainActivity',
           matches: '[text="关闭"]',
           exampleUrls: 'https://e.gkd.li/e4a71c0c-c0ce-4822-ae69-4a3330a28a84',
           snapshotUrls: 'https://i.gkd.li/i/16977929',
@@ -85,8 +85,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds:
-            'com.tencent.wework.common.controller.DialogActivityUtil',
+          activityIds: '.common.controller.DialogActivityUtil',
           matches: ['[text^="请开启悬浮窗"]', '[text="取消"][clickable=true]'],
           snapshotUrls: 'https://i.gkd.li/i/24230054',
         },

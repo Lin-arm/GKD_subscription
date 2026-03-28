@@ -42,7 +42,7 @@ export default defineGkdApp({
         {
           key: 0,
           name: '首页-浮窗广告',
-          activityIds: 'com.ss.android.article.news.activity.MainActivity',
+          activityIds: '.activity.MainActivity',
           matches:
             'FrameLayout > FrameLayout > FrameLayout[childCount=2] > @ImageView + ImageView[clickable=true][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/13762123',
@@ -116,7 +116,7 @@ export default defineGkdApp({
       desc: '点击右上角x按钮,点击[不感兴趣]',
       fastQuery: true,
       activityIds: [
-        'com.ss.android.article.news.activity.MainActivity',
+        '.activity.MainActivity',
         'com.bytedance.ugc.innerfeed.impl.PostInnerFeedActivity',
       ],
       rules: [
@@ -150,7 +150,7 @@ export default defineGkdApp({
       name: '局部广告-底部话题推荐弹窗',
       rules: [
         {
-          activityIds: 'com.ss.android.article.news.activity.MainActivity',
+          activityIds: '.activity.MainActivity',
           name: '话题谈论',
           matches:
             'FlattenUIText[text="参与讨论"] + FlattenUIImage[clickable=true]',
@@ -167,7 +167,7 @@ export default defineGkdApp({
         {
           key: 0,
           name: '点击"看视频"',
-          activityIds: 'com.ss.android.article.news.activity.MainActivity',
+          activityIds: '.activity.MainActivity',
           matches:
             '[id="com.bytedance.novel.api:id/component_ad_dialog_button_video"]',
           snapshotUrls: 'https://i.gkd.li/i/13402468',
@@ -188,7 +188,7 @@ export default defineGkdApp({
       desc: '点击X',
       rules: [
         {
-          activityIds: 'com.ss.android.article.news.activity.MainActivity',
+          activityIds: '.activity.MainActivity',
           matches: 'FrameLayout[childCount=8] > FlattenUIImage[index=7]',
           snapshotUrls: 'https://i.gkd.li/i/13828331',
         },
@@ -203,7 +203,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.ss.android.article.news.activity.MainActivity',
+          activityIds: '.activity.MainActivity',
           matches: '@[desc="关闭"] + [text^="关联"]',
           exampleUrls:
             'https://m.gkd.li/57941037/c938001e-f39b-4ece-ad0e-2c93ba41aa94',
@@ -220,7 +220,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.ss.android.article.news.activity.MainActivity',
+          activityIds: '.activity.MainActivity',
           matches: [
             '[text^="下次打开APP默认进入"]',
             '[text="取消"][clickable=true]',

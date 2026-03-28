@@ -32,9 +32,9 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.vivo.space.ui.VivoSpaceTabActivity',
+          activityIds: '.ui.VivoSpaceTabActivity',
           matches:
-            'View[childCount=2] > @[index=1][clickable=true][visibleToUser=true][childCount=0] <<n [id="com.vivo.space:id/floating_window_web"]',
+            'View[childCount=2] > @[index=1][clickable=true][visibleToUser=true][childCount=0] <<n [vid="floating_window_web"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13218155',
             'https://i.gkd.li/i/13292907',
@@ -53,7 +53,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.ui.VivoSpaceTabActivity',
-          matches: 'Button[id="com.vivo.space:id/vbutton_title"][text="取消"]',
+          matches: 'Button[vid="vbutton_title"][text="取消"]',
           snapshotUrls: 'https://i.gkd.li/i/13771581',
         },
       ],

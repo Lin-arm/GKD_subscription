@@ -34,7 +34,7 @@ export default defineGkdApp({
           key: 0,
           actionMaximum: 1,
           resetMatch: 'app',
-          activityIds: 'com.ruanmei.ithome.ui.MainActivity',
+          activityIds: '.ui.MainActivity',
           matches:
             '@[visibleToUser=true][text="关闭"] <<n [vid="ll_web"][visibleToUser=true] + [vid="shadowLayout"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/15413491',
@@ -45,7 +45,7 @@ export default defineGkdApp({
         },
         {
           key: 1,
-          activityIds: 'com.ruanmei.ithome.ui.NewsInfoV8Activity',
+          activityIds: '.ui.NewsInfoV8Activity',
           matches: '[vid="iv_dislike"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/16972394',
         },
@@ -56,7 +56,7 @@ export default defineGkdApp({
       name: '分段广告-信息流广告',
       desc: '长按广告-点击[屏蔽]-点击[不喜欢此条]',
       fastQuery: true,
-      activityIds: 'com.ruanmei.ithome.ui.MainActivity',
+      activityIds: '.ui.MainActivity',
       rules: [
         {
           key: 0,
@@ -89,7 +89,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.ruanmei.ithome.ui.MainActivity',
+          activityIds: '.ui.MainActivity',
           matches: '[vid="btn_dialog_upgrade_ignore"]',
           snapshotUrls: 'https://i.gkd.li/i/15413494',
         },

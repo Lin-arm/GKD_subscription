@@ -19,7 +19,7 @@ export default defineGkdApp({
         {
           key: 1,
           fastQuery: true,
-          activityIds: 'com.banshenghuo.mobile.ofdm.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             '@ImageView[childCount=0][text=null][visibleToUser=true] < FrameLayout[childCount=1] <2 FrameLayout[childCount=2] <2 FrameLayout[childCount=2] <2 FrameLayout[childCount=2] - FrameLayout > [text^="扭动或点击"]',
           snapshotUrls: 'https://i.gkd.li/i/15444005',
@@ -34,7 +34,7 @@ export default defineGkdApp({
         {
           key: 3,
           fastQuery: true,
-          activityIds: 'com.banshenghuo.mobile.ofdm.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             'ImageView[childCount=0][text=null] < @ViewGroup[clickable=true] < ViewGroup + ViewGroup > [text="广告"]',
           exampleUrls: 'https://e.gkd.li/8bbf31e8-598b-4021-9136-8de189fc7cf9',

@@ -14,7 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.baiji.jianshu.ui.splash.SplashScreenActivity',
-          matches: '[id="com.jianshu.haruki:id/dialog_lucky_prize_close"]',
+          matches: '[vid="dialog_lucky_prize_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13327286',
         },
       ],

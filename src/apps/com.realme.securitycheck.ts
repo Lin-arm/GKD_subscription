@@ -11,7 +11,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.realme.securitycheck.SecurityCheckActivity',
+          activityIds: '.SecurityCheckActivity',
           matches: '[vid="ad_contain"] >5 [vid="close"][clickable=true]',
           exampleUrls:
             'https://m.gkd.li/57941037/c4a9acc9-3108-4364-8586-906b200e1171',

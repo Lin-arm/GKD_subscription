@@ -27,7 +27,7 @@ export default defineGkdApp({
             left: 'width * 0.9009',
             top: 'width * 0.075',
           },
-          matches: '[id="com.myzaker.ZAKER_Phone:id/cover_pic"]',
+          matches: '[vid="cover_pic"]',
           exampleUrls:
             'https://m.gkd.li/57941037/c140267a-a48a-45a9-9303-7507aa2008e4',
           snapshotUrls: 'https://i.gkd.li/i/13694552',

@@ -11,7 +11,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.duoduo.child.story.ui.activity.PlayActivity',
+          activityIds: '.ui.activity.PlayActivity',
           matches: '[vid="iv_close_banner"]',
           exampleUrls:
             'https://m.gkd.li/57941037/0a4febc1-9a34-41cb-bbca-63c6723fa228',

@@ -14,7 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.hihonor.phoneservice.main.MainActivity',
+          activityIds: '.main.MainActivity',
           matches: '[vid="ads_cancel"]',
           exampleUrls: 'https://e.gkd.li/539acb69-5c9c-4c4b-9757-d189b6852f89',
           snapshotUrls: 'https://i.gkd.li/i/16476928',
@@ -28,9 +28,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.hihonor.phoneservice.main.MainActivity',
-          matches:
-            '[text^="开启定位权限"] + [id="com.hihonor.phoneservice:id/iv_close"]',
+          activityIds: '.main.MainActivity',
+          matches: '[text^="开启定位权限"] + [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12783134',
         },
       ],

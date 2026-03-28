@@ -73,8 +73,7 @@ export default defineGkdApp({
         },
         {
           key: 1,
-          activityIds:
-            'com.gamersky.common.activity.LibDetailContentDetailActivity',
+          activityIds: '.common.activity.LibDetailContentDetailActivity',
           matches:
             'WebView >2 View[childCount=2] > View[index=1] > @View[clickable=true][visibleToUser=true][childCount=0] <<n [vid="contentWebView"]',
           snapshotUrls: 'https://i.gkd.li/i/14622935',
@@ -82,8 +81,7 @@ export default defineGkdApp({
         },
         {
           key: 2,
-          activityIds:
-            'com.gamersky.common.activity.LibDetailContentDetailActivity',
+          activityIds: '.common.activity.LibDetailContentDetailActivity',
           matches:
             '@[clickable=true][visibleToUser=true][text=""] - [childCount=0][text="广告"] <<n [vid="nested_view_group" || vid="contentWebView"]',
           snapshotUrls: [
@@ -94,7 +92,7 @@ export default defineGkdApp({
         },
         {
           key: 4,
-          activityIds: 'com.gamersky.main.activity.LibMainActivity',
+          activityIds: '.main.activity.LibMainActivity',
           matches: '[vid="recommended_reviews_or_rating_close_img"]',
           exampleUrls: 'https://e.gkd.li/f214c099-c22a-4c20-abc0-4cdddc2fe614',
           snapshotUrls: 'https://i.gkd.li/i/16556122',
@@ -111,7 +109,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.gamersky.main.activity.LibMainActivity',
+          activityIds: '.main.activity.LibMainActivity',
           matches: ['[text="签到成功！"]', '[text="确定"]'],
           exampleUrls:
             'https://m.gkd.li/57941037/696e417a-3100-43a2-a401-f4f80dfa9f47',

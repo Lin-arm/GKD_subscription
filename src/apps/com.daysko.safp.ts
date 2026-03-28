@@ -74,7 +74,7 @@ export default defineGkdApp({
     {
       key: 3,
       name: '局部广告-页面底部广告',
-      activityIds: 'com.daysko.safp.MainActivity',
+      activityIds: '.MainActivity',
       rules: [
         {
           matches:

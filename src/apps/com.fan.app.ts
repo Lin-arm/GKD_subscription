@@ -35,7 +35,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.mvc.activity.HomepageActivity2',
-          matches: '[id="com.fan.app:id/tv_nj_later"]',
+          matches: '[vid="tv_nj_later"]',
           snapshotUrls: 'https://i.gkd.li/i/13601734',
         },
       ],

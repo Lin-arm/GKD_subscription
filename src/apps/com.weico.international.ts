@@ -52,9 +52,9 @@ export default defineGkdApp({
       forcedTime: 10000,
       activityIds: [
         'com.google.android.material.bottomsheet.BottomSheetDialog',
-        'com.weico.international.activity.MainFragmentActivity',
-        'com.weico.international.ui.search.SearchActivity',
-        'com.weico.international.ui.detail.StatusDetailV3Activity',
+        '.activity.MainFragmentActivity',
+        '.ui.search.SearchActivity',
+        '.ui.detail.StatusDetailV3Activity',
       ],
       rules: [
         {

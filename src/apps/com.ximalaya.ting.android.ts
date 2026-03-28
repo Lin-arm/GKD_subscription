@@ -75,8 +75,8 @@ export default defineGkdApp({
         {
           activityIds: '.host.activity.MainActivity',
           matches: [
-            '[text*="青少年模式"][id="com.ximalaya.ting.android:id/host_btn_set"]',
-            '[id="com.ximalaya.ting.android:id/host_dialog_close"]',
+            '[text*="青少年模式"][vid="host_btn_set"]',
+            '[vid="host_dialog_close"]',
           ],
           snapshotUrls: 'https://i.gkd.li/i/12506209',
         },
@@ -91,9 +91,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.ximalaya.ting.android.host.activity.MainActivity',
-          matches:
-            '[text="你可能感兴趣的专辑"] + [id="com.ximalaya.ting.android:id/main_iv_close"]',
+          activityIds: '.host.activity.MainActivity',
+          matches: '[text="你可能感兴趣的专辑"] + [vid="main_iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13251713',
         },
       ],
@@ -104,9 +103,9 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.ximalaya.ting.android.host.activity.MainActivity',
+          activityIds: '.host.activity.MainActivity',
           matches:
-            '@[id="com.ximalaya.ting.android:id/host_close_firework"] +2 [id="com.ximalaya.ting.android:id/host_firework_ad_tag"]',
+            '@[vid="host_close_firework"] +2 [vid="host_firework_ad_tag"]',
           snapshotUrls: 'https://i.gkd.li/i/13263421',
         },
       ],

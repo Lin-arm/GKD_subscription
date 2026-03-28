@@ -30,16 +30,14 @@ export default defineGkdApp({
           fastQuery: true,
           activityIds:
             'com.tencent.qqmusiclite.activity.player.MusicPlayerActivity',
-          matches:
-            '[id="com.miui.player:id/free_mode_tips_layout"] + [id="com.miui.player:id/iv_close"]',
+          matches: '[vid="free_mode_tips_layout"] + [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13303283',
         },
         {
           key: 1,
           fastQuery: true,
           activityIds: 'com.tencent.qqmusiclite.activity.MainActivity',
-          matches:
-            '[id="com.miui.player:id/cl_floating_promote"] > [id="com.miui.player:id/iv_close"]',
+          matches: '[vid="cl_floating_promote"] > [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13562649',
         },
       ],
@@ -54,7 +52,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          matches: '[id="com.miui.player:id/ad_skip_text"][text="关闭"]',
+          matches: '[vid="ad_skip_text"][text="关闭"]',
           exampleUrls:
             'https://m.gkd.li/57941037/d923ba1b-3098-49b0-8593-c84dbaa16612',
           snapshotUrls: [
@@ -107,7 +105,7 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: 'com.tencent.qqmusiclite.activity.MainActivity',
-          matches: '[id="com.miui.player:id/iv_close_dialog_button"]',
+          matches: '[vid="iv_close_dialog_button"]',
           snapshotUrls: 'https://i.gkd.li/i/13623503',
         },
       ],
@@ -121,7 +119,7 @@ export default defineGkdApp({
           actionDelay: 15000,
           fastQuery: true,
           activityIds: 'com.tencentmusic.ad.tmead.reward.TMERewardActivity',
-          matches: '[id="com.miui.player:id/tme_ad_skip_button"]',
+          matches: '[vid="tme_ad_skip_button"]',
           snapshotUrls: 'https://i.gkd.li/i/13610667',
         },
       ],

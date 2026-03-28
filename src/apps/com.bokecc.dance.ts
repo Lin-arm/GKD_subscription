@@ -29,7 +29,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.bokecc.dance.player.DancePlayActivity',
+          activityIds: '.player.DancePlayActivity',
           matches: '[text="关闭广告"][clickable=true][visibleToUser=true]',
           exampleUrls:
             'https://m.gkd.li/57941037/f70ca3e3-762c-47ba-aed8-c9e8d5955b7e',
@@ -45,7 +45,7 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds: 'com.bokecc.dance.activity.MainActivity',
+          activityIds: '.activity.MainActivity',
           matches: '[vid="iv_bottom"][visibleToUser=true]',
           exampleUrls:
             'https://m.gkd.li/57941037/e866b196-04f3-454a-9eb3-a766fed952ba',
@@ -54,7 +54,7 @@ export default defineGkdApp({
         {
           key: 1,
           fastQuery: true,
-          activityIds: 'com.bokecc.dance.player.DancePlayActivity',
+          activityIds: '.player.DancePlayActivity',
           matches: '[vid="iv_cancel"][clickable=true][visibleToUser=true]',
           exampleUrls:
             'https://m.gkd.li/57941037/45eb8c79-f683-4fcd-a2c4-0c9d1ff9d998',

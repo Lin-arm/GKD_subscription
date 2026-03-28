@@ -14,9 +14,8 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds:
-            'com.showstartfans.activity.activitys.maintab.newmain.MainNewActivity',
-          matches: '[id="com.showstartfans.activity:id/img_close_coupon"]',
+          activityIds: '.activitys.maintab.newmain.MainNewActivity',
+          matches: '[vid="img_close_coupon"]',
           snapshotUrls: 'https://i.gkd.li/i/13670432',
         },
       ],

@@ -19,7 +19,7 @@ export default defineGkdApp({
             '.webview.TMCommonWebViewActivity',
             '.themis.container.TMThemisActivity',
           ],
-          matches: '[id="com.tmall.wireless:id/update_button_cancel"]',
+          matches: '[vid="update_button_cancel"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13162603',
             'https://i.gkd.li/i/13258201',
@@ -35,9 +35,9 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: [
-            'com.tmall.wireless.maintab.module.TMMainTabActivity',
-            'com.tmall.wireless.turboweb.container.TurboWebViewActivity',
-            'com.tmall.wireless.webview.TMCommonWebViewActivity',
+            '.maintab.module.TMMainTabActivity',
+            '.turboweb.container.TurboWebViewActivity',
+            '.webview.TMCommonWebViewActivity',
           ],
           matches:
             'Image[id=null][clickable=false] < View + Image[id=null][clickable=true]',

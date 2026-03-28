@@ -12,8 +12,7 @@ export default defineGkdApp({
           fastQuery: true,
           activityIds:
             'com.ss.lark.android.passport.biz.feature.sso.suite.SuiteConfirmActivity',
-          matches:
-            '[text="飞书 桌面端登录确认"] +2 [id="com.ss.android.lark:id/login_button"]',
+          matches: '[text="飞书 桌面端登录确认"] +2 [vid="login_button"]',
           snapshotUrls: 'https://i.gkd.li/i/13494960',
         },
       ],
@@ -24,10 +23,9 @@ export default defineGkdApp({
       desc: '查看图片时自动点击"查看原图"',
       rules: [
         {
-          activityIds:
-            'com.ss.android.lark.widget.photo.preview.PhotoPagerActivity',
+          activityIds: '.widget.photo.preview.PhotoPagerActivity',
           fastQuery: true,
-          matches: '[id="com.ss.android.lark:id/look_origin_icon"]',
+          matches: '[vid="look_origin_icon"]',
           snapshotUrls: 'https://i.gkd.li/i/12840528',
         },
       ],

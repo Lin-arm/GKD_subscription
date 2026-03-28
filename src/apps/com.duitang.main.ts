@@ -12,8 +12,8 @@ export default defineGkdApp({
         {
           key: 0,
           activityIds: [
-            'com.duitang.main.business.',
-            'com.duitang.main.activity.',
+            '.business.',
+            '.activity.',
           ],
           matches: '[vid="adOptionEntry" || vid="adClose"][visibleToUser=true]',
           snapshotUrls: [
@@ -52,10 +52,10 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: [
-            'com.duitang.main.business.display.ImageActivity',
-            'com.duitang.main.business.main.NAMainActivity',
+            '.business.display.ImageActivity',
+            '.business.main.NAMainActivity',
           ],
-          matches: '[id="com.duitang.main:id/popUpbtnClose"]',
+          matches: '[vid="popUpbtnClose"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13997011',
             'https://i.gkd.li/i/14332109',

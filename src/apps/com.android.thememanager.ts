@@ -38,8 +38,8 @@ export default defineGkdApp({
         {
           action: 'clickCenter',
           activityIds: [
-            'com.android.thememanager.ThemeResourceTabActivity',
-            'com.android.thememanager.ThemeResourceProxyTabActivity',
+            '.ThemeResourceTabActivity',
+            '.ThemeResourceProxyTabActivity',
           ],
           matches: 'ImageView[vid="cancel"][desc="关闭"]',
           snapshotUrls: [
@@ -60,8 +60,8 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: [
-            'com.android.thememanager.ThemeResourceTabActivity',
-            'com.android.thememanager.ThemeResourceProxyTabActivity',
+            '.ThemeResourceTabActivity',
+            '.ThemeResourceProxyTabActivity',
           ],
           matches: '[vid="close"]',
           exampleUrls:

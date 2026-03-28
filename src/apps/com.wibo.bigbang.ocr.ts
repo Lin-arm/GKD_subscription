@@ -15,8 +15,7 @@ export default defineGkdApp({
         {
           activityIds:
             'com.vivo.upgradelibrary.upmode.appdialog.VivoUpgradeActivityDialog',
-          matches:
-            '[id="com.wibo.bigbang.ocr:id/vivo_upgrade_negative_btn"][text="忽略本次"]',
+          matches: '[vid="vivo_upgrade_negative_btn"][text="忽略本次"]',
           snapshotUrls: 'https://i.gkd.li/i/13360281',
         },
       ],

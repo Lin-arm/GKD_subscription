@@ -13,9 +13,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.ddsy.songyao.activity.SplashActivity',
-          matches:
-            '[id="com.ddsy.songyao:id/iv_coupon_bottom"] + [id="com.ddsy.songyao:id/iv_close"]',
+          activityIds: '.activity.SplashActivity',
+          matches: '[vid="iv_coupon_bottom"] + [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13048720',
         },
       ],

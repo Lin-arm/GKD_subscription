@@ -7,9 +7,8 @@ export default defineGkdApp({
     {
       key: 1,
       name: '局部广告-主页面上方广告',
-      activityIds: 'com.intsig.camscanner.mainmenu.mainactivity.MainActivity',
-      rules:
-        '[id="com.intsig.camscanner:id/card_ad_tag"] + [id="com.intsig.camscanner:id/card_close"]',
+      activityIds: '.mainmenu.mainactivity.MainActivity',
+      rules: '[vid="card_ad_tag"] + [vid="card_close"]',
       exampleUrls: 'https://e.gkd.li/772a24be-ca12-459f-8abf-e9573cde3f56',
       snapshotUrls: 'https://i.gkd.li/i/12668813',
     },

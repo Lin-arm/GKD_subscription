@@ -7,8 +7,8 @@ export default defineGkdApp({
     {
       key: 2,
       name: '局部广告-漫画界面底部弹窗广告',
-      activityIds: 'com.kuaikan.comic.infinitecomic.view.ComicInfiniteActivity',
-      rules: '[id="com.kuaikan.comic:id/adBannerClose"]',
+      activityIds: '.infinitecomic.view.ComicInfiniteActivity',
+      rules: '[vid="adBannerClose"]',
       snapshotUrls: 'https://i.gkd.li/i/12910268',
     },
   ],

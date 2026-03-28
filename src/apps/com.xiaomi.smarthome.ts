@@ -9,7 +9,7 @@ export default defineGkdApp({
       name: '局部广告-卡片广告',
       rules: [
         {
-          activityIds: 'com.xiaomi.smarthome.SmartHomeMainActivity',
+          activityIds: '.SmartHomeMainActivity',
           matches:
             'RelativeLayout[childCount=2] > ImageView[id!=null] + ImageView[clickable=true][id!=null]',
           snapshotUrls: 'https://i.gkd.li/i/12639658',

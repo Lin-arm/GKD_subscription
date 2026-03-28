@@ -15,10 +15,8 @@ export default defineGkdApp({
           key: 1,
           name: '首页右侧悬浮广告',
           fastQuery: true,
-          activityIds:
-            'com.m4399.gamecenter.plugin.main.controllers.ApplicationActivity',
-          matches:
-            '@[id="com.m4399.gamecenter:id/close"] + [id="com.m4399.gamecenter:id/image"]',
+          activityIds: '.plugin.main.controllers.ApplicationActivity',
+          matches: '@[vid="close"] + [vid="image"]',
           snapshotUrls: 'https://i.gkd.li/i/13297466',
         },
       ],
@@ -33,8 +31,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          matches:
-            '[id="com.m4399.gamecenter:id/image"] + [id="com.m4399.gamecenter:id/close"]',
+          matches: '[vid="image"] + [vid="close"]',
           exampleUrls: 'https://e.gkd.li/28dafb84-2474-4a09-9885-9810089bad00',
           snapshotUrls: 'https://i.gkd.li/i/13297551',
         },

@@ -33,7 +33,7 @@ export default defineGkdApp({
     {
       key: 10,
       name: '分段广告-小说阅读页面-卡片广告',
-      activityIds: 'com.tencent.mtt.MainActivity',
+      activityIds: '.MainActivity',
       rules: [
         {
           actionCd: 3000,
@@ -76,7 +76,7 @@ export default defineGkdApp({
         {
           preKeys: [0],
           key: 1,
-          matches: '[id="com.tencent.mtt:id/reward_dialog_close"]',
+          matches: '[vid="reward_dialog_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12908955',
         },
       ],

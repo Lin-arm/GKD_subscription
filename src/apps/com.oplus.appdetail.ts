@@ -18,9 +18,9 @@ export default defineGkdApp({
             '.modelv2.parsing.PackageParsingV2Activity',
           ],
           excludeMatches:
-            '[id="com.oplus.appdetail:id/view_scanning_and_tip_view_tv_title"][text^="正在扫描"]',
+            '[vid="view_scanning_and_tip_view_tv_title"][text^="正在扫描"]',
           matches:
-            '[id="com.oplus.appdetail:id/view_bottom_guide_continue_install_btn" || text="继续安装"]',
+            '[vid="view_bottom_guide_continue_install_btn" || text="继续安装"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13054204',
             'https://i.gkd.li/i/13038570',

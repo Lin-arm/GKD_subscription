@@ -14,8 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.wisorg.wisedu.home.ui.HomeActivity',
-          matches:
-            '[id="com.wisedu.cpdaily:id/btn_update"] + [id="com.wisedu.cpdaily:id/tv_ignore"]',
+          matches: '[vid="btn_update"] + [vid="tv_ignore"]',
           snapshotUrls: 'https://i.gkd.li/i/13643565',
         },
       ],

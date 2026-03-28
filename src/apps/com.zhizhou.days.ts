@@ -28,7 +28,7 @@ export default defineGkdApp({
           key: 10,
           name: '优量汇-第一类广告',
           fastQuery: true,
-          activityIds: 'com.zhizhou.days.activity.MainActivity',
+          activityIds: '.activity.MainActivity',
           matches:
             '@ImageView[childCount=0][text=null][desc=null][id=null][visibleToUser=true][width<90 && height<90] < FrameLayout[childCount=1][text=null][desc=null][id=null][parent.childCount>3] <n FrameLayout >(2,3) [text^="立即" || text$="详情" || text^="了解" || text="去微信看看" || text$="应用" || text="进入小程序" || text="领取优惠" || text="跳转微信"]',
           snapshotUrls: 'https://i.gkd.li/i/12727528',
@@ -38,7 +38,7 @@ export default defineGkdApp({
           name: '优量汇-第二类广告',
           fastQuery: true,
           activityIds: [
-            'com.zhizhou.days.activity.MainActivity',
+            '.activity.MainActivity',
             'com.huawei.android.launcher.unihome.UniHomeLauncher',
           ],
           matches:

@@ -30,7 +30,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.sec.android.app.samsungapps.SearchResultActivity',
+          activityIds: '.SearchResultActivity',
           matches:
             '[text="您是否年满 18 岁？"] +4 @[clickable=true] > [text="是"]',
           exampleUrls:

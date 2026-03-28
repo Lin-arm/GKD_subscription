@@ -13,7 +13,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.x.istar.view.main.MainActivity',
+          activityIds: '.view.main.MainActivity',
           matches: '[text="关闭广告"][vid="btn_negative"]',
           snapshotUrls: 'https://i.gkd.li/i/13974606',
         },

@@ -12,9 +12,8 @@ export default defineGkdApp({
           key: 1,
           name: '首页上方卡片广告',
           fastQuery: true,
-          activityIds: 'com.youdao.note.activity2.MainActivity',
-          matches:
-            '[id="com.youdao.note:id/recycle_view"] + [id="com.youdao.note:id/close_ad"]',
+          activityIds: '.activity2.MainActivity',
+          matches: '[vid="recycle_view"] + [vid="close_ad"]',
           snapshotUrls: 'https://i.gkd.li/i/13379524',
         },
       ],

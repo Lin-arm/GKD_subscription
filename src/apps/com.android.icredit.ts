@@ -14,7 +14,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.android.icredit.ui.MainMenuActivity',
+          activityIds: '.ui.MainMenuActivity',
           matches:
             '@Image[childCount=0][visibleToUser=true] <2 View < View < WebView[text$="限时返场" || text="首单有礼"] < WebView < LinearLayout < LinearLayout < FrameLayout < [id="android:id/content"]',
           exampleUrls:

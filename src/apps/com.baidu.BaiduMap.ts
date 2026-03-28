@@ -44,19 +44,18 @@ export default defineGkdApp({
         {
           key: 0,
           matches:
-            '[text^="开启位置服务"] + RelativeLayout > [id="com.baidu.BaiduMap:id/tv_notip_btn"]',
+            '[text^="开启位置服务"] + RelativeLayout > [vid="tv_notip_btn"]',
           snapshotUrls: 'https://i.gkd.li/i/12660884',
         },
         {
           key: 1,
           matches:
-            '[text="需开启系统定位服务开关"] +2 [id="com.baidu.BaiduMap:id/ll_dialog_btn"] > [id="com.baidu.BaiduMap:id/tv_dialog_cancel"]',
+            '[text="需开启系统定位服务开关"] +2 [vid="ll_dialog_btn"] > [vid="tv_dialog_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/12660883',
         },
         {
           key: 2,
-          matches:
-            'ImageView[id="com.baidu.BaiduMap:id/location_dialog_close_iv"]',
+          matches: 'ImageView[vid="location_dialog_close_iv"]',
           snapshotUrls: 'https://i.gkd.li/i/12909299',
         },
       ],
@@ -71,7 +70,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.baidu.baidumaps.MapsActivity',
-          matches: 'ImageView[id="com.baidu.BaiduMap:id/cancel_update"]',
+          matches: 'ImageView[vid="cancel_update"]',
           snapshotUrls: 'https://i.gkd.li/i/12909385',
         },
       ],
@@ -144,7 +143,7 @@ export default defineGkdApp({
           key: 2,
           fastQuery: true,
           activityIds: 'com.baidu.baidumaps.MapsActivity',
-          matches: 'ImageView[id="com.baidu.BaiduMap:id/yellow_banner_close"]',
+          matches: 'ImageView[vid="yellow_banner_close"]',
           snapshotUrls: 'https://i.gkd.li/i/24633179',
         },
       ],

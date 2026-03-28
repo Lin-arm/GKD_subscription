@@ -38,8 +38,7 @@ export default defineGkdApp({
           key: 3,
           actionDelay: 300,
           fastQuery: true,
-          matches:
-            '[id="com.sgcc.wsgw.cn:id/news_remind_laytout"] >n [id="com.sgcc.wsgw.cn:id/btn_remind_close"]',
+          matches: '[vid="news_remind_laytout"] >n [vid="btn_remind_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12745042',
         },
       ],

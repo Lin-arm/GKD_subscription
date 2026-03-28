@@ -38,7 +38,7 @@ export default defineGkdApp({
             'com.tvmain.mvp.view.activity.TvMainActivity',
             'com.tvmain.mvp.view.activity.LivePlayerActivity',
           ],
-          matches: '[id="com.zbx.ct.tvzhibo:id/iv_close"]',
+          matches: '[vid="iv_close"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13740079',
             'https://i.gkd.li/i/13740126',

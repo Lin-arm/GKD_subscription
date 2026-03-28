@@ -28,7 +28,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.mt.mtxx.mtxx.MainActivity',
+          activityIds: '.MainActivity',
           matches: '[vid="iv_close"][clickable=true][visibleToUser=true]',
           exampleUrls:
             'https://m.gkd.li/57941037/d98355c6-1308-4ed1-bf29-56499e22446d',

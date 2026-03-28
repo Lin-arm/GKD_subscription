@@ -41,7 +41,7 @@ export default defineGkdApp({
             left: 'width * 0.9016',
             top: 'width * 0.1557',
           },
-          matches: '[id="com.netease.mail:id/animation_view"]',
+          matches: '[vid="animation_view"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13207736',
             'https://i.gkd.li/i/14900326', // 防止提前触发规则
@@ -53,18 +53,18 @@ export default defineGkdApp({
     {
       key: 2,
       name: '全屏广告-邮件列表广告',
-      activityIds: 'com.netease.mail.biz.main.MainITabActivity',
+      activityIds: '.biz.main.MainITabActivity',
       fastQuery: true,
       rules: [
         {
           key: 0,
-          matches: '[id="com.netease.mail:id/ad_vip"]',
+          matches: '[vid="ad_vip"]',
           snapshotUrls: 'https://i.gkd.li/i/12999833',
         },
         {
           preKeys: [0],
           key: 1,
-          matches: '[id="com.netease.mail:id/ll_delete"]',
+          matches: '[vid="ll_delete"]',
           snapshotUrls: 'https://i.gkd.li/i/12999841',
         },
       ],

@@ -21,12 +21,12 @@ export default defineGkdApp({
         },
         {
           key: 1,
-          matches: 'ImageView[id="com.bilibili.studio:id/iv_close"]',
+          matches: 'ImageView[vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12908880', // 模板页面
         },
         {
           key: 2,
-          matches: 'ImageView[id="com.bilibili.studio:id/iv_push_tips_close"]',
+          matches: 'ImageView[vid="iv_push_tips_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12908886', // 我的页面
         },
       ],
@@ -49,7 +49,7 @@ export default defineGkdApp({
         {
           preKeys: [0],
           name: '点击"以后再说"',
-          matches: '[id="com.bilibili.studio:id/update_btn_cancel"]',
+          matches: '[vid="update_btn_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/13496049',
         },
       ],

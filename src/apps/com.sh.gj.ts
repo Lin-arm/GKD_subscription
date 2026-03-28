@@ -12,10 +12,7 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds: [
-            'com.sh.gj.MainActivity',
-            'com.sh.gj.activity.LineDetailActivity',
-          ],
+          activityIds: ['.MainActivity', '.activity.LineDetailActivity'],
           matches:
             'ImageView[visibleToUser=true] - FrameLayout[childCount=1] > @ImageView[visibleToUser=true] <<n [vid="bannerContainer"]',
           exampleUrls:
@@ -34,7 +31,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.sh.gj.MainActivity',
+          activityIds: '.MainActivity',
           matches: '[text="确认退出"]',
           exampleUrls:
             'https://m.gkd.li/57941037/38c20d82-947e-4e46-aba8-80e1a773552b',

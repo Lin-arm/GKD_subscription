@@ -13,7 +13,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.activity.main.MainActivity',
-          matches: '[id="com.icbc:id/tv_time"][text*="跳过"][text.length<=6]',
+          matches: '[vid="tv_time"][text*="跳过"][text.length<=6]',
           snapshotUrls: 'https://i.gkd.li/i/13330431',
         },
       ],

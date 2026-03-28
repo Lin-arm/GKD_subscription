@@ -12,7 +12,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.taptap.other.basic.impl.TapMainActivity',
+          activityIds: '.other.basic.impl.TapMainActivity',
           matches:
             '[id="com.taptap.app.middle:id/decision_layout_mask"] + @[id="com.taptap.app.game:id/app_menu"][visibleToUser=true]',
           snapshotUrls: [
@@ -24,8 +24,8 @@ export default defineGkdApp({
         {
           key: 1,
           activityIds: [
-            'com.taptap.game.discovery.impl.findgame.allgame.dialog.FindGameMenuDialog',
-            'com.taptap.other.basic.impl.TapMainActivity',
+            '.game.discovery.impl.findgame.allgame.dialog.FindGameMenuDialog',
+            '.other.basic.impl.TapMainActivity',
           ],
           matches: '@LinearLayout > [text="对此内容不感兴趣"]',
           snapshotUrls: [

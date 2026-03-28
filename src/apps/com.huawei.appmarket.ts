@@ -42,8 +42,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds:
-            'com.huawei.appmarket.service.appmgr.view.activity.AppUpdateActivity',
+          activityIds: '.service.appmgr.view.activity.AppUpdateActivity',
           matches: '[text="查看更多"]',
           exampleUrls:
             'https://m.gkd.li/57941037/e2283b1d-3041-49c5-aca2-7c165c83ce37',
@@ -79,7 +78,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.huawei.appmarket.MarketActivity',
+          activityIds: '.MarketActivity',
           matches: '[vid="close_icon"]',
           exampleUrls:
             'https://m.gkd.li/57941037/13a31ae0-10c8-49bc-9154-363498237eff',

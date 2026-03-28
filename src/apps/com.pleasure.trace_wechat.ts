@@ -15,7 +15,7 @@ export default defineGkdApp({
           key: 0,
           name: '点击关闭',
           matches:
-            'View < @FrameLayout[desc^="dislike"] <<n [id="com.pleasure.trace_wechat:id/adsuyi_id_view_response"]',
+            'View < @FrameLayout[desc^="dislike"] <<n [vid="adsuyi_id_view_response"]',
           snapshotUrls: 'https://i.gkd.li/i/13479466',
         },
         {

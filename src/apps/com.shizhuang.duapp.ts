@@ -12,9 +12,8 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds:
-            'com.shizhuang.duapp.modules.product_detail.detailv4.ui.ProductDetailActivityV4',
-          matches:
-            '[id="com.shizhuang.duapp:id/ivClose"] +2 [id="com.shizhuang.duapp:id/ivSave"]',
+            '.modules.product_detail.detailv4.ui.ProductDetailActivityV4',
+          matches: '[vid="ivClose"] +2 [vid="ivSave"]',
           snapshotUrls: 'https://i.gkd.li/i/13473449',
         },
       ],

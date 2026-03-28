@@ -34,7 +34,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.donews.nga.activitys.MainActivity',
-          matches: '[id="gov.pianzong.androidnga:id/iv_close_ad"]',
+          matches: '[vid="iv_close_ad"]',
           snapshotUrls: 'https://i.gkd.li/i/12482727',
         },
       ],
@@ -43,8 +43,7 @@ export default defineGkdApp({
       key: 2,
       name: '局部广告-话题-帖子列表广告',
       desc: '点击卡片x按钮关闭广告',
-      activityIds:
-        'gov.pianzong.androidnga.activity.forumdetail.ForumDetailActivity',
+      activityIds: '.activity.forumdetail.ForumDetailActivity',
       rules: [
         {
           key: 1,
@@ -59,8 +58,7 @@ export default defineGkdApp({
         },
         {
           key: 3,
-          matches:
-            '[text="广告"] - [id="gov.pianzong.androidnga:id/iv_information_ad_close"]',
+          matches: '[text="广告"] - [vid="iv_information_ad_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13303236',
         },
       ],
@@ -71,7 +69,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.donews.nga.activitys.MainActivity',
-          matches: '[id="gov.pianzong.androidnga:id/iv_close_community_ad"]',
+          matches: '[vid="iv_close_community_ad"]',
           snapshotUrls: ['https://i.gkd.li/i/12706132'],
         },
       ],
@@ -108,8 +106,7 @@ export default defineGkdApp({
             left: 'width * 0.9629',
             top: 'width * 0.0472',
           },
-          activityIds:
-            'gov.pianzong.androidnga.activity.forumdetail.ArticleDetailActivity',
+          activityIds: '.activity.forumdetail.ArticleDetailActivity',
           matches: '[id="advertisementBottom"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/589a4441-4be0-4ebc-90f5-d0dc5cfc84ff',
           snapshotUrls: 'https://i.gkd.li/i/17348441',

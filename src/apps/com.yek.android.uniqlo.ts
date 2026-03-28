@@ -13,8 +13,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.yek.android.uniqlo.uiux.Home.activity.HomeActivity',
-          matches: 'ImageView[id="com.yek.android.uniqlo:id/pop_close"]',
+          activityIds: '.uiux.Home.activity.HomeActivity',
+          matches: 'ImageView[vid="pop_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13212320',
         },
       ],

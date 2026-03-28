@@ -11,9 +11,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'tw.com.gamer.android.animad.VideoActivity',
-          matches:
-            '[id="tw.com.gamer.android.animad:id/agree_button"][text="同意"]',
+          activityIds: '.VideoActivity',
+          matches: '[vid="agree_button"][text="同意"]',
           snapshotUrls: 'https://i.gkd.li/i/13808757',
         },
       ],

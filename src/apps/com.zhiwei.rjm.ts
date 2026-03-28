@@ -15,7 +15,7 @@ export default defineGkdApp({
           matchTime: 10000,
           actionMaximum: 1,
           resetMatch: 'app',
-          activityIds: 'com.zhiwei.rjm.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             'ImageView < @ViewGroup[clickable=true] < * +2 ViewGroup > [text="广告"]',
           exampleUrls:
@@ -33,7 +33,7 @@ export default defineGkdApp({
           key: 0,
           name: '视频播放页卡片广告',
           fastQuery: true,
-          activityIds: 'com.zhiwei.rjm.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             '@TextView[clickable=true] <2 View + View > [visibleToUser=true][text="广告"] <<n [vid="ksad_container"]',
           exampleUrls:

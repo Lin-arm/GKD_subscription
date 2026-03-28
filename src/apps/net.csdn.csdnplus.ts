@@ -14,8 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: ['.activity.MainActivity', '.activity.SetActivity'],
-          matches:
-            '[id="net.csdn.csdnplus:id/update"] -2 [id="net.csdn.csdnplus:id/cancel"]',
+          matches: '[vid="update"] -2 [vid="cancel"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12673693',
             'https://i.gkd.li/i/12673654',
@@ -27,11 +26,11 @@ export default defineGkdApp({
       key: 2,
       name: '分段广告-信息流广告',
       fastQuery: true,
-      activityIds: 'net.csdn.csdnplus.activity.MainActivity',
+      activityIds: '.activity.MainActivity',
       rules: [
         {
           key: 1,
-          matches: '[text="广告"] + [id="net.csdn.csdnplus:id/iv_more"]',
+          matches: '[text="广告"] + [vid="iv_more"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12673738',
             'https://i.gkd.li/i/13224538',
@@ -41,7 +40,7 @@ export default defineGkdApp({
           preKeys: [1],
           key: 2,
           matches:
-            '@[clickable=true] > [id="net.csdn.csdnplus:id/img_feedback_title"][text="重复推荐该广告"]',
+            '@[clickable=true] > [vid="img_feedback_title"][text="重复推荐该广告"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12673787',
             'https://i.gkd.li/i/13224551',
@@ -59,7 +58,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.activity.MainActivity',
-          matches: '[id="net.csdn.csdnplus:id/tv_cancel"][text="残忍拒绝"]',
+          matches: '[vid="tv_cancel"][text="残忍拒绝"]',
           snapshotUrls: 'https://i.gkd.li/i/13251085',
         },
       ],
@@ -71,7 +70,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'net.csdn.csdnplus.activity.MainActivity',
+          activityIds: '.activity.MainActivity',
           matches:
             'LinearLayout[childCount=2] > [vid="img_cancel"][clickable=true][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/25171470',
@@ -89,10 +88,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.activity.MainActivity',
-          matches: [
-            '[text="开启推送通知"]',
-            '[id="net.csdn.csdnplus:id/iv_close"]',
-          ],
+          matches: ['[text="开启推送通知"]', '[vid="iv_close"]'],
           snapshotUrls: 'https://i.gkd.li/i/12673638',
         },
       ],
@@ -105,7 +101,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'net.csdn.csdnplus.mvvm.ui.activity.BlogDetailActivity',
+          activityIds: '.mvvm.ui.activity.BlogDetailActivity',
           matches:
             'ViewGroup > ViewGroup[childCount=2] > @ImageView[index=1][clickable=true][childCount=0][visibleToUser=true] <<n [vid="fl_template_container" || vid="fl_bottom_ad_container"]',
           snapshotUrls: [
@@ -116,7 +112,7 @@ export default defineGkdApp({
         {
           preKeys: [0],
           key: 1,
-          activityIds: 'net.csdn.csdnplus.mvvm.ui.activity.BlogDetailActivity',
+          activityIds: '.mvvm.ui.activity.BlogDetailActivity',
           matches: '@LinearLayout[clickable=true] >(1,2) [text="不感兴趣"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13830858',

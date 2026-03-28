@@ -16,7 +16,7 @@ export default defineGkdApp({
           key: 0,
           name: '红包弹窗',
           activityIds: 'net.duohuo.magappx.main.IndexTabActivity',
-          matches: '[id="com.badmintoncn.bbs:id/iv_close_ad"]',
+          matches: '[vid="iv_close_ad"]',
           snapshotUrls: 'https://i.gkd.li/i/13635224',
         },
       ],

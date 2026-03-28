@@ -13,8 +13,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.boohee.library.update.UpdateDialogActivity',
-          matches:
-            '@[id="com.boohee.one:id/tv_ignore"] + [id="com.boohee.one:id/tv_update"]',
+          matches: '@[vid="tv_ignore"] + [vid="tv_update"]',
           snapshotUrls: 'https://i.gkd.li/i/12716918',
         },
       ],
@@ -37,7 +36,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.app.account.ui.activity.MsgCategoryActivityV2',
-          matches: '[id="com.boohee.one:id/img_close_push"]',
+          matches: '[vid="img_close_push"]',
           snapshotUrls: 'https://i.gkd.li/i/12716950',
         },
       ],

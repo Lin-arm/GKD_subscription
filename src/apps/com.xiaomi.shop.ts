@@ -16,8 +16,8 @@ export default defineGkdApp({
           key: 0,
           fastQuery: true,
           activityIds: [
-            'com.xiaomi.shop2.activity.MainActivity',
-            'com.xiaomi.shop.plugin.homepage.utils.AdDialog',
+            '2.activity.MainActivity',
+            '.plugin.homepage.utils.AdDialog',
           ],
           matches:
             '@ImageView[clickable=true][childCount=0][visibleToUser=true] <2 LinearLayout[childCount=2] < RelativeLayout < [id="android:id/content"]',
@@ -29,7 +29,7 @@ export default defineGkdApp({
         {
           key: 1,
           fastQuery: true,
-          activityIds: 'com.xiaomi.shop2.activity.MainActivity',
+          activityIds: '2.activity.MainActivity',
           matches:
             '@ImageView[clickable=true][childCount=0][visibleToUser=true] <2 FrameLayout[childCount=2] < [id="android:id/content"]',
           snapshotUrls: 'https://i.gkd.li/i/22550140',
@@ -45,7 +45,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.xiaomi.shop2.activity.MainActivity',
+          activityIds: '2.activity.MainActivity',
           matches:
             '[id="com.xiaomi.shop.plugin.homepage:id/home_bottom_float_close_btn"]',
           snapshotUrls: 'https://i.gkd.li/i/15528092',

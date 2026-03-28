@@ -29,10 +29,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: [
-            'com.huawei.android.totemweather.WeatherMainActivity',
-            'com.huawei.android.totemweather.WeatherHome',
-          ],
+          activityIds: ['.WeatherMainActivity', '.WeatherHome'],
           matches:
             '[vid="rl_close_pps" || vid="ad_cancel"][visibleToUser=true]',
           snapshotUrls: [
@@ -45,10 +42,8 @@ export default defineGkdApp({
         },
         {
           key: 1,
-          activityIds:
-            'com.huawei.android.totemweather.composite.MarketCompositeActivity',
-          matches:
-            '[id="com.huawei.android.totemweather:id/promote_ad_cancel"]',
+          activityIds: '.composite.MarketCompositeActivity',
+          matches: '[vid="promote_ad_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/13218197',
         },
         {

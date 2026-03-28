@@ -11,12 +11,12 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: [
-            'com.smk.activity.MainActivity',
-            'com.smk.activity.LaunchActivity',
+            '.activity.MainActivity',
+            '.activity.LaunchActivity',
             'com.tianmu.biz.activity.InterstitialActivity',
           ],
           matches:
-            '[id="com.smk:id/iv_close_ad" || vid="tianmu_widget_iv_close"][visibleToUser=true]',
+            '[vid="iv_close_ad" || vid="tianmu_widget_iv_close"][visibleToUser=true]',
           snapshotUrls: [
             'https://i.gkd.li/i/13402584',
             'https://i.gkd.li/i/13425013',

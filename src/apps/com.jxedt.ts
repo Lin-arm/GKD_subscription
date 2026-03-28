@@ -10,8 +10,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.jxedt.ui.activitys.exercise.OrderExerciseActivity',
-          matches: '[id="com.jxedt:id/img_question_banner_close"]',
+          activityIds: '.ui.activitys.exercise.OrderExerciseActivity',
+          matches: '[vid="img_question_banner_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13195641',
         },
       ],
@@ -26,8 +26,8 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.jxedt.ui.activitys.NewHomeActivity',
-          matches: '[id="com.jxedt:id/img_dialog_ad_close"]',
+          activityIds: '.ui.activitys.NewHomeActivity',
+          matches: '[vid="img_dialog_ad_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13476741',
         },
       ],

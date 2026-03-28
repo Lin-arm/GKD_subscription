@@ -15,7 +15,7 @@ export default defineGkdApp({
             left: 'width * 0.9037',
             top: 'width * 0.2976',
           },
-          activityIds: 'com.etalien.booster.mobile.MainActivity',
+          activityIds: '.mobile.MainActivity',
           matches:
             'View[childCount=3] > @View[childCount=1] >2 FrameLayout[childCount=4]',
           exampleUrls:

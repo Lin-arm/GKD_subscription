@@ -7,7 +7,7 @@ export default defineGkdApp({
     {
       key: 0,
       name: '局部广告-关闭[个性推荐开启提示]',
-      activityIds: ['com.android.browser.BrowserActivity'],
+      activityIds: ['.BrowserActivity'],
       rules: [
         {
           matches:
@@ -20,10 +20,7 @@ export default defineGkdApp({
       key: 1,
       name: '分段广告-主页信息流广告',
       fastQuery: true,
-      activityIds: [
-        'com.android.browser.BrowserActivity',
-        'com.android.browser.flow.view.FeedbackDialog',
-      ],
+      activityIds: ['.BrowserActivity', '.flow.view.FeedbackDialog'],
       rules: [
         {
           key: 0,
@@ -51,7 +48,7 @@ export default defineGkdApp({
       desc: '点击关闭',
       rules: [
         {
-          activityIds: 'com.android.browser.BrowserActivity',
+          activityIds: '.BrowserActivity',
           matches: '[id="bnp_close_icon"][visibleToUser=true]',
           exampleUrls:
             'https://m.gkd.li/57941037/b0d601cf-6cd1-411c-8555-bd4a8ee3335c',

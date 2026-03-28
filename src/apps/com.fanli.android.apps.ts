@@ -17,7 +17,7 @@ export default defineGkdApp({
           activityIds:
             'com.fanli.android.module.webview.ui.activity.TransparentBrowserInnerActivity',
           matches:
-            '@[desc="closewv"][visibleToUser=true] <<n [id="com.fanli.android.apps:id/webviewContainer"]',
+            '@[desc="closewv"][visibleToUser=true] <<n [vid="webviewContainer"]',
           exampleUrls: 'https://e.gkd.li/7e013a50-4f55-4f49-8024-7dd749e8d53d',
           snapshotUrls: 'https://i.gkd.li/i/13245808',
         },

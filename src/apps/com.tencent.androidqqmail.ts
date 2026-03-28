@@ -13,7 +13,7 @@ export default defineGkdApp({
         {
           key: 0,
           name: '英文版邮箱广告-点击Ads',
-          matches: '[id="com.tencent.androidqqmail:id/advertise_view_ad"]',
+          matches: '[vid="advertise_view_ad"]',
           snapshotUrls: 'https://i.gkd.li/i/12842757',
         },
         {

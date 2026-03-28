@@ -13,8 +13,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.dw.btime.MainHomeTabActivity',
-          matches: '[id="com.dw.btime:id/iv_overlay_close"][clickable=true]',
+          activityIds: '.MainHomeTabActivity',
+          matches: '[vid="iv_overlay_close"][clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/12889448',
         },
       ],
@@ -25,8 +25,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.dw.btime.MainHomeTabActivity',
-          matches: '[id="com.dw.btime:id/old_baby_close"][clickable=true]',
+          activityIds: '.MainHomeTabActivity',
+          matches: '[vid="old_baby_close"][clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/12889450',
         },
       ],
@@ -41,7 +41,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.base_library.dialog.DWBaseDialog',
-          matches: '[id="com.dw.btime:id/iv_upgrade_close"]',
+          matches: '[vid="iv_upgrade_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12911011',
         },
       ],

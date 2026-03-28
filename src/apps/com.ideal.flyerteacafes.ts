@@ -13,9 +13,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.ideal.flyerteacafes.ui.HomeActivity',
-          matches:
-            '@[id="com.ideal.flyerteacafes:id/close"] - FrameLayout > [id="com.ideal.flyerteacafes:id/iv_adv_tip"]',
+          activityIds: '.ui.HomeActivity',
+          matches: '@[vid="close"] - FrameLayout > [vid="iv_adv_tip"]',
           snapshotUrls: 'https://i.gkd.li/i/13466119',
         },
       ],

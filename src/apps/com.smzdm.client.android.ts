@@ -13,8 +13,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.smzdm.client.android.app.HomeActivity',
-          matches: '[id="com.smzdm.client.android:id/dialog_home_close"]',
+          activityIds: '.app.HomeActivity',
+          matches: '[vid="dialog_home_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12695751',
         },
       ],
@@ -29,8 +29,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.app.HomeActivity',
-          matches:
-            '[id="com.smzdm.client.android:id/tv_version"] +2 [id="com.smzdm.client.android:id/iv_close"]',
+          matches: '[vid="tv_version"] +2 [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13198016',
         },
       ],
@@ -45,7 +44,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.smzdm.client.android.app.HomeActivity',
+          activityIds: '.app.HomeActivity',
           matches: '@[text="暂不允许"] + [text="允许"]',
           snapshotUrls: 'https://i.gkd.li/i/13198020',
         },
@@ -67,7 +66,7 @@ export default defineGkdApp({
           ],
           matches: [
             'TextView[text^="开启推送通知"]',
-            '[vid="iv_close" || id="com.smzdm.client.android:id/ib_close"][visibleToUser=true]',
+            '[vid="iv_close" || vid="ib_close"][visibleToUser=true]',
           ],
           exampleUrls: [
             'https://e.gkd.li/2e979f31-7498-497f-a4ed-b82b884e2d8d',

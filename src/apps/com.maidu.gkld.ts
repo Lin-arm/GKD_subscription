@@ -9,9 +9,8 @@ export default defineGkdApp({
       name: '局部广告-首页右侧悬浮广告',
       rules: [
         {
-          activityIds: 'com.maidu.gkld.ui.main.MainActivity',
-          matches:
-            '[id="com.maidu.gkld:id/fl_float"] + [id="com.maidu.gkld:id/close_image_view"]',
+          activityIds: '.ui.main.MainActivity',
+          matches: '[vid="fl_float"] + [vid="close_image_view"]',
           snapshotUrls: 'https://i.gkd.li/i/12715291',
         },
       ],
@@ -24,8 +23,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          matches:
-            '[id="com.maidu.gkld:id/ll_open_app_notice"] + [id="com.maidu.gkld:id/iv_cancel"]',
+          matches: '[vid="ll_open_app_notice"] + [vid="iv_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/12715250',
         },
       ],

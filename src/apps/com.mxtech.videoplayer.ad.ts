@@ -7,7 +7,7 @@ export default defineGkdApp({
     {
       key: 1,
       name: '全屏广告-谷歌广告',
-      activityIds: 'com.mxtech.videoplayer.ad.ActivityMediaList',
+      activityIds: '.ActivityMediaList',
       rules: [
         {
           matches:

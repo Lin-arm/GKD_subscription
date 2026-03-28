@@ -16,12 +16,12 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          matches: 'TextView[id="com.dubox.drive:id/tv_skip"]',
+          matches: 'TextView[vid="tv_skip"]',
           snapshotUrls: 'https://i.gkd.li/i/13200574',
         },
         {
           key: 1,
-          matches: '@[id="com.dubox.drive:id/ivClose"] - * >2 [id="inmobi-ad"]',
+          matches: '@[vid="ivClose"] - * >2 [id="inmobi-ad"]',
           snapshotUrls: 'https://i.gkd.li/i/13688384',
         },
       ],
@@ -35,8 +35,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.dubox.drive.ui.MainActivity',
-          matches: 'ImageView[id="com.dubox.drive:id/ivClose"]',
+          activityIds: '.ui.MainActivity',
+          matches: 'ImageView[vid="ivClose"]',
           snapshotUrls: 'https://i.gkd.li/i/13200577',
         },
       ],
@@ -51,8 +51,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.permission.view.PermissionDialogActivity',
-          matches:
-            '[text="Authorize"] - [id="com.dubox.drive:id/dialog_button_cancel"]',
+          matches: '[text="Authorize"] - [vid="dialog_button_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/13688406',
         },
       ],

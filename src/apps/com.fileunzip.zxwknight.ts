@@ -36,8 +36,8 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: [
-            'com.fileunzip.zxwknight.activity.MainActivity',
-            'com.fileunzip.zxwknight.activity.VideoPlayActivity',
+            '.activity.MainActivity',
+            '.activity.VideoPlayActivity',
           ],
           matches:
             '@[vid="ziputil_dialog_imageview"] < * > [text="升级到专业版"]',
@@ -63,7 +63,7 @@ export default defineGkdApp({
         },
         {
           key: 1,
-          activityIds: 'com.fileunzip.zxwknight.activity.MainActivity',
+          activityIds: '.activity.MainActivity',
           matches: '@[text="本次启动不再提示"][checked=false]',
           exampleUrls:
             'https://m.gkd.li/57941037/57e29faf-2806-4166-a21d-839f1479960d',
@@ -72,7 +72,7 @@ export default defineGkdApp({
         {
           preKeys: [1],
           key: 2,
-          activityIds: 'com.fileunzip.zxwknight.activity.MainActivity',
+          activityIds: '.activity.MainActivity',
           matches: '[vid="promote_vault_full_screen_close"]',
           exampleUrls:
             'https://m.gkd.li/57941037/57e29faf-2806-4166-a21d-839f1479960d',

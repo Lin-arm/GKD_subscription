@@ -34,12 +34,12 @@ export default defineGkdApp({
           name: '腾讯广告',
           fastQuery: true,
           activityIds: [
-            'com.zmzx.college.search.activity.main.activity.MainActivity',
-            'com.zmzx.college.search.activity.questionsearch.camera.activity.PicSearchResultActivity',
-            'com.zmzx.college.search.activity.camerasdk.ZybCameraSDKActivity',
-            'com.zmzx.college.search.activity.common.CommonCacheHybridActivity',
+            '.activity.main.activity.MainActivity',
+            '.activity.questionsearch.camera.activity.PicSearchResultActivity',
+            '.activity.camerasdk.ZybCameraSDKActivity',
+            '.activity.common.CommonCacheHybridActivity',
           ],
-          matches: '[id="com.zmzx.college.search:id/iv_close"]',
+          matches: '[vid="iv_close"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12867751',
             'https://i.gkd.li/i/12894813',
@@ -52,8 +52,8 @@ export default defineGkdApp({
           name: '快手广告-1',
           fastQuery: true,
           activityIds: [
-            'com.zmzx.college.search.activity.main.activity.MainActivity',
-            'com.zmzx.college.search.activity.questionsearch.camera.activity.PicSearchResultActivity',
+            '.activity.main.activity.MainActivity',
+            '.activity.questionsearch.camera.activity.PicSearchResultActivity',
           ],
           matches:
             'ImageView < @ViewGroup[clickable=true] < ViewGroup <n * + ViewGroup >3 [text="广告"]',
@@ -103,8 +103,8 @@ export default defineGkdApp({
           key: 0,
           fastQuery: true,
           activityIds: [
-            'com.zmzx.college.search.activity.booksearch.result.activity.SearchScanCodeResultDxActivity',
-            'com.zmzx.college.search.activity.booksearch.result.activity.AnswerBrowseActivity',
+            '.activity.booksearch.result.activity.SearchScanCodeResultDxActivity',
+            '.activity.booksearch.result.activity.AnswerBrowseActivity',
           ],
           matches: '[vid="close_m_image_left_text_right_app_compliance"]',
           snapshotUrls: [
@@ -116,9 +116,9 @@ export default defineGkdApp({
           key: 1,
           fastQuery: true,
           activityIds:
-            'com.zmzx.college.search.activity.booksearch.result.activity.SearchScanCodeResultDxActivity',
+            '.activity.booksearch.result.activity.SearchScanCodeResultDxActivity',
           matches:
-            '[id^="com.zmzx.college.search:id/ad_flag_source"] - * > [id="com.zmzx.college.search:id/close"]',
+            '[id^="com.zmzx.college.search:id/ad_flag_source"] - * > [vid="close"]',
           snapshotUrls: 'https://i.gkd.li/i/13063381',
         },
       ],
@@ -136,7 +136,7 @@ export default defineGkdApp({
             '.activity.main.activity.MainActivity',
             '.activity.init.InitActivity',
           ],
-          matches: '[id="com.zmzx.college.search:id/update_close"]',
+          matches: '[vid="update_close"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13063373',
             'https://i.gkd.li/i/13623469',
@@ -154,8 +154,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.activity.main.activity.MainActivity',
-          matches:
-            '[text="开启推送通知"] - [id="com.zmzx.college.search:id/siv_dialog_close"]',
+          matches: '[text="开启推送通知"] - [vid="siv_dialog_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13440939',
         },
       ],
@@ -170,8 +169,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.activity.camerasdk.ZybCameraSDKActivity',
-          matches:
-            '[id="com.zmzx.college.search:id/iv_logo"] + [id="com.zmzx.college.search:id/siv_close"]',
+          matches: '[vid="iv_logo"] + [vid="siv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13476308',
         },
       ],
@@ -186,8 +184,7 @@ export default defineGkdApp({
         {
           fastQuery: true,
           action: 'back',
-          activityIds:
-            'com.zmzx.college.search.activity.common.CommonCacheHybridActivity',
+          activityIds: '.activity.common.CommonCacheHybridActivity',
           matches:
             '[visibleToUser=true][text="邀好友得开学好礼"] <<n [vid="webview_root_layout"]',
           exampleUrls:
@@ -201,8 +198,7 @@ export default defineGkdApp({
       name: '分段广告-底部卡片广告',
       desc: '点击关闭-点击不感兴趣',
       fastQuery: true,
-      activityIds:
-        'com.zmzx.college.search.activity.booksearch.result.activity.AnswerBrowseActivity',
+      activityIds: '.activity.booksearch.result.activity.AnswerBrowseActivity',
       rules: [
         {
           key: 0,

@@ -25,10 +25,10 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: [
-            'com.ecitic.bank.mobile.ui.MainActivity',
-            'com.ecitic.bank.mobile.ui.webview.CordovaWebViewActivity',
+            '.ui.MainActivity',
+            '.ui.webview.CordovaWebViewActivity',
           ],
-          matches: '[id="com.ecitic.bank.mobile:id/close_product_send"]',
+          matches: '[vid="close_product_send"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12701230',
             'https://i.gkd.li/i/13402746',
@@ -56,7 +56,7 @@ export default defineGkdApp({
       name: '局部广告-理财产品悬浮广告',
       rules: [
         {
-          activityIds: 'com.ecitic.bank.mobile.ui.MainActivity',
+          activityIds: '.ui.MainActivity',
           matches:
             '@[clickable=true] +2 [visibleToUser=true][text="恭喜您关注到宝藏基金"] <<n [vid="cordova_view"]',
           snapshotUrls: 'https://i.gkd.li/i/14208637',

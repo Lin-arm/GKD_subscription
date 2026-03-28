@@ -12,10 +12,10 @@ export default defineGkdApp({
       actionMaximum: 1,
       resetMatch: 'app',
       activityIds: [
-        'com.tima.carnet.m.main.lib.common.dialog.TimaLoadingDialog',
-        'com.tima.carnet.m.main.app.main.NoticeActivity',
-        'com.tima.carnet.m.main.app.main.MainActivity',
-        'com.tima.carnet.m.main.LaunchActivity',
+        '.lib.common.dialog.TimaLoadingDialog',
+        '.app.main.NoticeActivity',
+        '.app.main.MainActivity',
+        '.LaunchActivity',
       ],
       rules: [
         {
@@ -46,12 +46,12 @@ export default defineGkdApp({
     {
       key: 3,
       name: '分段广告-设备界面顶部广告',
-      activityIds: 'com.tima.carnet.m.main.app.main.MainActivity',
+      activityIds: '.app.main.MainActivity',
       rules: [
         {
           key: 1,
           matches:
-            '@Image[childCount=0][visibleToUser=true] < View[childCount=1] + View >2 [visibleToUser=true][text="广告"] <<n [id="com.tima.carnet.m.main:id/fl_ad_banner"]',
+            '@Image[childCount=0][visibleToUser=true] < View[childCount=1] + View >2 [visibleToUser=true][text="广告"] <<n [vid="fl_ad_banner"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13508030',
             'https://i.gkd.li/i/13508115',

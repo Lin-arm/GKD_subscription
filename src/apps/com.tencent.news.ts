@@ -8,13 +8,13 @@ export default defineGkdApp({
       key: 1,
       name: '分段广告-信息流广告',
       desc: '自动点击"更多"->"不感兴趣"',
-      activityIds: 'com.tencent.news.activity.SplashActivity',
+      activityIds: '.activity.SplashActivity',
       rules: [
         {
           key: 0,
           name: '点击"更多"按钮',
           matches:
-            'FrameLayout[id="android:id/content"][childCount=1] >n [text="广告"] +n [id="com.tencent.news:id/dislike_streamAd_more"]',
+            'FrameLayout[id="android:id/content"][childCount=1] >n [text="广告"] +n [vid="dislike_streamAd_more"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12755834',
             'https://i.gkd.li/i/12755852', // 使用 FrameLayout[id="android:id/content"][childCount=1] 进行限定，防止点击"更多"按钮后继续触发规则
@@ -24,8 +24,7 @@ export default defineGkdApp({
           preKeys: [0],
           key: 1,
           name: '点击"不感兴趣"按钮',
-          matches:
-            '[id="com.tencent.news:id/dislike_reason_view"] >n [text="不感兴趣"]',
+          matches: '[vid="dislike_reason_view"] >n [text="不感兴趣"]',
           snapshotUrls: 'https://i.gkd.li/i/12755852',
         },
       ],
@@ -36,7 +35,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.tencent.news.activity.SplashActivity',
+          activityIds: '.activity.SplashActivity',
           matches: '@[text="关闭"] + [text="查看活动详情"]',
           snapshotUrls: 'https://i.gkd.li/i/12755872',
         },

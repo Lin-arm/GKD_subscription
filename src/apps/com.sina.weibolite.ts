@@ -48,7 +48,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.weico.international.activity.MainFragmentActivity',
-          matches: '[id="com.sina.weibolite:id/ed_btn_negative"]',
+          matches: '[vid="ed_btn_negative"]',
           snapshotUrls: 'https://i.gkd.li/i/13727728',
         },
       ],

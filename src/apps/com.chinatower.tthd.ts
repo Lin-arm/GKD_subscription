@@ -15,8 +15,7 @@ export default defineGkdApp({
         {
           key: 0,
           activityIds: 'com.chinatower.fghd.customer.home.HomeNewActivity',
-          matches:
-            '[id="com.chinatower.tthd:id/fl_content_container"] + [id="com.chinatower.tthd:id/iv_close"]',
+          matches: '[vid="fl_content_container"] + [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13694901',
         },
       ],

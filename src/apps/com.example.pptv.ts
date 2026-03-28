@@ -21,7 +21,7 @@ export default defineGkdApp({
         },
         {
           key: 1,
-          matches: '[id="com.example.pptv:id/view_count_shake"]',
+          matches: '[vid="view_count_shake"]',
           snapshotUrls: 'https://i.gkd.li/i/13761160',
         },
       ],

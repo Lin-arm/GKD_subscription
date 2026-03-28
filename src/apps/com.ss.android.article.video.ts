@@ -43,7 +43,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.ss.android.article.video.activity.SplashActivity',
+          activityIds: '.activity.SplashActivity',
           matches: '@FlattenUIImage[clickable=true] -2 [text="开心收下"]',
           snapshotUrls: 'https://i.gkd.li/i/13620299',
         },

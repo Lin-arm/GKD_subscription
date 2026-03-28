@@ -11,8 +11,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.sdu.didi.gsui.main.MainActivity',
-          matches: '[id="com.sdu.didi.gsui:id/main_dialog_banner_image_close"]',
+          activityIds: '.main.MainActivity',
+          matches: '[vid="main_dialog_banner_image_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13958887',
         },
       ],

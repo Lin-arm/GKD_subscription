@@ -16,7 +16,7 @@ export default defineGkdApp({
           actionMaximum: 1,
           resetMatch: 'app',
           activityIds: 'com.zmapp.fwatch.activity.NativeAdActivity',
-          matches: '[id="com.zmsoft.forwatch:id/ad_close"]',
+          matches: '[vid="ad_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13545995',
         },
       ],

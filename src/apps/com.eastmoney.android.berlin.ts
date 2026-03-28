@@ -14,7 +14,7 @@ export default defineGkdApp({
         {
           activityIds:
             'com.eastmoney.android.module.launcher.internal.home.HomeActivity',
-          matches: '[id="com.eastmoney.android.berlin:id/tv_update_next_time"]',
+          matches: '[vid="tv_update_next_time"]',
           snapshotUrls: 'https://i.gkd.li/i/12706070',
         },
       ],
@@ -46,8 +46,7 @@ export default defineGkdApp({
         {
           activityIds:
             'com.eastmoney.android.module.launcher.internal.home.HomeActivity',
-          matches:
-            '[id="com.eastmoney.android.berlin:id/push_on_notify_delete"]',
+          matches: '[vid="push_on_notify_delete"]',
           snapshotUrls: 'https://i.gkd.li/i/12706065',
         },
       ],

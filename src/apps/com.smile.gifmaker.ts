@@ -40,7 +40,7 @@ export default defineGkdApp({
       rules: [
         {
           matches:
-            '[id="com.smile.gifmaker:id/pendant_mask_bg"] + [id="com.smile.gifmaker:id/pendant_close"][visibleToUser=true]',
+            '[vid="pendant_mask_bg"] + [vid="pendant_close"][visibleToUser=true]',
           snapshotUrls: [
             'https://i.gkd.li/i/12708671',
             'https://i.gkd.li/i/12708676', // 执行规则后，控件隐藏，使用 visibleToUser=true 进行限定，防止反复触发规则
@@ -57,7 +57,7 @@ export default defineGkdApp({
         {
           key: 0,
           name: '消息页面-你可能感兴趣的人',
-          matches: '[id="com.smile.gifmaker:id/close_pymk"]',
+          matches: '[vid="close_pymk"]',
           snapshotUrls: 'https://i.gkd.li/i/12708707',
         },
         {

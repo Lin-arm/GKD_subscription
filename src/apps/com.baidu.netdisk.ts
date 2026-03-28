@@ -13,9 +13,9 @@ export default defineGkdApp({
         {
           key: 3,
           activityIds: [
-            'com.baidu.netdisk.business.guide.dialog.lifeproduct.',
-            'com.baidu.netdisk.ui.MainActivity',
-            'com.baidu.netdisk.ui.Navigate',
+            '.business.guide.dialog.lifeproduct.',
+            '.ui.MainActivity',
+            '.ui.Navigate',
           ],
           matches: '[vid="iv_close"]',
           snapshotUrls: [
@@ -100,7 +100,7 @@ export default defineGkdApp({
       desc: '点击关闭',
       rules: [
         {
-          activityIds: 'com.baidu.netdisk.ui.MainActivity',
+          activityIds: '.ui.MainActivity',
           matches:
             '[vid="float_btn_close"][clickable=true][visibleToUser=true]',
           exampleUrls:

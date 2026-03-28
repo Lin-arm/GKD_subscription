@@ -50,8 +50,7 @@ export default defineGkdApp({
           fastQuery: true,
           actionMaximum: 1,
           activityIds: 'com.ucpro.BrowserActivity',
-          matches:
-            'ImageView[id="com.quark.browser:id/close_img"][clickable=true]',
+          matches: 'ImageView[vid="close_img"][clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/13292571',
         },
       ],

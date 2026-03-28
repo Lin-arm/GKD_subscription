@@ -13,8 +13,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.lgd.update.UpdateActivity',
-          matches:
-            '@[id="com.jin10:id/update_cancel"] + [id="com.jin10:id/iv_pic"]',
+          matches: '@[vid="update_cancel"] + [vid="iv_pic"]',
           snapshotUrls: 'https://i.gkd.li/i/12706043',
         },
       ],
@@ -27,8 +26,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.jin10.lgd.biz.MainActivity',
-          matches: '[id="com.jin10:id/iv_body"] + [id="com.jin10:id/iv_close"]',
+          activityIds: '.lgd.biz.MainActivity',
+          matches: '[vid="iv_body"] + [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12706045',
         },
       ],
@@ -38,8 +37,8 @@ export default defineGkdApp({
       name: '全屏广告-快讯页面弹窗广告',
       rules: [
         {
-          activityIds: 'com.jin10.lgd.biz.MainActivity',
-          matches: '@[id="com.jin10:id/iv_close"] + [id="com.jin10:id/iv_pic"]',
+          activityIds: '.lgd.biz.MainActivity',
+          matches: '@[vid="iv_close"] + [vid="iv_pic"]',
           snapshotUrls: 'https://i.gkd.li/i/12706047',
         },
       ],
@@ -49,9 +48,8 @@ export default defineGkdApp({
       name: '局部广告-会员页面顶部广告',
       rules: [
         {
-          activityIds: 'com.jin10.lgd.biz.MainActivity',
-          matches:
-            '[id="com.jin10:id/iv_header"] + [id="com.jin10:id/iv_close"]',
+          activityIds: '.lgd.biz.MainActivity',
+          matches: '[vid="iv_header"] + [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12706051',
         },
       ],

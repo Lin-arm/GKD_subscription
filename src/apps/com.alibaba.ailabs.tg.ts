@@ -14,8 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.activity.HomeActivity',
-          matches:
-            '[id="com.alibaba.ailabs.tg:id/ll_download"] + [id="com.alibaba.ailabs.tg:id/va_dialog_cancel"]',
+          matches: '[vid="ll_download"] + [vid="va_dialog_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/13296332',
         },
       ],

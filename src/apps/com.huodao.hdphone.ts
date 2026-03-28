@@ -26,7 +26,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.huodao.hdphone.mvp.view.main.NewMainActivity',
+          activityIds: '.mvp.view.main.NewMainActivity',
           matches: '[vid="iv_recycle_close"]',
           exampleUrls:
             'https://m.gkd.li/57941037/dc1534ca-9ab1-4d7b-8da4-6c7992882c94',

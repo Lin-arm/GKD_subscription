@@ -13,8 +13,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.black.unique.feature.home.HomeActivity',
-          matches: '@ImageView[id="com.black.unique:id/iv_close"]',
+          activityIds: '.feature.home.HomeActivity',
+          matches: '@ImageView[vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13499502',
         },
       ],

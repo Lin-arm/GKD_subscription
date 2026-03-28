@@ -31,9 +31,9 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.wallstreetcn.news.ProxyMainActivity',
+          activityIds: '.ProxyMainActivity',
           matches:
-            '[text="广告" || text="活动"] + [id="com.wallstreetcn.news:id/close"][visibleToUser=true]',
+            '[text="广告" || text="活动"] + [vid="close"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/13262717',
         },
       ],

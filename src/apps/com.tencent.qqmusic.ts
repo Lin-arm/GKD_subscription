@@ -39,8 +39,7 @@ export default defineGkdApp({
         {
           key: 1,
           fastQuery: true,
-          activityIds:
-            'com.tencent.qqmusic.business.playernew.view.NewPlayerActivity',
+          activityIds: '.business.playernew.view.NewPlayerActivity',
           matches:
             '[text^="广告"] + [text="跳过"][clickable=true][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/13985169', // 播放界面
@@ -48,7 +47,7 @@ export default defineGkdApp({
         {
           key: 2,
           fastQuery: true,
-          activityIds: 'com.tencent.qqmusic.activity.AppStarterActivity',
+          activityIds: '.activity.AppStarterActivity',
           matches:
             '@[desc="关闭"][clickable=true] -(1,2) [text="广告"][visibleToUser=true]',
           snapshotUrls: [
@@ -59,7 +58,7 @@ export default defineGkdApp({
         {
           key: 3,
           fastQuery: true,
-          activityIds: 'com.tencent.qqmusic.activity.AppStarterActivity',
+          activityIds: '.activity.AppStarterActivity',
           matches:
             '@ImageView - ImageView - RelativeLayout >n [text="听歌入会赢绿钻"||text="摇动点击广告跳转"][visibleToUser=true]',
           snapshotUrls: [
@@ -70,7 +69,7 @@ export default defineGkdApp({
         {
           key: 4,
           fastQuery: true,
-          activityIds: 'com.tencent.qqmusic.activity.AppStarterActivity',
+          activityIds: '.activity.AppStarterActivity',
           matches:
             '@[clickable=true][visibleToUser=true] > [text="广告"][visibleToUser=true]',
           snapshotUrls: [
@@ -81,7 +80,7 @@ export default defineGkdApp({
         },
         {
           key: 5,
-          activityIds: 'com.tencent.qqmusic.activity.AppStarterActivity',
+          activityIds: '.activity.AppStarterActivity',
           matches:
             'RecyclerView > LinearLayout[childCount=3] >5 ViewGroup[childCount=3] > @ViewGroup[clickable=true] >2 ImageView[text=null][desc=null][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/15756931',
@@ -152,7 +151,7 @@ export default defineGkdApp({
           resetMatch: 'app',
           activityIds: [
             '.activity.AppStarterActivity',
-            'com.tencent.qqmusiccommon.hybrid.HybridViewActivity',
+            'common.hybrid.HybridViewActivity',
           ],
           matches: '[desc^="关闭弹窗"][clickable=true][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/47107dd3-b19a-4486-a0d1-6d9aa62ee722',
@@ -215,8 +214,8 @@ export default defineGkdApp({
           name: '免流弹窗',
           fastQuery: true,
           activityIds: [
-            'com.tencent.qqmusic.activity.AppStarterActivity',
-            'com.tencent.qqmusic.business.playernew.view.NewPlayerActivity',
+            '.activity.AppStarterActivity',
+            '.business.playernew.view.NewPlayerActivity',
           ],
           matches: '[text="流量够用"]',
           snapshotUrls: [
@@ -228,7 +227,7 @@ export default defineGkdApp({
           key: 7,
           name: '看广告免费听歌弹窗',
           fastQuery: true,
-          activityIds: 'com.tencent.qqmusiccommon.hybrid.HybridViewActivity',
+          activityIds: 'common.hybrid.HybridViewActivity',
           matches:
             '@ViewGroup[desc="关闭按钮"] - [desc^="看广告"] <2 ViewGroup < ViewGroup < FrameLayout < FrameLayout < FrameLayout < [id="android:id/content"]',
           snapshotUrls: 'https://i.gkd.li/i/13806773',
@@ -236,7 +235,7 @@ export default defineGkdApp({
         {
           key: 8,
           fastQuery: true,
-          activityIds: 'com.tencent.qqmusic.activity.AppStarterActivity',
+          activityIds: '.activity.AppStarterActivity',
           matches:
             '@ViewGroup[childCount=0][clickable=true] <2 ViewGroup[childCount=2] < FrameLayout < FrameLayout < [id="android:id/content"]',
           snapshotUrls: 'https://i.gkd.li/i/13806782',
@@ -287,8 +286,7 @@ export default defineGkdApp({
       key: 9,
       name: '分段广告-评论区广告',
       desc: '点击右下角展开-点击[不感兴趣]',
-      activityIds:
-        'com.tencent.qqmusic.activity.base.FragmentActivityWithMinibar',
+      activityIds: '.activity.base.FragmentActivityWithMinibar',
       rules: [
         {
           key: 0,

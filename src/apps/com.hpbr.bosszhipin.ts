@@ -17,7 +17,7 @@ export default defineGkdApp({
             '.module.main.activity.MainActivity',
             '.module.launcher.WelcomeActivity',
           ],
-          matches: '@ImageView[id="com.hpbr.bosszhipin:id/iv_cancle"]',
+          matches: '@ImageView[vid="iv_cancle"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13440781',
             'https://i.gkd.li/i/13623476',

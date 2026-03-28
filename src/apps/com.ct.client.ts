@@ -32,8 +32,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.ct.client.activity.UserGuideActivity',
-          matches: '[id="com.ct.client:id/tvSkip"]',
+          activityIds: '.activity.UserGuideActivity',
+          matches: '[vid="tvSkip"]',
           snapshotUrls: 'https://i.gkd.li/i/12508971',
         },
       ],
@@ -71,8 +71,8 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: [
-            'com.ct.client.common.ConfirmDialogActivity',
-            'com.ct.client.activity.MainActivity',
+            '.common.ConfirmDialogActivity',
+            '.activity.MainActivity',
           ],
           matches: '[vid="rlActivity"] > [vid="close"]',
           snapshotUrls: [
@@ -86,7 +86,7 @@ export default defineGkdApp({
       key: 4,
       name: '全屏广告-弹窗广告',
       // fastQuery: true, 实机测试使用无法跳过
-      activityIds: 'com.ct.client.common.webview.OnlineBusinessWebkitActivity',
+      activityIds: '.common.webview.OnlineBusinessWebkitActivity',
       rules: 'Image[text="tishi-close"]',
       snapshotUrls: 'https://i.gkd.li/i/12913804',
     },
@@ -101,13 +101,13 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          matches: 'ImageView[id="com.ct.client:id/msg_close"]',
+          matches: 'ImageView[vid="msg_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13043522',
         },
         {
           key: 1,
           fastQuery: true,
-          activityIds: 'com.ct.client.activity.MainActivity',
+          activityIds: '.activity.MainActivity',
           matches: '[text^="开启消息通知"] - [vid="ivClose"]',
           snapshotUrls: 'https://i.gkd.li/i/15209597',
         },
@@ -120,15 +120,15 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.ct.client.MainActivity',
-          matches: '[id="com.ct.client:id/close"]',
+          activityIds: '.MainActivity',
+          matches: '[vid="close"]',
           exampleUrls:
             'https://m.gkd.li/57941037/3a14e0ac-ce6a-411d-9f92-e50da5165119',
           snapshotUrls: 'https://i.gkd.li/i/14133742',
         },
         {
-          activityIds: 'com.ct.client.activity.MainActivity',
-          matches: '[id="com.ct.client:id/ivFloatClose"]',
+          activityIds: '.activity.MainActivity',
+          matches: '[vid="ivFloatClose"]',
           exampleUrls:
             'https://m.gkd.li/57941037/a97bf7a2-6e35-4922-ad0d-8677fca79f7c',
           snapshotUrls: 'https://i.gkd.li/i/13043345',
@@ -144,7 +144,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.ct.client.activity.MainActivity',
+          activityIds: '.activity.MainActivity',
           matches: '[vid="ivFloatClose"]',
           exampleUrls:
             'https://m.gkd.li/57941037/5dd9c9e3-f290-4b73-abdd-dc5e97a99772',

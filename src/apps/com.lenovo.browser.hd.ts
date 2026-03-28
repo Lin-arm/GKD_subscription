@@ -14,8 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.zui.launcher.drawer.NormalLauncher',
-          matches:
-            '[text="发现新版本"] - * > [id="com.lenovo.browser.hd:id/fl_close"]',
+          matches: '[text="发现新版本"] - * > [vid="fl_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13401982',
         },
       ],
@@ -30,8 +29,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.zui.launcher.drawer.NormalLauncher',
-          matches:
-            '[text="开启消息通知"] +n * > [id="com.lenovo.browser.hd:id/tv_cancle"]',
+          matches: '[text="开启消息通知"] +n * > [vid="tv_cancle"]',
           snapshotUrls: 'https://i.gkd.li/i/13401980',
         },
       ],

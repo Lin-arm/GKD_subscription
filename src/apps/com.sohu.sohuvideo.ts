@@ -14,8 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.ui.homepage.MainActivity',
-          matches:
-            '@[id="com.sohu.sohuvideo:id/ivClose"] + LinearLayout [text="新版本上线啦"]',
+          matches: '@[vid="ivClose"] + LinearLayout [text="新版本上线啦"]',
           snapshotUrls: 'https://i.gkd.li/i/13435504',
         },
       ],

@@ -11,7 +11,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.bbk.theme.Theme',
+          activityIds: '.Theme',
           matches: '[vid="card_close_img"]',
           exampleUrls:
             'https://m.gkd.li/57941037/8207ec80-6e9d-4b9e-9880-7370d826c405',

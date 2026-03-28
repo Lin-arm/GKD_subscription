@@ -13,7 +13,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.lanjinger.choiassociatedpress.main.OperateActivity',
+          activityIds: '.main.OperateActivity',
           matches: '@ImageView[id$="iv_back"][clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/13749206',
         },

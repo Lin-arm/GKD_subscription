@@ -26,7 +26,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.csg.palmhall.MainActivity',
+          activityIds: '.MainActivity',
           matches: 'View > Image +(3) [text="不再显示"][clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/12700075',
         },
@@ -41,7 +41,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.csg.palmhall.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             '[text$="公告"] - View[childCount=2] > Image[childCount=0][text=""]',
           exampleUrls: 'https://e.gkd.li/0ecc2a4e-6ab9-4c00-80fe-bbd23d181be8',

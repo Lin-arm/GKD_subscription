@@ -13,8 +13,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.serviceupdate.widget.DialogUpdate',
-          matches:
-            '@[id="com.netease.gl:id/iv_close"] +2 LinearLayout >n [id="com.netease.gl:id/btn_update"]',
+          matches: '@[vid="iv_close"] +2 LinearLayout >n [vid="btn_update"]',
           snapshotUrls: 'https://i.gkd.li/i/12883135',
         },
       ],
@@ -25,9 +24,8 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.netease.gl.ui.activity.welcome.WelcomeActivity',
-          matches:
-            '@[id="com.netease.gl:id/iv_close"] + [id="com.netease.gl:id/iv_cover"]',
+          activityIds: '.ui.activity.welcome.WelcomeActivity',
+          matches: '@[vid="iv_close"] + [vid="iv_cover"]',
           snapshotUrls: 'https://i.gkd.li/i/12883277',
         },
       ],
@@ -41,7 +39,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.compfeed.widget.CommonWebPopupDialog',
-          matches: '@[id="com.netease.gl:id/iv_close"] + [text="开启推送"]',
+          matches: '@[vid="iv_close"] + [text="开启推送"]',
           snapshotUrls: 'https://i.gkd.li/i/13072071',
         },
       ],

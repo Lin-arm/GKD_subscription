@@ -45,11 +45,10 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: [
-            'com.cebbank.mobile.cemb.ui.activity.SplashActivity',
-            'com.cebbank.mobile.cemb.ui.activity.HomeActivity',
+            '.ui.activity.SplashActivity',
+            '.ui.activity.HomeActivity',
           ],
-          matches:
-            '[id="com.cebbank.mobile.cemb:id/home_advertising_iv_close"]',
+          matches: '[vid="home_advertising_iv_close"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12727248',
             'https://i.gkd.li/i/13471080',

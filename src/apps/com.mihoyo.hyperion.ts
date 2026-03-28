@@ -11,9 +11,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.mihoyo.hyperion.main.HyperionMainActivity',
-          matches:
-            'TextView[id="com.mihoyo.hyperion:id/signTv"][text="打卡"][visibleToUser=true]',
+          activityIds: '.main.HyperionMainActivity',
+          matches: 'TextView[vid="signTv"][text="打卡"][visibleToUser=true]',
           snapshotUrls: [
             'https://i.gkd.li/i/13721772', // 未打卡
             'https://i.gkd.li/i/13721776', // 已打卡

@@ -23,7 +23,7 @@ export default defineGkdApp({
       name: '局部广告-评论区卡片广告',
       rules: [
         {
-          activityIds: 'com.xiaomi.vipaccount.newbrowser.NormalWebActivity',
+          activityIds: '.newbrowser.NormalWebActivity',
           matches: '[text="closeGray"][clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/12642459',
         },
@@ -34,7 +34,7 @@ export default defineGkdApp({
       name: '全屏广告-签到弹窗',
       rules: [
         {
-          activityIds: 'com.xiaomi.vipaccount.newbrowser.NormalWebActivity',
+          activityIds: '.newbrowser.NormalWebActivity',
           matches: '[text="签到赢权益"] +n Image[text*="cancel_circle"]',
           snapshotUrls: 'https://i.gkd.li/i/13328271',
         },
@@ -50,12 +50,12 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: [
-            'com.xiaomi.vipaccount.ui.home.page.HomeFrameActivity',
-            'com.xiaomi.vipaccount.newbrowser.NormalWebActivity',
+            '.ui.home.page.HomeFrameActivity',
+            '.newbrowser.NormalWebActivity',
           ],
           anyMatches: [
-            '[desc="公告版弹窗"] +2 [id="com.xiaomi.vipaccount:id/close"]',
-            '[desc="公告版弹窗"] + ViewGroup[vid="image_container"] > [id="com.xiaomi.vipaccount:id/close"]',
+            '[desc="公告版弹窗"] +2 [vid="close"]',
+            '[desc="公告版弹窗"] + ViewGroup[vid="image_container"] > [vid="close"]',
           ],
           exampleUrls: 'https://e.gkd.li/46e16bc5-2f13-408e-9c34-927a13ba3e9c',
           snapshotUrls: [

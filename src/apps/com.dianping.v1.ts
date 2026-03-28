@@ -38,9 +38,8 @@ export default defineGkdApp({
       key: 3,
       name: '局部广告-关闭[签到开红包]',
       desc: '点击右下角悬浮图片右上角的x图标',
-      activityIds: ['com.dianping.v1.NovaMainActivity'],
-      rules:
-        '[id="com.dianping.v1:id/float_image"] + [id="com.dianping.v1:id/close"][clickable=true]',
+      activityIds: ['.NovaMainActivity'],
+      rules: '[vid="float_image"] + [vid="close"][clickable=true]',
       snapshotUrls: 'https://i.gkd.li/i/12727366',
     },
     {
@@ -49,9 +48,9 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.dianping.v1.NovaMainActivity',
+          activityIds: '.NovaMainActivity',
           fastQuery: true,
-          matches: '[id="com.dianping.v1:id/operate_cross_icon"]',
+          matches: '[vid="operate_cross_icon"]',
           snapshotUrls: 'https://i.gkd.li/i/13538340',
         },
       ],
@@ -62,7 +61,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.dianping.v1.NovaMainActivity',
+          activityIds: '.NovaMainActivity',
           matches:
             '@[desc="reculike_delete"][clickable=true][visibleToUser=true] +3 [childCount=2]',
           snapshotUrls: [
@@ -74,7 +73,7 @@ export default defineGkdApp({
           preKeys: [0],
           key: 1,
           action: 'clickCenter',
-          activityIds: 'com.dianping.v1.NovaMainActivity',
+          activityIds: '.NovaMainActivity',
           matches: '@[clickable=true] > [text="重复出现"]',
           snapshotUrls: [
             'https://i.gkd.li/i/14238381',
@@ -85,7 +84,7 @@ export default defineGkdApp({
           preKeys: [0],
           key: 2,
           fastQuery: true,
-          activityIds: 'com.dianping.v1.NovaMainActivity',
+          activityIds: '.NovaMainActivity',
           matches: '[text$="重复出现"][clickable=true]',
           exampleUrls:
             'https://m.gkd.li/57941037/010c0314-e89b-468f-8143-691925a308a6',

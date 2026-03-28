@@ -11,10 +11,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds:
-            'com.youdao.translator.activity.trans.TransResultActivity',
-          matches:
-            '@ImageView[id="com.youdao.translator:id/close_iv"] + [id="com.youdao.translator:id/native_ad_flag_tv"]',
+          activityIds: '.activity.trans.TransResultActivity',
+          matches: '@ImageView[vid="close_iv"] + [vid="native_ad_flag_tv"]',
           snapshotUrls: 'https://i.gkd.li/i/13259910',
         },
       ],

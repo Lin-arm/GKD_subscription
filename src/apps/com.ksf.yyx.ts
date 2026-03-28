@@ -16,13 +16,13 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          matches: '[id="com.ksf.yyx:id/ksad_splash_circle_skip_view"]',
+          matches: '[vid="ksad_splash_circle_skip_view"]',
           snapshotUrls: 'https://i.gkd.li/i/12775918',
         },
         {
           key: 1,
           matches:
-            '[id="com.ksf.yyx:id/ksad_splash_root_container"] [childCount=3] > @ImageView[clickable=true] - [text="|"]',
+            '[vid="ksad_splash_root_container"] [childCount=3] > @ImageView[clickable=true] - [text="|"]',
           snapshotUrls: 'https://i.gkd.li/i/12775919',
         },
         {
@@ -54,7 +54,7 @@ export default defineGkdApp({
           key: 1,
           fastQuery: true,
           activityIds: '.MainActivity',
-          matches: '[id="com.ksf.yyx:id/ksad_container"] [text="跳过"]',
+          matches: '[vid="ksad_container"] [text="跳过"]',
           snapshotUrls: 'https://i.gkd.li/i/12775922',
         },
         {

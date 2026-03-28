@@ -13,7 +13,7 @@ export default defineGkdApp({
           activityIds:
             'com.android.module.app.ui.test.activity.ActivityTestResult',
           matches:
-            '[text="广告"] +2 View > @TextView[childCount=0][index=1][clickable=true][visibleToUser=true] <<n [id="com.antutu.ABenchMark:id/ksad_container"]',
+            '[text="广告"] +2 View > @TextView[childCount=0][index=1][clickable=true][visibleToUser=true] <<n [vid="ksad_container"]',
           snapshotUrls: 'https://i.gkd.li/i/13234012',
         },
       ],

@@ -22,8 +22,7 @@ export default defineGkdApp({
           matchTime: 10000,
           actionMaximum: 1,
           resetMatch: 'app',
-          activityIds:
-            'com.sodalife.sodax.libraries.ads.gromore.GroMoreSplashActivity',
+          activityIds: '.libraries.ads.gromore.GroMoreSplashActivity',
           matches:
             'ViewGroup[childCount=2] > ViewGroup + ViewGroup[clickable=true][childCount=1]',
           snapshotUrls: 'https://i.gkd.li/i/13400653',

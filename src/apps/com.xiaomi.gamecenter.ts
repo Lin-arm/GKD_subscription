@@ -9,9 +9,8 @@ export default defineGkdApp({
       name: '局部广告-首页右侧悬浮广告',
       rules: [
         {
-          activityIds: 'com.xiaomi.gamecenter.ui.MainTabActivity',
-          matches:
-            '[id="com.xiaomi.gamecenter:id/ad_view"] + [id="com.xiaomi.gamecenter:id/close_btn"]',
+          activityIds: '.ui.MainTabActivity',
+          matches: '[vid="ad_view"] + [vid="close_btn"]',
           snapshotUrls: 'https://i.gkd.li/i/12715800',
         },
       ],

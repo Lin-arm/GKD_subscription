@@ -57,7 +57,7 @@ export default defineGkdApp({
           key: 0,
           name: '快手广告',
           fastQuery: true,
-          activityIds: 'com.github.eprendre.tingshu.ui.SplashActivity',
+          activityIds: '.ui.SplashActivity',
           matches: [
             '[text="广告"]',
             '@ImageView[clickable=true] - [text="|"] - [text$="s"]',

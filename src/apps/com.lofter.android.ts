@@ -14,7 +14,7 @@ export default defineGkdApp({
           matchTime: 10000,
           actionMaximum: 1,
           resetMatch: 'app',
-          activityIds: 'com.lofter.android.global.home.TabHomeActivity',
+          activityIds: '.global.home.TabHomeActivity',
           matches:
             '[vid="global_ad_layout"] > [vid="close"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/0559eada-7899-4c8a-8634-ef3f55227492',

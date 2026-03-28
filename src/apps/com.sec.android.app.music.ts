@@ -11,8 +11,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds:
-            'com.sec.android.app.music.common.activity.MusicMainActivity',
+          activityIds: '.common.activity.MusicMainActivity',
           matches: [
             '[text="是否为三星音乐关闭优化电池使用量？"]',
             '[text="取消"]',

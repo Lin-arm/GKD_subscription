@@ -13,7 +13,7 @@ export default defineGkdApp({
         {
           key: 0,
           name: '点击关闭',
-          activityIds: 'com.yunzhi.tiyu.module.MainActivity',
+          activityIds: '.module.MainActivity',
           matches:
             '@Image[childCount=0][visibleToUser=true][width<80&&height<80] < View[childCount=1] +n View[childCount=2] >(2,3) [text="广告"] <<n [vid="viewAd" || vid="fl_flow_content"]',
           exampleUrls:
@@ -28,7 +28,7 @@ export default defineGkdApp({
           preKeys: [0],
           key: 1,
           name: '点击[不感兴趣]',
-          activityIds: 'com.yunzhi.tiyu.module.MainActivity',
+          activityIds: '.module.MainActivity',
           matches: '@[clickable=true] > [text="不感兴趣"]',
           exampleUrls:
             'https://m.gkd.li/57941037/1e5bff7e-b82b-458e-9179-364e6bf2c1da',

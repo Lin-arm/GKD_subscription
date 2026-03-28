@@ -31,9 +31,9 @@ export default defineGkdApp({
         {
           activityIds: [
             'com.hihonor.android.launcher.unihome.UniHomeLauncher',
-            'com.hihonor.appmarket.module.main.MainActivity',
+            '.module.main.MainActivity',
           ],
-          matches: '[id="com.hihonor.appmarket:id/iv_dialog_operation_close"]',
+          matches: '[vid="iv_dialog_operation_close"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13063815',
             'https://i.gkd.li/i/13168440',
@@ -48,7 +48,7 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: '.module.main.MainActivity',
-          matches: '[id="com.hihonor.appmarket:id/iv_floating_close"]',
+          matches: '[vid="iv_floating_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13063928',
         },
       ],

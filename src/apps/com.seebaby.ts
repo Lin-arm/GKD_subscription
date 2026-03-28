@@ -13,7 +13,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.login.ui.activity.LauncherActivity',
-          matches: '@[id="com.seebaby:id/btn_later"] + [text$="新版本"]',
+          matches: '@[vid="btn_later"] + [text$="新版本"]',
           snapshotUrls: 'https://i.gkd.li/i/12705351',
         },
       ],
@@ -22,14 +22,13 @@ export default defineGkdApp({
       key: 2,
       name: '分段广告-信息流、文章底部广告',
       activityIds: [
-        'com.seebaby.login.ui.activity.LauncherActivity',
-        'com.seebaby.parent.article.ui.activity.NativeArticleDetailActivity',
+        '.login.ui.activity.LauncherActivity',
+        '.parent.article.ui.activity.NativeArticleDetailActivity',
       ],
       rules: [
         {
           key: 1,
-          matches:
-            '[id="com.seebaby:id/tv_ad_detail"] + [id="com.seebaby:id/ic_delad"]',
+          matches: '[vid="tv_ad_detail"] + [vid="ic_delad"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12705353',
             'https://i.gkd.li/i/12705363',
@@ -37,14 +36,13 @@ export default defineGkdApp({
         },
         {
           key: 2,
-          matches:
-            '[id="com.seebaby:id/ad_tv_advertiser"] + [id="com.seebaby:id/ad_iv_close"]',
+          matches: '[vid="ad_tv_advertiser"] + [vid="ad_iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12705372',
         },
         {
           preKeys: [1, 2],
           key: 3,
-          matches: '[id="com.seebaby:id/tv_un_instrest"]',
+          matches: '[vid="tv_un_instrest"]',
           snapshotUrls: 'https://i.gkd.li/i/12705358',
         },
       ],

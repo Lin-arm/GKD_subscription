@@ -12,9 +12,9 @@ export default defineGkdApp({
           key: 0,
           fastQuery: true,
           activityIds: [
-            'com.babycloud.hanju.ui.activity.HanjuSeriesActivity',
-            'com.babycloud.hanju.ui.activity.HanjuHomeActivity',
-            'com.babycloud.hanju.search.activity.SearchActivity',
+            '.ui.activity.HanjuSeriesActivity',
+            '.ui.activity.HanjuHomeActivity',
+            '.search.activity.SearchActivity',
           ],
           matches: '[vid="unified_ad_close"][visibleToUser=true]',
           snapshotUrls: [
@@ -32,7 +32,7 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds: 'com.babycloud.hanju.ui.activity.HanjuSeriesActivity',
+          activityIds: '.ui.activity.HanjuSeriesActivity',
           matches:
             '[vid="close_rl" || vid="only_skip_rl" || vid="skip_rl"][visibleToUser=true]',
           snapshotUrls: [

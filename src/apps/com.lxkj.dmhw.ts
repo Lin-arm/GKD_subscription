@@ -20,7 +20,7 @@ export default defineGkdApp({
             left: 'width * 0.8981',
             top: 'width * 0.1629',
           },
-          matches: '[id="com.lxkj.dmhw:id/animation_view"]',
+          matches: '[vid="animation_view"]',
           snapshotUrls: 'https://i.gkd.li/i/13246178',
         },
         {

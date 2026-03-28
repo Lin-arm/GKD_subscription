@@ -39,7 +39,7 @@ export default defineGkdApp({
             top: 'width * 0.1667',
           },
           matches:
-            '[id$="spalsh_ad_view"] >4 [id$="native_container"] >2 [id="cn.xiaochuankeji.zuiyouLite:id/contentView"]', // 避免选中其他开屏广告节点
+            '[id$="spalsh_ad_view"] >4 [id$="native_container"] >2 [vid="contentView"]', // 避免选中其他开屏广告节点
           exampleUrls:
             'https://m.gkd.li/57941037/485963ab-07b1-412a-a932-badc50cb2688',
           snapshotUrls: 'https://i.gkd.li/i/13399391',
@@ -50,12 +50,12 @@ export default defineGkdApp({
       key: 2,
       name: '分段广告-信息流广告',
       fastQuery: true,
-      activityIds: 'cn.xiaochuankeji.zuiyouLite.ui.slide.ActivitySlideDetail',
+      activityIds: '.ui.slide.ActivitySlideDetail',
       rules: [
         {
           key: 0,
           name: '点击关闭',
-          matches: '[id="cn.xiaochuankeji.zuiyouLite:id/ad_remove"]',
+          matches: '[vid="ad_remove"]',
           snapshotUrls: 'https://i.gkd.li/i/13387116',
         },
         {

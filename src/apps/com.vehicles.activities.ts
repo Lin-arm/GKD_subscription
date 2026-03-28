@@ -14,7 +14,7 @@ export default defineGkdApp({
           fastQuery: true,
           activityIds: [
             'com.sinoiov.cwza.discovery.activity.SpyDetailFragmentActivity',
-            'com.vehicles.activities.activity.MainActivity',
+            '.activity.MainActivity',
             'com.sinoiov.cwza.discovery.activity.TrackDetailActivity',
           ],
           matches: '[vid="iv_close" || vid="iv_cancle"]',

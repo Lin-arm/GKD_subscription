@@ -14,8 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.main.MainActivity',
-          matches:
-            '[id="com.xiaomi.mico:id/adImage"] + [id="com.xiaomi.mico:id/ivCloseAd"]',
+          matches: '[vid="adImage"] + [vid="ivCloseAd"]',
           snapshotUrls: 'https://i.gkd.li/i/12745621',
         },
       ],

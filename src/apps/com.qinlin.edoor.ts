@@ -7,13 +7,10 @@ export default defineGkdApp({
     {
       key: 1,
       name: '局部广告-首页顶部广告',
-      activityIds: 'com.qinlin.edoor.MainActivity',
+      activityIds: '.MainActivity',
       rules: [
         {
-          matches: [
-            '[id="com.qinlin.edoor:id/reaper_ad_source_layout"]',
-            '[id="com.qinlin.edoor:id/close"]',
-          ],
+          matches: ['[vid="reaper_ad_source_layout"]', '[vid="close"]'],
           snapshotUrls: 'https://i.gkd.li/i/12707733',
         },
       ],

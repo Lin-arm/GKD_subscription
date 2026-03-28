@@ -15,8 +15,7 @@ export default defineGkdApp({
           key: 0,
           name: '点击"更多"按钮',
           actionCd: 4000,
-          matches:
-            '[text="赞助内容"] + [id="com.instagram.android:id/feed_more_button_stub"]',
+          matches: '[text="赞助内容"] + [vid="feed_more_button_stub"]',
           snapshotUrls: 'https://i.gkd.li/i/12798562',
         },
         {

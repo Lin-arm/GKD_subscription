@@ -14,8 +14,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          matches:
-            '[text="开启钱包扩展服务"] +2 [id="com.huawei.wallet:id/linear_close"]',
+          matches: '[text="开启钱包扩展服务"] +2 [vid="linear_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13441814',
         },
       ],

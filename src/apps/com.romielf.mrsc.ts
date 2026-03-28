@@ -8,7 +8,7 @@ export default defineGkdApp({
       key: 1,
       name: '分段广告-新闻页面摇一摇广告',
       desc: '点击准确率灵敏度不太高',
-      activityIds: 'com.romielf.mrsc.MainActivity',
+      activityIds: '.MainActivity',
       rules: [
         {
           key: 1,

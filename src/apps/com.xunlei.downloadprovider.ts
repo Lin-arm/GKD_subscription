@@ -89,7 +89,7 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds: 'com.xunlei.downloadprovider.frame.MainTabActivity',
+          activityIds: '.frame.MainTabActivity',
           matches:
             '[vid="close_btn" || id="com.noah.dycsdk.dynamic_sdk:id/noah_interstitial_close_button" || text="关闭"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/71c2dc44-a976-4910-8e44-26e39865406e',
@@ -114,10 +114,7 @@ export default defineGkdApp({
         {
           key: 2,
           fastQuery: true,
-          activityIds: [
-            'com.xunlei.downloadprovider.frame.MainTabActivity',
-            'com.xunlei.downloadprovider.launch.LaunchActivity',
-          ],
+          activityIds: ['.frame.MainTabActivity', '.launch.LaunchActivity'],
           matches:
             '@ImageView[childCount=0][text=null][desc=null][id=null][visibleToUser=true][width<90 && height<90] < FrameLayout[childCount=1][text=null][desc=null][id=null][parent.childCount>3] <n FrameLayout >(2,3) [text^="立即" || text$="详情" || text^="了解" || text="去微信看看" || text$="应用" || text="进入小程序" || text="领取优惠" || text="跳转微信"]',
           snapshotUrls: [
@@ -179,7 +176,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.xunlei.upgrade.XUpgradeActivity',
-          matches: '[id="com.xunlei.downloadprovider:id/x_upgrade_cancel"]',
+          matches: '[vid="x_upgrade_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/13228920',
         },
       ],
@@ -192,7 +189,7 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds: 'com.xunlei.downloadprovider.frame.MainTabActivity',
+          activityIds: '.frame.MainTabActivity',
           matches:
             '[text="立即领取" || text="点击领取" || text^="此云盘为您的私人云盘"] + [vid="close"]',
           snapshotUrls: [

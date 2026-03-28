@@ -40,10 +40,10 @@ export default defineGkdApp({
           name: '首页-弹窗广告',
           fastQuery: true,
           activityIds: [
-            'com.youdao.dict.activity.MainActivity',
-            'com.youdao.dict.activity.DictSplashActivity',
+            '.activity.MainActivity',
+            '.activity.DictSplashActivity',
           ],
-          matches: '@ImageView[id="com.youdao.dict:id/iv_close_bt"]',
+          matches: '@ImageView[vid="iv_close_bt"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12893419',
             'https://i.gkd.li/i/13263801',
@@ -54,8 +54,8 @@ export default defineGkdApp({
           name: '学习页面-弹窗广告',
           fastQuery: true,
           activityIds: [
-            'com.youdao.dict.edu.main.MainPopDialog',
-            'com.youdao.dict.activity.MainActivity',
+            '.edu.main.MainPopDialog',
+            '.activity.MainActivity',
             '.activity.DictQueryActivity',
           ],
           matches: '[vid="iv_close"]',
@@ -70,8 +70,8 @@ export default defineGkdApp({
           name: '抽奖机会-弹窗广告',
           fastQuery: true,
           activityIds: [
-            'com.youdao.dict.activity.DictSplashActivity',
-            'com.youdao.dict.activity.DictHotBootSplashActivity',
+            '.activity.DictSplashActivity',
+            '.activity.DictHotBootSplashActivity',
           ],
           matches: '[vid="skip_bottom_view"]',
           snapshotUrls: [
@@ -83,7 +83,7 @@ export default defineGkdApp({
           key: 3,
           fastQuery: true,
           name: '首页-礼包弹窗',
-          activityIds: 'com.youdao.dict.activity.MainActivity',
+          activityIds: '.activity.MainActivity',
           matches: '[vid="image"] + [vid="close"]',
           snapshotUrls: 'https://i.gkd.li/i/14296482',
         },
@@ -105,8 +105,8 @@ export default defineGkdApp({
         {
           key: 0,
           activityIds: [
-            'com.youdao.dict.vip.activity.RecallSevenDayVipActivity',
-            'com.youdao.dict.vip.activity.SecondShowNewUserSevenDayVipActivity',
+            '.vip.activity.RecallSevenDayVipActivity',
+            '.vip.activity.SecondShowNewUserSevenDayVipActivity',
             '.activity.DictQueryActivity',
             '.vip.activity.FirstShowNewUserSevenDayVipActivity',
           ],
@@ -140,7 +140,7 @@ export default defineGkdApp({
             '.activity.MainActivity',
             '.activity.DictQueryActivity',
           ],
-          matches: '[id="com.youdao.dict:id/btn_never"][text*="不再提醒"]',
+          matches: '[vid="btn_never"][text*="不再提醒"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13540941',
             'https://i.gkd.li/i/14256301',
@@ -158,8 +158,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.activity.MainActivity',
-          matches:
-            '[id="com.youdao.dict:id/tv_version"] + [id="com.youdao.dict:id/iv_close"]',
+          matches: '[vid="tv_version"] + [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13627912',
         },
       ],
@@ -167,8 +166,7 @@ export default defineGkdApp({
     {
       key: 7,
       name: '功能类-点击显示释义',
-      activityIds:
-        'com.youdao.dict_flutter_android_bridge.WordBookFlutterActivity',
+      activityIds: '_flutter_android_bridge.WordBookFlutterActivity',
       rules: [
         {
           matches: '[desc="点击显示释义"] > View[index=3][visibleToUser=true]',
@@ -219,8 +217,8 @@ export default defineGkdApp({
             top: 'width * -1.0673',
           },
           activityIds: [
-            'com.youdao.dict.activity.DictQueryActivity',
-            'com.youdao.dict.activity.MainActivity',
+            '.activity.DictQueryActivity',
+            '.activity.MainActivity',
           ],
           matches: '[text="已收藏单词一周，快去复习吧"]',
           exampleUrls:
@@ -239,7 +237,7 @@ export default defineGkdApp({
       fastQuery: true,
       actionMaximum: 1,
       resetMatch: 'app',
-      activityIds: 'com.youdao.dict.activity.MainActivity',
+      activityIds: '.activity.MainActivity',
       rules: [
         {
           key: 0,

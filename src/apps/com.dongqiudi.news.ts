@@ -62,26 +62,25 @@ export default defineGkdApp({
       key: 4,
       name: '分段广告-首页信息流广告',
       desc: '点击卡片广告x关闭按钮-关闭反馈理由弹窗',
-      activityIds: 'com.dongqiudi.news.MainActivity',
+      activityIds: '.MainActivity',
       fastQuery: true,
       rules: [
         {
           preKeys: [1, 2],
           name: '首页信息流广告-反馈理由',
-          matches:
-            'TextView[text="诱导点击"][id="com.dongqiudi.news:id/text_item"]',
+          matches: 'TextView[text="诱导点击"][vid="text_item"]',
           snapshotUrls: 'https://i.gkd.li/i/12620656',
         },
         {
           key: 1,
           matches:
-            'TextView[id="com.dongqiudi.news:id/ads_label"] +(n) ImageView[id="com.dongqiudi.news:id/feedback_close"]',
+            'TextView[vid="ads_label"] +(n) ImageView[vid="feedback_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12620654',
         },
         {
           key: 2,
           matches:
-            'TextView[id="com.dongqiudi.news:id/ads_title"] +(2) RelativeLayout > ImageView[id="com.dongqiudi.news:id/feedback_close"]',
+            'TextView[vid="ads_title"] +(2) RelativeLayout > ImageView[vid="feedback_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12620788',
         },
       ],
@@ -97,8 +96,8 @@ export default defineGkdApp({
           matchTime: 10000,
           actionMaximum: 1,
           resetMatch: 'app',
-          activityIds: 'com.dongqiudi.news.MainActivity',
-          matches: '[id="com.dongqiudi.news:id/iv_close"]',
+          activityIds: '.MainActivity',
+          matches: '[vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13260467',
         },
         {
@@ -117,7 +116,7 @@ export default defineGkdApp({
       name: '全屏广告-数据页弹窗广告',
       actionMaximum: 1,
       resetMatch: 'app',
-      activityIds: 'com.dongqiudi.news.MainActivity',
+      activityIds: '.MainActivity',
       rules: [
         {
           key: 1,

@@ -11,7 +11,7 @@ export default defineGkdApp({
       fastQuery: true,
       actionMaximum: 1,
       resetMatch: 'app',
-      activityIds: 'com.baseus.intelligent.view.home.MainActivity',
+      activityIds: '.view.home.MainActivity',
       rules: [
         {
           key: 0,

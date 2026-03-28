@@ -43,7 +43,7 @@ export default defineGkdApp({
           fastQuery: true,
           activityIds: 'com.sup.android.base.MainActivity',
           matches:
-            '@ImageView[clickable=true][visibleToUser=true][childCount=0] < RelativeLayout[childCount=2] < FrameLayout - [id="com.sup.android.superb:id/tab_container"]',
+            '@ImageView[clickable=true][visibleToUser=true][childCount=0] < RelativeLayout[childCount=2] < FrameLayout - [vid="tab_container"]',
           snapshotUrls: 'https://i.gkd.li/i/13624220',
         },
       ],

@@ -13,7 +13,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.attempt.afusekt.MainActivity',
+          activityIds: '.MainActivity',
           matches: '[text="下次一定"]',
           exampleUrls: 'https://e.gkd.li/7c513592-123b-4dde-92cd-54fad5d14dee',
           snapshotUrls: 'https://i.gkd.li/i/16938883',

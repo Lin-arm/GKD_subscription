@@ -10,8 +10,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.youloft.icloser.view.dialog.VipRetainPacketDialog',
-          matches: '[id="com.youloft.icloser:id/tv_later_buy"]',
+          activityIds: '.view.dialog.VipRetainPacketDialog',
+          matches: '[vid="tv_later_buy"]',
           snapshotUrls: 'https://i.gkd.li/i/13067183',
         },
       ],
@@ -22,8 +22,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.youloft.icloser.activity.MainActivity',
-          matches: '[id="com.youloft.icloser:id/iv_close"]',
+          activityIds: '.activity.MainActivity',
+          matches: '[vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13164387',
         },
       ],

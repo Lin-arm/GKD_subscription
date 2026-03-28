@@ -10,7 +10,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.tencent.qqmusiccar.app.activity.AppStarterActivity',
+          activityIds: '.app.activity.AppStarterActivity',
           matches: [
             '[text$="版本升级"]',
             '[vid="dialog_button_close"][clickable=true]',

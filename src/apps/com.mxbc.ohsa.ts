@@ -13,7 +13,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.mxbc.ohsa.modules.main.MainAbilityShellActivity',
+          activityIds: '.modules.main.MainAbilityShellActivity',
           matches:
             '@UIComponent[id="Id_close"] <2 UIComponentContainer < UIComponentContainer < UIComponentContainer < [id="android:id/content"]',
           snapshotUrls: 'https://i.gkd.li/i/13728113',

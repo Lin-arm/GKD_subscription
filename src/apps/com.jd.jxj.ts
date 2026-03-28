@@ -14,7 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.jd.jxj.modules.main.SlidingTabActivity',
+          activityIds: '.modules.main.SlidingTabActivity',
           matches: '[vid="popup_close_imgid"]',
           exampleUrls:
             'https://m.gkd.li/57941037/ac5a04ef-3199-4ae5-8863-ea365b5efbab',

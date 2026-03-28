@@ -14,7 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          matches: '[id="com.shaoniandream:id/countdown"]',
+          matches: '[vid="countdown"]',
           exampleUrls: 'https://e.gkd.li/080e7f84-c8ac-48b3-ba82-c1dbb795f4f6',
           snapshotUrls: 'https://i.gkd.li/i/13236791',
         },

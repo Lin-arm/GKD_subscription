@@ -13,9 +13,9 @@ export default defineGkdApp({
         {
           key: 0,
           activityIds: [
-            'com.sfexpress.sfim.scan.view.SfScanActivity',
-            'com.sfexpress.sfim.microservice.commonservice.ui.MicroAppContainerActivity',
-            'com.sfexpress.sfim.sdkuikit.widget.dialog.NoticeDialog',
+            '.scan.view.SfScanActivity',
+            '.microservice.commonservice.ui.MicroAppContainerActivity',
+            '.sdkuikit.widget.dialog.NoticeDialog',
           ],
           matches: '@[visibleToUser=true][text="登录"] <<n [vid="flContainer"]',
           snapshotUrls: [
@@ -27,8 +27,7 @@ export default defineGkdApp({
         },
         {
           key: 1,
-          activityIds:
-            'com.sfexpress.sfim.middleplatform.ui.SFMiddlePlatformLoginActivity',
+          activityIds: '.middleplatform.ui.SFMiddlePlatformLoginActivity',
           matches: '[text="登录"]',
           snapshotUrls: 'https://i.gkd.li/i/14830682',
         },

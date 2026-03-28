@@ -16,8 +16,7 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          matches:
-            '[text*="跳过"][text.length<=10][!(id="com.netease.mobimail:id/ad_skip")]',
+          matches: '[text*="跳过"][text.length<=10][!(vid="ad_skip")]',
           snapshotUrls: [
             'https://i.gkd.li/i/12686132',
             'https://i.gkd.li/i/13328441',
@@ -36,7 +35,7 @@ export default defineGkdApp({
         {
           key: 2,
           fastQuery: true,
-          matches: '[id="com.netease.mobimail:id/ad_skip"][clickable=true]',
+          matches: '[vid="ad_skip"][clickable=true]',
           snapshotUrls: [
             'https://i.gkd.li/i/12667519',
             'https://i.gkd.li/i/13328425', // 限定 [clickable=true] 防止误触假的跳过按钮
@@ -50,8 +49,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.netease.mail.biz.main.MainITabActivity',
-          matches:
-            '[id="com.netease.mobimail:id/ad_vip" || id="com.netease.mobimail:id/ll_delete"]',
+          matches: '[vid="ad_vip" || vid="ll_delete"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12683488',
             'https://i.gkd.li/i/12683511',

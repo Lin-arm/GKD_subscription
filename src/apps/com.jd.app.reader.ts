@@ -38,7 +38,7 @@ export default defineGkdApp({
             left: 'width * 0.9007',
             top: 'width * 0.1603',
           },
-          matches: '[id="com.jd.app.reader:id/animation_view"]',
+          matches: '[vid="animation_view"]',
           exampleUrls:
             'https://m.gkd.li/57941037/ab677b66-4681-4672-a1d6-3b5938e7f374',
           snapshotUrls: 'https://i.gkd.li/i/13264389',

@@ -14,7 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.xtc.widget.phone.popup.activity.CustomActivity',
-          matches: '[id="com.okii.watch.global:id/iv_close"]',
+          matches: '[vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13630943',
         },
       ],
@@ -29,7 +29,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.xtc.widget.phone.popup.activity.CustomActivity13',
-          matches: '[id="com.okii.watch.global:id/photo_sensitive_close"]',
+          matches: '[vid="photo_sensitive_close"]',
           exampleUrls:
             'https://m.gkd.li/57941037/8a5030a1-2b24-4a8a-a944-29d0eaabf936',
           snapshotUrls: 'https://i.gkd.li/i/13630944',

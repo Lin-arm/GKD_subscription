@@ -15,7 +15,7 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: '.home.page.MainActivity',
-          matches: '[id="com.ctm:id/iv_close"]',
+          matches: '[vid="iv_close"]',
           exampleUrls: 'https://e.gkd.li/fbaa53c3-109d-47b3-b85c-373d93e420d9',
           snapshotUrls: 'https://i.gkd.li/i/13350575',
         },
@@ -27,9 +27,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.ctm.home.page.MainActivity',
-          matches:
-            '[id="com.ctm:id/iv_bottom_adv"] + [id="com.ctm:id/btn_close"]',
+          activityIds: '.home.page.MainActivity',
+          matches: '[vid="iv_bottom_adv"] + [vid="btn_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13350612',
         },
       ],

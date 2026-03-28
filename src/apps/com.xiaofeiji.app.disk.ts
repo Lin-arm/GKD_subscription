@@ -11,7 +11,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: 'com.xiaofeiji.app.disk.MainActivity',
+          activityIds: '.MainActivity',
           matches: '@Image[visibleToUser=true] < View + View >2 [text="广告"]',
           snapshotUrls: 'https://i.gkd.li/i/13857392',
         },
@@ -19,7 +19,7 @@ export default defineGkdApp({
           preKeys: [0],
           key: 1,
           fastQuery: true,
-          activityIds: 'com.xiaofeiji.app.disk.MainActivity',
+          activityIds: '.MainActivity',
           matches: '@[clickable=true] > [text="不感兴趣"]',
           snapshotUrls: 'https://i.gkd.li/i/13857537',
         },

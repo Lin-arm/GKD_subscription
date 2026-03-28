@@ -13,11 +13,10 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: [
-            'com.huatu.handheld_huatu.view.MainPopDialog',
-            'com.huatu.handheld_huatu.business.main.MainTabActivity',
+            '.view.MainPopDialog',
+            '.business.main.MainTabActivity',
           ],
-          matches:
-            '[id="com.huatu.handheld_huatu:id/main_img_adv_bg"] + [id="com.huatu.handheld_huatu:id/main_img_close"]',
+          matches: '[vid="main_img_adv_bg"] + [vid="main_img_close"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12715702',
             'https://i.gkd.li/i/12744973',

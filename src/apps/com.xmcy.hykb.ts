@@ -15,7 +15,7 @@ export default defineGkdApp({
         {
           activityIds: '.app.dialog.UpdateDialog',
           matches:
-            '@[id="com.xmcy.hykb:id/iv_inner_button_close"] - RelativeLayout >n [id="com.xmcy.hykb:id/text_update_tip"]',
+            '@[vid="iv_inner_button_close"] - RelativeLayout >n [vid="text_update_tip"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12870604',
             'https://i.gkd.li/i/13297450',
@@ -32,8 +32,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.xmcy.hykb.app.ui.main.MainActivity',
-          matches: '[id="com.xmcy.hykb:id/dialog_home_notice_image_close"]',
+          activityIds: '.app.ui.main.MainActivity',
+          matches: '[vid="dialog_home_notice_image_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13259427',
         },
       ],

@@ -12,11 +12,10 @@ export default defineGkdApp({
         {
           key: 1,
           name: '好券即将过期弹窗',
-          activityIds:
-            'cn.yonghui.hyd.coupon.couponfactory.CouponFactoryActivity',
+          activityIds: '.coupon.couponfactory.CouponFactoryActivity',
           matches: [
-            '[id="cn.yonghui.hyd:id/advance" || id="cn.yonghui.hyd:id/couponsWillGoneHeaderIv"]',
-            '[id="cn.yonghui.hyd:id/close"]',
+            '[vid="advance" || vid="couponsWillGoneHeaderIv"]',
+            '[vid="close"]',
           ],
           snapshotUrls: [
             'https://i.gkd.li/i/13414401',

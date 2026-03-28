@@ -34,8 +34,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.sinovatech.unicom.basic.ui.activity.MainActivity',
-          matches:
-            '[id="com.sinovatech.unicom.ui:id/custom_dialog_cancel_button"]',
+          matches: '[vid="custom_dialog_cancel_button"]',
           snapshotUrls: 'https://i.gkd.li/i/13511386',
         },
       ],

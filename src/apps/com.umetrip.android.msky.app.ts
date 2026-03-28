@@ -12,8 +12,7 @@ export default defineGkdApp({
           fastQuery: true,
           activityIds:
             'com.umetrip.android.msky.homepage.activity.UmeHomeActivity',
-          matches:
-            '[id="com.umetrip.android.msky.app:id/imageView"] + [id="com.umetrip.android.msky.app:id/iv_cancel"]',
+          matches: '[vid="imageView"] + [vid="iv_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/12750185',
         },
       ],
@@ -26,8 +25,7 @@ export default defineGkdApp({
           fastQuery: true,
           activityIds:
             'com.umetrip.android.msky.homepage.activity.UmeHomeActivity',
-          matches:
-            '@[id="com.umetrip.android.msky.app:id/iv_close_envelope"] + [id="com.umetrip.android.msky.app:id/media_view_envelope"]',
+          matches: '@[vid="iv_close_envelope"] + [vid="media_view_envelope"]',
           snapshotUrls: 'https://i.gkd.li/i/12783264',
         },
       ],

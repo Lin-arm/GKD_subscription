@@ -11,7 +11,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.doc360.client.activity.ReadRoomActivity',
+          activityIds: '.activity.ReadRoomActivity',
           matches:
             '@View[clickable=true] < FrameLayout[desc^="dislike"] -2 FrameLayout >2 [text="广告"]',
           snapshotUrls: 'https://i.gkd.li/i/13485051',

@@ -12,12 +12,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: [
-            'com.moutai.mall.MainActivity',
-            'com.moutai.mall.module.splash.SplashActivity',
-          ],
-          matches:
-            '[id="com.moutai.mall:id/ivPic"] + ViewGroup + [id="com.moutai.mall:id/vClose"]',
+          activityIds: ['.MainActivity', '.module.splash.SplashActivity'],
+          matches: '[vid="ivPic"] + ViewGroup + [vid="vClose"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12745130',
             'https://i.gkd.li/i/12745153',
@@ -34,8 +30,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.MainActivity',
-          matches:
-            '@[id="com.moutai.mall:id/vClose"] - LinearLayout > [text*="开通消息通知"]',
+          matches: '@[vid="vClose"] - LinearLayout > [text*="开通消息通知"]',
           snapshotUrls: 'https://i.gkd.li/i/12745142',
         },
       ],

@@ -33,8 +33,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.xiaomi.market.ui.UpdateListActivity',
-          matches: '[id="com.xiaomi.market:id/iv_close_tip"]',
+          activityIds: '.ui.UpdateListActivity',
+          matches: '[vid="iv_close_tip"]',
           snapshotUrls: 'https://i.gkd.li/i/13197334',
         },
       ],
@@ -44,7 +44,7 @@ export default defineGkdApp({
       name: '功能类-忽略升级',
       desc: '应用升级界面-自动点击忽略',
       fastQuery: true,
-      activityIds: 'com.xiaomi.market.ui.UpdateListActivity',
+      activityIds: '.ui.UpdateListActivity',
       rules: [
         {
           key: 1,
@@ -98,8 +98,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.xiaomi.market.business_ui.main.MarketTabActivity',
-          matches: '[id="com.xiaomi.market:id/close_float_recommend"]',
+          activityIds: '.business_ui.main.MarketTabActivity',
+          matches: '[vid="close_float_recommend"]',
           snapshotUrls: 'https://i.gkd.li/i/13624971',
         },
       ],
@@ -112,10 +112,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: [
-            'com.xiaomi.market.ui.UpdateListActivity',
-            '.ui.UpdateAppsActivity',
-          ],
+          activityIds: ['.ui.UpdateListActivity', '.ui.UpdateAppsActivity'],
           matches:
             '@[clickable=true] > [text^="查看全部升级" || text^="查看全部更新"]',
           exampleUrls: [
@@ -135,7 +132,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.xiaomi.market.ui.UpdateListActivity',
+          activityIds: '.ui.UpdateListActivity',
           matches:
             '@[text="继续"] <n * - * >4 [text^="您在使用数据网络，升级应用可能产生流量费用"]',
           snapshotUrls: 'https://i.gkd.li/i/22927652',

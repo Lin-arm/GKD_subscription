@@ -15,7 +15,7 @@ export default defineGkdApp({
           key: 1,
           fastQuery: true,
           activityIds: '.MainActivity',
-          matches: '[id="com.wm.dmall:id/advert_close"]',
+          matches: '[vid="advert_close"]',
           exampleUrls: 'https://e.gkd.li/60b65af4-7efa-4e82-b294-d96d5b426953',
           snapshotUrls: 'https://i.gkd.li/i/13197627',
         },
@@ -23,8 +23,8 @@ export default defineGkdApp({
           key: 2,
           fastQuery: true,
           matches: [
-            '[id="com.wm.dmall:id/coupon_activity"][text="去使用"]',
-            '[id="com.wm.dmall:id/iv_close"]',
+            '[vid="coupon_activity"][text="去使用"]',
+            '[vid="iv_close"]',
           ],
           snapshotUrls: 'https://i.gkd.li/i/13331283',
         },
@@ -36,10 +36,10 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.wm.dmall.MainActivity',
+          activityIds: '.MainActivity',
           anyMatches: [
-            '@[id="com.wm.dmall:id/iv_close"] + [id="com.wm.dmall:id/view_float"]',
-            '[id="com.wm.dmall:id/close_iV"]',
+            '@[vid="iv_close"] + [vid="view_float"]',
+            '[vid="close_iV"]',
           ],
           snapshotUrls: 'https://i.gkd.li/i/13197634',
           excludeSnapshotUrls: 'https://i.gkd.li/i/13246242',
@@ -56,10 +56,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.MainActivity',
-          matches: [
-            '[id="com.wm.dmall:id/update_confirm_btn"]',
-            '[id="com.wm.dmall:id/close_btn"]',
-          ],
+          matches: ['[vid="update_confirm_btn"]', '[vid="close_btn"]'],
           snapshotUrls: 'https://i.gkd.li/i/13234668',
         },
       ],

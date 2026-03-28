@@ -31,11 +31,11 @@ export default defineGkdApp({
           actionMaximum: 1,
           resetMatch: 'app',
           activityIds: [
-            'com.chinamobile.mcloud.client.ui.MenuActivity',
-            'com.chinamobile.mcloud.client.ui.CustomScanActivity',
+            '.client.ui.MenuActivity',
+            '.client.ui.CustomScanActivity',
             'com.mcloud.login.ui.ConfirmLoginTvActivity',
           ],
-          matches: '[id="com.chinamobile.mcloud:id/iv_close"]',
+          matches: '[vid="iv_close"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13627826',
             'https://i.gkd.li/i/14549523',
@@ -45,7 +45,7 @@ export default defineGkdApp({
         {
           key: 1,
           fastQuery: true,
-          activityIds: 'com.chinamobile.mcloud.client.ui.MenuActivity',
+          activityIds: '.client.ui.MenuActivity',
           matches:
             '@Image[clickable=true] < View -3 [text="马上领取"] < View < View < View < WebView < WebView < FrameLayout < [id="android:id/content"]',
           snapshotUrls: 'https://i.gkd.li/i/13627832',
@@ -61,9 +61,8 @@ export default defineGkdApp({
           fastQuery: true,
           actionMaximum: 1,
           resetMatch: 'app',
-          activityIds: 'com.chinamobile.mcloud.client.ui.MenuActivity',
-          matches:
-            '[id="com.chinamobile.mcloud:id/iv_logo"] + [id="com.chinamobile.mcloud:id/iv_close"]',
+          activityIds: '.client.ui.MenuActivity',
+          matches: '[vid="iv_logo"] + [vid="iv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13627834',
         },
       ],

@@ -13,8 +13,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          matches:
-            '@[text="取消"] < [id="com.coloros.phonemanager:id/buttonPanel"] > [text="更新"]',
+          matches: '@[text="取消"] < [vid="buttonPanel"] > [text="更新"]',
           snapshotUrls: 'https://i.gkd.li/i/13194979',
         },
       ],
@@ -26,7 +25,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.coloros.phonemanager.clear.ClearMainActivity',
+          activityIds: '.clear.ClearMainActivity',
           matches: '[vid="ad_close"][clickable=true]',
           exampleUrls:
             'https://m.gkd.li/57941037/4d8b27a4-f129-479e-871b-bc6f664072ae',

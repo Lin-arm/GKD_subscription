@@ -14,7 +14,7 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds: 'com.yfoo.listenx.activity.HomeActivity',
+          activityIds: 'x.activity.HomeActivity',
           matches: '@[text="取消"] < * > [text="下载"]',
           snapshotUrls: 'https://i.gkd.li/i/15856014',
         },

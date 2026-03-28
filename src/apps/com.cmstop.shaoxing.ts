@@ -14,7 +14,7 @@ export default defineGkdApp({
       priorityTime: 10000,
       rules: [
         {
-          matches: '[id="com.cmstop.shaoxing:id/roundProgressBar"]',
+          matches: '[vid="roundProgressBar"]',
           snapshotUrls: 'https://i.gkd.li/i/13611775',
         },
       ],

@@ -14,7 +14,7 @@ export default defineGkdApp({
       priorityTime: 10000,
       rules: [
         {
-          matches: '[id="com.kkeji.news.client:id/tv_counter"]',
+          matches: '[vid="tv_counter"]',
           snapshotUrls: 'https://i.gkd.li/i/13197536',
         },
       ],

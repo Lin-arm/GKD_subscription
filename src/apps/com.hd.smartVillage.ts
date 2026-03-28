@@ -17,8 +17,7 @@ export default defineGkdApp({
             '.modules.main.MainActivity',
             '.modules.h5service.H5WebActivity',
           ],
-          matches:
-            'View[id="com.hd.smartVillage:id/notificationSettingCloseBtn"]',
+          matches: 'View[vid="notificationSettingCloseBtn"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13223669',
             'https://i.gkd.li/i/13293000',
@@ -36,7 +35,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.modules.main.MainActivity',
-          matches: 'TextView[id="com.hd.smartVillage:id/tv_upgrade_cancel"]',
+          matches: 'TextView[vid="tv_upgrade_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/13223642',
         },
       ],

@@ -14,7 +14,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.apkpure.aegon.main.activity.MainTabActivity',
+          activityIds: '.main.activity.MainTabActivity',
           matches:
             '@RelativeLayout[clickable=true][visibleToUser=true] - [text="精选必备好应用"] <2 RelativeLayout < LinearLayout < [id="android:id/content"]',
           snapshotUrls: 'https://i.gkd.li/i/13466647',
@@ -28,10 +28,10 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: [
-            'com.apkpure.aegon.main.activity.MainTabActivity',
-            'com.apkpure.aegon.main.activity.AppManagerActivity',
-            'com.apkpure.aegon.cms.activity.CommonActivity',
-            'com.apkpure.aegon.main.activity.AppMoreActivity',
+            '.main.activity.MainTabActivity',
+            '.main.activity.AppManagerActivity',
+            '.cms.activity.CommonActivity',
+            '.main.activity.AppMoreActivity',
           ],
           matches:
             '@ViewGroup[clickable=true] > [text="查看更多"][visibleToUser=true]',
@@ -43,10 +43,10 @@ export default defineGkdApp({
       key: 3,
       name: '分段广告-更新界面软件推荐',
       activityIds: [
-        'com.apkpure.aegon.main.activity.MainTabActivity',
-        'com.apkpure.aegon.main.activity.AppManagerActivity',
-        'com.apkpure.aegon.cms.activity.CommonActivity',
-        'com.apkpure.aegon.main.activity.AppMoreActivity',
+        '.main.activity.MainTabActivity',
+        '.main.activity.AppManagerActivity',
+        '.cms.activity.CommonActivity',
+        '.main.activity.AppMoreActivity',
       ],
       fastQuery: true,
       rules: [
@@ -75,8 +75,8 @@ export default defineGkdApp({
       desc: '下次添加',
       rules: [
         {
-          activityIds: 'com.apkpure.aegon.main.activity.MainTabActivity',
-          matches: '[id="com.apkpure.aegon:id/arg"][text="下次添加"]',
+          activityIds: '.main.activity.MainTabActivity',
+          matches: '[vid="arg"][text="下次添加"]',
           snapshotUrls: 'https://i.gkd.li/i/13416401',
         },
       ],

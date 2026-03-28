@@ -14,8 +14,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'cn.yujian.MainActivity',
-          matches:
-            'TextView[id="com.yujian.ResideMenuDemo:id/btn_selectOther"]',
+          matches: 'TextView[vid="btn_selectOther"]',
           snapshotUrls: 'https://i.gkd.li/i/13224234',
         },
       ],

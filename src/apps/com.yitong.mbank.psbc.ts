@@ -17,7 +17,7 @@ export default defineGkdApp({
             '.module.home.view.activity.MainActivity',
             '.module.app.view.customview.dialog.DialogUpdateApk',
           ],
-          matches: 'Button[id="com.yitong.mbank.psbc:id/bt_cancel"]',
+          matches: 'Button[vid="bt_cancel"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12685350',
             'https://i.gkd.li/i/13695462',
@@ -34,10 +34,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds:
-            'com.yitong.mbank.psbc.module.home.view.activity.MainActivity',
-          matches:
-            '[id="com.yitong.mbank.psbc:id/iv_theme"] + [id="com.yitong.mbank.psbc:id/iv_theme_close_btn"]',
+          activityIds: '.module.home.view.activity.MainActivity',
+          matches: '[vid="iv_theme"] + [vid="iv_theme_close_btn"]',
           snapshotUrls: 'https://i.gkd.li/i/12755516',
         },
       ],
@@ -51,9 +49,8 @@ export default defineGkdApp({
           matchTime: 10000,
           actionMaximum: 1,
           resetMatch: 'app',
-          activityIds:
-            'com.yitong.mbank.psbc.module.home.view.activity.MainActivity',
-          matches: '[id="com.yitong.mbank.psbc:id/img_close_float_window"]',
+          activityIds: '.module.home.view.activity.MainActivity',
+          matches: '[vid="img_close_float_window"]',
           snapshotUrls: 'https://i.gkd.li/i/13797314',
         },
       ],

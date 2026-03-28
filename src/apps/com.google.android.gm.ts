@@ -36,7 +36,7 @@ export default defineGkdApp({
           key: 3,
           name: '③点击[继续]',
           matches:
-            '@Button[clickable=true][text="继续" || text="Continue"] <<n [id="com.google.android.gm:id/my_ad_center_dialog"]',
+            '@Button[clickable=true][text="继续" || text="Continue"] <<n [vid="my_ad_center_dialog"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13255701', // 继续
             'https://i.gkd.li/i/13724287', // Continue

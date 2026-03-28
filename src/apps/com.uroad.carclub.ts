@@ -11,7 +11,7 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds: 'com.uroad.carclub.main.activity.MainActivity',
+          activityIds: '.main.activity.MainActivity',
           matches:
             'View[childCount=4] > @TextView[index=2][clickable=true] <<n [vid="ad_container_fl"]',
           snapshotUrls: 'https://i.gkd.li/i/13800067',

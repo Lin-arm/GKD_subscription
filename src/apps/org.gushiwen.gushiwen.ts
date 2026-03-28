@@ -27,7 +27,7 @@ export default defineGkdApp({
         {
           key: 2,
           actionDelay: 500,
-          activityIds: 'org.gushiwen.gushiwen.HomeActivity',
+          activityIds: '.HomeActivity',
           matches:
             '@FrameLayout  +2 FrameLayout > LinearLayout > LinearLayout > [text^="摇动"]',
           snapshotUrls: ['https://i.gkd.li/i/13266879'],
@@ -74,7 +74,7 @@ export default defineGkdApp({
             'local.z.androidshared.vip.RewardActivity',
             'local.z.androidshared.pay.RewardActivity',
           ],
-          matches: '[id="org.gushiwen.gushiwen:id/btn_back"]',
+          matches: '[vid="btn_back"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12813638',
             'https://i.gkd.li/i/13111042',
@@ -88,7 +88,7 @@ export default defineGkdApp({
             'local.z.androidshared.vip.member.VipActivity',
             'local.z.androidshared.pay.vip.VipActivity',
           ],
-          matches: '[id="org.gushiwen.gushiwen:id/backBtn"]',
+          matches: '[vid="backBtn"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12837229',
             'https://i.gkd.li/i/13111057',

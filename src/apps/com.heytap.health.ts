@@ -13,7 +13,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.heytap.health.settings.me.upgrade.UpgradeActivity',
+          activityIds: '.settings.me.upgrade.UpgradeActivity',
           matches: [
             '[text="检测到新版本"][visibleToUser=true]',
             '[text="以后再说"][visibleToUser=true]',
@@ -28,7 +28,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.heytap.health.main.MainActivity',
+          activityIds: '.main.MainActivity',
           matches:
             '[vid="adapter_act_root_view"] > [vid="close"][clickable=true][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/22657359',
@@ -67,7 +67,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.heytap.health.main.MainActivity',
+          activityIds: '.main.MainActivity',
           matches: '[text^="开启微信运动同步"] + [text="忽略"]',
           exampleUrls: 'https://e.gkd.li/867170d7-5c10-48fc-8bda-9139235ef718',
           snapshotUrls: 'https://i.gkd.li/i/23087769',

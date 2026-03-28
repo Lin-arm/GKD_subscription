@@ -77,14 +77,14 @@ export default defineGkdApp({
         },
         {
           key: 3,
-          activityIds: 'com.tencent.mobileqq.activity.SplashActivity',
+          activityIds: '.activity.SplashActivity',
           matches:
             '@ImageView[desc="关闭"][clickable=true] <n RelativeLayout - RelativeLayout >3 ImageView[desc="快捷入口"]',
           snapshotUrls: 'https://i.gkd.li/i/24230528',
         },
         {
           key: 4,
-          activityIds: 'com.tencent.mobileqq.activity.SplashActivity',
+          activityIds: '.activity.SplashActivity',
           matches:
             '@ImageView[width<100 && height<100][clickable=true] - TextView[text!=null] <n * + * >3 ImageView[desc="快捷入口"]',
           snapshotUrls: 'https://i.gkd.li/i/25235782',

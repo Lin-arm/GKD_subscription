@@ -10,8 +10,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.xtuone.android.friday.MainFragmentActivity',
-          matches:
-            '[id="com.xtuone.android.syllabus:id/treehole_banner_close"]',
+          matches: '[vid="treehole_banner_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12840733',
         },
       ],
@@ -22,7 +21,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.xtuone.android.friday.MainFragmentActivity',
-          matches: '[id="com.xtuone.android.syllabus:id/imgv_close"]',
+          matches: '[vid="imgv_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12999642',
         },
       ],
@@ -37,7 +36,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'com.xtuone.android.friday.MainFragmentActivity',
-          matches: '[id="com.xtuone.android.syllabus:id/dialog_ad_close"]',
+          matches: '[vid="dialog_ad_close"]',
           snapshotUrls: 'https://i.gkd.li/i/13166501',
         },
       ],

@@ -7,10 +7,7 @@ export default defineGkdApp({
     {
       key: 3,
       name: '局部广告-交友页面底部广告',
-      activityIds: [
-        'com.maxhom.weibu.tool.home.activity.NewMainActivity',
-        'com.maxhom.weibu.WelcomeActivity',
-      ],
+      activityIds: ['.tool.home.activity.NewMainActivity', '.WelcomeActivity'],
       rules: [
         {
           key: 0,
@@ -20,7 +17,7 @@ export default defineGkdApp({
             '.WelcomeActivity',
           ],
           matches: [
-            '@ImageView[childCount=0][visibleToUser=true] < FrameLayout[childCount=1] <3 FrameLayout < FrameLayout < FrameLayout < FrameLayout < FrameLayout < FrameLayout < FrameLayout < [id="com.maxhom.weibu:id/flAd"][visibleToUser=true]',
+            '@ImageView[childCount=0][visibleToUser=true] < FrameLayout[childCount=1] <3 FrameLayout < FrameLayout < FrameLayout < FrameLayout < FrameLayout < FrameLayout < FrameLayout < [vid="flAd"][visibleToUser=true]',
           ],
           snapshotUrls: [
             'https://i.gkd.li/i/13377607',
@@ -32,7 +29,7 @@ export default defineGkdApp({
           key: 2,
           fastQuery: true,
           activityIds: '.tool.home.activity.NewMainActivity',
-          matches: '[id="com.maxhom.weibu:id/anythink_myoffer_banner_close"]',
+          matches: '[vid="anythink_myoffer_banner_close"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13702305',
             'https://i.gkd.li/i/13702339',
@@ -52,7 +49,7 @@ export default defineGkdApp({
             '.tool.home.activity.ToolBottleActivity',
             '.tool.home.activity.NewMainActivity',
           ],
-          matches: '[id="com.maxhom.weibu:id/ivClose"]',
+          matches: '[vid="ivClose"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13377649',
             'https://i.gkd.li/i/13457015',
@@ -78,9 +75,9 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: [
-            'com.maxhom.weibu.tool.home.activity.ToolBottleActivity',
-            'com.maxhom.weibu.tool.msg.MyBottleActivity',
-            'com.maxhom.weibu.tool.home.activity.NewMainActivity',
+            '.tool.home.activity.ToolBottleActivity',
+            '.tool.msg.MyBottleActivity',
+            '.tool.home.activity.NewMainActivity',
           ],
           matches: '[text="去设置"] + [text="取消"]',
           snapshotUrls: [

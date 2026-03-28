@@ -14,7 +14,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: 'com.heytap.cloud.home.ui.CloudSettingsActivity2',
+          activityIds: '.home.ui.CloudSettingsActivity2',
           matches: ['[text="检测到新版本"]', '[vid="cancel"]'],
           snapshotUrls: 'https://i.gkd.li/i/16097208',
         },

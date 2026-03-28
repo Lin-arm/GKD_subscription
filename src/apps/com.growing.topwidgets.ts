@@ -9,7 +9,7 @@ export default defineGkdApp({
       name: '局部广告-卡片广告',
       desc: '点击关闭',
       fastQuery: true,
-      activityIds: 'com.growing.topwidgets.home.MainActivity',
+      activityIds: '.home.MainActivity',
       rules: [
         {
           key: 0,

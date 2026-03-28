@@ -9,7 +9,7 @@ export default defineGkdApp({
       name: '分段广告-播放界面卡片广告',
       desc: '需点击二次弹窗关闭原因',
       activityIds: [
-        'com.vo.icea.MainActivity',
+        '.MainActivity',
         'com.bytedance.sdk.openadsdk.stub.activity.Stub_Standard_Portrait_Activity',
       ],
       rules: [

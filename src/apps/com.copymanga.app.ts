@@ -13,7 +13,7 @@ export default defineGkdApp({
           key: 0,
           name: '快手广告-1',
           fastQuery: true,
-          activityIds: 'com.copymanga.app.MainActivity',
+          activityIds: '.MainActivity',
           matches: [
             '[text="广告"]',
             '@ImageView[clickable=true] - [text="|"] - [text$="s"]',
@@ -24,10 +24,7 @@ export default defineGkdApp({
           key: 1,
           name: '快手广告-2',
           fastQuery: true,
-          activityIds: [
-            'com.copymanga.app.MainActivity',
-            'com.kwad.components.ad.interstitial',
-          ],
+          activityIds: ['.MainActivity', 'com.kwad.components.ad.interstitial'],
           matches:
             'ImageView[childCount=0][text=null] < @ViewGroup[childCount=1][clickable=true][visibleToUser=true] < ViewGroup +n ViewGroup[childCount=2] > [text="广告"]',
           snapshotUrls: [
@@ -40,7 +37,7 @@ export default defineGkdApp({
           key: 2,
           name: '快手广告-3',
           fastQuery: true,
-          activityIds: 'com.copymanga.app.MainActivity',
+          activityIds: '.MainActivity',
           matches: [
             'ViewGroup > [text="广告"]',
             '@ViewGroup[clickable=true] > [text="跳过"]',
@@ -51,7 +48,7 @@ export default defineGkdApp({
           key: 3,
           name: '腾讯广告-1',
           fastQuery: true,
-          activityIds: 'com.copymanga.app.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             '@ImageView[childCount=0][text=null][desc=null][id=null][visibleToUser=true][width<90 && height<90] < FrameLayout[childCount=1][text=null][desc=null][id=null][parent.childCount>3] <n FrameLayout >(2,3) [text^="立即" || text$="详情" || text^="了解" || text="去微信看看" || text$="应用" || text="进入小程序" || text="领取优惠" || text="跳转微信"]',
           snapshotUrls: [
@@ -75,9 +72,8 @@ export default defineGkdApp({
           key: 5,
           name: '腾讯广告-3',
           fastQuery: true,
-          activityIds: 'com.copymanga.app.MainActivity',
-          matches:
-            '[id="com.copymanga.app:id/interact_ad_root"] > [id="com.copymanga.app:id/iv_close"]',
+          activityIds: '.MainActivity',
+          matches: '[vid="interact_ad_root"] > [vid="iv_close"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13521801',
             'https://i.gkd.li/i/13332719',
@@ -139,24 +135,23 @@ export default defineGkdApp({
         {
           key: 0,
           name: '快手广告-1',
-          activityIds: 'com.copymanga.app.MainActivity',
+          activityIds: '.MainActivity',
           matches:
-            '[id^="com.copymanga.app:id/ad_flag_source"] - * > [id="com.copymanga.app:id/close"]',
+            '[id^="com.copymanga.app:id/ad_flag_source"] - * > [vid="close"]',
           snapshotUrls: 'https://i.gkd.li/i/12504525',
         },
         {
           key: 1,
           name: '快手广告-2',
-          activityIds: 'com.copymanga.app.MainActivity',
+          activityIds: '.MainActivity',
           fastQuery: true,
-          matches:
-            '[id="com.copymanga.app:id/close_m_image_left_text_right_no_compliance"]',
+          matches: '[vid="close_m_image_left_text_right_no_compliance"]',
           snapshotUrls: 'https://i.gkd.li/i/13761154',
         },
         {
           key: 2,
           name: '腾讯广告',
-          activityIds: 'com.copymanga.app.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             'FrameLayout[childCount=3] > LinearLayout + FrameLayout[childCount=1] > ImageView[id=null]',
           snapshotUrls: [
@@ -169,7 +164,7 @@ export default defineGkdApp({
     {
       key: 3,
       name: '全屏广告-关闭赞助提示',
-      activityIds: 'com.copymanga.app.MainActivity',
+      activityIds: '.MainActivity',
       rules: [
         {
           matches: '@[desc="就这样吧"] + [desc^="赞助免广告"]',

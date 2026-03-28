@@ -12,9 +12,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds:
-            'com.netease.yanxuan.module.mainpage.activity.MainPageActivity',
-          matches: '[id="com.netease.yanxuan:id/trans_cancel"]',
+          activityIds: '.module.mainpage.activity.MainPageActivity',
+          matches: '[vid="trans_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/12840641',
         },
       ],

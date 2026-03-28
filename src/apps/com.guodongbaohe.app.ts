@@ -14,8 +14,8 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.guodongbaohe.app.activity.AdvertisementTwoActivity',
-          matches: 'LinearLayout[id="com.guodongbaohe.app:id/close_dialog_lv"]',
+          activityIds: '.activity.AdvertisementTwoActivity',
+          matches: 'LinearLayout[vid="close_dialog_lv"]',
           snapshotUrls: 'https://i.gkd.li/i/13577877',
         },
       ],

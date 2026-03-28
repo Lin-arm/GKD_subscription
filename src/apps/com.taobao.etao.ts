@@ -14,8 +14,8 @@ export default defineGkdApp({
         {
           key: 0,
           activityIds: [
-            'com.taobao.etao.app.home.view.NewHomeActivity',
-            'com.taobao.etao.app.homev4.HomeV4Activity',
+            '.app.home.view.NewHomeActivity',
+            '.app.homev4.HomeV4Activity',
           ],
           matches:
             'LinearLayout[childCount=2] > @RelativeLayout[clickable=true][childCount=1] > ImageView[childCount=0]',
@@ -26,7 +26,7 @@ export default defineGkdApp({
         },
         {
           key: 1,
-          activityIds: 'com.taobao.etao.app.homev4.HomeV4Activity',
+          activityIds: '.app.homev4.HomeV4Activity',
           matches:
             '[text="一淘-首页红包升级-2312wf"] >5 View[childCount=3] > View[index=0][visibleToUser=true]',
           exampleUrls:

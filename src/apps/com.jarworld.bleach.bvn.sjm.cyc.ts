@@ -14,14 +14,14 @@ export default defineGkdApp({
         {
           key: 0,
           fastQuery: true,
-          activityIds: 'com.jarworld.bleach.bvn.sjm.cyc.MainActivity',
+          activityIds: '.MainActivity',
           matches: '[text*="跳过"][text.length<=10]',
           snapshotUrls: 'https://i.gkd.li/i/13626949',
         },
         {
           key: 1,
           fastQuery: true,
-          activityIds: 'com.jarworld.bleach.bvn.sjm.cyc.MainActivity',
+          activityIds: '.MainActivity',
           matches:
             'ImageView[childCount=0][text=null] < @ViewGroup[childCount=1][clickable=true][visibleToUser=true] < ViewGroup +n ViewGroup[childCount=2] > [text="广告"]',
           snapshotUrls: 'https://i.gkd.li/i/13626950',
@@ -31,7 +31,7 @@ export default defineGkdApp({
           fastQuery: true,
           activityIds: 'com.kwad.sdk.api.proxy.app.KsRewardVideoActivity',
           matches:
-            'ViewGroup[childCount=2] > ViewGroup[childCount=2] > @ViewGroup[clickable=true][childCount=1][visibleToUser=true] > ImageView[childCount=0] <<n [id="com.jarworld.bleach.bvn.sjm.cyc:id/ksad_js_reward_card"]',
+            'ViewGroup[childCount=2] > ViewGroup[childCount=2] > @ViewGroup[clickable=true][childCount=1][visibleToUser=true] > ImageView[childCount=0] <<n [vid="ksad_js_reward_card"]',
           snapshotUrls: 'https://i.gkd.li/i/13635410',
         },
       ],
