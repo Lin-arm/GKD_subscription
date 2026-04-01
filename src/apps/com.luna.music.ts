@@ -100,8 +100,8 @@ export default defineGkdApp({
     },
     {
       key: 8,
-      name: '功能类-自动看Ad领VIP⚠️二选一',
-      desc: '广告一直看下去直到手动干预退出_适合需要领多天vip的用户⚠️与单日规则互斥',
+      name: '功能类-自动看广告领VIP',
+      desc: '⚠️二选一,广告一直看下去直到手动干预退出,适合需要领多天vip的用户,与单日规则互斥',
       rules: [
         {
           key: 0,
@@ -130,7 +130,7 @@ export default defineGkdApp({
           snapshotUrls: 'https://i.gkd.li/i/24522627',
         },
         {
-          preKeys: [0, 1],
+          preKeys: [0, 1], // 轮询判断是否已领取
           fastQuery: true,
           actionDelay: 500,
           activityIds: [
@@ -219,8 +219,8 @@ export default defineGkdApp({
     },
     {
       key: 13,
-      name: '功能类-自动看Ad领VIP_单日⚠️二选一',
-      desc: '领到今天vip收手退出,适合只想领一天vip的用户⚠️与多日规则互斥',
+      name: '功能类-自动看广告领VIP_单日',
+      desc: '⚠️二选一,领到今天vip收手退出,适合只想领一天vip的用户,与多日规则互斥',
       rules: [
         {
           key: 0,
@@ -249,30 +249,22 @@ export default defineGkdApp({
           snapshotUrls: 'https://i.gkd.li/i/24522627',
         },
         {
-          preKeys: [0, 1],
+          preKeys: [0, 1], // 轮询判断是否已领取
           fastQuery: true,
           actionDelay: 500,
           activityIds: [
             'com.bytedance.sdk.openadsdk.core.component.reward.activity.TTRewardVideoActivity',
             'com.bytedance.sdk.openadsdk.stub.activity.Stub_Standard_Portrait_Activity',
+            'com.ss.android.excitingvideo.ExcitingVideoActivity',
           ],
           matches:
             '[text="领取奖励" || text^="再看一个" || text="继续观看"][visibleToUser=true]',
+          excludeMatches: '[text$="提前得"]', // 今日已领取
           snapshotUrls: [
             'https://i.gkd.li/i/15140816',
             'https://i.gkd.li/i/24521446',
           ],
-        },
-        {
-          key: 2, //今天vip领到了，收手
-          fastQuery: true,
-          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
-          matches:
-            '@[text="坚持退出"][visibleToUser=true][childCount=0] -(6,8) [text="明日免费听"][visibleToUser=true]',
-          snapshotUrls: [
-            'https://i.gkd.li/i/24521516',
-            'https://i.gkd.li/i/24521416',
-          ],
+          excludeSnapshotUrls: 'https://i.gkd.li/i/24522244',
         },
         {
           key: 99,
