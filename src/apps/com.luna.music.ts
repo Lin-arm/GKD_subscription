@@ -105,8 +105,9 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
+          name: '①x掉-坐标轮询点击',
           fastQuery: true,
-          actionDelay: 12000,
+          actionDelay: 10000,
           position: {
             left: 'width * 3.28',
             top: 'width * 0.2',
@@ -121,9 +122,11 @@ export default defineGkdApp({
             'https://i.gkd.li/i/26401058', // 设备2
             'https://i.gkd.li/i/26401097', // 设备3
           ],
+          exampleUrls: 'https://e.gkd.li/87c7201a-f413-4d82-9198-2dc9455c4f23',
         },
         {
           key: 1,
+          name: '①跳过',
           activityIds:
             'com.bytedance.sdk.openadsdk.core.component.reward.activity.TTRewardVideoActivity',
           matches: '[visibleToUser=true][text="奖励已领取"]',
@@ -131,6 +134,7 @@ export default defineGkdApp({
         },
         {
           preKeys: [0, 1], // 轮询判断是否已领取
+          name: '②没结束-继续轮询',
           fastQuery: true,
           actionDelay: 500,
           activityIds: [
@@ -146,6 +150,7 @@ export default defineGkdApp({
             'https://i.gkd.li/i/24521446',
             'https://i.gkd.li/i/24521516',
           ],
+          exampleUrls: 'https://e.gkd.li/3b2a0948-3b77-419b-8acf-2166e1cd445c',
         },
         {
           key: 99,
@@ -223,9 +228,10 @@ export default defineGkdApp({
       desc: '⚠️二选一,领到今天vip收手退出,适合只想领一天vip的用户,与多日规则互斥',
       rules: [
         {
+          name: '①x掉-坐标轮询点击',
           key: 0,
           fastQuery: true,
-          actionDelay: 12000,
+          actionDelay: 10000,
           position: {
             left: 'width * 3.28',
             top: 'width * 0.2',
@@ -238,10 +244,12 @@ export default defineGkdApp({
             'https://i.gkd.li/i/26401083', // 38s后？？？
             'https://i.gkd.li/i/24521423', // 设备1
             'https://i.gkd.li/i/26401058', // 设备2
-            'https://i.gkd.li/i/26401097', // 设备3
+            'https://i.gkd.li/i/26401097', // 设备3-领取成功
           ],
+          exampleUrls: 'https://e.gkd.li/87c7201a-f413-4d82-9198-2dc9455c4f23',
         },
         {
+          name: '①跳过',
           key: 1,
           activityIds:
             'com.bytedance.sdk.openadsdk.core.component.reward.activity.TTRewardVideoActivity',
@@ -249,6 +257,7 @@ export default defineGkdApp({
           snapshotUrls: 'https://i.gkd.li/i/24522627',
         },
         {
+          name: '②没结束-继续轮询',
           preKeys: [0, 1], // 轮询判断是否已领取
           fastQuery: true,
           actionDelay: 500,
@@ -259,12 +268,39 @@ export default defineGkdApp({
           ],
           matches:
             '[text="领取奖励" || text^="再看一个" || text="继续观看"][visibleToUser=true]',
-          excludeMatches: '[text$="提前得"]', // 今日已领取
+          excludeMatches: '[text$="提前得"]', // 今日已领取-排除
           snapshotUrls: [
             'https://i.gkd.li/i/15140816',
+            'https://i.gkd.li/i/24521416',
             'https://i.gkd.li/i/24521446',
+            'https://i.gkd.li/i/24521516',
           ],
-          excludeSnapshotUrls: 'https://i.gkd.li/i/24522244',
+          exampleUrls: 'https://e.gkd.li/3b2a0948-3b77-419b-8acf-2166e1cd445c',
+          excludeSnapshotUrls: 'https://i.gkd.li/i/24521416',
+        },
+        {
+          key: 2,
+          name: '③今日结束退出',
+          fastQuery: true,
+          actionDelay: 500,
+          activityIds: [
+            'com.bytedance.sdk.openadsdk.core.component.reward.activity.TTRewardVideoActivity',
+            'com.bytedance.sdk.openadsdk.stub.activity.Stub_Standard_Portrait_Activity',
+            'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          ],
+          matches: '[text$="提前得"] +n [text="坚持退出"][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/24521416',
+          exampleUrls: 'https://e.gkd.li/8cc22cd9-f48e-4aaa-8c5c-a04a752e6df6',
+        },
+        {
+          preKeys: [2],
+          name: '④再看视频?-返回操作',
+          fastQuery: true,
+          activityIds: 'com.luna.biz.main.main.MainActivity',
+          matches: '[text$="天畅听"] + [text^="再看"][text$="个提前领"]',
+          action: 'back',
+          snapshotUrls: 'https://i.gkd.li/i/26411131',
+          exampleUrls: 'https://e.gkd.li/d3902ed0-5e8d-4c0c-b8ae-5bf3f64c84a8',
         },
         {
           key: 99,
