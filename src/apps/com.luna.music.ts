@@ -100,7 +100,7 @@ export default defineGkdApp({
     },
     {
       key: 8,
-      name: '功能类-全自动看广告领VIP⚠️二选一',
+      name: '功能类-自动看Ad领VIP⚠️二选一',
       desc: '广告一直看下去直到手动干预退出_适合需要领多天vip的用户⚠️与单日规则互斥',
       rules: [
         {
@@ -108,15 +108,18 @@ export default defineGkdApp({
           fastQuery: true,
           actionDelay: 12000,
           position: {
-            left: 'width * 7.45',
-            top: 'height * 0.5',
+            left: 'width * 3.28',
+            top: 'width * 0.2',
           },
           activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
           matches:
-            '@FlattenUIText[text="广告"] + [text$="声音"] + [text="反馈"][visibleToUser=true]',
+            'FlattenUIText[text="广告"] + [text$="声音"] + [text="反馈"][visibleToUser=true]', // [反馈]相对坐标点击成功率高大概率
           snapshotUrls: [
-            'https://i.gkd.li/i/24521423',
-            'https://i.gkd.li/i/24521440',
+            'https://i.gkd.li/i/24521440', // 18s后可领取奖励
+            'https://i.gkd.li/i/26401083', // 38s后？？？
+            'https://i.gkd.li/i/24521423', // 设备1
+            'https://i.gkd.li/i/26401058', // 设备2
+            'https://i.gkd.li/i/26401097', // 设备3
           ],
         },
         {
@@ -216,7 +219,7 @@ export default defineGkdApp({
     },
     {
       key: 13,
-      name: '功能类-全自动看广告领VIP_单日⚠️二选一',
+      name: '功能类-自动看Ad领VIP_单日⚠️二选一',
       desc: '领到今天vip收手退出,适合只想领一天vip的用户⚠️与多日规则互斥',
       rules: [
         {
@@ -224,15 +227,18 @@ export default defineGkdApp({
           fastQuery: true,
           actionDelay: 12000,
           position: {
-            left: 'width * 7.45',
-            top: 'height * 0.5',
+            left: 'width * 3.28',
+            top: 'width * 0.2',
           },
           activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
           matches:
-            '@FlattenUIText[text="广告"] + [text$="声音"] + [text="反馈"][visibleToUser=true]',
+            'FlattenUIText[text="广告"] + [text$="声音"] + [text="反馈"][visibleToUser=true]', // [反馈]相对坐标点击成功率高大概率
           snapshotUrls: [
-            'https://i.gkd.li/i/24521423',
-            'https://i.gkd.li/i/24521440',
+            'https://i.gkd.li/i/24521440', // 18s后可领取奖励
+            'https://i.gkd.li/i/26401083', // 38s后？？？
+            'https://i.gkd.li/i/24521423', // 设备1
+            'https://i.gkd.li/i/26401058', // 设备2
+            'https://i.gkd.li/i/26401097', // 设备3
           ],
         },
         {
