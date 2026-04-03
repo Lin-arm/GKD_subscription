@@ -18,14 +18,14 @@ export default defineGkdApp({
           key: 0, // 放前面优先判断
           name: '③已完成-关闭', // 剩余时长大于 [text="03:45:00"] 则点击x掉
           matches:
-            '[text.get(1).toInt()=3 && text.substring(3,5).toInt()>45] - [text="剩余时长"] < * -3 @ImageView[width<102 && height<102] + [text^="领取成功"]',
+            '[text^="03:" && text.substring(3,5).toInt()>45] - [text="剩余时长"] < * -3 @ImageView[width<102 && height<102] + [text^="领取成功"]',
           snapshotUrls: 'https://i.gkd.li/i/26456102', //时长已满
         },
         {
           key: 1,
           name: '①点击看视频', // 剩余时长小于 [text="03:45:00"] 则继续去观看
           matches:
-            '[text.get(1).toInt()<3 || (text.get(1).toInt()=3 && text.substring(3,5).toInt()<45)] - [text="剩余时长"] < * + [text^="看视频领取"][clickable=true]',
+            '[text.get(1).toInt()<3 || (text^="03:" && text.substring(3,5).toInt()<45)] - [text="剩余时长"] < * + [text^="看视频领取"][clickable=true]',
           // matches: '[text="剩余时长"] < * + [text^="看视频领取"][clickable=true]', // 前面key0判断过剩余时长了,这里不判断应该也可以
           snapshotUrls: 'https://i.gkd.li/i/26456075',
           exampleUrls: 'https://e.gkd.li/dec3910f-ee59-482b-99e0-aba6de33c67c',
