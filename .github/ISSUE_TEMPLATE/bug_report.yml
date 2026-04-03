@@ -5,10 +5,15 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## 在提交问题之前，请您务必完成以下操作，否则你的issue可能会根据情况直接被关闭！！！
+        ## ⚠️在提交问题之前，请您务必完成以下操作，否则你的issue可能会根据情况直接被关闭❗❗❗
 
-        1. **提供 误触/出现问题 界面的快照（不要提供截图，截图没有任何作用，不要使用截屏快照），并说明是哪一条规则 误触/出现问题，快照获取方式如下图**
-        2. 如果是需要点击多次才能关闭的情况，那么必须提供每一次点击页面的快照
+        1. **提供 误触/出现问题 界面的快照📸，并说明是哪一条规则 误触/出现问题，快照获取方式如下图**
+        
+        > [!WARNING]
+        >   - 不要提供截图，截图对编写规则**没有任何作用❗**
+        >   - 不要使用**截屏快照**
+        
+        2. **如果是需要多次/逐步点击才能关闭或生效的情况**（如分段广告、步骤式弹窗、多步操作功能类规则），请务必提供**每一步点击的快照**
         3. 检查使用的是否是 [最新版订阅](https://github.com/Lin-arm/GKD_subscription/releases/latest) 和 [最新版GKD](https://github.com/gkd-kit/gkd/releases)
         4. 检查这个问题是否属于 [本项目维护的规则](https://github.com/Lin-arm/GKD_subscription) 导致的
         5. 如果你的issue被受理，受理者提出的问题、要求，应在3日内予以回复，否则会被关闭
@@ -20,7 +25,7 @@ body:
     id: bug-1
     attributes:
       label: |
-        请提供 误触界面/出现问题界面 的快照（不要提供截图！！！不要使用截屏快照！！！），也可补充说明
+        📸请提供 误触界面/出现问题界面 的快照（不要提供截图！！！不要使用截屏快照！！！），也可补充说明
       description: |
         快照是一个 zip 文件，快照链接是类似 "https://i.gkd.li/i/XXXXXXXX" 的文本，按照如下方式可获得快照信息
 
@@ -35,3 +40,19 @@ body:
         请说明是哪一条规则 误触/出现问题（文字/触发记录界面截图）
     validations:
       required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: ✅ 请您再次检查核对以下所有内容
+      description: |
+        为了节省时间提高处理效率，请您再次核对是否已严格按照上方要求操作。
+      options:
+        - label: 我已提供正确的**界面快照**（非截图），且在快照说明中明确标注了是哪一条规则误触/出现问题
+          required: true
+        - label: 如果是多次点击才能生效的情况，我已提供**每一次点击的快照**
+          required: true
+        - label: 我已确认使用的是 **[最新版订阅](https://github.com/Lin-arm/GKD_subscription/releases/latest)** 和 **[最新版 GKD](https://github.com/gkd-kit/gkd/releases)**
+          required: true
+        - label: 我已确认这个问题**属于本项目维护的规则**导致的（若不属于，已在说明中明确指出）
+          required: true
