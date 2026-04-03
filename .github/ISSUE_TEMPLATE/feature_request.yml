@@ -16,7 +16,7 @@ body:
     attributes:
       label: ✅ 请核对以下内容
       options:
-        - label: 我已阅读 [不予适配情况合集](https://github.com/Lin-arm/GKD_subscription/issues/17) 并确认没有提及我想要适配的情况
+        - label: 我已阅读 [不予适配情况合集](https://tinyurl.com/4re9bu6p) 并确认没有提及我想要适配的情况
           required: true
         - label: 我已**开启全局规则**并确认**此 App 无法触发全局规则**
           required: true
