@@ -178,9 +178,14 @@ jobs:
 
       - name: 校验代码格式化结果
         run: |
+          echo "==== GIT STATUS ===="
+          git status
+
+          echo "==== GIT DIFF ===="
+          git --no-pager diff || true
+
           status=$(git status --porcelain)
           if [ -n "$status" ]; then
-            echo "Something wasn’t formatted properly"
-            git --no-pager diff
+            echo "❌ 格式化修改了文件，请提交格式化后的代码"
             exit 1
           fi
