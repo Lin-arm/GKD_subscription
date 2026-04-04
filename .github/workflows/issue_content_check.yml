@@ -166,6 +166,7 @@ jobs:
           mkdir -p work
           printf '%s' "$URLS_JSON" > work/urls.json
           : > work/records.ndjson
+          SOURCE_TOTAL="$(jq 'length' work/urls.json)"
 
           PARSED_COUNT=0
           SNAP_INDEX=0
@@ -298,7 +299,10 @@ jobs:
           done < <(jq -r '.[]' work/urls.json)
 
           if [ "$PARSED_COUNT" -eq 0 ]; then
-            echo "success=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "success=false"
+              echo "failed_count=$SOURCE_TOTAL"
+            } >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -362,10 +366,26 @@ jobs:
           {
             echo "success=true"
             echo "parsed_count=$PARSED_COUNT"
+            echo "failed_count=$((SOURCE_TOTAL - PARSED_COUNT))"
             echo "prefix=$PREFIX"
             echo "app_row_count=$APP_ROW_COUNT"
             echo "env_row_count=$ENV_ROW_COUNT"
           } >> "$GITHUB_OUTPUT"
+
+      - name: 快照无法解析时自动标记并提醒
+        if: steps.parse.outputs.success != 'true'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: add-labels,create-comment
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          labels: 'invalid'
+          body: |
+            您好 ${{ github.event.issue.user.login }}，检测到您提供的快照链接或附件暂时无法解析出有效快照 JSON。
+
+            这通常意味着链接已失效、附件当前不可访问，或压缩包中不包含正确的快照内容。
+
+            请重新分享公开可访问的快照链接（如 `https://i.gkd.li/i/12345678`），或补充可访问的 zip 文件后重新编辑此 issue。
 
       - name: 更新 Issue 标题与解析区块
         if: steps.parse.outputs.success == 'true'

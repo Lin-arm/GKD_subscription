@@ -18,6 +18,34 @@ jobs:
     steps:
       - name: 检出仓库代码
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: 获取本次 push 的资源链接变更文件
+        id: resource_changed_files
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work
+
+          BEFORE_SHA="${{ github.event.before }}"
+          CURRENT_SHA="${{ github.sha }}"
+
+          if [ -z "$BEFORE_SHA" ] || [[ "$BEFORE_SHA" =~ ^0+$ ]]; then
+            git ls-files 'src/apps/*.ts' 'src/globalGroups.ts' | sort -u > work/resource-files.txt
+          else
+            git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" -- 'src/apps/*.ts' 'src/globalGroups.ts' \
+              | sort -u > work/resource-files.txt
+          fi
+
+          FILE_COUNT="$(grep -c '.' work/resource-files.txt || true)"
+
+          {
+            echo "has_files=$([ "$FILE_COUNT" -gt 0 ] && echo true || echo false)"
+            echo "files<<EOF"
+            cat work/resource-files.txt
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: 配置 Node.js 运行环境
         uses: actions/setup-node@v5
@@ -32,6 +60,15 @@ jobs:
 
       - name: 安装项目依赖
         run: pnpm install
+
+      - name: 校验本次 push 变更中的资源链接
+        if: steps.resource_changed_files.outputs.has_files == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work
+          mapfile -t RESOURCE_FILES < work/resource-files.txt
+          pnpm run check:resource-links -- --mode enforce --report-file work/resource-links-report.json --files "${RESOURCE_FILES[@]}"
 
       - name: 执行项目检查
         run: pnpm run check
