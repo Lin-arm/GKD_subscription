@@ -438,10 +438,43 @@ jobs:
               /^###\s*🧩\s*规则分类\s*$/u
             ]);
 
+            const stripLeadingTitleSeparator = (value) =>
+              (value || '').replace(/^[-:：|/\\\s]+/, '').trim();
+
+            const extractUserTitleSuffix = (titleValue, generatedCore) => {
+              const normalized = cleanInline(titleValue);
+              if (!normalized) {
+                return '';
+              }
+              if (!generatedCore) {
+                return normalized;
+              }
+              if (normalized === generatedCore) {
+                return '';
+              }
+              if (normalized.startsWith(generatedCore)) {
+                return stripLeadingTitleSeparator(
+                  normalized.slice(generatedCore.length),
+                );
+              }
+              return normalized;
+            };
+
             const tagMatch = oldTitle.match(/^(\[[^\]]+\])\s*(.*)$/);
             if (prefix && category) {
               const titleCore = `${prefix} ${category}_`.trim();
-              newTitle = tagMatch ? `${tagMatch[1]} ${titleCore}`.trim() : titleCore;
+              const rawTitleSuffix = tagMatch ? tagMatch[2] : oldTitle;
+              const userTitleSuffix = extractUserTitleSuffix(
+                rawTitleSuffix,
+                titleCore,
+              );
+              const mergedTitle = userTitleSuffix
+                ? `${titleCore} - ${userTitleSuffix}`
+                : titleCore;
+
+              newTitle = tagMatch
+                ? `${tagMatch[1]} ${mergedTitle}`.trim()
+                : mergedTitle;
             }
 
             const newBlock = [
