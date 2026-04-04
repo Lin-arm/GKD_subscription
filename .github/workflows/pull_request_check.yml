@@ -63,14 +63,13 @@ jobs:
           mkdir -p work
 
           if [ "${{ steps.resource_changed_files.outputs.all_changed_files_count }}" -eq 0 ]; then
-            cat <<'EOF' > work/resource-links-report.json
-            {
-              "checkedFiles": [],
-              "checkedLinks": 0,
-              "invalidLinks": [],
-              "uncertainLinks": []
-            }
-            EOF
+            printf '%s\n' \
+              '{' \
+              '  "checkedFiles": [],' \
+              '  "checkedLinks": 0,' \
+              '  "invalidLinks": [],' \
+              '  "uncertainLinks": []' \
+              '}' > work/resource-links-report.json
             exit 0
           fi
 
