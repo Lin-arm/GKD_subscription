@@ -8,8 +8,30 @@ body:
         ## ⚠️ 在提交 issue 之前，请您务必确认以下信息，否则此 issue 可能会被关闭❗❗❗
 
         > [!WARNING]
-        >   - 不要提供截图，截图对编写规则**没有任何作用❗**
-        >   - 不要使用**截屏快照**
+        > - 一个 issue 只提交一条规则/一个问题场景，多个规则请创建多个 issues
+        > - 不要提供截图，截图对编写规则**没有任何作用❗**
+        > - 不要使用**截屏快照**
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: 🧩 规则分类
+      description: 请选择本 Issue 对应的一条规则分类，必须与本次问题场景一致
+      multiple: false
+      options:
+        - 开屏广告
+        - 青少年模式
+        - 更新提示
+        - 评价提示
+        - 通知提示
+        - 权限提示
+        - 局部广告
+        - 全屏广告
+        - 分段广告
+        - 功能类
+        - 其他
+    validations:
+      required: true
 
   - type: checkboxes
     id: base-info-confirm
@@ -21,6 +43,14 @@ body:
         - label: 如果是多次点击才能生效的情况，我已提供**每一次点击的快照**
           required: true
         - label: 我已确认使用的是 **最新版订阅** [![GitHub Release](https://img.shields.io/github/v/release/Lin-arm/GKD_subscription)](https://github.com/Lin-arm/GKD_subscription/releases/latest) 和 **最新版GKD** [![GitHub Release](https://img.shields.io/github/v/release/gkd-kit/gkd)](https://github.com/gkd-kit/gkd/releases/latest)
+          required: true
+
+  - type: checkboxes
+    id: single-rule-confirm
+    attributes:
+      label: 🧾 单规则确认
+      options:
+        - label: 我已知晓一个 issue 只对应一条规则/一个问题场景，多个规则会拆分成多个 issues
           required: true
 
   - type: checkboxes
@@ -36,12 +66,11 @@ body:
     id: snapshot
     attributes:
       label: |
-        📸请提供 误触界面/出现问题界面 的快照（不要提供截图！！！不要使用截屏快照！！！），也可补充说明
+        📸 请提供误触界面/出现问题界面的快照（不要提供截图！！！不要使用截屏快照！！！），也可补充说明
       description: |
         快照是一个 zip 文件，快照链接是类似 "https://i.gkd.li/i/XXXXXXXX" 的文本，按照如下方式可获得快照信息
 
-        按照下面的截图示例来获取界面快照，上传文件或者生成链接并粘贴到下面的输入框\
-        ![img](https://raw.githubusercontent.com/Lin-arm/GKD_subscription/refs/heads/main/Snapshot.webp)
+        按照下面的截图示例来获取界面快照，上传文件或者生成链接并粘贴到下面的输入框。同一条规则可填写多张快照；如果是不同规则，请分别创建多个 issues。        ![img](https://raw.githubusercontent.com/Lin-arm/GKD_subscription/refs/heads/main/Snapshot.webp)
     validations:
       required: true
 
@@ -49,6 +78,9 @@ body:
     id: rule
     attributes:
       label: |
-        请说明是哪一条规则 误触/出现问题（文字/触发记录界面截图）
+        🎯 本 Issue 对应的单条规则/单个问题场景（不要在一个 issue 中填写多条规则）
+      description: |
+        请只说明一条规则的误触/问题场景，可补充文字或触发记录界面截图
+      placeholder: 例如：支付宝首页红包弹窗误触了全局规则
     validations:
       required: true

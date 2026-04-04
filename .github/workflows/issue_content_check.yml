@@ -374,6 +374,16 @@ jobs:
             const oldTitle = context.payload.issue.title || '';
             let newTitle = oldTitle;
 
+            const cleanInline = (value) =>
+              (value || '')
+                .replace(/\r\n/g, '\n')
+                .split('\n')
+                .map((line) => line.trim())
+                .filter(Boolean)
+                .join(' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+
             const extractSection = (body, headingPatterns) => {
               const normalized = body.replace(/\r\n/g, '\n');
               const lines = normalized.split('\n');
@@ -404,31 +414,45 @@ jobs:
               return { section, remaining };
             };
 
-            const tagMatch = oldTitle.match(/^(\[[^\]]+\])\s*(.*)$/);
-            if (prefix) {
-              if (tagMatch) {
-                const tag = tagMatch[1];
-                const rawContent = (tagMatch[2] || '').trim();
-                if (!rawContent.includes(prefix)) {
-                  newTitle = `${tag} ${prefix} - ${rawContent}`.trim();
-                }
-              } else if (!oldTitle.includes(prefix)) {
-                newTitle = `[${prefix}] ${oldTitle}`.trim();
+            const getSectionValue = (body, headingPatterns) => {
+              const { section } = extractSection(body, headingPatterns);
+              if (!section) {
+                return '';
               }
-            }
+
+              const sectionBody = section
+                .split('\n')
+                .slice(1)
+                .join('\n');
+
+              return cleanInline(sectionBody);
+            };
 
             const startMarker = '<!-- gkd-auto-parse:start -->';
             const endMarker = '<!-- gkd-auto-parse:end -->';
             const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const blockRe = new RegExp(`${escapeRegExp(startMarker)}[\\s\\S]*?${escapeRegExp(endMarker)}`, 'm');
+            const oldBody = context.payload.issue.body || '';
+            const bodyWithoutBlock = oldBody.replace(blockRe, '').trim();
+            const category = getSectionValue(bodyWithoutBlock, [
+              /^###\s*🧩\s*规则分类\s*$/u
+            ]);
+
+            const tagMatch = oldTitle.match(/^(\[[^\]]+\])\s*(.*)$/);
+            if (prefix && category) {
+              const titleCore = `${prefix} ${category}_`.trim();
+              newTitle = tagMatch ? `${tagMatch[1]} ${titleCore}`.trim() : titleCore;
+            }
 
             const newBlock = [
               startMarker,
               '## 📦 快照自动解析详情',
               '',
+              `🧩 表单分类：${category ? `**${category}**` : '未填写'}`,
+              '',
               '### 应用快照汇总',
               '',
-              '| # | 📱 应用名称 | 📦 软件包名 | 🏷️ 应用版本 | 🧩 Activity / 页面 ID（合并去重） |',
+              '| # | 📱 应用名称 | 📦 软件包名 | 🏷️ 应用版本 | 🧩 ActivityId |',
               '| :-- | :--- | :--- | :--- | :--- |',
               appRows,
               '',
@@ -442,8 +466,6 @@ jobs:
               endMarker
             ].join('\n');
 
-            const oldBody = context.payload.issue.body || '';
-            const bodyWithoutBlock = oldBody.replace(blockRe, '').trim();
             const snapshotSectionInfo = extractSection(bodyWithoutBlock, [
               /^###\s*📸\s*需要适配界面的快照\s*$/u,
               /^###\s*📸\s*请提供.*快照.*$/u
