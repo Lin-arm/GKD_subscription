@@ -2,17 +2,31 @@ name: issue_content_check
 
 on:
   issues:
-    types: [opened]
+    types: [opened, edited]
 
 jobs:
   check-issue-content:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    outputs:
+      should_continue: ${{ steps.check_links.outputs.should_continue }}
 
     steps:
+      - name: 检查快照特征并设置输出
+        id: check_links
+        shell: bash
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          if [[ "$ISSUE_BODY" != *"i.gkd.li/"* && "$ISSUE_BODY" != *".zip"* ]]; then
+            echo "should_continue=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_continue=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: 缺少快照时自动标记并关闭 Issue
-        if: |
-          contains(github.event.issue.body, 'i.gkd.li/') == false &&
-          contains(github.event.issue.body, '.zip') == false
+        if: steps.check_links.outputs.should_continue == 'false'
         uses: actions-cool/issues-helper@v3
         with:
           actions: add-labels,create-comment,close-issue
@@ -20,7 +34,7 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           labels: 'invalid'
           body: |
-            您好 ${{ github.event.issue.user.login }}，由于您没有提供快照，此issue已被自动关闭。
+            您好 ${{ github.event.issue.user.login }},由于您没有提供快照,此issue已被自动关闭。
 
       - name: 快照链接不可访问时自动标记并提醒
         if: contains(github.event.issue.body, 'i.gkd.li/snapshot/') == true
@@ -35,3 +49,162 @@ jobs:
             请点击查看 [正确的分享快照方式说明](https://gkd.li/guide/snapshot#share-note) 。
 
             可在下方评论区补充
+
+  parse-and-update:
+    name: 解析快照并更新状态
+    needs: check-issue-content
+    if: ${{ needs.check-issue-content.outputs.should_continue == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+      - name: 提取纯净快照链接
+        id: extract
+        shell: bash
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          set -euo pipefail
+
+          grep -oE 'https?://[^[:space:]()]+' <<< "$ISSUE_BODY" \
+            | grep -E '(\.zip$|i\.gkd\.li|igkd\.li)' \
+            | sort -u > urls.txt || true
+
+          if [ ! -s urls.txt ]; then
+            echo "has_zip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "has_zip=true" >> "$GITHUB_OUTPUT"
+
+      - name: 下载并构建表格数据
+        id: parse
+        if: ${{ steps.extract.outputs.has_zip == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p data
+          SUCCESS_COUNT=0
+          TABLE_BODY=""
+          APP_NAMES=()
+
+          while IFS= read -r URL; do
+            [ -z "$URL" ] && continue
+
+            if [[ "$URL" =~ (i\.gkd\.li|igkd\.li)/i/([0-9]+) ]]; then
+              ID="${BASH_REMATCH[2]}"
+              D_URL="https://github.com/user-attachments/files/$ID/file.zip"
+            else
+              D_URL="$URL"
+            fi
+
+            WORK_DIR="data/snap_$SUCCESS_COUNT"
+            mkdir -p "$WORK_DIR"
+
+            if ! curl -fsSL -L --retry 3 --connect-timeout 15 -o "$WORK_DIR/file.zip" "$D_URL"; then
+              continue
+            fi
+
+            if ! unzip -qo "$WORK_DIR/file.zip" -d "$WORK_DIR" >/dev/null 2>&1; then
+              continue
+            fi
+
+            JSON_PATH="$(find "$WORK_DIR" -name "*.json" | head -n 1 || true)"
+            if [ -z "$JSON_PATH" ]; then
+              continue
+            fi
+
+            NAME="$(jq -r '.appInfo.name // "未知"' "$JSON_PATH" | tr -d '|' | xargs)"
+            PKG="$(jq -r '.appInfo.id // "未知"' "$JSON_PATH" | tr -d '|' | xargs)"
+            VER="$(jq -r '.appInfo.versionName // "未知"' "$JSON_PATH" | tr -d '|' | xargs)"
+            ACT="$(jq -r '.activityId // "未知"' "$JSON_PATH" | tr -d '|' | xargs)"
+
+            SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+            APP_NAMES+=("$NAME")
+
+            ROW="| $SUCCESS_COUNT | $NAME | \`$PKG\` | \`$VER\` | \`$ACT\` |"
+            TABLE_BODY+="${ROW}"$'\n'
+          done < urls.txt
+
+          if [ "$SUCCESS_COUNT" -eq 0 ]; then
+            echo "success=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          PREFIX="$(printf '%s\n' "${APP_NAMES[@]}" | sort -u | paste -sd '/' -)"
+
+          {
+            echo "success=true"
+            echo "prefix=$PREFIX"
+            echo "count=$SUCCESS_COUNT"
+            echo "TABLE_ROWS<<EOF"
+            printf '%s' "$TABLE_BODY"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: 更新 Issue 标题与表格
+        if: ${{ steps.parse.outputs.success == 'true' }}
+        uses: actions/github-script@v7
+        env:
+          RES_PREFIX: ${{ steps.parse.outputs.prefix }}
+          RES_COUNT: ${{ steps.parse.outputs.count }}
+          TABLE_ROWS: ${{ steps.parse.outputs.TABLE_ROWS }}
+        with:
+          script: |
+            const prefix = (process.env.RES_PREFIX || '').trim();
+            const count = process.env.RES_COUNT || '';
+            const tableRows = process.env.TABLE_ROWS || '';
+
+            const oldTitle = context.payload.issue.title || '';
+            let newTitle = oldTitle;
+
+            const tagMatch = oldTitle.match(/^(\[[^\]]+\])\s*(.*)$/);
+
+            if (prefix) {
+              if (tagMatch) {
+                const tag = tagMatch[1];
+                const rawContent = tagMatch[2] || '';
+                if (!rawContent.includes(prefix)) {
+                  newTitle = `${tag} ${prefix} - ${rawContent}`.trim();
+                }
+              } else if (!oldTitle.includes(prefix)) {
+                newTitle = `[${prefix}] ${oldTitle}`.trim();
+              }
+            }
+
+            const startMarker = '<!-- gkd-auto-parse:start -->';
+            const endMarker = '<!-- gkd-auto-parse:end -->';
+
+            const appendText = [
+              '',
+              startMarker,
+              '## 📦 快照自动解析详情',
+              '',
+              '| # | 📱 应用名称 | 📦 软件包名 | 📱 版本 | 🧩 Activity / 页面 ID |',
+              '| :-- | :--- | :--- | :--- | :--- |',
+              tableRows.trimEnd(),
+              '',
+              `✅ 成功解析 ${count} 个快照。`,
+              endMarker,
+              ''
+            ].join('\n');
+
+            const oldBody = context.payload.issue.body || '';
+            const blockRe = new RegExp(`${startMarker}[\\s\\S]*?${endMarker}`, 'm');
+
+            let newBody;
+            if (blockRe.test(oldBody)) {
+              newBody = oldBody.replace(blockRe, appendText.trim());
+            } else {
+              newBody = oldBody.trimEnd() + '\n' + appendText;
+            }
+
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              title: newTitle,
+              body: newBody
+            });
