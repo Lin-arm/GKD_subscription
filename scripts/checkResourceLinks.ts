@@ -275,7 +275,8 @@ const runCommand = async (command: string, args: string[]) => {
 
 const extractArchive = async (zipPath: string, destination: string) => {
   if (process.platform === 'win32') {
-    const escapePowerShellPath = (value: string) => value.replace(/'/g, "''");
+    const escapePowerShellPath = (value: string) =>
+      value.replace(/'/g, String.fromCharCode(39, 39));
     return await runCommand('powershell', [
       '-NoLogo',
       '-NoProfile',
