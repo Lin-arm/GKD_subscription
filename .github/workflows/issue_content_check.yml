@@ -291,10 +291,26 @@ jobs:
           jq -s '.' work/records.ndjson > work/records.json
 
           jq -r '
+            def uniq_keep_order:
+              reduce .[] as $item ([]; if index($item) == null then . + [$item] else . end);
             sort_by(.appName, .appId, .appVersion, .activityId)
-            | unique_by(.appName, .appId, .appVersion, .activityId)
+            | group_by(.appName, .appId, .appVersion)
+            | map({
+                appName: .[0].appName,
+                appId: .[0].appId,
+                appVersion: .[0].appVersion,
+                activityIds: ([.[].activityId] | uniq_keep_order)
+              })
             | to_entries
-            | map("| \(.key + 1) | \(.value.appName) | `\(.value.appId)` | `\(.value.appVersion)` | `\(.value.activityId)` |")
+            | map(
+                "| \(.key + 1) | \(.value.appName) | `\(.value.appId)` | `\(.value.appVersion)` | "
+                + (
+                    .value.activityIds
+                    | map("`\(.)`")
+                    | join("<br>")
+                  )
+                + " |"
+              )
             | join("\n")
           ' work/records.json > work/app_rows.md
 
@@ -320,7 +336,7 @@ jobs:
           ' work/records.json)"
 
           APP_ROW_COUNT="$(
-            jq 'sort_by(.appName, .appId, .appVersion, .activityId) | unique_by(.appName, .appId, .appVersion, .activityId) | length' work/records.json
+            jq 'sort_by(.appName, .appId, .appVersion, .activityId) | group_by(.appName, .appId, .appVersion) | length' work/records.json
           )"
           ENV_ROW_COUNT="$(
             jq 'sort_by(.resolution, .orientation, .deviceInfo, .androidInfo, .gkdInfo) | unique_by(.resolution, .orientation, .deviceInfo, .androidInfo, .gkdInfo) | length' work/records.json
@@ -358,6 +374,36 @@ jobs:
             const oldTitle = context.payload.issue.title || '';
             let newTitle = oldTitle;
 
+            const extractSection = (body, headingPatterns) => {
+              const normalized = body.replace(/\r\n/g, '\n');
+              const lines = normalized.split('\n');
+              const startIndex = lines.findIndex((line) =>
+                headingPatterns.some((pattern) => pattern.test(line))
+              );
+
+              if (startIndex === -1) {
+                return {
+                  section: '',
+                  remaining: normalized.trim()
+                };
+              }
+
+              let endIndex = lines.length;
+              for (let index = startIndex + 1; index < lines.length; index += 1) {
+                if (/^#{1,6}\s/.test(lines[index])) {
+                  endIndex = index;
+                  break;
+                }
+              }
+
+              const before = lines.slice(0, startIndex).join('\n').trimEnd();
+              const section = lines.slice(startIndex, endIndex).join('\n').trim();
+              const after = lines.slice(endIndex).join('\n').trimStart();
+              const remaining = [before, after].filter(Boolean).join('\n\n').trim();
+
+              return { section, remaining };
+            };
+
             const tagMatch = oldTitle.match(/^(\[[^\]]+\])\s*(.*)$/);
             if (prefix) {
               if (tagMatch) {
@@ -382,7 +428,7 @@ jobs:
               '',
               '### 应用快照汇总',
               '',
-              '| # | 📱 应用名称 | 📦 软件包名 | 🏷️ 应用版本 | 🧩 Activity / 页面 ID |',
+              '| # | 📱 应用名称 | 📦 软件包名 | 🏷️ 应用版本 | 🧩 Activity / 页面 ID（合并去重） |',
               '| :-- | :--- | :--- | :--- | :--- |',
               appRows,
               '',
@@ -397,14 +443,19 @@ jobs:
             ].join('\n');
 
             const oldBody = context.payload.issue.body || '';
-            let newBody;
-
-            if (blockRe.test(oldBody)) {
-              newBody = oldBody.replace(blockRe, newBlock).trimEnd();
-            } else {
-              const baseBody = oldBody.trimEnd();
-              newBody = baseBody ? `${baseBody}\n\n${newBlock}` : newBlock;
-            }
+            const bodyWithoutBlock = oldBody.replace(blockRe, '').trim();
+            const snapshotSectionInfo = extractSection(bodyWithoutBlock, [
+              /^###\s*📸\s*需要适配界面的快照\s*$/u,
+              /^###\s*📸\s*请提供.*快照.*$/u
+            ]);
+            const newBody = [
+              snapshotSectionInfo.remaining,
+              newBlock,
+              snapshotSectionInfo.section
+            ]
+              .filter(Boolean)
+              .join('\n\n')
+              .trimEnd();
 
             const labels = (context.payload.issue.labels || []).map((label) =>
               typeof label === 'string' ? label : label.name
