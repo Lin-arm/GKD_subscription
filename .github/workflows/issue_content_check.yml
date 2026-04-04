@@ -4,29 +4,87 @@ on:
   issues:
     types: [opened, edited]
 
+concurrency:
+  group: issue-content-check-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
 jobs:
-  check-issue-content:
+  prepare:
+    if: github.event.sender.type != 'Bot'
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
     outputs:
-      should_continue: ${{ steps.check_links.outputs.should_continue }}
+      should_close: ${{ steps.collect.outputs.should_close }}
+      should_warn_uploading: ${{ steps.collect.outputs.should_warn_uploading }}
+      should_warn_private: ${{ steps.collect.outputs.should_warn_private }}
+      should_parse: ${{ steps.collect.outputs.should_parse }}
+      source_count: ${{ steps.collect.outputs.source_count }}
+      urls_json: ${{ steps.collect.outputs.urls_json }}
 
     steps:
-      - name: 检查快照特征并设置输出
-        id: check_links
+      - name: 分类 Issue 并提取可解析快照链接
+        id: collect
         shell: bash
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
-          if [[ "$ISSUE_BODY" != *"i.gkd.li/"* && "$ISSUE_BODY" != *".zip"* ]]; then
-            echo "should_continue=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "should_continue=true" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+
+          BODY="$(printf '%s' "${ISSUE_BODY:-}" | tr -d '\r')"
+
+          HAS_UPLOADING=false
+          HAS_PRIVATE=false
+
+          if grep -q 'Uploading' <<< "$BODY"; then
+            HAS_UPLOADING=true
           fi
 
+          if grep -Eq 'https?://(i\.gkd\.li|igkd\.li)/snapshot/' <<< "$BODY"; then
+            HAS_PRIVATE=true
+          fi
+
+          grep -oE 'https?://[^[:space:]<>()]+' <<< "$BODY" \
+            | sed -E 's/[)>.,]+$//' \
+            | grep -E '(^https?://(i\.gkd\.li|igkd\.li)/i/[0-9]+([?][^[:space:]]*)?$|^https?://[^[:space:]]+\.zip([?][^[:space:]]*)?$)' \
+            | sort -u > urls.txt || true
+
+          SOURCE_COUNT="$(wc -l < urls.txt | tr -d ' ')"
+
+          SHOULD_PARSE=false
+          SHOULD_CLOSE=false
+
+          if [ "$SOURCE_COUNT" -gt 0 ]; then
+            SHOULD_PARSE=true
+          elif [ "$HAS_UPLOADING" = false ] && [ "$HAS_PRIVATE" = false ]; then
+            SHOULD_CLOSE=true
+          fi
+
+          URLS_JSON="$(jq -Rsc 'split("\n") | map(select(length > 0))' urls.txt)"
+
+          {
+            echo "should_close=$SHOULD_CLOSE"
+            echo "should_warn_uploading=$HAS_UPLOADING"
+            echo "should_warn_private=$HAS_PRIVATE"
+            echo "should_parse=$SHOULD_PARSE"
+            echo "source_count=$SOURCE_COUNT"
+            echo "urls_json=$URLS_JSON"
+          } >> "$GITHUB_OUTPUT"
+
+  notify-invalid:
+    needs: prepare
+    if: |
+      needs.prepare.result == 'success' &&
+      (
+        needs.prepare.outputs.should_close == 'true' ||
+        needs.prepare.outputs.should_warn_uploading == 'true' ||
+        needs.prepare.outputs.should_warn_private == 'true'
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
       - name: 缺少快照时自动标记并关闭 Issue
-        if: steps.check_links.outputs.should_continue == 'false'
+        if: needs.prepare.outputs.should_close == 'true'
         uses: actions-cool/issues-helper@v3
         with:
           actions: add-labels,create-comment,close-issue
@@ -34,10 +92,24 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           labels: 'invalid'
           body: |
-            您好 ${{ github.event.issue.user.login }},由于您没有提供快照,此issue已被自动关闭。
+            您好 ${{ github.event.issue.user.login }}，由于您没有提供快照，此 issue 已被自动关闭。
+
+      - name: 上传未完成时自动标记并提醒
+        if: needs.prepare.outputs.should_warn_uploading == 'true'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: add-labels,create-comment
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          labels: 'invalid'
+          body: |
+            您好 ${{ github.event.issue.user.login }}，检测到您提供的文件仍处于 Uploading 状态，
+            请等待上传完成后重新提交，或补充可访问的 zip / 分享链接。
+
+            可在下方评论区补充
 
       - name: 快照链接不可访问时自动标记并提醒
-        if: contains(github.event.issue.body, 'i.gkd.li/snapshot/') == true
+        if: needs.prepare.outputs.should_warn_private == 'true'
         uses: actions-cool/issues-helper@v3
         with:
           actions: add-labels,create-comment
@@ -50,122 +122,247 @@ jobs:
 
             可在下方评论区补充
 
-  parse-and-update:
-    name: 解析快照并更新状态
-    needs: check-issue-content
-    if: ${{ needs.check-issue-content.outputs.should_continue == 'true' }}
+  parse-and-sync:
+    name: 解析快照并同步 Issue
+    needs: prepare
+    if: needs.prepare.result == 'success' && needs.prepare.outputs.should_parse == 'true'
     runs-on: ubuntu-latest
     permissions:
       issues: write
 
     steps:
-      - name: 提取纯净快照链接
-        id: extract
+      - name: 下载快照并生成去重汇总
+        id: parse
         shell: bash
         env:
-          ISSUE_BODY: ${{ github.event.issue.body }}
+          URLS_JSON: ${{ needs.prepare.outputs.urls_json }}
         run: |
           set -euo pipefail
 
-          grep -oE 'https?://[^[:space:]()]+' <<< "$ISSUE_BODY" \
-            | grep -E '(\.zip$|i\.gkd\.li|igkd\.li)' \
-            | sort -u > urls.txt || true
+          download_and_extract() {
+            local url="$1"
+            local zip_path="$2"
+            local extract_dir="$3"
 
-          if [ ! -s urls.txt ]; then
-            echo "has_zip=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
+            rm -f "$zip_path"
+            rm -rf "$extract_dir"
+            mkdir -p "$extract_dir"
 
-          echo "has_zip=true" >> "$GITHUB_OUTPUT"
+            curl -fsSL --retry 3 --connect-timeout 20 -o "$zip_path" "$url" &&
+              unzip -qo "$zip_path" -d "$extract_dir" >/dev/null 2>&1
+          }
 
-      - name: 下载并构建表格数据
-        id: parse
-        if: ${{ steps.extract.outputs.has_zip == 'true' }}
-        shell: bash
-        run: |
-          set -euo pipefail
+          mkdir -p work
+          printf '%s' "$URLS_JSON" > work/urls.json
+          : > work/records.ndjson
 
-          mkdir -p data
-          SUCCESS_COUNT=0
-          TABLE_BODY=""
-          APP_NAMES=()
+          PARSED_COUNT=0
+          SNAP_INDEX=0
 
-          while IFS= read -r URL; do
-            [ -z "$URL" ] && continue
+          while IFS= read -r SOURCE_URL; do
+            [ -n "$SOURCE_URL" ] || continue
 
-            if [[ "$URL" =~ (i\.gkd\.li|igkd\.li)/i/([0-9]+) ]]; then
-              ID="${BASH_REMATCH[2]}"
-              D_URL="https://github.com/user-attachments/files/$ID/file.zip"
-            else
-              D_URL="$URL"
-            fi
-
-            WORK_DIR="data/snap_$SUCCESS_COUNT"
+            WORK_DIR="work/snap_${SNAP_INDEX}"
+            ZIP_PATH="$WORK_DIR/snapshot.zip"
+            EXTRACT_DIR="$WORK_DIR/extracted"
+            SNAP_INDEX=$((SNAP_INDEX + 1))
             mkdir -p "$WORK_DIR"
 
-            if ! curl -fsSL -L --retry 3 --connect-timeout 15 -o "$WORK_DIR/file.zip" "$D_URL"; then
+            DOWNLOADED=false
+
+            if [[ "$SOURCE_URL" =~ ^https?://(i\.gkd\.li|igkd\.li)/i/([0-9]+)(\?.*)?$ ]]; then
+              SNAP_ID="${BASH_REMATCH[2]}"
+              DOWNLOAD_URL="https://github.com/user-attachments/files/$SNAP_ID/file.zip"
+
+              if download_and_extract "$DOWNLOAD_URL" "$ZIP_PATH" "$EXTRACT_DIR"; then
+                DOWNLOADED=true
+              else
+                PAGE_HTML="$(curl -fsSL --retry 2 --connect-timeout 20 "$SOURCE_URL" || true)"
+                FALLBACK_URL="$(
+                  printf '%s' "$PAGE_HTML" \
+                    | grep -oE "https?://[^\"'[:space:]]+\\.zip[^\"'[:space:]]*" \
+                    | head -n 1 || true
+                )"
+
+                if [ -n "$FALLBACK_URL" ] && download_and_extract "$FALLBACK_URL" "$ZIP_PATH" "$EXTRACT_DIR"; then
+                  DOWNLOADED=true
+                fi
+              fi
+            else
+              if download_and_extract "$SOURCE_URL" "$ZIP_PATH" "$EXTRACT_DIR"; then
+                DOWNLOADED=true
+              fi
+            fi
+
+            if [ "$DOWNLOADED" = false ]; then
               continue
             fi
 
-            if ! unzip -qo "$WORK_DIR/file.zip" -d "$WORK_DIR" >/dev/null 2>&1; then
-              continue
-            fi
+            JSON_PATH=""
+            while IFS= read -r CANDIDATE; do
+              if jq -e 'type == "object" and ((has("appId") and has("activityId")) or has("appInfo") or has("gkdAppInfo") or has("device"))' "$CANDIDATE" >/dev/null 2>&1; then
+                JSON_PATH="$CANDIDATE"
+                break
+              fi
+            done < <(find "$EXTRACT_DIR" -type f -name '*.json' | sort)
 
-            JSON_PATH="$(find "$WORK_DIR" -name "*.json" | head -n 1 || true)"
             if [ -z "$JSON_PATH" ]; then
               continue
             fi
 
-            NAME="$(jq -r '.appInfo.name // "未知"' "$JSON_PATH" | tr -d '|' | xargs)"
-            PKG="$(jq -r '.appInfo.id // "未知"' "$JSON_PATH" | tr -d '|' | xargs)"
-            VER="$(jq -r '.appInfo.versionName // "未知"' "$JSON_PATH" | tr -d '|' | xargs)"
-            ACT="$(jq -r '.activityId // "未知"' "$JSON_PATH" | tr -d '|' | xargs)"
+            if ! jq -c --arg sourceUrl "$SOURCE_URL" '
+              def clean:
+                if . == null then "未知"
+                else tostring
+                  | gsub("\\|"; "¦")
+                  | gsub("[\\r\\n]+"; " ")
+                  | gsub("\\s+"; " ")
+                  | sub("^\\s+"; "")
+                  | sub("\\s+$"; "")
+                  | if . == "" then "未知" else . end
+                end;
+              def display_version(name; code):
+                if (name != null and (name | tostring | length) > 0) and code != null then
+                  ((name | tostring) + " (" + (code | tostring) + ")")
+                elif name != null and (name | tostring | length) > 0 then
+                  (name | tostring)
+                elif code != null then
+                  ("versionCode " + (code | tostring))
+                else
+                  "未知"
+                end;
+              {
+                sourceUrl: $sourceUrl,
+                appName: (.appInfo.name // .appInfo.id // .appId // "未知") | clean,
+                appId: (.appInfo.id // .appId // "未知") | clean,
+                appVersion: display_version(.appInfo.versionName; .appInfo.versionCode) | clean,
+                activityId: (.activityId // "未知") | clean,
+                resolution: (
+                  if .screenWidth != null and .screenHeight != null
+                  then ((.screenWidth | tostring) + "x" + (.screenHeight | tostring))
+                  else "未知"
+                  end
+                ) | clean,
+                orientation: (
+                  if .isLandscape == true then "横屏"
+                  elif .isLandscape == false then "竖屏"
+                  else "未知"
+                  end
+                ),
+                deviceInfo: (
+                  [
+                    .device.brand,
+                    .device.manufacturer,
+                    .device.model,
+                    .device.device
+                  ]
+                  | map(select(. != null) | tostring)
+                  | map(select(length > 0))
+                  | reduce .[] as $item ([]; if index($item) == null then . + [$item] else . end)
+                  | if length > 0 then join(" / ") else "未知" end
+                ) | clean,
+                androidInfo: (
+                  if .device.release != null or .device.sdkInt != null
+                  then "Android " + ((.device.release // "?") | tostring) + " / SDK " + ((.device.sdkInt // "?") | tostring)
+                  else "未知"
+                  end
+                ) | clean,
+                gkdInfo: (
+                  ((.gkdAppInfo.name // "GKD") | tostring)
+                  + " "
+                  + (display_version(.gkdAppInfo.versionName; .gkdAppInfo.versionCode) | tostring)
+                  + "<br>`"
+                  + ((.gkdAppInfo.id // "未知") | tostring)
+                  + "`"
+                ) | clean
+              }
+            ' "$JSON_PATH" >> work/records.ndjson; then
+              continue
+            fi
 
-            SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
-            APP_NAMES+=("$NAME")
+            PARSED_COUNT=$((PARSED_COUNT + 1))
+          done < <(jq -r '.[]' work/urls.json)
 
-            ROW="| $SUCCESS_COUNT | $NAME | \`$PKG\` | \`$VER\` | \`$ACT\` |"
-            TABLE_BODY+="${ROW}"$'\n'
-          done < urls.txt
-
-          if [ "$SUCCESS_COUNT" -eq 0 ]; then
+          if [ "$PARSED_COUNT" -eq 0 ]; then
             echo "success=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          PREFIX="$(printf '%s\n' "${APP_NAMES[@]}" | sort -u | paste -sd '/' -)"
+          jq -s '.' work/records.ndjson > work/records.json
+
+          jq -r '
+            sort_by(.appName, .appId, .appVersion, .activityId)
+            | unique_by(.appName, .appId, .appVersion, .activityId)
+            | to_entries
+            | map("| \(.key + 1) | \(.value.appName) | `\(.value.appId)` | `\(.value.appVersion)` | `\(.value.activityId)` |")
+            | join("\n")
+          ' work/records.json > work/app_rows.md
+
+          jq -r '
+            sort_by(.resolution, .orientation, .deviceInfo, .androidInfo, .gkdInfo)
+            | unique_by(.resolution, .orientation, .deviceInfo, .androidInfo, .gkdInfo)
+            | to_entries
+            | map("| \(.key + 1) | `\(.value.resolution)` | \(.value.orientation) | \(.value.deviceInfo) | `\(.value.androidInfo)` | \(.value.gkdInfo) |")
+            | join("\n")
+          ' work/records.json > work/env_rows.md
+
+          PREFIX="$(jq -r '
+            def uniq_keep_order:
+              reduce .[] as $item ([]; if index($item) == null then . + [$item] else . end);
+            ([ .[].appName | select(. != "未知") ] | uniq_keep_order) as $appNames
+            | (
+                if ($appNames | length) > 0
+                then $appNames
+                else [ .[].appId | select(. != "未知") ] | uniq_keep_order
+                end
+              )
+            | join("/")
+          ' work/records.json)"
+
+          APP_ROW_COUNT="$(
+            jq 'sort_by(.appName, .appId, .appVersion, .activityId) | unique_by(.appName, .appId, .appVersion, .activityId) | length' work/records.json
+          )"
+          ENV_ROW_COUNT="$(
+            jq 'sort_by(.resolution, .orientation, .deviceInfo, .androidInfo, .gkdInfo) | unique_by(.resolution, .orientation, .deviceInfo, .androidInfo, .gkdInfo) | length' work/records.json
+          )"
 
           {
             echo "success=true"
+            echo "parsed_count=$PARSED_COUNT"
             echo "prefix=$PREFIX"
-            echo "count=$SUCCESS_COUNT"
-            echo "TABLE_ROWS<<EOF"
-            printf '%s' "$TABLE_BODY"
-            echo "EOF"
+            echo "app_row_count=$APP_ROW_COUNT"
+            echo "env_row_count=$ENV_ROW_COUNT"
           } >> "$GITHUB_OUTPUT"
 
-      - name: 更新 Issue 标题与表格
-        if: ${{ steps.parse.outputs.success == 'true' }}
+      - name: 更新 Issue 标题与解析区块
+        if: steps.parse.outputs.success == 'true'
         uses: actions/github-script@v7
         env:
           RES_PREFIX: ${{ steps.parse.outputs.prefix }}
-          RES_COUNT: ${{ steps.parse.outputs.count }}
-          TABLE_ROWS: ${{ steps.parse.outputs.TABLE_ROWS }}
+          PARSED_COUNT: ${{ steps.parse.outputs.parsed_count }}
+          SOURCE_COUNT: ${{ needs.prepare.outputs.source_count }}
+          APP_ROW_COUNT: ${{ steps.parse.outputs.app_row_count }}
+          ENV_ROW_COUNT: ${{ steps.parse.outputs.env_row_count }}
         with:
           script: |
+            const fs = require('fs');
+
             const prefix = (process.env.RES_PREFIX || '').trim();
-            const count = process.env.RES_COUNT || '';
-            const tableRows = process.env.TABLE_ROWS || '';
+            const parsedCount = Number(process.env.PARSED_COUNT || 0);
+            const sourceCount = Number(process.env.SOURCE_COUNT || 0);
+            const appRowCount = Number(process.env.APP_ROW_COUNT || 0);
+            const envRowCount = Number(process.env.ENV_ROW_COUNT || 0);
+            const appRows = fs.readFileSync('work/app_rows.md', 'utf8').trim();
+            const envRows = fs.readFileSync('work/env_rows.md', 'utf8').trim();
 
             const oldTitle = context.payload.issue.title || '';
             let newTitle = oldTitle;
 
             const tagMatch = oldTitle.match(/^(\[[^\]]+\])\s*(.*)$/);
-
             if (prefix) {
               if (tagMatch) {
                 const tag = tagMatch[1];
-                const rawContent = tagMatch[2] || '';
+                const rawContent = (tagMatch[2] || '').trim();
                 if (!rawContent.includes(prefix)) {
                   newTitle = `${tag} ${prefix} - ${rawContent}`.trim();
                 }
@@ -176,35 +373,64 @@ jobs:
 
             const startMarker = '<!-- gkd-auto-parse:start -->';
             const endMarker = '<!-- gkd-auto-parse:end -->';
+            const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const blockRe = new RegExp(`${escapeRegExp(startMarker)}[\\s\\S]*?${escapeRegExp(endMarker)}`, 'm');
 
-            const appendText = [
-              '',
+            const newBlock = [
               startMarker,
               '## 📦 快照自动解析详情',
               '',
-              '| # | 📱 应用名称 | 📦 软件包名 | 📱 版本 | 🧩 Activity / 页面 ID |',
-              '| :-- | :--- | :--- | :--- | :--- |',
-              tableRows.trimEnd(),
+              '### 应用快照汇总',
               '',
-              `✅ 成功解析 ${count} 个快照。`,
-              endMarker,
-              ''
+              '| # | 📱 应用名称 | 📦 软件包名 | 🏷️ 应用版本 | 🧩 Activity / 页面 ID |',
+              '| :-- | :--- | :--- | :--- | :--- |',
+              appRows,
+              '',
+              '### 运行环境汇总',
+              '',
+              '| # | 📐 分辨率 | 🧭 方向 | 📱 设备信息 | 🤖 Android | ⚙️ GKD |',
+              '| :-- | :--- | :--- | :--- | :--- | :--- |',
+              envRows,
+              '',
+              `✅ 成功解析 ${parsedCount}/${sourceCount} 个快照，应用信息去重后 ${appRowCount} 项，环境信息去重后 ${envRowCount} 项。`,
+              endMarker
             ].join('\n');
 
             const oldBody = context.payload.issue.body || '';
-            const blockRe = new RegExp(`${startMarker}[\\s\\S]*?${endMarker}`, 'm');
-
             let newBody;
+
             if (blockRe.test(oldBody)) {
-              newBody = oldBody.replace(blockRe, appendText.trim());
+              newBody = oldBody.replace(blockRe, newBlock).trimEnd();
             } else {
-              newBody = oldBody.trimEnd() + '\n' + appendText;
+              const baseBody = oldBody.trimEnd();
+              newBody = baseBody ? `${baseBody}\n\n${newBlock}` : newBlock;
             }
 
-            await github.rest.issues.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              title: newTitle,
-              body: newBody
-            });
+            const labels = (context.payload.issue.labels || []).map((label) =>
+              typeof label === 'string' ? label : label.name
+            );
+            const shouldReopen = context.payload.issue.state === 'closed' && labels.includes('invalid');
+
+            if (newTitle !== oldTitle || newBody !== oldBody || shouldReopen) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                title: newTitle,
+                body: newBody,
+                ...(shouldReopen ? { state: 'open' } : {})
+              });
+            }
+
+            if (labels.includes('invalid')) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  name: 'invalid'
+                });
+              } catch (error) {
+                console.log(`remove invalid label skipped: ${error.message}`);
+              }
+            }
