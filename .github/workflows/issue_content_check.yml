@@ -5,10 +5,12 @@ on:
     types: [opened, edited]
 
 concurrency:
+  # 避免同一个 issue 在 opened / edited 连续触发时并发回写，造成标题或正文相互覆盖。
   group: issue-content-check-${{ github.event.issue.number }}
   cancel-in-progress: true
 
 jobs:
+  # 1）先检查原始 issue 正文，决定后续是关闭、提醒，还是进入解析流程。
   prepare:
     if: github.event.sender.type != 'Bot'
     runs-on: ubuntu-latest
@@ -34,14 +36,19 @@ jobs:
           HAS_UPLOADING=false
           HAS_PRIVATE=false
 
+          # 出现 "Uploading" 说明 GitHub 附件还没传完，此时链接通常还不可用。
           if grep -q 'Uploading' <<< "$BODY"; then
             HAS_UPLOADING=true
           fi
 
+          # /snapshot/ 分享链接只有上传者自己可见，维护者无法直接访问。
           if grep -Eq 'https?://(i\.gkd\.li|igkd\.li)/snapshot/' <<< "$BODY"; then
             HAS_PRIVATE=true
           fi
 
+          # 这里只保留当前工作流真正能尝试下载的来源：
+          # 1. 公开的 i.gkd.li 分享链接
+          # 2. 直接可下载的 zip 附件链接
           grep -oE 'https?://[^[:space:]<>()]+' <<< "$BODY" \
             | sed -E 's/[)>.,]+$//' \
             | grep -E '(^https?://(i\.gkd\.li|igkd\.li)/i/[0-9]+([?][^[:space:]]*)?$|^https?://[^[:space:]]+\.zip([?][^[:space:]]*)?$)' \
@@ -55,6 +62,7 @@ jobs:
           if [ "$SOURCE_COUNT" -gt 0 ]; then
             SHOULD_PARSE=true
           elif [ "$HAS_UPLOADING" = false ] && [ "$HAS_PRIVATE" = false ]; then
+            # 既没有可解析快照，也不是“上传中 / 私有链接”这类可补救情况，直接按无效 issue 处理。
             SHOULD_CLOSE=true
           fi
 
@@ -69,6 +77,7 @@ jobs:
             echo "urls_json=$URLS_JSON"
           } >> "$GITHUB_OUTPUT"
 
+  # 2）对当前还无法解析的 issue 给出可执行的反馈，例如补传或改用公开链接。
   notify-invalid:
     needs: prepare
     if: |
@@ -80,7 +89,7 @@ jobs:
       )
     runs-on: ubuntu-latest
     permissions:
-      issues: write
+      issues: write // 用于覆写评论追加信息
 
     steps:
       - name: 缺少快照时自动标记并关闭 Issue
@@ -122,6 +131,7 @@ jobs:
 
             可在下方评论区补充
 
+  # 3）下载快照、生成去重汇总，并把标题和正文同步回 issue。
   parse-and-sync:
     name: 解析快照并同步 Issue
     needs: prepare
@@ -139,6 +149,7 @@ jobs:
         run: |
           set -euo pipefail
 
+          # 统一的下载解压函数，同时服务于直接 zip 链接和分享链接解析后的真实附件地址。
           download_and_extract() {
             local url="$1"
             local zip_path="$2"
@@ -174,9 +185,11 @@ jobs:
               SNAP_ID="${BASH_REMATCH[2]}"
               DOWNLOAD_URL="https://github.com/user-attachments/files/$SNAP_ID/file.zip"
 
+              # 对公开 i.gkd.li 分享链接，优先尝试可预测的 GitHub 附件地址。
               if download_and_extract "$DOWNLOAD_URL" "$ZIP_PATH" "$EXTRACT_DIR"; then
                 DOWNLOADED=true
               else
+                # 兜底方案：打开分享页 HTML，从中提取第一个 zip 地址再尝试下载。
                 PAGE_HTML="$(curl -fsSL --retry 2 --connect-timeout 20 "$SOURCE_URL" || true)"
                 FALLBACK_URL="$(
                   printf '%s' "$PAGE_HTML" \
@@ -210,6 +223,7 @@ jobs:
               continue
             fi
 
+            # 先把原始快照 JSON 规整成“每个来源一条扁平记录”，后面 jq 去重和出表都基于这层数据。
             if ! jq -c --arg sourceUrl "$SOURCE_URL" '
               def clean:
                 if . == null then "未知"
@@ -290,6 +304,7 @@ jobs:
 
           jq -s '.' work/records.ndjson > work/records.json
 
+          # 应用表按 名称 / 包名 / 版本 去重；同一应用下多个 ActivityId 合并到同一行展示。
           jq -r '
             def uniq_keep_order:
               reduce .[] as $item ([]; if index($item) == null then . + [$item] else . end);
@@ -314,6 +329,7 @@ jobs:
             | join("\n")
           ' work/records.json > work/app_rows.md
 
+          # 运行环境表按 分辨率 / 方向 / 设备 / Android / GKD 去重，避免同设备多快照重复占行。
           jq -r '
             sort_by(.resolution, .orientation, .deviceInfo, .androidInfo, .gkdInfo)
             | unique_by(.resolution, .orientation, .deviceInfo, .androidInfo, .gkdInfo)
@@ -322,6 +338,7 @@ jobs:
             | join("\n")
           ' work/records.json > work/env_rows.md
 
+          # 自动标题前缀优先使用应用名；如果应用名拿不到，再退回到包名。
           PREFIX="$(jq -r '
             def uniq_keep_order:
               reduce .[] as $item ([]; if index($item) == null then . + [$item] else . end);
@@ -374,6 +391,7 @@ jobs:
             const oldTitle = context.payload.issue.title || '';
             let newTitle = oldTitle;
 
+            // 把 issue form 里的多行内容压成稳定的单行文本，便于后续生成标题和汇总文案。
             const cleanInline = (value) =>
               (value || '')
                 .replace(/\r\n/g, '\n')
@@ -384,6 +402,7 @@ jobs:
                 .replace(/\s+/g, ' ')
                 .trim();
 
+            // 按标题提取某个 markdown 区块，同时返回移除该区块后的剩余正文。
             const extractSection = (body, headingPatterns) => {
               const normalized = body.replace(/\r\n/g, '\n');
               const lines = normalized.split('\n');
@@ -414,6 +433,7 @@ jobs:
               return { section, remaining };
             };
 
+            // GitHub issue form 最终会落成 markdown，因此这里要按标题回读用户选择的值。
             const getSectionValue = (body, headingPatterns) => {
               const { section } = extractSection(body, headingPatterns);
               if (!section) {
@@ -433,6 +453,7 @@ jobs:
             const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const blockRe = new RegExp(`${escapeRegExp(startMarker)}[\\s\\S]*?${escapeRegExp(endMarker)}`, 'm');
             const oldBody = context.payload.issue.body || '';
+            // 解析时只看用户原始正文，不把之前自动插入的解析区块再算进去，避免重复污染。
             const bodyWithoutBlock = oldBody.replace(blockRe, '').trim();
             const category = getSectionValue(bodyWithoutBlock, [
               /^###\s*🧩\s*规则分类\s*$/u
@@ -462,6 +483,7 @@ jobs:
 
             const tagMatch = oldTitle.match(/^(\[[^\]]+\])\s*(.*)$/);
             if (prefix && category) {
+              // 保留原有 [Feature]/[Bug] 标签，刷新自动前缀，同时尽量保留用户自己写的标题后缀。
               const titleCore = `${prefix} ${category}_`.trim();
               const rawTitleSuffix = tagMatch ? tagMatch[2] : oldTitle;
               const userTitleSuffix = extractUserTitleSuffix(
@@ -499,6 +521,7 @@ jobs:
               endMarker
             ].join('\n');
 
+            // 原始快照区始终放在最后，方便维护者继续直接核对用户提供的原始链接或附件。
             const snapshotSectionInfo = extractSection(bodyWithoutBlock, [
               /^###\s*📸\s*需要适配界面的快照\s*$/u,
               /^###\s*📸\s*请提供.*快照.*$/u
@@ -517,6 +540,7 @@ jobs:
             );
             const shouldReopen = context.payload.issue.state === 'closed' && labels.includes('invalid');
 
+            // 只有标题 / 正文 / 状态确实发生变化时才回写；之前因 invalid 被自动关闭的会一并 reopen。
             if (newTitle !== oldTitle || newBody !== oldBody || shouldReopen) {
               await github.rest.issues.update({
                 owner: context.repo.owner,
@@ -528,6 +552,7 @@ jobs:
               });
             }
 
+            // 已成功解析的 issue 不应继续保留 invalid 标签。
             if (labels.includes('invalid')) {
               try {
                 await github.rest.issues.removeLabel({
