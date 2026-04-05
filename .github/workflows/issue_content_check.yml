@@ -89,7 +89,7 @@ jobs:
       )
     runs-on: ubuntu-latest
     permissions:
-      issues: write // 用于覆写评论追加信息
+      issues: write # 用于覆写评论追加信息
 
     steps:
       - name: 缺少快照时自动标记并关闭 Issue
