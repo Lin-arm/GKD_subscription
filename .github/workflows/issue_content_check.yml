@@ -453,21 +453,6 @@ jobs:
               return { section, remaining };
             };
 
-            // GitHub issue form 最终会落成 markdown，因此这里要按标题回读用户选择的值。
-            const getSectionValue = (body, headingPatterns) => {
-              const { section } = extractSection(body, headingPatterns);
-              if (!section) {
-                return '';
-              }
-
-              const sectionBody = section
-                .split('\n')
-                .slice(1)
-                .join('\n');
-
-              return cleanInline(sectionBody);
-            };
-
             const startMarker = '<!-- gkd-auto-parse:start -->';
             const endMarker = '<!-- gkd-auto-parse:end -->';
             const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -475,9 +460,6 @@ jobs:
             const oldBody = context.payload.issue.body || '';
             // 解析时只看用户原始正文，不把之前自动插入的解析区块再算进去，避免重复污染。
             const bodyWithoutBlock = oldBody.replace(blockRe, '').trim();
-            const category = getSectionValue(bodyWithoutBlock, [
-              /^###\s*🧩\s*规则分类\s*$/u
-            ]);
 
             const stripLeadingTitleSeparator = (value) =>
               (value || '').replace(/^[-:：|/\\\s]+/, '').trim();
@@ -502,12 +484,19 @@ jobs:
             };
 
             const tagMatch = oldTitle.match(/^(\[[^\]]+\])\s*(.*)$/);
-            if (prefix && category) {
+            if (prefix) {
               // 保留原有 [Feature]/[Bug] 标签，刷新自动前缀，同时尽量保留用户自己写的标题后缀。
-              const titleCore = `${prefix} ${category}_`.trim();
+              const titleCore = prefix.trim();
               const rawTitleSuffix = tagMatch ? tagMatch[2] : oldTitle;
+              const legacyCorePattern = new RegExp(
+                `^${escapeRegExp(titleCore)}(?:\\s+[^\\s]+_)?(?:\\s*[-:：|/\\\\]\\s*)?`,
+              );
+              const normalizedRawTitleSuffix = cleanInline(rawTitleSuffix).replace(
+                legacyCorePattern,
+                '',
+              );
               const userTitleSuffix = extractUserTitleSuffix(
-                rawTitleSuffix,
+                normalizedRawTitleSuffix,
                 titleCore,
               );
               const mergedTitle = userTitleSuffix
@@ -522,8 +511,6 @@ jobs:
             const newBlock = [
               startMarker,
               '## 📦 快照自动解析详情',
-              '',
-              `🧩 表单分类：${category ? `**${category}**` : '未填写'}`,
               '',
               '### 应用快照汇总',
               '',
