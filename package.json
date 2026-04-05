@@ -13,6 +13,7 @@
     "postinstall": "simple-git-hooks",
     "format": "prettier --cache --write ./**/*.{js,cjs,mjs,ts,jsx,tsx,json}",
     "lint": "eslint --cache --fix ./**/*.{js,cjs,mjs,ts,jsx,tsx}",
+    "build:issue-snapshot-summary": "tsx ./scripts/buildIssueSnapshotSummary.ts",
     "check:resource-links": "tsx ./scripts/checkResourceLinks.ts",
     "update:issue-forms": "tsx ./scripts/updateIssueForms.ts --write",
     "check": "tsc --noEmit && tsx ./scripts/check.ts",

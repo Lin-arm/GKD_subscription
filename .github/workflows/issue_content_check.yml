@@ -141,7 +141,24 @@ jobs:
       issues: write
 
     steps:
-      - name: 下载快照并生成去重汇总
+      - name: 检出仓库代码
+        uses: actions/checkout@v5
+
+      - name: 配置 Node.js 运行环境
+        uses: actions/setup-node@v5
+        with:
+          node-version: 25
+          package-manager-cache: false
+
+      - name: 启用 corepack 并安装 pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+
+      - name: 安装项目依赖
+        run: pnpm install
+
+      - name: 生成快照自动摘要
         id: parse
         shell: bash
         env:
@@ -149,227 +166,14 @@ jobs:
         run: |
           set -euo pipefail
 
-          # 统一的下载解压函数，同时服务于直接 zip 链接和分享链接解析后的真实附件地址。
-          download_and_extract() {
-            local url="$1"
-            local zip_path="$2"
-            local extract_dir="$3"
-
-            rm -f "$zip_path"
-            rm -rf "$extract_dir"
-            mkdir -p "$extract_dir"
-
-            curl -fsSL --retry 3 --connect-timeout 20 -o "$zip_path" "$url" &&
-              unzip -qo "$zip_path" -d "$extract_dir" >/dev/null 2>&1
-          }
-
           mkdir -p work
           printf '%s' "$URLS_JSON" > work/urls.json
-          : > work/records.ndjson
-          SOURCE_TOTAL="$(jq 'length' work/urls.json)"
-
-          PARSED_COUNT=0
-          SNAP_INDEX=0
-
-          while IFS= read -r SOURCE_URL; do
-            [ -n "$SOURCE_URL" ] || continue
-
-            WORK_DIR="work/snap_${SNAP_INDEX}"
-            ZIP_PATH="$WORK_DIR/snapshot.zip"
-            EXTRACT_DIR="$WORK_DIR/extracted"
-            SNAP_INDEX=$((SNAP_INDEX + 1))
-            mkdir -p "$WORK_DIR"
-
-            DOWNLOADED=false
-
-            if [[ "$SOURCE_URL" =~ ^https?://(i\.gkd\.li|igkd\.li)/i/([0-9]+)(\?.*)?$ ]]; then
-              SNAP_ID="${BASH_REMATCH[2]}"
-              DOWNLOAD_URL="https://github.com/user-attachments/files/$SNAP_ID/file.zip"
-
-              # 对公开 i.gkd.li 分享链接，优先尝试可预测的 GitHub 附件地址。
-              if download_and_extract "$DOWNLOAD_URL" "$ZIP_PATH" "$EXTRACT_DIR"; then
-                DOWNLOADED=true
-              else
-                # 兜底方案：打开分享页 HTML，从中提取第一个 zip 地址再尝试下载。
-                PAGE_HTML="$(curl -fsSL --retry 2 --connect-timeout 20 "$SOURCE_URL" || true)"
-                FALLBACK_URL="$(
-                  printf '%s' "$PAGE_HTML" \
-                    | grep -oE "https?://[^\"'[:space:]]+\\.zip[^\"'[:space:]]*" \
-                    | head -n 1 || true
-                )"
-
-                if [ -n "$FALLBACK_URL" ] && download_and_extract "$FALLBACK_URL" "$ZIP_PATH" "$EXTRACT_DIR"; then
-                  DOWNLOADED=true
-                fi
-              fi
-            else
-              if download_and_extract "$SOURCE_URL" "$ZIP_PATH" "$EXTRACT_DIR"; then
-                DOWNLOADED=true
-              fi
-            fi
-
-            if [ "$DOWNLOADED" = false ]; then
-              continue
-            fi
-
-            JSON_PATH=""
-            while IFS= read -r CANDIDATE; do
-              if jq -e 'type == "object" and ((has("appId") and has("activityId")) or has("appInfo") or has("gkdAppInfo") or has("device"))' "$CANDIDATE" >/dev/null 2>&1; then
-                JSON_PATH="$CANDIDATE"
-                break
-              fi
-            done < <(find "$EXTRACT_DIR" -type f -name '*.json' | sort)
-
-            if [ -z "$JSON_PATH" ]; then
-              continue
-            fi
-
-            # 先把原始快照 JSON 规整成“每个来源一条扁平记录”，后面 jq 去重和出表都基于这层数据。
-            if ! jq -c --arg sourceUrl "$SOURCE_URL" '
-              def clean:
-                if . == null then "未知"
-                else tostring
-                  | gsub("\\|"; "¦")
-                  | gsub("[\\r\\n]+"; " ")
-                  | gsub("\\s+"; " ")
-                  | sub("^\\s+"; "")
-                  | sub("\\s+$"; "")
-                  | if . == "" then "未知" else . end
-                end;
-              def display_version(name; code):
-                if (name != null and (name | tostring | length) > 0) and code != null then
-                  ((name | tostring) + " (" + (code | tostring) + ")")
-                elif name != null and (name | tostring | length) > 0 then
-                  (name | tostring)
-                elif code != null then
-                  ("versionCode " + (code | tostring))
-                else
-                  "未知"
-                end;
-              {
-                sourceUrl: $sourceUrl,
-                appName: (.appInfo.name // .appInfo.id // .appId // "未知") | clean,
-                appId: (.appInfo.id // .appId // "未知") | clean,
-                appVersion: display_version(.appInfo.versionName; .appInfo.versionCode) | clean,
-                activityId: (.activityId // "未知") | clean,
-                resolution: (
-                  if .screenWidth != null and .screenHeight != null
-                  then ((.screenWidth | tostring) + "x" + (.screenHeight | tostring))
-                  else "未知"
-                  end
-                ) | clean,
-                orientation: (
-                  if .isLandscape == true then "横屏"
-                  elif .isLandscape == false then "竖屏"
-                  else "未知"
-                  end
-                ),
-                deviceInfo: (
-                  [
-                    .device.brand,
-                    .device.manufacturer,
-                    .device.model,
-                    .device.device
-                  ]
-                  | map(select(. != null) | tostring)
-                  | map(select(length > 0))
-                  | reduce .[] as $item ([]; if index($item) == null then . + [$item] else . end)
-                  | if length > 0 then join(" / ") else "未知" end
-                ) | clean,
-                androidInfo: (
-                  if .device.release != null or .device.sdkInt != null
-                  then "Android " + ((.device.release // "?") | tostring) + " / SDK " + ((.device.sdkInt // "?") | tostring)
-                  else "未知"
-                  end
-                ) | clean,
-                gkdInfo: (
-                  ((.gkdAppInfo.name // "GKD") | tostring)
-                  + " "
-                  + (display_version(.gkdAppInfo.versionName; .gkdAppInfo.versionCode) | tostring)
-                  + "<br>`"
-                  + ((.gkdAppInfo.id // "未知") | tostring)
-                  + "`"
-                ) | clean
-              }
-            ' "$JSON_PATH" >> work/records.ndjson; then
-              continue
-            fi
-
-            PARSED_COUNT=$((PARSED_COUNT + 1))
-          done < <(jq -r '.[]' work/urls.json)
-
-          if [ "$PARSED_COUNT" -eq 0 ]; then
-            {
-              echo "success=false"
-              echo "failed_count=$SOURCE_TOTAL"
-            } >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          jq -s '.' work/records.ndjson > work/records.json
-
-          # 应用表按 名称 / 包名 / 版本 去重；同一应用下多个 ActivityId 合并到同一行展示。
-          jq -r '
-            def uniq_keep_order:
-              reduce .[] as $item ([]; if index($item) == null then . + [$item] else . end);
-            sort_by(.appName, .appId, .appVersion, .activityId)
-            | group_by(.appName, .appId, .appVersion)
-            | map({
-                appName: .[0].appName,
-                appId: .[0].appId,
-                appVersion: .[0].appVersion,
-                activityIds: ([.[].activityId] | uniq_keep_order)
-              })
-            | to_entries
-            | map(
-                "| \(.key + 1) | \(.value.appName) | `\(.value.appId)` | `\(.value.appVersion)` | "
-                + (
-                    .value.activityIds
-                    | map("`\(.)`")
-                    | join("<br>")
-                  )
-                + " |"
-              )
-            | join("\n")
-          ' work/records.json > work/app_rows.md
-
-          # 运行环境表按 分辨率 / 方向 / 设备 / Android / GKD 去重，避免同设备多快照重复占行。
-          jq -r '
-            sort_by(.resolution, .orientation, .deviceInfo, .androidInfo, .gkdInfo)
-            | unique_by(.resolution, .orientation, .deviceInfo, .androidInfo, .gkdInfo)
-            | to_entries
-            | map("| \(.key + 1) | `\(.value.resolution)` | \(.value.orientation) | \(.value.deviceInfo) | `\(.value.androidInfo)` | \(.value.gkdInfo) |")
-            | join("\n")
-          ' work/records.json > work/env_rows.md
-
-          # 自动标题前缀优先使用应用名；如果应用名拿不到，再退回到包名。
-          PREFIX="$(jq -r '
-            def uniq_keep_order:
-              reduce .[] as $item ([]; if index($item) == null then . + [$item] else . end);
-            ([ .[].appName | select(. != "未知") ] | uniq_keep_order) as $appNames
-            | (
-                if ($appNames | length) > 0
-                then $appNames
-                else [ .[].appId | select(. != "未知") ] | uniq_keep_order
-                end
-              )
-            | join("/")
-          ' work/records.json)"
-
-          APP_ROW_COUNT="$(
-            jq 'sort_by(.appName, .appId, .appVersion, .activityId) | group_by(.appName, .appId, .appVersion) | length' work/records.json
-          )"
-          ENV_ROW_COUNT="$(
-            jq 'sort_by(.resolution, .orientation, .deviceInfo, .androidInfo, .gkdInfo) | unique_by(.resolution, .orientation, .deviceInfo, .androidInfo, .gkdInfo) | length' work/records.json
-          )"
+          pnpm run build:issue-snapshot-summary -- --urls-file work/urls.json --out-dir work/issue-summary
+          SUMMARY_PATH="work/issue-summary/summary.json"
 
           {
-            echo "success=true"
-            echo "parsed_count=$PARSED_COUNT"
-            echo "failed_count=$((SOURCE_TOTAL - PARSED_COUNT))"
-            echo "prefix=$PREFIX"
-            echo "app_row_count=$APP_ROW_COUNT"
-            echo "env_row_count=$ENV_ROW_COUNT"
+            echo "success=$(jq -r '.success' "$SUMMARY_PATH")"
+            echo "prefix=$(jq -r '.titlePrefix' "$SUMMARY_PATH")"
           } >> "$GITHUB_OUTPUT"
 
       - name: 快照无法解析时自动标记并提醒
@@ -392,21 +196,12 @@ jobs:
         uses: actions/github-script@v7
         env:
           RES_PREFIX: ${{ steps.parse.outputs.prefix }}
-          PARSED_COUNT: ${{ steps.parse.outputs.parsed_count }}
-          SOURCE_COUNT: ${{ needs.prepare.outputs.source_count }}
-          APP_ROW_COUNT: ${{ steps.parse.outputs.app_row_count }}
-          ENV_ROW_COUNT: ${{ steps.parse.outputs.env_row_count }}
         with:
           script: |
             const fs = require('fs');
 
             const prefix = (process.env.RES_PREFIX || '').trim();
-            const parsedCount = Number(process.env.PARSED_COUNT || 0);
-            const sourceCount = Number(process.env.SOURCE_COUNT || 0);
-            const appRowCount = Number(process.env.APP_ROW_COUNT || 0);
-            const envRowCount = Number(process.env.ENV_ROW_COUNT || 0);
-            const appRows = fs.readFileSync('work/app_rows.md', 'utf8').trim();
-            const envRows = fs.readFileSync('work/env_rows.md', 'utf8').trim();
+            const newBlock = fs.readFileSync('work/issue-summary/block.md', 'utf8').trim();
 
             const oldTitle = context.payload.issue.title || '';
             let newTitle = oldTitle;
@@ -507,26 +302,6 @@ jobs:
                 ? `${tagMatch[1]} ${mergedTitle}`.trim()
                 : mergedTitle;
             }
-
-            const newBlock = [
-              startMarker,
-              '## 📦 快照自动解析详情',
-              '',
-              '### 应用快照汇总',
-              '',
-              '| # | 📱 应用名称 | 📦 软件包名 | 🏷️ 应用版本 | 🧩 ActivityId |',
-              '| :-- | :--- | :--- | :--- | :--- |',
-              appRows,
-              '',
-              '### 运行环境汇总',
-              '',
-              '| # | 📐 分辨率 | 🧭 方向 | 📱 设备信息 | 🤖 Android | ⚙️ GKD |',
-              '| :-- | :--- | :--- | :--- | :--- | :--- |',
-              envRows,
-              '',
-              `✅ 成功解析 ${parsedCount}/${sourceCount} 个快照，应用信息去重后 ${appRowCount} 项，环境信息去重后 ${envRowCount} 项。`,
-              endMarker
-            ].join('\n');
 
             // 原始快照区始终放在最后，方便维护者继续直接核对用户提供的原始链接或附件。
             const snapshotSectionInfo = extractSection(bodyWithoutBlock, [
