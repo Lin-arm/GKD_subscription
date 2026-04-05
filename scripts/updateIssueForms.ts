@@ -22,15 +22,6 @@ body:
         > - 不要提供截图，截图对编写规则**没有任何作用❗**
         > - 不要使用**截屏快照**
 
-  - type: input
-    id: scene
-    attributes:
-      label: 🎯 场景说明 / 补充信息
-      description: 可填写本次想适配的界面、场景、按钮文字或其他补充说明
-      placeholder: 例如：支付宝首页红包弹窗关闭按钮、进入直播间后的悬浮广告等
-    validations:
-      required: true
-
   - type: checkboxes
     id: base-info-confirm
     attributes:
@@ -61,7 +52,7 @@ body:
       description: |
         快照是一个 zip 文件，快照链接是类似 "https://i.gkd.li/i/XXXXXXXX" 的文本，按照如下方式可获得快照信息
 
-        按照下面的截图示例来获取界面快照，上传文件或者生成链接并粘贴到下面的输入框。\
+        按照下面的截图示例来获取界面快照，上传文件或者生成链接并粘贴到下面的输入框，如果是需要多个点击如 [点击关闭按钮->出现关闭弹窗->点击关闭原因] 这种类型，则需要填写每个点击界面的快照\\
         ![img](https://raw.githubusercontent.com/Lin-arm/GKD_subscription/refs/heads/main/Snapshot.webp)
     validations:
       required: true
@@ -77,15 +68,15 @@ body:
         ## ⚠️ 在提交 issue 之前，请您务必确认以下信息，否则此 issue 可能会被关闭❗❗❗
 
         > [!WARNING]
-        > - 不要提供截图，截图对编写规则**没有任何作用❗**
-        > - 不要使用**截屏快照**
+        >   - 不要提供截图，截图对编写规则**没有任何作用❗**
+        >   - 不要使用**截屏快照**
 
   - type: checkboxes
     id: base-info-confirm
     attributes:
       label: ✅ 请核对以下内容
       options:
-        - label: 我已提供正确的**界面快照**（非截图），并会在下方说明具体误触/问题情况
+        - label: 我已提供正确的**界面快照**（非截图），且在快照说明中明确标注了是哪一条规则误触/出现问题
           required: true
         - label: 如果是多次点击才能生效的情况，我已提供**每一次点击的快照**
           required: true
@@ -105,11 +96,11 @@ body:
     id: snapshot
     attributes:
       label: |
-        📸 请提供误触界面/出现问题界面的快照（不要提供截图！！！不要使用截屏快照！！！），也可补充说明
+        📸请提供 误触界面/出现问题界面 的快照（不要提供截图！！！不要使用截屏快照！！！），也可补充说明
       description: |
         快照是一个 zip 文件，快照链接是类似 "https://i.gkd.li/i/XXXXXXXX" 的文本，按照如下方式可获得快照信息
 
-        按照下面的截图示例来获取界面快照，上传文件或者生成链接并粘贴到下面的输入框。\
+        按照下面的截图示例来获取界面快照，上传文件或者生成链接并粘贴到下面的输入框\\
         ![img](https://raw.githubusercontent.com/Lin-arm/GKD_subscription/refs/heads/main/Snapshot.webp)
     validations:
       required: true
@@ -118,10 +109,7 @@ body:
     id: rule
     attributes:
       label: |
-        🎯 问题说明 / 相关规则信息
-      description: |
-        请说明误触、不生效或其他异常情况，可补充相关规则名、触发步骤或记录界面截图
-      placeholder: 例如：支付宝首页红包弹窗误触了全局规则，或进入直播间后悬浮广告没有触发
+        请说明是哪一条规则 误触/出现问题（文字/触发记录界面截图）
     validations:
       required: true
 `;
