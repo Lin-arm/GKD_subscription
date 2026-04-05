@@ -44,6 +44,9 @@ type PageSummary = {
   hasMissingNodes: boolean;
   hasMissingFields: boolean;
   hasNoFastQuery: boolean;
+  hasLegacySnapshot: boolean;
+  hasDataInsufficient: boolean;
+  missingFieldNames: string[];
 };
 
 type EnvSummary = {
@@ -158,6 +161,66 @@ const rangeText = (values: number[]) => {
   const min = sorted[0];
   const max = sorted[sorted.length - 1];
   return min === max ? String(min) : `${min}~${max}`;
+};
+
+const formatActivityIdForMainTable = (activityId: string) => {
+  const normalized = cleanCell(activityId);
+
+  if (normalized === '未知' || normalized.length <= 32) {
+    return formatInlineCode(normalized);
+  }
+
+  const dotIndexes = [...normalized.matchAll(/\./g)]
+    .map((match) => match.index ?? -1)
+    .filter((index) => index > 0 && index < normalized.length - 1);
+
+  if (dotIndexes.length === 0) {
+    return formatInlineCode(normalized);
+  }
+
+  const bestSplitIndex = dotIndexes.reduce((bestIndex, currentIndex) => {
+    const currentDistance = Math.abs(currentIndex - 32);
+    const bestDistance = Math.abs(bestIndex - 32);
+
+    if (currentDistance < bestDistance) {
+      return currentIndex;
+    }
+    if (currentDistance === bestDistance && currentIndex > bestIndex) {
+      return currentIndex;
+    }
+    return bestIndex;
+  });
+
+  const firstLine = normalized.slice(0, bestSplitIndex + 1);
+  const secondLine = normalized.slice(bestSplitIndex + 1);
+
+  if (!firstLine || !secondLine) {
+    return formatInlineCode(normalized);
+  }
+
+  return `${formatInlineCode(firstLine)}<br>${formatInlineCode(secondLine)}`;
+};
+
+const buildPageRemarkList = (summary: PageSummary) => {
+  const remarks: string[] = [];
+
+  if (summary.hasLegacySnapshot) {
+    remarks.push('兼容模式解析');
+  }
+  if (summary.hasMissingNodes) {
+    remarks.push('缺少 nodes');
+  }
+  if (summary.hasDataInsufficient) {
+    remarks.push('QF 数据不足');
+  }
+  if (summary.hasNoFastQuery) {
+    remarks.push('无可用快查');
+  }
+  if (summary.hasMissingFields) {
+    remarks.push(`字段缺失: ${summary.missingFieldNames.join(', ')}`);
+  }
+
+  return remarks.length > 0 ? remarks.join(' / ') : '无';
 };
 
 const buildFetchInit = () => ({
@@ -500,12 +563,7 @@ const normalizeSnapshotRecord = (
         appInfo?.versionCode ?? snapshot.appVersionCode,
       ),
     ),
-    activityId: cleanCell(
-      snapshot.activityId
-        ? (snapshot.activityId as string).split('$').pop() ||
-            snapshot.activityId
-        : snapshot.activityId,
-    ),
+    activityId: cleanCell(snapshot.activityId),
 
     resolution: cleanCell(
       snapshot.screenWidth !== undefined && snapshot.screenHeight !== undefined
@@ -592,7 +650,13 @@ const summarizePageGroups = (records: NormalizedSnapshotRecord[]) => {
     const hasMissingFields = groupRecords.some(
       (record) => record.missingFields.length > 0,
     );
+    const missingFieldNames = uniqKeepOrder(
+      groupRecords.flatMap((record) => record.missingFields),
+    );
     const hasQfSignals = recordsWithNodes.some((record) => record.hasQfSignals);
+    const hasLegacySnapshot = groupRecords.some(
+      (record) => record.legacySnapshot,
+    );
 
     let nodeScaleText = '无节点数据';
     if (recordsWithNodes.length > 0) {
@@ -613,9 +677,11 @@ const summarizePageGroups = (records: NormalizedSnapshotRecord[]) => {
 
     let fastQueryText = '无节点数据';
     let hasNoFastQuery = false;
+    let hasDataInsufficient = false;
     if (recordsWithNodes.length > 0) {
       if (!hasQfSignals) {
         fastQueryText = '数据不足';
+        hasDataInsufficient = true;
       } else {
         const qualifiedIdValues = recordsWithNodes.flatMap((record) =>
           record.qualifiedIdCount === null ? [] : [record.qualifiedIdCount],
@@ -648,6 +714,9 @@ const summarizePageGroups = (records: NormalizedSnapshotRecord[]) => {
       hasMissingNodes,
       hasMissingFields,
       hasNoFastQuery,
+      hasLegacySnapshot,
+      hasDataInsufficient,
+      missingFieldNames,
     });
   });
 
@@ -721,11 +790,22 @@ const renderPageRows = (pageSummaries: PageSummary[]) => {
   return pageSummaries
     .map(
       (summary, index) =>
-        `| ${index + 1} | ${summary.appName} | ${formatInlineCode(
+        `| ${index + 1} | ${summary.appName}<br>${formatInlineCode(
           summary.appId,
-        )} | ${formatInlineCode(summary.appVersion)} | ${formatInlineCode(
+        )} | ${formatInlineCode(summary.appVersion)} | ${formatActivityIdForMainTable(
           summary.activityId,
         )} | ${summary.snapshotCount} | ${summary.nodeScaleText} | ${summary.fastQueryText} |`,
+    )
+    .join('\n');
+};
+
+const renderPageDetailRows = (pageSummaries: PageSummary[]) => {
+  return pageSummaries
+    .map(
+      (summary, index) =>
+        `| ${index + 1} | ${formatInlineCode(summary.appVersion)} | ${formatInlineCode(
+          summary.activityId,
+        )} | ${summary.fastQueryText} | ${buildPageRemarkList(summary)} |`,
     )
     .join('\n');
 };
@@ -775,9 +855,10 @@ const buildWarningLines = (
 const buildMarkdownBlock = (params: {
   summary: IssueSnapshotSummary;
   pageRows: string;
+  pageDetailRows: string;
   envRows: string;
 }) => {
-  const { summary, pageRows, envRows } = params;
+  const { summary, pageRows, pageDetailRows, envRows } = params;
 
   const sections = [
     '<!-- gkd-auto-parse:start -->',
@@ -800,9 +881,20 @@ const buildMarkdownBlock = (params: {
     '',
     '### 页面快照汇总',
     '',
-    '| # |📱应用名称 |📦软件包名 |🏷️应用版本 |🧩Activity/界面ID |🧾快照数 |🌲节点规模 |⚡快查信号 |',
-    '| :-- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |',
+    '| # | 📱应用 | 🏷️应用版本 | 🧩界面ID | 🧾快照数 | 🌲节点规模 | ⚡快查 |',
+    '| :-- | :--- | :--- | :--- | :--- | :--- | :--- |',
     pageRows,
+    '',
+    '### 页面技术详情',
+    '',
+    '<details>',
+    '<summary>展开查看完整界面 ID 与技术备注</summary>',
+    '',
+    '| # | 🏷️应用版本 | 🧩完整界面ID | ⚡快查信号 | 📝备注 |',
+    '| :-- | :--- | :--- | :--- | :--- |',
+    pageDetailRows,
+    '',
+    '</details>',
     '',
     '### 运行环境汇总',
     '',
@@ -866,6 +958,7 @@ const buildSummary = async (sourceUrls: string[]) => {
     block: buildMarkdownBlock({
       summary,
       pageRows: renderPageRows(pageSummaries),
+      pageDetailRows: renderPageDetailRows(pageSummaries),
       envRows: renderEnvRows(envSummaries),
     }),
   };
