@@ -10,12 +10,15 @@ permissions:
   issues: write
   pull-requests: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
       - name: 检出仓库代码
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 获取 PR 变更文件列表
         id: changed_files
@@ -46,12 +49,15 @@ jobs:
           fi
 
       - name: 配置 Node.js 运行环境
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
+          package-manager-cache: false
 
-      - name: 配置 pnpm 包管理器
-        uses: pnpm/action-setup@v4
+      - name: 启用 corepack 并安装 pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
 
       - name: 安装项目依赖
         run: pnpm install

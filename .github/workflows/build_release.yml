@@ -5,13 +5,16 @@ on:
     - cron: '0 19 * * *'
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   check_changes:
     runs-on: ubuntu-latest
     outputs:
       changed: ${{ steps.changes.outputs.changed }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - id: changes
@@ -40,17 +43,20 @@ jobs:
       version: ${{ steps.version.outputs.version }}
     steps:
       - name: 检出仓库代码
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: 配置 Node.js 运行环境
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 25
+          package-manager-cache: false
 
-      - name: 配置 pnpm 包管理器
-        uses: pnpm/action-setup@v4
+      - name: 启用 corepack 并安装 pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
 
       - name: 安装项目依赖
         run: pnpm install
