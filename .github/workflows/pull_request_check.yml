@@ -184,8 +184,8 @@ jobs:
           echo "==== GIT DIFF ===="
           git --no-pager diff || true
 
-          status=$(git status --porcelain)
+          status=$(git status --porcelain --untracked-files=no) // 排除未跟踪文件导致误报检查错误(如Action的work目录)
           if [ -n "$status" ]; then
-            echo "❌ 格式化修改了文件，请提交格式化后的代码"
+            echo "❌ 某些内容格式不正确"
             exit 1
           fi
