@@ -500,7 +500,13 @@ const normalizeSnapshotRecord = (
         appInfo?.versionCode ?? snapshot.appVersionCode,
       ),
     ),
-    activityId: cleanCell(snapshot.activityId),
+    activityId: cleanCell(
+      snapshot.activityId
+        ? (snapshot.activityId as string).split('$').pop() ||
+            snapshot.activityId
+        : snapshot.activityId,
+    ),
+
     resolution: cleanCell(
       snapshot.screenWidth !== undefined && snapshot.screenHeight !== undefined
         ? `${String(snapshot.screenWidth)}x${String(snapshot.screenHeight)}`
@@ -794,13 +800,13 @@ const buildMarkdownBlock = (params: {
     '',
     '### 页面快照汇总',
     '',
-    '| # | 📱 应用名称 | 📦 软件包名 | 🏷️ 应用版本 | 🧩 Activity / 页面 ID | 🧾 快照数 | 🌲 节点规模 | ⚡ 快查信号 |',
+    '| # |📱应用名称 |📦软件包名 |🏷️应用版本 |🧩Activity/界面ID |🧾快照数 |🌲节点规模 |⚡快查信号 |',
     '| :-- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |',
     pageRows,
     '',
     '### 运行环境汇总',
     '',
-    '| # | 📐 分辨率 | 🧭 方向 | 📱 设备信息 | 🤖 Android | ⚙️ GKD |',
+    '| # |📐分辨率 |🧭方向 |📱设备信息 |🤖Android |⚙️GKD |',
     '| :-- | :--- | :--- | :--- | :--- | :--- |',
     envRows,
     '<!-- gkd-auto-parse:end -->',
