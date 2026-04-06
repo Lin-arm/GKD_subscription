@@ -16,8 +16,6 @@
     "build:issue-snapshot-summary": "tsx ./scripts/buildIssueSnapshotSummary.ts",
     "build:issue-update-payload": "tsx ./scripts/buildIssueUpdatePayload.ts",
     "build:pr-check-report": "tsx ./scripts/buildPrCheckReport.ts",
-    "build:push-check-report": "tsx ./scripts/buildPushCheckReport.ts",
-    "build:push-resource-scope": "tsx ./scripts/resolvePushResourceScope.ts",
     "enhance:issue-snapshot-section": "tsx ./scripts/enhanceIssueSnapshotSection.ts",
     "check:resource-links": "tsx ./scripts/checkResourceLinks.ts",
     "update:issue-forms": "tsx ./scripts/updateIssueForms.ts --write",

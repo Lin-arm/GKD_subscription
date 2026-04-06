@@ -1,97 +1,156 @@
-name: Push 提交检查与自动修复
+name: check_fix_push
 
 on:
   push:
     branches:
       - '**'
 
-permissions:
-  contents: write
-  issues: write
-  pull-requests: write
+permissions: write-all
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 # 触发条件：任意分支 push
-# 是否会改仓库：会，format 或 lint 产生修复时会自动提交并 push
-# 失败含义：资源链接、项目检查或自动修复链路未通过
+# 是否会改仓库：会，格式化或 lint 产生修复时会自动提交并 push
+# 失败含义：资源链接检查未通过，或常规 check / format / lint 未通过
 jobs:
   # 流程树：
-  # 1. 已有 PR -> 用 PR changed files 识别资源链接检查范围
-  # 2. 无 PR -> 用本次 push files 识别资源链接检查范围
-  # 3. 无法精确识别 -> 跳过资源链接检查
-  # 4. 随后继续执行 check / format / lint
-  # 5. 若存在可提交的自动修复结果，则自动提交并 push
-  # 6. 若当前分支有关联 open PR，则同步一条固定 push 检查评论
+  # 1. 当前分支已有 open PR -> 用 PR changed files 识别资源链接检查范围
+  # 2. 无 PR -> 用本次 push changed files 识别资源链接检查范围
+  # 3. 两者都拿不到 -> 跳过资源链接检查并说明原因
+  # 4. 资源链接检查通过或被跳过 -> 执行 check / format / lint -> 自动提交修复
   prepare-resource-scope:
     name: 识别资源链接检查范围
     runs-on: ubuntu-latest
     if: |
       ${{ github.event.head_commit.message != 'chore(actions): check_format_lint' }}
     outputs:
-      scope_state: ${{ steps.scope_outputs.outputs.scope_state }}
-      scope_source: ${{ steps.scope_outputs.outputs.scope_source }}
-      resource_files_json: ${{ steps.scope_outputs.outputs.resource_files_json }}
-      scope_message: ${{ steps.scope_outputs.outputs.scope_message }}
-      pr_numbers_json: ${{ steps.scope_outputs.outputs.pr_numbers_json }}
+      scope_state: ${{ steps.detect.outputs.scope_state }}
+      scope_source: ${{ steps.detect.outputs.scope_source }}
+      resource_files_json: ${{ steps.detect.outputs.resource_files_json }}
+      scope_message: ${{ steps.detect.outputs.scope_message }}
     steps:
-      - name: 检出仓库代码
-        uses: actions/checkout@v5
-
-      - name: 配置 Node.js 运行环境
-        uses: actions/setup-node@v5
+      - name: 根据 PR 或 push 事件确定资源文件范围
+        id: detect
+        uses: actions/github-script@v7
         with:
-          node-version: 22
-          package-manager-cache: false
+          script: |
+            const resourceFilePattern = /^(src\/apps\/.+\.ts|src\/globalGroups\.ts)$/;
+            const uniqueSorted = (items) => [...new Set(items)].sort();
+            const branch = context.ref.replace('refs/heads/', '');
+            const head = `${context.repo.owner}:${branch}`;
+            const before = context.payload.before || '';
+            const current = context.sha;
 
-      - name: 启用 corepack 并安装 pnpm
-        run: |
-          corepack enable
-          corepack prepare pnpm@latest --activate
+            let scopeState = 'unresolved';
+            let scopeSource = 'none';
+            let resourceFiles = [];
+            let scopeMessage =
+              '当前没有可用 PR 文件集，也无法从本次 push 事件恢复精确文件列表，因此资源链接检查被安全跳过。';
 
-      - name: 安装项目依赖
-        run: pnpm install
+            try {
+              const prs = await github.paginate(github.rest.pulls.list, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                head,
+                per_page: 100,
+              });
 
-      - name: 运行资源范围识别脚本
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p work/push-resource-scope
-          pnpm run build:push-resource-scope -- \
-            --repo-owner "${{ github.repository_owner }}" \
-            --repo-name "${{ github.event.repository.name }}" \
-            --branch "${{ github.ref_name }}" \
-            --before "${{ github.event.before }}" \
-            --current "${{ github.sha }}" \
-            --event-file "$GITHUB_EVENT_PATH" \
-            --github-token "${{ secrets.GITHUB_TOKEN }}" \
-            --out-dir work/push-resource-scope
+              if (prs.length > 0) {
+                const prFiles = [];
+                for (const pr of prs) {
+                  const files = await github.paginate(github.rest.pulls.listFiles, {
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    pull_number: pr.number,
+                    per_page: 100,
+                  });
+                  prFiles.push(...files.map((file) => file.filename));
+                }
 
-      - name: 发布资源范围识别结果
-        id: scope_outputs
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "scope_state=$(jq -r '.scopeState' work/push-resource-scope/scope.json)" >> "$GITHUB_OUTPUT"
-          echo "scope_source=$(jq -r '.scopeSource' work/push-resource-scope/scope.json)" >> "$GITHUB_OUTPUT"
-          echo "resource_files_json=$(jq -c '.resourceFiles' work/push-resource-scope/scope.json)" >> "$GITHUB_OUTPUT"
-          echo "scope_message<<EOF" >> "$GITHUB_OUTPUT"
-          jq -r '.scopeMessage' work/push-resource-scope/scope.json >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
-          echo "pr_numbers_json=$(jq -c '.prNumbers' work/push-resource-scope/scope.json)" >> "$GITHUB_OUTPUT"
+                resourceFiles = uniqueSorted(
+                  prFiles.filter((file) => resourceFilePattern.test(file)),
+                );
+                scopeSource = 'pr';
 
-      - name: 上传资源范围识别产物
-        uses: actions/upload-artifact@v4
-        with:
-          name: push-resource-scope
-          path: work/push-resource-scope/scope.json
+                if (resourceFiles.length > 0) {
+                  scopeState = 'pr_files';
+                  scopeMessage = `资源链接检查来源：PR 文件集（命中 ${resourceFiles.length} 个资源文件）。`;
+                } else {
+                  scopeState = 'no_resource_files';
+                  scopeMessage =
+                    '资源链接检查已跳过：当前分支已有 open PR，但 PR 改动未触碰 src/apps/*.ts 或 src/globalGroups.ts。';
+                }
+              }
+            } catch (error) {
+              console.log(`list pull requests failed, fallback to push files: ${error.message}`);
+            }
+
+            if (scopeSource === 'none') {
+              let pushFiles = [];
+
+              if (before && !/^0+$/.test(before)) {
+                try {
+                  const comparison = await github.rest.repos.compareCommits({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    base: before,
+                    head: current,
+                  });
+                  pushFiles = (comparison.data.files ?? [])
+                    .map((file) => file.filename)
+                    .filter((file) => typeof file === 'string' && file.length > 0);
+                } catch (error) {
+                  console.log(`compare commits failed, fallback to push payload: ${error.message}`);
+                }
+              }
+
+              if (pushFiles.length === 0) {
+                const payloadFiles = [];
+                for (const commit of context.payload.commits ?? []) {
+                  payloadFiles.push(
+                    ...(commit.added ?? []),
+                    ...(commit.modified ?? []),
+                    ...(commit.removed ?? []),
+                  );
+                }
+                pushFiles = payloadFiles.filter(
+                  (file) => typeof file === 'string' && file.length > 0,
+                );
+              }
+
+              if (pushFiles.length > 0) {
+                resourceFiles = uniqueSorted(
+                  pushFiles.filter((file) => resourceFilePattern.test(file)),
+                );
+                scopeSource = 'push';
+
+                if (resourceFiles.length > 0) {
+                  scopeState = 'push_files';
+                  scopeMessage = `资源链接检查来源：本次 push 文件集（命中 ${resourceFiles.length} 个资源文件）。`;
+                } else {
+                  scopeState = 'no_resource_files';
+                  scopeMessage =
+                    '资源链接检查已跳过：本次 push 未触碰 src/apps/*.ts 或 src/globalGroups.ts。';
+                }
+              }
+            }
+
+            core.setOutput('scope_state', scopeState);
+            core.setOutput('scope_source', scopeSource);
+            core.setOutput('resource_files_json', JSON.stringify(resourceFiles));
+            core.setOutput('scope_message', scopeMessage);
+
+            console.log(scopeMessage);
+            if (resourceFiles.length > 0) {
+              console.log(`资源文件列表: ${resourceFiles.join(', ')}`);
+            }
 
   check-resource-links:
     name: 执行资源链接检查
     needs: prepare-resource-scope
     if: |
-      always() &&
       needs.prepare-resource-scope.result == 'success' &&
       (needs.prepare-resource-scope.outputs.scope_state == 'pr_files' ||
         needs.prepare-resource-scope.outputs.scope_state == 'push_files')
@@ -103,7 +162,7 @@ jobs:
       - name: 配置 Node.js 运行环境
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 25
           package-manager-cache: false
 
       - name: 启用 corepack 并安装 pnpm
@@ -114,91 +173,43 @@ jobs:
       - name: 安装项目依赖
         run: pnpm install
 
-      - name: 初始化资源链接检查产物目录
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p work/push-resource-links
-          cat <<'EOF' > work/push-resource-links/resource-links-report.json
-          {
-            "checkedFiles": [],
-            "checkedLinks": 0,
-            "invalidLinks": [],
-            "uncertainLinks": []
-          }
-          EOF
-
       - name: 使用 PR 文件集检查资源链接
-        id: resource_check_pr
         if: needs.prepare-resource-scope.outputs.scope_state == 'pr_files'
-        continue-on-error: true
         shell: bash
         env:
           RESOURCE_FILES_JSON: ${{ needs.prepare-resource-scope.outputs.resource_files_json }}
         run: |
           set -euo pipefail
-          printf '%s' "$RESOURCE_FILES_JSON" > work/push-resource-links/resource-files.json
-          mapfile -t RESOURCE_FILES < <(jq -r '.[]' work/push-resource-links/resource-files.json)
-          pnpm run check:resource-links -- \
-            --mode enforce \
-            --fail-on-uncertain \
-            --report-file work/push-resource-links/resource-links-report.json \
-            --files "${RESOURCE_FILES[@]}"
+          mkdir -p work
+          printf '%s' "$RESOURCE_FILES_JSON" > work/resource-files.json
+          mapfile -t RESOURCE_FILES < <(jq -r '.[]' work/resource-files.json)
+          pnpm run check:resource-links -- --mode enforce --fail-on-uncertain --report-file work/resource-links-report.json --files "${RESOURCE_FILES[@]}"
 
       - name: 使用本次 push 文件集检查资源链接
-        id: resource_check_push
         if: needs.prepare-resource-scope.outputs.scope_state == 'push_files'
-        continue-on-error: true
         shell: bash
         env:
           RESOURCE_FILES_JSON: ${{ needs.prepare-resource-scope.outputs.resource_files_json }}
         run: |
           set -euo pipefail
-          printf '%s' "$RESOURCE_FILES_JSON" > work/push-resource-links/resource-files.json
-          mapfile -t RESOURCE_FILES < <(jq -r '.[]' work/push-resource-links/resource-files.json)
-          pnpm run check:resource-links -- \
-            --mode enforce \
-            --fail-on-uncertain \
-            --report-file work/push-resource-links/resource-links-report.json \
-            --files "${RESOURCE_FILES[@]}"
+          mkdir -p work
+          printf '%s' "$RESOURCE_FILES_JSON" > work/resource-files.json
+          mapfile -t RESOURCE_FILES < <(jq -r '.[]' work/resource-files.json)
+          pnpm run check:resource-links -- --mode enforce --fail-on-uncertain --report-file work/resource-links-report.json --files "${RESOURCE_FILES[@]}"
 
-      - name: 上传资源链接检查报告
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: push-resource-links
-          path: work/push-resource-links/resource-links-report.json
-          if-no-files-found: warn
-
-      - name: 根据资源链接检查结果决定本 job 是否通过
-        if: |
-          always() &&
-          (steps.resource_check_pr.outcome == 'failure' ||
-            steps.resource_check_push.outcome == 'failure')
-        run: exit 1
-
-  project-checks:
-    name: 执行常规项目检查
+  project-check-and-autofix:
+    name: 执行项目检查并自动修复
     needs:
       - prepare-resource-scope
       - check-resource-links
     if: |
       always() &&
       needs.prepare-resource-scope.result == 'success' &&
-      (needs.check-resource-links.result == 'success' ||
-        needs.check-resource-links.result == 'failure' ||
-        needs.check-resource-links.result == 'skipped')
+      (needs.check-resource-links.result == 'success' || needs.check-resource-links.result == 'skipped')
     runs-on: ubuntu-latest
-    outputs:
-      check_outcome: ${{ steps.project_check.outcome }}
-      format_outcome: ${{ steps.format.outcome }}
-      lint_outcome: ${{ steps.lint.outcome }}
-      has_dirty_changes: ${{ steps.publish_outputs.outputs.has_dirty_changes }}
     steps:
       - name: 检出仓库代码
         uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
 
       - name: 跳过资源链接检查并说明原因
         if: |
@@ -209,401 +220,38 @@ jobs:
       - name: 配置 Node.js 运行环境
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 25
           package-manager-cache: false
 
       - name: 启用 corepack 并安装 pnpm
         run: |
           corepack enable
           corepack prepare pnpm@latest --activate
-
-      - name: 初始化项目检查产物目录
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p work/push-project-checks
-          : > work/push-project-checks/check.log
-          : > work/push-project-checks/format.log
-          : > work/push-project-checks/lint.log
-          : > work/push-project-checks/post-format-status.txt
-          : > work/push-project-checks/final-status.txt
-          : > work/push-project-checks/autofix.patch
 
       - name: 安装项目依赖
         run: pnpm install
 
       - name: 执行项目检查
-        id: project_check
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -o pipefail
-          pnpm run check 2>&1 | tee work/push-project-checks/check.log
+        run: pnpm run check
 
       - name: 执行代码格式化
-        id: format
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -o pipefail
-          pnpm run format 2>&1 | tee work/push-project-checks/format.log
-
-      - name: 记录格式化后的工作区状态
-        if: always()
-        shell: bash
-        run: |
-          set -euo pipefail
-          git status --porcelain --untracked-files=no > work/push-project-checks/post-format-status.txt
+        run: pnpm run format
 
       - name: 执行代码静态检查
-        id: lint
-        continue-on-error: true
-        shell: bash
+        run: pnpm run lint
+
+      - name: 提交自动修复结果
+        id: commit
         run: |
-          set -o pipefail
-          pnpm run lint 2>&1 | tee work/push-project-checks/lint.log
-
-      - name: 记录最终工作区状态与自动修复补丁
-        if: always()
-        shell: bash
-        run: |
-          set -euo pipefail
-          git status --porcelain --untracked-files=no > work/push-project-checks/final-status.txt
-          git diff --binary > work/push-project-checks/autofix.patch || true
-
-      - name: 发布项目检查摘要输出
-        if: always()
-        id: publish_outputs
-        shell: bash
-        run: |
-          set -euo pipefail
-          if grep -q '.' work/push-project-checks/final-status.txt; then
-            echo "has_dirty_changes=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "has_dirty_changes=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: 上传项目检查产物
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: push-project-checks
-          path: work/push-project-checks
-          if-no-files-found: warn
-
-  push-autofix:
-    name: 提交自动修复结果
-    needs:
-      - prepare-resource-scope
-      - project-checks
-    if: |
-      always() &&
-      needs.prepare-resource-scope.result == 'success' &&
-      (needs.project-checks.result == 'success' || needs.project-checks.result == 'failure')
-    runs-on: ubuntu-latest
-    outputs:
-      autofix_state: ${{ steps.publish_outputs.outputs.autofix_state }}
-      autofix_message: ${{ steps.publish_outputs.outputs.autofix_message }}
-    steps:
-      - name: 检出仓库代码
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
-      - name: 下载项目检查产物
-        if: always()
-        uses: actions/download-artifact@v4
-        with:
-          name: push-project-checks
-          path: work/push-project-checks
-
-      - name: 生成或提交自动修复结果
-        id: autofix
-        shell: bash
-        env:
-          CHECK_OUTCOME: ${{ needs.project-checks.outputs.check_outcome }}
-          LINT_OUTCOME: ${{ needs.project-checks.outputs.lint_outcome }}
-          HAS_DIRTY_CHANGES: ${{ needs.project-checks.outputs.has_dirty_changes }}
-          REF_NAME: ${{ github.ref_name }}
-        run: |
-          set -euo pipefail
-          mkdir -p work/push-autofix
-
-          if [ "${{ needs.project-checks.result }}" != "success" ]; then
-            jq -n \
-              --arg state "skipped_due_to_failures" \
-              --arg message "常规检查 job 未完整成功，已跳过自动修复提交。" \
-              --argjson hadChanges false \
-              '{state:$state,message:$message,hadChanges:$hadChanges}' \
-              > work/push-autofix/autofix-summary.json
-            exit 0
-          fi
-
-          if [ "$HAS_DIRTY_CHANGES" != "true" ]; then
-            jq -n \
-              --arg state "no_changes" \
-              --arg message "工作区没有可提交的自动修复结果，无需额外提交。" \
-              --argjson hadChanges false \
-              '{state:$state,message:$message,hadChanges:$hadChanges}' \
-              > work/push-autofix/autofix-summary.json
-            exit 0
-          fi
-
-          if [ "$CHECK_OUTCOME" != "success" ] || [ "$LINT_OUTCOME" != "success" ]; then
-            jq -n \
-              --arg state "skipped_due_to_failures" \
-              --arg message "检测到 pnpm run check 或 pnpm run lint 未通过，已跳过自动修复提交。" \
-              --argjson hadChanges true \
-              '{state:$state,message:$message,hadChanges:$hadChanges}' \
-              > work/push-autofix/autofix-summary.json
-            exit 0
-          fi
-
-          if [ ! -s work/push-project-checks/autofix.patch ]; then
-            jq -n \
-              --arg state "no_changes" \
-              --arg message "补丁文件为空，无需自动修复提交。" \
-              --argjson hadChanges false \
-              '{state:$state,message:$message,hadChanges:$hadChanges}' \
-              > work/push-autofix/autofix-summary.json
-            exit 0
-          fi
-
-          if ! git apply --binary --whitespace=nowarn work/push-project-checks/autofix.patch; then
-            jq -n \
-              --arg state "commit_failed" \
-              --arg message "自动修复补丁无法应用，请手动同步本地修复结果。" \
-              --argjson hadChanges true \
-              '{state:$state,message:$message,hadChanges:$hadChanges}' \
-              > work/push-autofix/autofix-summary.json
-            exit 0
-          fi
-
-          if ! grep -q '.' <(git status --porcelain --untracked-files=no); then
-            jq -n \
-              --arg state "no_changes" \
-              --arg message "补丁应用后没有产生新的工作区改动，无需自动修复提交。" \
-              --argjson hadChanges false \
-              '{state:$state,message:$message,hadChanges:$hadChanges}' \
-              > work/push-autofix/autofix-summary.json
-            exit 0
-          fi
-
           git config --local user.email github-actions[bot]@users.noreply.github.com
           git config --local user.name github-actions[bot]
-
-          if ! git commit -a -m "chore(actions): check_format_lint"; then
-            jq -n \
-              --arg state "commit_failed" \
-              --arg message "自动修复改动提交失败，请查看 git 状态并手动同步修复结果。" \
-              --argjson hadChanges true \
-              '{state:$state,message:$message,hadChanges:$hadChanges}' \
-              > work/push-autofix/autofix-summary.json
-            exit 0
-          fi
-
-          if ! git push origin "HEAD:$REF_NAME"; then
-            jq -n \
-              --arg state "commit_failed" \
-              --arg message "自动修复提交已生成，但 push 失败，请检查分支权限或远端状态。" \
-              --argjson hadChanges true \
-              '{state:$state,message:$message,hadChanges:$hadChanges}' \
-              > work/push-autofix/autofix-summary.json
-            exit 0
-          fi
-
-          COMMIT_SHA="$(git rev-parse HEAD)"
-          jq -n \
-            --arg state "committed" \
-            --arg message "已由 push 流水线自动提交并推送修复结果，请先同步分支最新提交。" \
-            --arg commitSha "$COMMIT_SHA" \
-            --argjson hadChanges true \
-            '{state:$state,message:$message,commitSha:$commitSha,hadChanges:$hadChanges}' \
-            > work/push-autofix/autofix-summary.json
-
-      - name: 发布自动修复摘要输出
-        if: always()
-        id: publish_outputs
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "autofix_state=$(jq -r '.state' work/push-autofix/autofix-summary.json)" >> "$GITHUB_OUTPUT"
-          echo "autofix_message<<EOF" >> "$GITHUB_OUTPUT"
-          jq -r '.message' work/push-autofix/autofix-summary.json >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
-
-      - name: 上传自动修复产物
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: push-autofix
-          path: work/push-autofix/autofix-summary.json
-          if-no-files-found: warn
-
-  sync-push-feedback:
-    name: 同步 push 检查评论
-    needs:
-      - prepare-resource-scope
-      - check-resource-links
-      - project-checks
-      - push-autofix
-    if: |
-      always() &&
-      needs.prepare-resource-scope.result == 'success' &&
-      (needs.check-resource-links.result == 'success' ||
-        needs.check-resource-links.result == 'failure' ||
-        needs.check-resource-links.result == 'skipped') &&
-      (needs.project-checks.result == 'success' || needs.project-checks.result == 'failure') &&
-      needs.push-autofix.result == 'success'
-    runs-on: ubuntu-latest
-    outputs:
-      should_fail: ${{ steps.report_outputs.outputs.should_fail }}
-    steps:
-      - name: 检出仓库代码
-        uses: actions/checkout@v5
-
-      - name: 配置 Node.js 运行环境
-        uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          package-manager-cache: false
-
-      - name: 启用 corepack 并安装 pnpm
-        run: |
-          corepack enable
-          corepack prepare pnpm@latest --activate
-
-      - name: 安装项目依赖
-        run: pnpm install
-
-      - name: 下载资源范围识别产物
-        uses: actions/download-artifact@v4
-        with:
-          name: push-resource-scope
-          path: work/push-resource-scope
-
-      - name: 下载项目检查产物
-        uses: actions/download-artifact@v4
-        with:
-          name: push-project-checks
-          path: work/push-project-checks
-
-      - name: 下载自动修复产物
-        uses: actions/download-artifact@v4
-        with:
-          name: push-autofix
-          path: work/push-autofix
-
-      - name: 下载资源链接检查产物
-        if: needs.check-resource-links.result != 'skipped'
+          git status --porcelain
+          git --no-pager diff
+          git commit -a -m "chore(actions): check_format_lint"
         continue-on-error: true
-        uses: actions/download-artifact@v4
+
+      - name: 推送修复后的代码
+        uses: ad-m/github-push-action@master
+        if: ${{ steps.commit.outcome == 'success' }}
         with:
-          name: push-resource-links
-          path: work/push-resource-links
-
-      - name: 生成 push 检查报告
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p work/push-feedback
-          pnpm run build:push-check-report -- \
-            --scope-file work/push-resource-scope/scope.json \
-            --resource-check-outcome "${{ needs.check-resource-links.result }}" \
-            --resource-report-file work/push-resource-links/resource-links-report.json \
-            --check-log-file work/push-project-checks/check.log \
-            --check-outcome "${{ needs.project-checks.outputs.check_outcome }}" \
-            --format-log-file work/push-project-checks/format.log \
-            --format-outcome "${{ needs.project-checks.outputs.format_outcome }}" \
-            --post-format-status-file work/push-project-checks/post-format-status.txt \
-            --lint-log-file work/push-project-checks/lint.log \
-            --lint-outcome "${{ needs.project-checks.outputs.lint_outcome }}" \
-            --final-status-file work/push-project-checks/final-status.txt \
-            --autofix-summary-file work/push-autofix/autofix-summary.json \
-            --out-dir work/push-feedback
-
-      - name: 发布 push 检查汇总输出
-        id: report_outputs
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "should_fail=$(jq -r '.shouldFail' work/push-feedback/summary.json)" >> "$GITHUB_OUTPUT"
-
-      - name: 同步固定 push 检查评论
-        continue-on-error: true
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-
-            const marker = '<!-- gkd-push-check -->';
-            const scope = JSON.parse(fs.readFileSync('work/push-resource-scope/scope.json', 'utf8'));
-            const summary = JSON.parse(fs.readFileSync('work/push-feedback/summary.json', 'utf8'));
-            const body = fs.readFileSync('work/push-feedback/comment.md', 'utf8').trim();
-            const prNumbers = Array.isArray(scope.prNumbers) ? scope.prNumbers : [];
-
-            if (prNumbers.length === 0) {
-              core.info('当前分支没有关联 open PR，仅保留 Actions 日志，不创建 push 检查评论。');
-              return;
-            }
-
-            for (const issueNumber of prNumbers) {
-              const comments = await github.paginate(github.rest.issues.listComments, {
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issueNumber,
-                per_page: 100,
-              });
-
-              const existingComment = comments.find(
-                (comment) => comment.user?.type === 'Bot' && comment.body?.includes(marker),
-              );
-
-              if (summary.shouldDeleteComment) {
-                if (existingComment) {
-                  await github.rest.issues.deleteComment({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    comment_id: existingComment.id,
-                  });
-                }
-                continue;
-              }
-
-              if (existingComment) {
-                await github.rest.issues.updateComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  comment_id: existingComment.id,
-                  body,
-                });
-                continue;
-              }
-
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issueNumber,
-                body,
-              });
-            }
-
-  finalize-push-status:
-    name: 根据汇总结果决定本次 push 是否通过
-    needs:
-      - prepare-resource-scope
-      - sync-push-feedback
-    if: always() && needs.prepare-resource-scope.result == 'success'
-    runs-on: ubuntu-latest
-    steps:
-      - name: 汇总并返回最终状态
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [ "${{ needs.sync-push-feedback.result }}" != "success" ]; then
-            exit 1
-          fi
-
-          if [ "${{ needs.sync-push-feedback.outputs.should_fail }}" = "true" ]; then
-            exit 1
-          fi
+          branch: ${{ github.ref }}
