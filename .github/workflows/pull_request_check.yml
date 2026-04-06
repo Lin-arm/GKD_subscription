@@ -1,18 +1,32 @@
-name: pull_request_check
+name: PR 合并门禁与指引
 
 on:
   pull_request:
     branches:
       - main
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+# 触发条件：指向 main 的 pull request
+# 是否会改仓库：不会，只会在 PR 中维护一条固定提示评论
+# 失败含义：当前 PR 还不满足合并门禁，需要按评论提示修复
 jobs:
-  check:
+  pr_gate:
+    name: 执行 PR 门禁检查
     runs-on: ubuntu-latest
     steps:
       - name: 检出仓库代码
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
-      - name: 获取 PR 变更文件列表
+      - name: 获取 PR 关键变更文件列表
         id: changed_files
         uses: tj-actions/changed-files@v46
         with:
@@ -22,41 +36,183 @@ jobs:
             src/globalGroups.ts
             src/subscription.ts
 
-      - name: 校验订阅文件变更数量
-        run: |
-          for file in ${{ steps.changed_files.outputs.all_changed_files }}; do
-            echo "$file was changed"
-          done
-          if [ ${{ steps.changed_files.outputs.all_changed_files_count }} -gt 1 ]; then
-            echo "your src subscription changed files count must <= 1"
-            exit 1
-          fi
+      - name: 检测 PR 中是否已有自动修复提交
+        id: pr_commit_context
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const commits = await github.paginate(github.rest.pulls.listCommits, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              per_page: 100,
+            });
+
+            const hasAutofixCommit = commits.some((commit) => {
+              const title = commit.commit?.message?.split('\n')[0]?.trim();
+              return title === 'chore(actions): check_format_lint';
+            });
+
+            core.setOutput('has_autofix_commit', hasAutofixCommit ? 'true' : 'false');
 
       - name: 配置 Node.js 运行环境
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
+          package-manager-cache: false
 
-      - name: 配置 pnpm 包管理器
-        uses: pnpm/action-setup@v4
+      - name: 启用 corepack 并安装 pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
 
       - name: 安装项目依赖
         run: pnpm install
 
+      - name: 校验关键订阅文件变更数量
+        id: key_files_limit
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work
+          printf '%s\n' ${{ steps.changed_files.outputs.all_changed_files }} | sed '/^$/d' > work/changed-files.txt
+
+          for file in $(cat work/changed-files.txt); do
+            echo "$file was changed"
+          done | tee work/key-files-limit.log
+
+          if [ "${{ steps.changed_files.outputs.all_changed_files_count }}" -gt 1 ]; then
+            echo "your src subscription changed files count must <= 1" | tee -a work/key-files-limit.log
+            exit 1
+          fi
+
       - name: 执行项目检查
-        run: pnpm run check
+        id: project_check
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p work
+          pnpm run check 2>&1 | tee work/check.log
 
       - name: 执行代码格式化
-        run: pnpm run format
+        id: format
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p work
+          pnpm run format 2>&1 | tee work/format.log
+
+      - name: 记录格式化后的工作区状态
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work
+          git status --porcelain --untracked-files=no > work/post-format-status.txt
 
       - name: 执行代码静态检查
-        run: pnpm run lint
-
-      - name: 校验代码格式化结果
+        id: lint
+        continue-on-error: true
+        shell: bash
         run: |
-          status=$(git status --porcelain)
-          if [ -n "$status" ]; then
-            echo "Something wasn’t formatted properly"
-            git --no-pager diff
+          set -o pipefail
+          mkdir -p work
+          pnpm run lint 2>&1 | tee work/lint.log
+
+      - name: 校验工作区是否仍有未提交改动
+        id: worktree_clean
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work
+          git status --porcelain --untracked-files=no > work/final-status.txt
+          git --no-pager diff || true
+
+          if grep -q '.' work/final-status.txt; then
+            echo "❌ 某些内容尚未格式化或仍可被自动修复" >&2
+            exit 1
+          fi
+
+      - name: 生成 PR 检查报告
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work/pr-check-report
+          pnpm run build:pr-check-report -- \
+            --changed-files-file work/changed-files.txt \
+            --key-files-limit-outcome "${{ steps.key_files_limit.outcome }}" \
+            --check-log-file work/check.log \
+            --check-outcome "${{ steps.project_check.outcome }}" \
+            --format-log-file work/format.log \
+            --format-outcome "${{ steps.format.outcome }}" \
+            --format-status-file work/post-format-status.txt \
+            --lint-log-file work/lint.log \
+            --lint-outcome "${{ steps.lint.outcome }}" \
+            --dirty-status-file work/final-status.txt \
+            --dirty-outcome "${{ steps.worktree_clean.outcome }}" \
+            --has-autofix-commit "${{ steps.pr_commit_context.outputs.has_autofix_commit }}" \
+            --out-dir work/pr-check-report
+
+      - name: 同步 PR 检查评论
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const marker = '<!-- gkd-pr-check -->';
+            const summary = JSON.parse(fs.readFileSync('work/pr-check-report/summary.json', 'utf8'));
+            const body = fs.readFileSync('work/pr-check-report/comment.md', 'utf8').trim();
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              per_page: 100,
+            });
+
+            const existingComment = comments.find(
+              (comment) => comment.user?.type === 'Bot' && comment.body?.includes(marker),
+            );
+
+            if (!summary.shouldFail) {
+              if (existingComment) {
+                await github.rest.issues.deleteComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: existingComment.id,
+                });
+              }
+              return;
+            }
+
+            if (existingComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+                body,
+              });
+              return;
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body,
+            });
+
+      - name: 根据汇总结果决定 PR 是否通过
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if jq -e '.shouldFail == true' work/pr-check-report/summary.json >/dev/null; then
             exit 1
           fi

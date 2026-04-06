@@ -10,14 +10,212 @@ permissions: write-all
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
+# 触发条件：任意分支 push
+# 是否会改仓库：会，格式化或 lint 产生修复时会自动提交并 push
+# 失败含义：资源链接检查未通过，或常规 check / format / lint 未通过
 jobs:
-  check:
+  # 流程树：
+  # 1. 当前分支已有 open PR -> 用 PR changed files 识别资源链接检查范围
+  # 2. 无 PR -> 用本次 push changed files 识别资源链接检查范围
+  # 3. 两者都拿不到 -> 跳过资源链接检查并说明原因
+  # 4. 资源链接检查通过或被跳过 -> 执行 check / format / lint -> 自动提交修复
+  prepare-resource-scope:
+    name: 识别资源链接检查范围
     runs-on: ubuntu-latest
     if: |
-      ${{ github.event.head_commit.message!='chore(actions): check_format_lint' }}
+      ${{ github.event.head_commit.message != 'chore(actions): check_format_lint' }}
+    outputs:
+      scope_state: ${{ steps.detect.outputs.scope_state }}
+      scope_source: ${{ steps.detect.outputs.scope_source }}
+      resource_files_json: ${{ steps.detect.outputs.resource_files_json }}
+      scope_message: ${{ steps.detect.outputs.scope_message }}
+    steps:
+      - name: 根据 PR 或 push 事件确定资源文件范围
+        id: detect
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const resourceFilePattern = /^(src\/apps\/.+\.ts|src\/globalGroups\.ts)$/;
+            const uniqueSorted = (items) => [...new Set(items)].sort();
+            const branch = context.ref.replace('refs/heads/', '');
+            const head = `${context.repo.owner}:${branch}`;
+            const before = context.payload.before || '';
+            const current = context.sha;
+
+            let scopeState = 'unresolved';
+            let scopeSource = 'none';
+            let resourceFiles = [];
+            let scopeMessage =
+              '当前没有可用 PR 文件集，也无法从本次 push 事件恢复精确文件列表，因此资源链接检查被安全跳过。';
+
+            try {
+              const prs = await github.paginate(github.rest.pulls.list, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                head,
+                per_page: 100,
+              });
+
+              if (prs.length > 0) {
+                const prFiles = [];
+                for (const pr of prs) {
+                  const files = await github.paginate(github.rest.pulls.listFiles, {
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    pull_number: pr.number,
+                    per_page: 100,
+                  });
+                  prFiles.push(...files.map((file) => file.filename));
+                }
+
+                resourceFiles = uniqueSorted(
+                  prFiles.filter((file) => resourceFilePattern.test(file)),
+                );
+                scopeSource = 'pr';
+
+                if (resourceFiles.length > 0) {
+                  scopeState = 'pr_files';
+                  scopeMessage = `资源链接检查来源：PR 文件集（命中 ${resourceFiles.length} 个资源文件）。`;
+                } else {
+                  scopeState = 'no_resource_files';
+                  scopeMessage =
+                    '资源链接检查已跳过：当前分支已有 open PR，但 PR 改动未触碰 src/apps/*.ts 或 src/globalGroups.ts。';
+                }
+              }
+            } catch (error) {
+              console.log(`list pull requests failed, fallback to push files: ${error.message}`);
+            }
+
+            if (scopeSource === 'none') {
+              let pushFiles = [];
+
+              if (before && !/^0+$/.test(before)) {
+                try {
+                  const comparison = await github.rest.repos.compareCommits({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    base: before,
+                    head: current,
+                  });
+                  pushFiles = (comparison.data.files ?? [])
+                    .map((file) => file.filename)
+                    .filter((file) => typeof file === 'string' && file.length > 0);
+                } catch (error) {
+                  console.log(`compare commits failed, fallback to push payload: ${error.message}`);
+                }
+              }
+
+              if (pushFiles.length === 0) {
+                const payloadFiles = [];
+                for (const commit of context.payload.commits ?? []) {
+                  payloadFiles.push(
+                    ...(commit.added ?? []),
+                    ...(commit.modified ?? []),
+                    ...(commit.removed ?? []),
+                  );
+                }
+                pushFiles = payloadFiles.filter(
+                  (file) => typeof file === 'string' && file.length > 0,
+                );
+              }
+
+              if (pushFiles.length > 0) {
+                resourceFiles = uniqueSorted(
+                  pushFiles.filter((file) => resourceFilePattern.test(file)),
+                );
+                scopeSource = 'push';
+
+                if (resourceFiles.length > 0) {
+                  scopeState = 'push_files';
+                  scopeMessage = `资源链接检查来源：本次 push 文件集（命中 ${resourceFiles.length} 个资源文件）。`;
+                } else {
+                  scopeState = 'no_resource_files';
+                  scopeMessage =
+                    '资源链接检查已跳过：本次 push 未触碰 src/apps/*.ts 或 src/globalGroups.ts。';
+                }
+              }
+            }
+
+            core.setOutput('scope_state', scopeState);
+            core.setOutput('scope_source', scopeSource);
+            core.setOutput('resource_files_json', JSON.stringify(resourceFiles));
+            core.setOutput('scope_message', scopeMessage);
+
+            console.log(scopeMessage);
+            if (resourceFiles.length > 0) {
+              console.log(`资源文件列表: ${resourceFiles.join(', ')}`);
+            }
+
+  check-resource-links:
+    name: 执行资源链接检查
+    needs: prepare-resource-scope
+    if: |
+      needs.prepare-resource-scope.result == 'success' &&
+      (needs.prepare-resource-scope.outputs.scope_state == 'pr_files' ||
+        needs.prepare-resource-scope.outputs.scope_state == 'push_files')
+    runs-on: ubuntu-latest
     steps:
       - name: 检出仓库代码
         uses: actions/checkout@v5
+
+      - name: 配置 Node.js 运行环境
+        uses: actions/setup-node@v5
+        with:
+          node-version: 25
+          package-manager-cache: false
+
+      - name: 启用 corepack 并安装 pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+
+      - name: 安装项目依赖
+        run: pnpm install
+
+      - name: 使用 PR 文件集检查资源链接
+        if: needs.prepare-resource-scope.outputs.scope_state == 'pr_files'
+        shell: bash
+        env:
+          RESOURCE_FILES_JSON: ${{ needs.prepare-resource-scope.outputs.resource_files_json }}
+        run: |
+          set -euo pipefail
+          mkdir -p work
+          printf '%s' "$RESOURCE_FILES_JSON" > work/resource-files.json
+          mapfile -t RESOURCE_FILES < <(jq -r '.[]' work/resource-files.json)
+          pnpm run check:resource-links -- --mode enforce --fail-on-uncertain --report-file work/resource-links-report.json --files "${RESOURCE_FILES[@]}"
+
+      - name: 使用本次 push 文件集检查资源链接
+        if: needs.prepare-resource-scope.outputs.scope_state == 'push_files'
+        shell: bash
+        env:
+          RESOURCE_FILES_JSON: ${{ needs.prepare-resource-scope.outputs.resource_files_json }}
+        run: |
+          set -euo pipefail
+          mkdir -p work
+          printf '%s' "$RESOURCE_FILES_JSON" > work/resource-files.json
+          mapfile -t RESOURCE_FILES < <(jq -r '.[]' work/resource-files.json)
+          pnpm run check:resource-links -- --mode enforce --fail-on-uncertain --report-file work/resource-links-report.json --files "${RESOURCE_FILES[@]}"
+
+  project-check-and-autofix:
+    name: 执行项目检查并自动修复
+    needs:
+      - prepare-resource-scope
+      - check-resource-links
+    if: |
+      always() &&
+      needs.prepare-resource-scope.result == 'success' &&
+      (needs.check-resource-links.result == 'success' || needs.check-resource-links.result == 'skipped')
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出仓库代码
+        uses: actions/checkout@v5
+
+      - name: 跳过资源链接检查并说明原因
+        if: |
+          needs.prepare-resource-scope.outputs.scope_state == 'no_resource_files' ||
+          needs.prepare-resource-scope.outputs.scope_state == 'unresolved'
+        run: echo "${{ needs.prepare-resource-scope.outputs.scope_message }}"
 
       - name: 配置 Node.js 运行环境
         uses: actions/setup-node@v5

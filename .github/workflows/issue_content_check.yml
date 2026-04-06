@@ -1,18 +1,96 @@
-name: issue_content_check
+name: Issue 快照自动处理
 
 on:
   issues:
-    types: [opened]
+    types: [opened, edited]
 
+concurrency:
+  # 避免同一个 issue 在 opened / edited 连续触发时并发回写，造成标题或正文相互覆盖。
+  group: issue-content-check-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+# 触发条件：issue 新建或编辑
+# 是否会改仓库：不会，但会回写 issue 标题、正文、标签和状态
+# 失败含义：用户提供的快照输入不满足自动处理条件，或快照内容无法解析
 jobs:
-  check-issue-content:
+  # 流程树：
+  # 1. 可解析快照 -> 解析快照内容 -> (解析成功 -> 同步 Issue 标题与正文 | 解析失败 -> 提醒补充有效快照)
+  # 2. 缺少快照 -> 自动关闭
+  # 3. 上传未完成 -> 自动提醒
+  # 4. 私有快照链接 -> 自动提醒
+  prepare:
+    name: 识别 Issue 输入状态
+    if: github.event.sender.type != 'Bot'
     runs-on: ubuntu-latest
+    outputs:
+      precheck_state: ${{ steps.collect.outputs.precheck_state }}
+      source_count: ${{ steps.collect.outputs.source_count }}
+      urls_json: ${{ steps.collect.outputs.urls_json }}
+
+    steps:
+      - name: 提取快照来源并确定处理分支
+        id: collect
+        shell: bash
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          set -euo pipefail
+
+          BODY="$(printf '%s' "${ISSUE_BODY:-}" | tr -d '\r')"
+
+          HAS_UPLOADING=false
+          HAS_PRIVATE=false
+
+          if grep -q 'Uploading' <<< "$BODY"; then
+            HAS_UPLOADING=true
+          fi
+
+          # 使用路径模式检测，避免硬编码域名，支持任何域名下的 /snapshot/ 路径
+          if grep -Eq 'https?://[^/]+/snapshot/' <<< "$BODY"; then
+            HAS_PRIVATE=true
+          fi
+
+          # 这里只保留当前工作流真正能尝试下载的来源：
+          # 1. 公开的分享链接（任何域名下的 /i/ 路径）
+          # 2. 直接可下载的 zip 附件链接
+          grep -oE 'https?://[^[:space:]<>]+' <<< "$BODY" \
+            | sed -E 's/[)>.,]+$//' \
+            | grep -E '(^https?://[^/]+/i/[0-9]+([?][^[:space:]]*)?$|^https?://[^[:space:]]+\.zip([?][^[:space:]]*)?$)' \
+            | sort -u > urls.txt || true
+
+          SOURCE_COUNT="$(wc -l < urls.txt | tr -d ' ')"
+          PRECHECK_STATE="missing_snapshot"
+
+          # 状态优先级固定为：
+          # ready_to_parse > blocked_uploading > blocked_private_link > missing_snapshot
+          # 只要正文里已经有可解析来源，就直接进入解析链路，不再提前发 invalid 提醒。
+          if [ "$SOURCE_COUNT" -gt 0 ]; then
+            PRECHECK_STATE="ready_to_parse"
+          elif [ "$HAS_UPLOADING" = true ]; then
+            PRECHECK_STATE="blocked_uploading"
+          elif [ "$HAS_PRIVATE" = true ]; then
+            PRECHECK_STATE="blocked_private_link"
+          fi
+
+          URLS_JSON="$(jq -Rsc 'split("\n") | map(select(length > 0))' urls.txt)"
+
+          {
+            echo "precheck_state=$PRECHECK_STATE"
+            echo "source_count=$SOURCE_COUNT"
+            echo "urls_json=$URLS_JSON"
+          } >> "$GITHUB_OUTPUT"
+
+  handle-precheck-blocked:
+    name: 处理无法进入解析的 Issue
+    needs: prepare
+    if: needs.prepare.result == 'success' && needs.prepare.outputs.precheck_state != 'ready_to_parse'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
 
     steps:
       - name: 缺少快照时自动标记并关闭 Issue
-        if: |
-          contains(github.event.issue.body, 'i.gkd.li/') == false &&
-          contains(github.event.issue.body, '.zip') == false
+        if: needs.prepare.outputs.precheck_state == 'missing_snapshot'
         uses: actions-cool/issues-helper@v3
         with:
           actions: add-labels,create-comment,close-issue
@@ -20,10 +98,24 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           labels: 'invalid'
           body: |
-            您好 ${{ github.event.issue.user.login }}，由于您没有提供快照，此issue已被自动关闭。
+            您好 ${{ github.event.issue.user.login }}，由于您没有提供快照，此 issue 已被自动关闭。
 
-      - name: 快照链接不可访问时自动标记并提醒
-        if: contains(github.event.issue.body, 'i.gkd.li/snapshot/') == true
+      - name: 上传未完成时自动标记并提醒
+        if: needs.prepare.outputs.precheck_state == 'blocked_uploading'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: add-labels,create-comment
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          labels: 'invalid'
+          body: |
+            您好 ${{ github.event.issue.user.login }}，检测到您提供的文件仍处于 Uploading 状态，
+            请等待上传完成后重新提交，或补充可访问的 zip / 分享链接。
+
+            可在下方评论区补充
+
+      - name: 私有快照链接不可访问时自动标记并提醒
+        if: needs.prepare.outputs.precheck_state == 'blocked_private_link'
         uses: actions-cool/issues-helper@v3
         with:
           actions: add-labels,create-comment
@@ -35,3 +127,173 @@ jobs:
             请点击查看 [正确的分享快照方式说明](https://gkd.li/guide/snapshot#share-note) 。
 
             可在下方评论区补充
+
+  parse-content:
+    name: 生成快照摘要与回写载荷
+    needs: prepare
+    if: needs.prepare.result == 'success' && needs.prepare.outputs.precheck_state == 'ready_to_parse'
+    runs-on: ubuntu-latest
+    outputs:
+      parse_state: ${{ steps.parse.outputs.parse_state }}
+      prefix: ${{ steps.parse.outputs.prefix }}
+
+    steps:
+      - name: 检出仓库代码
+        uses: actions/checkout@v5
+
+      - name: 配置 Node.js 运行环境
+        uses: actions/setup-node@v5
+        with:
+          node-version: 25
+          package-manager-cache: false
+
+      - name: 启用 corepack 并安装 pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+
+      - name: 安装项目依赖
+        run: pnpm install
+
+      - name: 生成快照摘要并判断是否解析成功
+        id: parse
+        shell: bash
+        env:
+          URLS_JSON: ${{ needs.prepare.outputs.urls_json }}
+        run: |
+          set -euo pipefail
+
+          mkdir -p work
+          printf '%s' "$URLS_JSON" > work/urls.json
+          pnpm run build:issue-snapshot-summary -- --urls-file work/urls.json --out-dir work/issue-summary
+          SUMMARY_PATH="work/issue-summary/summary.json"
+
+          SUMMARY_SUCCESS="$(jq -r '.success' "$SUMMARY_PATH")"
+          PARSE_STATE="parse_failed"
+          if [ "$SUMMARY_SUCCESS" = "true" ]; then
+            PARSE_STATE="parsed"
+          fi
+
+          {
+            echo "parse_state=$PARSE_STATE"
+            echo "prefix=$(jq -r '.titlePrefix' "$SUMMARY_PATH")"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: 增强原始快照区内容
+        if: steps.parse.outputs.parse_state == 'parsed'
+        shell: bash
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          set -euo pipefail
+
+          printf '%s' "${ISSUE_BODY:-}" > work/issue-body.md
+          pnpm run enhance:issue-snapshot-section -- --body-file work/issue-body.md --out-dir work/issue-body-enhanced
+
+      - name: 生成最终 Issue 标题与正文
+        if: steps.parse.outputs.parse_state == 'parsed'
+        shell: bash
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          RES_PREFIX: ${{ steps.parse.outputs.prefix }}
+        run: |
+          set -euo pipefail
+
+          printf '%s' "${ISSUE_TITLE:-}" > work/issue-title.txt
+          printf '%s' "${ISSUE_BODY:-}" > work/issue-body.md
+          pnpm run build:issue-update-payload -- \
+            --issue-title-file work/issue-title.txt \
+            --issue-body-file work/issue-body.md \
+            --block-file work/issue-summary/block.md \
+            --remaining-body-file work/issue-body-enhanced/remaining.md \
+            --snapshot-section-file work/issue-body-enhanced/snapshot-section.md \
+            --out-dir work/issue-update \
+            --prefix "${RES_PREFIX:-}"
+
+      - name: 上传 Issue 回写所需文件
+        if: steps.parse.outputs.parse_state == 'parsed'
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue-update-${{ github.event.issue.number }}
+          path: work/issue-update
+          if-no-files-found: error
+          retention-days: 1
+
+  handle-parse-failure:
+    name: 提醒补充有效快照
+    needs: parse-content
+    if: needs.parse-content.result == 'success' && needs.parse-content.outputs.parse_state == 'parse_failed'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+      - name: 快照无法解析时自动标记并提醒
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: add-labels,create-comment
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          labels: 'invalid'
+          body: |
+            您好 ${{ github.event.issue.user.login }}，检测到您提供的快照链接或附件暂时无法解析出有效快照 JSON。
+
+            这通常意味着链接已失效、附件当前不可访问，或压缩包中不包含正确的快照内容。
+
+            请重新分享公开可访问的快照链接（如 `https://i.gkd.li/i/12345678`），或补充可访问的 zip 文件后重新编辑此 issue。
+
+  sync-issue:
+    name: 回写 Issue 标题与正文
+    needs: parse-content
+    if: needs.parse-content.result == 'success' && needs.parse-content.outputs.parse_state == 'parsed'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+      - name: 下载 Issue 回写文件
+        uses: actions/download-artifact@v4
+        with:
+          name: issue-update-${{ github.event.issue.number }}
+          path: work/issue-update
+
+      - name: 更新 Issue 标题与解析区块
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const oldTitle = context.payload.issue.title || '';
+            const oldBody = context.payload.issue.body || '';
+            const newTitle = fs.readFileSync('work/issue-update/title.txt', 'utf8').trim();
+            const newBody = fs.readFileSync('work/issue-update/body.md', 'utf8').trimEnd();
+
+            const labels = (context.payload.issue.labels || []).map((label) =>
+              typeof label === 'string' ? label : label.name
+            );
+            const shouldReopen = context.payload.issue.state === 'closed' && labels.includes('invalid');
+
+            if (newTitle !== oldTitle || newBody !== oldBody || shouldReopen) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                title: newTitle,
+                body: newBody,
+                ...(shouldReopen ? { state: 'open' } : {})
+              });
+            }
+
+            if (labels.includes('invalid')) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  name: 'invalid'
+                });
+              } catch (error) {
+                console.log(`remove invalid label skipped: ${error.message}`);
+              }
+            }
