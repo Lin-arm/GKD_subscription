@@ -85,12 +85,13 @@
 ├─ src/
 │  ├─ apps/                    # 按应用拆分的规则源码
 │  ├─ categories.ts            # 规则分类定义
-│  ├─ globalDefaultApps.ts     # 全局规则默认启用/禁用应用列表
+│  ├─ globalDefaultApps.ts     # 全局规则黑名单
 │  ├─ globalGroups.ts          # 全局规则
 │  └─ subscription.ts          # 订阅总入口
 ├─ Template.md                 # README 模板
 ├─ README.md                   # 根 README，由模板与构建结果生成
-└─ selectors.subscription.json # 选择器参考数据
+├─ selectors.meta.json         # 选择器订阅链接
+└─ selectors.subscription.json # 常见广告商SDK选择器参考模板
 ```
 
 ## 核心源码层说明
