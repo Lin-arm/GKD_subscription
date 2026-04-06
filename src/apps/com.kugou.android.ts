@@ -245,5 +245,11 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 8,
+      name: 'VIP广告',
+      rules: { matches: 'ImageView[id="com.kugou.android:id/g370"]' },
+      snapshotUrls: ['https://i.gkd.li/i/26493761'],
+    }
   ],
 });
