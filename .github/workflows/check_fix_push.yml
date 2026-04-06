@@ -32,11 +32,18 @@ jobs:
           CURRENT_SHA="${{ github.sha }}"
 
           if [ -z "$BEFORE_SHA" ] || [[ "$BEFORE_SHA" =~ ^0+$ ]]; then
-            git ls-files 'src/apps/*.ts' 'src/globalGroups.ts' | sort -u > work/resource-files.txt
-          else
-            git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" -- 'src/apps/*.ts' 'src/globalGroups.ts' \
-              | sort -u > work/resource-files.txt
+            echo "::error::无法可靠识别“本次 push 变更”的资源文件：github.event.before 为空或全 0。当前工作流只允许校验本次 push 的差异文件，已拒绝回退为分支累计改动或全仓扫描。"
+            echo "这通常发生在首次把本地分支推到远程时。请再次 push 一个增量提交后重试，或改在 PR 检查中执行资源链接校验。">&2
+            exit 1
           fi
+
+          if ! git rev-parse --verify "$BEFORE_SHA^{commit}" >/dev/null 2>&1; then
+            echo "::error::无法解析 github.event.before=$BEFORE_SHA,对应提交不存在,无法只按本次 push 差异做资源链接校验。">&2
+            exit 1
+          fi
+
+          git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" -- 'src/apps/*.ts' 'src/globalGroups.ts' \
+            | sort -u > work/resource-files.txt
 
           FILE_COUNT="$(grep -c '.' work/resource-files.txt || true)"
 
