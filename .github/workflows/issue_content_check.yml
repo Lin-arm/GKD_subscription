@@ -176,6 +176,17 @@ jobs:
             echo "prefix=$(jq -r '.titlePrefix' "$SUMMARY_PATH")"
           } >> "$GITHUB_OUTPUT"
 
+      - name: 增强原始快照区正文
+        if: steps.parse.outputs.success == 'true'
+        shell: bash
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          set -euo pipefail
+
+          printf '%s' "${ISSUE_BODY:-}" > work/issue-body.md
+          pnpm run enhance:issue-snapshot-section -- --body-file work/issue-body.md --out-dir work/issue-body-enhanced
+
       - name: 快照无法解析时自动标记并提醒
         if: steps.parse.outputs.success != 'true'
         uses: actions-cool/issues-helper@v3
@@ -202,6 +213,12 @@ jobs:
 
             const prefix = (process.env.RES_PREFIX || '').trim();
             const newBlock = fs.readFileSync('work/issue-summary/block.md', 'utf8').trim();
+            const remainingBody = fs
+              .readFileSync('work/issue-body-enhanced/remaining.md', 'utf8')
+              .trim();
+            const enhancedSnapshotSection = fs
+              .readFileSync('work/issue-body-enhanced/snapshot-section.md', 'utf8')
+              .trim();
 
             const oldTitle = context.payload.issue.title || '';
             let newTitle = oldTitle;
@@ -217,44 +234,8 @@ jobs:
                 .replace(/\s+/g, ' ')
                 .trim();
 
-            // 按标题提取某个 markdown 区块，同时返回移除该区块后的剩余正文。
-            const extractSection = (body, headingPatterns) => {
-              const normalized = body.replace(/\r\n/g, '\n');
-              const lines = normalized.split('\n');
-              const startIndex = lines.findIndex((line) =>
-                headingPatterns.some((pattern) => pattern.test(line))
-              );
-
-              if (startIndex === -1) {
-                return {
-                  section: '',
-                  remaining: normalized.trim()
-                };
-              }
-
-              let endIndex = lines.length;
-              for (let index = startIndex + 1; index < lines.length; index += 1) {
-                if (/^#{1,6}\s/.test(lines[index])) {
-                  endIndex = index;
-                  break;
-                }
-              }
-
-              const before = lines.slice(0, startIndex).join('\n').trimEnd();
-              const section = lines.slice(startIndex, endIndex).join('\n').trim();
-              const after = lines.slice(endIndex).join('\n').trimStart();
-              const remaining = [before, after].filter(Boolean).join('\n\n').trim();
-
-              return { section, remaining };
-            };
-
-            const startMarker = '<!-- gkd-auto-parse:start -->';
-            const endMarker = '<!-- gkd-auto-parse:end -->';
             const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            const blockRe = new RegExp(`${escapeRegExp(startMarker)}[\\s\\S]*?${escapeRegExp(endMarker)}`, 'm');
             const oldBody = context.payload.issue.body || '';
-            // 解析时只看用户原始正文，不把之前自动插入的解析区块再算进去，避免重复污染。
-            const bodyWithoutBlock = oldBody.replace(blockRe, '').trim();
 
             const stripLeadingTitleSeparator = (value) =>
               (value || '').replace(/^[-:：|/\\\s]+/, '').trim();
@@ -303,15 +284,11 @@ jobs:
                 : mergedTitle;
             }
 
-            // 原始快照区始终放在最后，方便维护者继续直接核对用户提供的原始链接或附件。
-            const snapshotSectionInfo = extractSection(bodyWithoutBlock, [
-              /^###\s*📸\s*需要适配界面的快照\s*$/u,
-              /^###\s*📸\s*请提供.*快照.*$/u
-            ]);
+            // 原始快照区增强逻辑已经抽到独立脚本，这里只负责把脚本产物重新拼回正文末尾。
             const newBody = [
-              snapshotSectionInfo.remaining,
+              remainingBody,
               newBlock,
-              snapshotSectionInfo.section
+              enhancedSnapshotSection
             ]
               .filter(Boolean)
               .join('\n\n')
