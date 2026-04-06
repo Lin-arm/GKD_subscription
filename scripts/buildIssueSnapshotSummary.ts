@@ -168,7 +168,7 @@ const rangeText = (values: number[]) => {
   const sorted = [...values].sort((left, right) => left - right);
   const min = sorted[0];
   const max = sorted[sorted.length - 1];
-  return min === max ? String(min) : `${min}~${max}`;
+  return min === max ? String(min) : `${min}-${max}`;
 };
 
 // 主表里的界面 ID 需要尽量保留原始值，同时压住横向宽度。
