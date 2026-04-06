@@ -205,9 +205,20 @@
   - 生成固定机器人评论内容与最终 gate 报告
   - 供 `pull_request_check.yml` 在评论同步和统一 fail/pass 时复用
 
+- [scripts/resolvePushResourceScope.ts](../scripts/resolvePushResourceScope.ts)
+  - 统一识别 push 侧资源链接检查范围
+  - 优先使用当前分支 open PR 的 changed files
+  - 其次回退到本次 push 的精确文件集，不做累计改动或全仓扫描
+
+- [scripts/buildPushCheckReport.ts](../scripts/buildPushCheckReport.ts)
+  - 汇总 push 侧资源链接检查、常规检查和自动修复结果
+  - 生成固定机器人评论内容与最终 gate 报告
+  - 供 `check_fix_push.yml` 在评论同步和统一 fail/pass 时复用
+
 - [scripts/checkResourceLinks.ts](../scripts/checkResourceLinks.ts)
   - 检查规则源码中的 `snapshotUrls`、`excludeSnapshotUrls`、`exampleUrls`
   - 供 push 工作流做资源链接有效性检查
+  - push 侧会启用严格模式，把 `uncertain` 也视为失败
 
 ### Issue 表单生成
 
@@ -255,11 +266,11 @@
 说明：
 
 - 是资源链接有效性检查的唯一入口
-- 优先按当前分支 open PR 的 changed files 检查资源链接
-- 若当前分支没有 open PR，再按本次 push 文件集检查资源链接
-- 若两者都拿不到精确文件集，则安全跳过资源链接检查并说明原因
+- 树状流程固定为：`已有 open PR -> 用 PR 文件集`、`无 PR -> 用本次 push 文件集`、`仍无法精确识别 -> 跳过资源链接检查`
+- 资源链接检查只针对 `src/apps/*.ts` 和 `src/globalGroups.ts`
 - 执行 `pnpm run check`、`pnpm run format`、`pnpm run lint`
-- 如格式化或 lint 产生修复，会自动提交 `chore(actions): check_format_lint`
+- 若 format 或 lint 产生可提交修复，会自动提交 `chore(actions): check_format_lint`
+- 当前分支若已有 open PR，会额外维护一条固定 `gkd-push-check` 评论，汇总这次 push 的直接反馈
 - 失败代表本次 push 的资源链接或代码质量未通过
 
 ### [pull_request_check.yml](../.github/workflows/pull_request_check.yml)
