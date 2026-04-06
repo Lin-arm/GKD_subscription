@@ -45,13 +45,17 @@ jobs:
             HAS_UPLOADING=true
           fi
 
-          if grep -Eq 'https?://(i\.gkd\.li|igkd\.li)/snapshot/' <<< "$BODY"; then
+          # 使用路径模式检测，避免硬编码域名，支持任何域名下的 /snapshot/ 路径
+          if grep -Eq 'https?://[^/]+/snapshot/' <<< "$BODY"; then
             HAS_PRIVATE=true
           fi
 
-          grep -oE 'https?://[^[:space:]<>()]+' <<< "$BODY" \
+          # 这里只保留当前工作流真正能尝试下载的来源：
+          # 1. 公开的分享链接（任何域名下的 /i/ 路径）
+          # 2. 直接可下载的 zip 附件链接
+          grep -oE 'https?://[^[:space:]]<>()]+' <<< "$BODY" \
             | sed -E 's/[)>.,]+$//' \
-            | grep -E '(^https?://(i\.gkd\.li|igkd\.li)/i/[0-9]+([?][^[:space:]]*)?$|^https?://[^[:space:]]+\.zip([?][^[:space:]]*)?$)' \
+            | grep -E '(^https?://[^/]+/i/[0-9]+([?][^[:space:]]*)?$|^https?://[^[:space:]]+\.zip([?][^[:space:]]*)?$)' \
             | sort -u > urls.txt || true
 
           SOURCE_COUNT="$(wc -l < urls.txt | tr -d ' ')"
