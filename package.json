@@ -15,6 +15,7 @@
     "lint": "eslint --cache --fix ./**/*.{js,cjs,mjs,ts,jsx,tsx}",
     "build:issue-snapshot-summary": "tsx ./scripts/buildIssueSnapshotSummary.ts",
     "build:issue-update-payload": "tsx ./scripts/buildIssueUpdatePayload.ts",
+    "build:pr-check-report": "tsx ./scripts/buildPrCheckReport.ts",
     "enhance:issue-snapshot-section": "tsx ./scripts/enhanceIssueSnapshotSection.ts",
     "check:resource-links": "tsx ./scripts/checkResourceLinks.ts",
     "update:issue-forms": "tsx ./scripts/updateIssueForms.ts --write",

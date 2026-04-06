@@ -1,4 +1,4 @@
-name: build_release
+name: 构建并发布订阅
 
 on:
   schedule:
@@ -8,8 +8,12 @@ on:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
+# 触发条件：定时任务或手动执行
+# 是否会改仓库：会，构建成功后会提交产物、打 tag、发 release
+# 失败含义：本次发版构建链路未完成
 jobs:
   check_changes:
+    name: 判断是否需要发布
     runs-on: ubuntu-latest
     outputs:
       changed: ${{ steps.changes.outputs.changed }}
@@ -36,6 +40,7 @@ jobs:
           fi
 
   build_release:
+    name: 构建产物并创建发行版
     needs: check_changes
     if: ${{ needs.check_changes.outputs.changed == 'true' }}
     runs-on: ubuntu-latest

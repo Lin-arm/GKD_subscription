@@ -1,4 +1,4 @@
-name: check_fix_push
+name: Push 提交检查与自动修复
 
 on:
   push:
@@ -10,8 +10,12 @@ permissions: write-all
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
+# 触发条件：任意分支 push
+# 是否会改仓库：会，格式化或 lint 产生修复时会自动提交并 push
+# 失败含义：本次 push 的资源链接或代码质量检查未通过
 jobs:
-  check:
+  push_guard:
+    name: 提交检查与自动修复
     runs-on: ubuntu-latest
     if: |
       ${{ github.event.head_commit.message!='chore(actions): check_format_lint' }}
@@ -21,7 +25,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 获取本次 push 的资源链接变更文件
+      - name: 识别本次 push 变更文件
         id: resource_changed_files
         shell: bash
         run: |
@@ -30,20 +34,33 @@ jobs:
 
           BEFORE_SHA="${{ github.event.before }}"
           CURRENT_SHA="${{ github.sha }}"
+          RAW_FILES_PATH="work/push-files.txt"
 
-          if [ -z "$BEFORE_SHA" ] || [[ "$BEFORE_SHA" =~ ^0+$ ]]; then
-            echo "::error::无法可靠识别“本次 push 变更”的资源文件：github.event.before 为空或全 0。当前工作流只允许校验本次 push 的差异文件，已拒绝回退为分支累计改动或全仓扫描。"
-            echo "这通常发生在首次把本地分支推到远程时。请再次 push 一个增量提交后重试，或改在 PR 检查中执行资源链接校验。">&2
+          # 流程树：
+          # 1. 优先用 before..sha 识别“本次 push”的精确变更文件
+          # 2. before 不可用时，再从 push 事件 payload 里的 commits[*] 恢复本次 push 文件
+          # 3. 两者都拿不到时直接失败，明确拒绝累计改动或全仓扫描
+          if [ -n "$BEFORE_SHA" ] && [[ ! "$BEFORE_SHA" =~ ^0+$ ]] && git rev-parse --verify "$BEFORE_SHA^{commit}" >/dev/null 2>&1; then
+            git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" | sort -u > "$RAW_FILES_PATH"
+          else
+            jq -r '
+              [
+                .commits[]?
+                | (.added[]?, .modified[]?, .removed[]?)
+              ]
+              | map(select(type == "string" and length > 0))
+              | unique[]
+            ' "$GITHUB_EVENT_PATH" | sort -u > "$RAW_FILES_PATH"
+          fi
+
+          if ! grep -q '.' "$RAW_FILES_PATH"; then
+            echo "::error::无法可靠识别“本次 push 变更”的文件列表。当前流程只允许校验本次 push 的精确差异文件，已拒绝回退为分支累计改动或全仓扫描。">&2
+            echo "这通常发生在首次把本地分支推到远程且事件 payload 未提供完整 commits 明细时。请再 push 一个增量提交后重试。">&2
             exit 1
           fi
 
-          if ! git rev-parse --verify "$BEFORE_SHA^{commit}" >/dev/null 2>&1; then
-            echo "::error::无法解析 github.event.before=$BEFORE_SHA,对应提交不存在,无法只按本次 push 差异做资源链接校验。">&2
-            exit 1
-          fi
-
-          git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" -- 'src/apps/*.ts' 'src/globalGroups.ts' \
-            | sort -u > work/resource-files.txt
+          grep -E '^(src/apps/.+\.ts|src/globalGroups\.ts)$' "$RAW_FILES_PATH" \
+            | sort -u > work/resource-files.txt || true
 
           FILE_COUNT="$(grep -c '.' work/resource-files.txt || true)"
 
@@ -68,7 +85,7 @@ jobs:
       - name: 安装项目依赖
         run: pnpm install
 
-      - name: 校验本次 push 变更中的资源链接
+      - name: 校验本次 push 的资源链接
         if: steps.resource_changed_files.outputs.has_files == 'true'
         shell: bash
         run: |
@@ -76,6 +93,10 @@ jobs:
           mkdir -p work
           mapfile -t RESOURCE_FILES < work/resource-files.txt
           pnpm run check:resource-links -- --mode enforce --report-file work/resource-links-report.json --files "${RESOURCE_FILES[@]}"
+
+      - name: 跳过未命中资源文件的链接校验
+        if: steps.resource_changed_files.outputs.has_files != 'true'
+        run: echo "本次 push 未改动 src/apps/*.ts 或 src/globalGroups.ts，跳过资源链接检查。"
 
       - name: 执行项目检查
         run: pnpm run check

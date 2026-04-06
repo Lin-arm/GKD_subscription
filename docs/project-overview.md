@@ -200,9 +200,14 @@
   - 负责输出给 workflow 读取的 `title.txt` 与 `body.md`
   - 不直接调用 GitHub API，`reopen`、移除标签等副作用仍由 workflow 处理
 
+- [scripts/buildPrCheckReport.ts](../scripts/buildPrCheckReport.ts)
+  - 汇总 PR 门禁各步骤的结果
+  - 生成固定机器人评论内容与最终 gate 报告
+  - 供 `pull_request_check.yml` 在评论同步和统一 fail/pass 时复用
+
 - [scripts/checkResourceLinks.ts](../scripts/checkResourceLinks.ts)
   - 检查规则源码中的 `snapshotUrls`、`excludeSnapshotUrls`、`exampleUrls`
-  - 供 PR / push 工作流复用
+  - 供 push 工作流做资源链接有效性检查
 
 ### Issue 表单生成
 
@@ -229,45 +234,51 @@
 
 ### [build_release.yml](../.github/workflows/build_release.yml)
 
-作用：
+定位：
 
-- 检查 `src/` 是否有变化
-- 执行构建
-- 提交产物
-- 打 tag / 发 release
+- 构建并发布订阅
+- 只处理版本产物、tag 和 release
 
-这是“发布链路”。
+说明：
+
+- 定时或手动触发
+- 成功后会提交构建产物并创建 GitHub Release
+- 失败代表发版链路本身出错，不属于日常代码门禁
 
 ### [check_fix_push.yml](../.github/workflows/check_fix_push.yml)
 
-作用：
+定位：
 
-- 检查本次 push 中的资源链接
-- 跑 `pnpm run check`
-- 跑格式化和 lint
-- 必要时自动提交修复结果
+- Push 提交检查与自动修复
+- 是资源链接有效性检查的唯一入口
 
-这是“push 后自动收口链路”。
+说明：
+
+- 只基于“本次 push 精确差异文件”检查资源链接
+- 执行 `pnpm run check`、`pnpm run format`、`pnpm run lint`
+- 如格式化或 lint 产生修复，会自动提交 `chore(actions): check_format_lint`
+- 失败代表本次 push 的资源链接或代码质量未通过
 
 ### [pull_request_check.yml](../.github/workflows/pull_request_check.yml)
 
-作用：
+定位：
 
-- 检查 PR 变更文件数量
-- 检查本次 PR 中的资源链接
-- 同步机器人提醒评论
-- 执行检查、格式化、lint
+- PR 合并门禁与指引
+- 不做资源链接有效性检查，也不会自动改仓库
 
-这是“PR 入口质量门禁”。
+说明：
+
+- 检查关键订阅文件变更数量
+- 执行 `pnpm run check`、`pnpm run format`、`pnpm run lint`
+- 统一维护一条固定机器人评论，汇总失败原因和修复建议
+- 失败代表当前 PR 还不满足合并条件，需要按评论提示修复后重新提交
 
 ### [issue_content_check.yml](../.github/workflows/issue_content_check.yml)
 
-作用：
+定位：
 
-- 先把 issue 归类为 `ready_to_parse / blocked_uploading / blocked_private_link / missing_snapshot`
-- 对无法进入解析链路的 issue 按分支执行关闭或提醒
-- 对可解析 issue 调用脚本生成快照摘要、增强原始快照区、组装最终标题和正文
-- 解析失败时单独提醒，解析成功时再同步标题与正文并清理 `invalid`
+- Issue 快照自动处理
+- 这是工单自动化，不是代码 CI
 
 当前树状路径是：
 
@@ -276,7 +287,7 @@
 - `blocked_uploading -> handle-precheck-blocked`
 - `blocked_private_link -> handle-precheck-blocked`
 
-这是“反馈工单自动化链路”。
+失败代表用户提交的快照输入不满足自动处理条件，或快照内容暂时无法解析。
 
 ## 常用维护路径
 

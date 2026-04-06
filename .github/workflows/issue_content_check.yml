@@ -1,4 +1,4 @@
-name: issue_content_check
+name: Issue 快照自动处理
 
 on:
   issues:
@@ -9,14 +9,17 @@ concurrency:
   group: issue-content-check-${{ github.event.issue.number }}
   cancel-in-progress: true
 
+# 触发条件：issue 新建或编辑
+# 是否会改仓库：不会，但会回写 issue 标题、正文、标签和状态
+# 失败含义：用户提供的快照输入不满足自动处理条件，或快照内容无法解析
 jobs:
   # 流程树：
-  # 1. ready_to_parse -> parse-content -> (parsed -> sync-issue | parse_failed -> handle-parse-failure)
-  # 2. missing_snapshot -> handle-precheck-blocked(close)
-  # 3. blocked_uploading -> handle-precheck-blocked(warn)
-  # 4. blocked_private_link -> handle-precheck-blocked(warn)
+  # 1. 可解析快照 -> 解析快照内容 -> (解析成功 -> 同步 Issue 标题与正文 | 解析失败 -> 提醒补充有效快照)
+  # 2. 缺少快照 -> 自动关闭
+  # 3. 上传未完成 -> 自动提醒
+  # 4. 私有快照链接 -> 自动提醒
   prepare:
-    name: 预检 Issue 并归类
+    name: 识别 Issue 输入状态
     if: github.event.sender.type != 'Bot'
     runs-on: ubuntu-latest
     outputs:
@@ -25,7 +28,7 @@ jobs:
       urls_json: ${{ steps.collect.outputs.urls_json }}
 
     steps:
-      - name: 提取可解析快照链接并确定预检状态
+      - name: 提取快照来源并确定处理分支
         id: collect
         shell: bash
         env:
@@ -74,7 +77,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
   handle-precheck-blocked:
-    name: 处理预检阻塞分支
+    name: 处理无法进入解析的 Issue
     needs: prepare
     if: needs.prepare.result == 'success' && needs.prepare.outputs.precheck_state != 'ready_to_parse'
     runs-on: ubuntu-latest
@@ -122,7 +125,7 @@ jobs:
             可在下方评论区补充
 
   parse-content:
-    name: 解析快照内容
+    name: 生成快照摘要与回写载荷
     needs: prepare
     if: needs.prepare.result == 'success' && needs.prepare.outputs.precheck_state == 'ready_to_parse'
     runs-on: ubuntu-latest
@@ -148,7 +151,7 @@ jobs:
       - name: 安装项目依赖
         run: pnpm install
 
-      - name: 生成快照自动摘要并确定解析状态
+      - name: 生成快照摘要并判断是否解析成功
         id: parse
         shell: bash
         env:
@@ -172,7 +175,7 @@ jobs:
             echo "prefix=$(jq -r '.titlePrefix' "$SUMMARY_PATH")"
           } >> "$GITHUB_OUTPUT"
 
-      - name: 增强原始快照区正文
+      - name: 增强原始快照区内容
         if: steps.parse.outputs.parse_state == 'parsed'
         shell: bash
         env:
@@ -183,7 +186,7 @@ jobs:
           printf '%s' "${ISSUE_BODY:-}" > work/issue-body.md
           pnpm run enhance:issue-snapshot-section -- --body-file work/issue-body.md --out-dir work/issue-body-enhanced
 
-      - name: 生成 Issue 回写内容
+      - name: 生成最终 Issue 标题与正文
         if: steps.parse.outputs.parse_state == 'parsed'
         shell: bash
         env:
@@ -204,7 +207,7 @@ jobs:
             --out-dir work/issue-update \
             --prefix "${RES_PREFIX:-}"
 
-      - name: 上传 Issue 回写载荷
+      - name: 上传 Issue 回写所需文件
         if: steps.parse.outputs.parse_state == 'parsed'
         uses: actions/upload-artifact@v4
         with:
@@ -214,7 +217,7 @@ jobs:
           retention-days: 1
 
   handle-parse-failure:
-    name: 处理解析失败分支
+    name: 提醒补充有效快照
     needs: parse-content
     if: needs.parse-content.result == 'success' && needs.parse-content.outputs.parse_state == 'parse_failed'
     runs-on: ubuntu-latest
@@ -237,7 +240,7 @@ jobs:
             请重新分享公开可访问的快照链接（如 `https://i.gkd.li/i/12345678`），或补充可访问的 zip 文件后重新编辑此 issue。
 
   sync-issue:
-    name: 同步 Issue 标题与正文
+    name: 回写 Issue 标题与正文
     needs: parse-content
     if: needs.parse-content.result == 'success' && needs.parse-content.outputs.parse_state == 'parsed'
     runs-on: ubuntu-latest
@@ -245,7 +248,7 @@ jobs:
       issues: write
 
     steps:
-      - name: 下载 Issue 回写载荷
+      - name: 下载 Issue 回写文件
         uses: actions/download-artifact@v4
         with:
           name: issue-update-${{ github.event.issue.number }}
