@@ -165,6 +165,10 @@
   - 从 `dist/README.md` 里读取统计信息
   - 把统计值填回 [Template.md](../Template.md)
   - 生成根 [README.md](../README.md)
+- [scripts/buildIssueUpdatePayload.ts](../scripts/buildIssueUpdatePayload.ts)
+  - 根据原标题、自动摘要区块和增强后的原始快照区生成最终回写载荷
+  - 负责输出给 workflow 读取的 `title.txt` 与 `body.md`
+  - 不直接调用 GitHub API，`reopen`、移除标签等副作用仍由 workflow 处理
 
 也就是说：
 

@@ -187,6 +187,27 @@ jobs:
           printf '%s' "${ISSUE_BODY:-}" > work/issue-body.md
           pnpm run enhance:issue-snapshot-section -- --body-file work/issue-body.md --out-dir work/issue-body-enhanced
 
+      - name: 生成 Issue 回写内容
+        if: steps.parse.outputs.success == 'true'
+        shell: bash
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          RES_PREFIX: ${{ steps.parse.outputs.prefix }}
+        run: |
+          set -euo pipefail
+
+          printf '%s' "${ISSUE_TITLE:-}" > work/issue-title.txt
+          printf '%s' "${ISSUE_BODY:-}" > work/issue-body.md
+          pnpm run build:issue-update-payload -- \
+            --issue-title-file work/issue-title.txt \
+            --issue-body-file work/issue-body.md \
+            --block-file work/issue-summary/block.md \
+            --remaining-body-file work/issue-body-enhanced/remaining.md \
+            --snapshot-section-file work/issue-body-enhanced/snapshot-section.md \
+            --out-dir work/issue-update \
+            --prefix "${RES_PREFIX:-}"
+
       - name: 快照无法解析时自动标记并提醒
         if: steps.parse.outputs.success != 'true'
         uses: actions-cool/issues-helper@v3
@@ -205,94 +226,14 @@ jobs:
       - name: 更新 Issue 标题与解析区块
         if: steps.parse.outputs.success == 'true'
         uses: actions/github-script@v7
-        env:
-          RES_PREFIX: ${{ steps.parse.outputs.prefix }}
         with:
           script: |
             const fs = require('fs');
 
-            const prefix = (process.env.RES_PREFIX || '').trim();
-            const newBlock = fs.readFileSync('work/issue-summary/block.md', 'utf8').trim();
-            const remainingBody = fs
-              .readFileSync('work/issue-body-enhanced/remaining.md', 'utf8')
-              .trim();
-            const enhancedSnapshotSection = fs
-              .readFileSync('work/issue-body-enhanced/snapshot-section.md', 'utf8')
-              .trim();
-
             const oldTitle = context.payload.issue.title || '';
-            let newTitle = oldTitle;
-
-            // 把 issue form 里的多行内容压成稳定的单行文本，便于后续生成标题和汇总文案。
-            const cleanInline = (value) =>
-              (value || '')
-                .replace(/\r\n/g, '\n')
-                .split('\n')
-                .map((line) => line.trim())
-                .filter(Boolean)
-                .join(' ')
-                .replace(/\s+/g, ' ')
-                .trim();
-
-            const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const oldBody = context.payload.issue.body || '';
-
-            const stripLeadingTitleSeparator = (value) =>
-              (value || '').replace(/^[-:：|/\\\s]+/, '').trim();
-
-            const extractUserTitleSuffix = (titleValue, generatedCore) => {
-              const normalized = cleanInline(titleValue);
-              if (!normalized) {
-                return '';
-              }
-              if (!generatedCore) {
-                return normalized;
-              }
-              if (normalized === generatedCore) {
-                return '';
-              }
-              if (normalized.startsWith(generatedCore)) {
-                return stripLeadingTitleSeparator(
-                  normalized.slice(generatedCore.length),
-                );
-              }
-              return normalized;
-            };
-
-            const tagMatch = oldTitle.match(/^(\[[^\]]+\])\s*(.*)$/);
-            if (prefix) {
-              // 保留原有 [Feature]/[Bug] 标签，刷新自动前缀，同时尽量保留用户自己写的标题后缀。
-              const titleCore = prefix.trim();
-              const rawTitleSuffix = tagMatch ? tagMatch[2] : oldTitle;
-              const legacyCorePattern = new RegExp(
-                `^${escapeRegExp(titleCore)}(?:\\s+[^\\s]+_)?(?:\\s*[-:：|/\\\\]\\s*)?`,
-              );
-              const normalizedRawTitleSuffix = cleanInline(rawTitleSuffix).replace(
-                legacyCorePattern,
-                '',
-              );
-              const userTitleSuffix = extractUserTitleSuffix(
-                normalizedRawTitleSuffix,
-                titleCore,
-              );
-              const mergedTitle = userTitleSuffix
-                ? `${titleCore} - ${userTitleSuffix}`
-                : titleCore;
-
-              newTitle = tagMatch
-                ? `${tagMatch[1]} ${mergedTitle}`.trim()
-                : mergedTitle;
-            }
-
-            // 原始快照区增强逻辑已经抽到独立脚本，这里只负责把脚本产物重新拼回正文末尾。
-            const newBody = [
-              remainingBody,
-              newBlock,
-              enhancedSnapshotSection
-            ]
-              .filter(Boolean)
-              .join('\n\n')
-              .trimEnd();
+            const newTitle = fs.readFileSync('work/issue-update/title.txt', 'utf8').trim();
+            const newBody = fs.readFileSync('work/issue-update/body.md', 'utf8').trimEnd();
 
             const labels = (context.payload.issue.labels || []).map((label) =>
               typeof label === 'string' ? label : label.name
