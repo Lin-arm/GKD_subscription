@@ -57,6 +57,7 @@ interface ParsedArgs {
   mode: Mode;
   reportFile?: string;
   files: string[];
+  failOnUncertain: boolean;
 }
 
 const SUPPORTED_FILE_RE =
@@ -104,6 +105,7 @@ const parseArgs = (argv: string[]): ParsedArgs => {
   const result: ParsedArgs = {
     mode: 'report',
     files: [],
+    failOnUncertain: false,
   };
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -137,6 +139,10 @@ const parseArgs = (argv: string[]): ParsedArgs => {
       }
       index -= 1;
       continue;
+    }
+
+    if (current === '--fail-on-uncertain') {
+      result.failOnUncertain = true;
     }
   }
 
@@ -609,6 +615,10 @@ const report = args.files.length
 await writeReport(args.reportFile, report);
 printSummary(report);
 
-if (args.mode === 'enforce' && report.invalidLinks.length > 0) {
+if (
+  args.mode === 'enforce' &&
+  (report.invalidLinks.length > 0 ||
+    (args.failOnUncertain && report.uncertainLinks.length > 0))
+) {
   process.exitCode = 1;
 }

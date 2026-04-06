@@ -254,7 +254,10 @@
 
 说明：
 
-- 只基于“本次 push 精确差异文件”检查资源链接
+- 是资源链接有效性检查的唯一入口
+- 优先按当前分支 open PR 的 changed files 检查资源链接
+- 若当前分支没有 open PR，再按本次 push 文件集检查资源链接
+- 若两者都拿不到精确文件集，则安全跳过资源链接检查并说明原因
 - 执行 `pnpm run check`、`pnpm run format`、`pnpm run lint`
 - 如格式化或 lint 产生修复，会自动提交 `chore(actions): check_format_lint`
 - 失败代表本次 push 的资源链接或代码质量未通过
