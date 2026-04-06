@@ -53,7 +53,7 @@ jobs:
           # 这里只保留当前工作流真正能尝试下载的来源：
           # 1. 公开的分享链接（任何域名下的 /i/ 路径）
           # 2. 直接可下载的 zip 附件链接
-          grep -oE 'https?://[^[:space:]]<>()]+' <<< "$BODY" \
+          grep -oE 'https?://[^[:space:]<>]+' <<< "$BODY" \
             | sed -E 's/[)>.,]+$//' \
             | grep -E '(^https?://[^/]+/i/[0-9]+([?][^[:space:]]*)?$|^https?://[^[:space:]]+\.zip([?][^[:space:]]*)?$)' \
             | sort -u > urls.txt || true
