@@ -165,10 +165,6 @@
   - 从 `dist/README.md` 里读取统计信息
   - 把统计值填回 [Template.md](../Template.md)
   - 生成根 [README.md](../README.md)
-- [scripts/buildIssueUpdatePayload.ts](../scripts/buildIssueUpdatePayload.ts)
-  - 根据原标题、自动摘要区块和增强后的原始快照区生成最终回写载荷
-  - 负责输出给 workflow 读取的 `title.txt` 与 `body.md`
-  - 不直接调用 GitHub API，`reopen`、移除标签等副作用仍由 workflow 处理
 
 也就是说：
 
@@ -198,6 +194,11 @@
   - 专门增强 Issue 原始快照区
   - 为 GitHub 附件链接追加“快速打开审查工具”
   - 为连续同应用附件块追加“复制全部链接”折叠块
+
+- [scripts/buildIssueUpdatePayload.ts](../scripts/buildIssueUpdatePayload.ts)
+  - 根据原标题、自动摘要区块和增强后的原始快照区生成最终回写载荷
+  - 负责输出给 workflow 读取的 `title.txt` 与 `body.md`
+  - 不直接调用 GitHub API，`reopen`、移除标签等副作用仍由 workflow 处理
 
 - [scripts/checkResourceLinks.ts](../scripts/checkResourceLinks.ts)
   - 检查规则源码中的 `snapshotUrls`、`excludeSnapshotUrls`、`exampleUrls`
@@ -263,10 +264,17 @@
 
 作用：
 
-- 检查 issue 是否提供了有效快照
-- 自动提醒无效链接、上传未完成、私有链接
-- 自动解析快照并回写摘要
-- 增强原始快照区正文
+- 先把 issue 归类为 `ready_to_parse / blocked_uploading / blocked_private_link / missing_snapshot`
+- 对无法进入解析链路的 issue 按分支执行关闭或提醒
+- 对可解析 issue 调用脚本生成快照摘要、增强原始快照区、组装最终标题和正文
+- 解析失败时单独提醒，解析成功时再同步标题与正文并清理 `invalid`
+
+当前树状路径是：
+
+- `ready_to_parse -> parse-content -> (parsed -> sync-issue | parse_failed -> handle-parse-failure)`
+- `missing_snapshot -> handle-precheck-blocked`
+- `blocked_uploading -> handle-precheck-blocked`
+- `blocked_private_link -> handle-precheck-blocked`
 
 这是“反馈工单自动化链路”。
 

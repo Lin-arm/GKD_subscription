@@ -96,6 +96,7 @@ const parseArgs = (argv: string[]): ParsedArgs => {
 
 const cleanInline = (value: string) =>
   (value || '')
+    .replace(/^\uFEFF/, '')
     .replace(/\r\n/g, '\n')
     .split('\n')
     .map((line) => line.trim())
@@ -106,6 +107,73 @@ const cleanInline = (value: string) =>
 
 const stripLeadingTitleSeparator = (value: string) =>
   (value || '').replace(/^[-:：|/\\\s_]+/, '').trim();
+
+const stripBom = (value: string) => value.replace(/^\uFEFF/, '');
+
+const detectIssueTag = (body: string) => {
+  const normalizedBody = body.replace(/\r\n/g, '\n');
+
+  const bugPatterns = [
+    /请说明是哪一条规则\s*误触\/出现问题/u,
+    /📸请提供\s*误触界面\/出现问题界面/u,
+    /明确标注了是哪一条规则误触\/出现问题/u,
+  ];
+  if (bugPatterns.some((pattern) => pattern.test(normalizedBody))) {
+    return '[Bug]';
+  }
+
+  const featurePatterns = [
+    /我已阅读\s*\[不予适配情况合集/u,
+    /我已\*\*开启全局规则\*\*/u,
+    /需要适配界面的快照/u,
+  ];
+  if (featurePatterns.some((pattern) => pattern.test(normalizedBody))) {
+    return '[Feature]';
+  }
+
+  return '';
+};
+
+// 自动生成的 App 前缀只在“前缀本体”或“前缀 + 分隔符 + 用户标题”这种形态下清理。
+// 如果用户标题只是恰好以相同文本开头，但没有使用生成分隔符，则按用户原意保留。
+const extractGeneratedSuffix = (value: string, prefix: string) => {
+  const normalizedValue = cleanInline(value);
+  if (!normalizedValue) {
+    return '';
+  }
+  if (normalizedValue === prefix) {
+    return '';
+  }
+  if (!normalizedValue.startsWith(prefix)) {
+    return normalizedValue;
+  }
+
+  const remainder = normalizedValue.slice(prefix.length);
+  if (!remainder) {
+    return '';
+  }
+
+  const separatorRe = /^(?:\s*_\s*|\s*-\s*|\s*[:：|/\\]\s*|\s+)/;
+  if (!separatorRe.test(remainder)) {
+    return normalizedValue;
+  }
+
+  return stripLeadingTitleSeparator(remainder);
+};
+
+const stripGeneratedPrefixRecursively = (value: string, prefix: string) => {
+  let current = cleanInline(value);
+
+  while (current) {
+    const next = extractGeneratedSuffix(current, prefix);
+    if (next === current) {
+      return current;
+    }
+    current = next;
+  }
+
+  return '';
+};
 
 // 标题策略单独放在脚本里，方便 review 时只关注“文本怎么拼”，
 // 不必在 workflow 的 github-script 中来回寻找字符串处理细节。
@@ -119,18 +187,13 @@ const buildUpdatedTitle = (
   }
 
   const normalizedPrefix = prefix.trim();
-  const tagMatch = oldTitle.match(/^(\[[^\]]+\])\s*(.*)$/);
-  const rawTitleSuffix = tagMatch ? tagMatch[2] : oldTitle;
-  const cleanedSuffix = cleanInline(rawTitleSuffix);
-
-  let userTitleSuffix = '';
-  const separatorIndex = cleanedSuffix.indexOf(' - ');
-  if (separatorIndex > -1) {
-    userTitleSuffix = cleanedSuffix.substring(separatorIndex + 3).trim();
-  } else {
-    userTitleSuffix = cleanedSuffix.trim();
-  }
-  userTitleSuffix = stripLeadingTitleSeparator(userTitleSuffix);
+  const normalizedOldTitle = cleanInline(oldTitle);
+  const tagMatch = normalizedOldTitle.match(/^(\[[^\]]+\])\s*(.*)$/);
+  const rawTitleCore = tagMatch ? tagMatch[2] : normalizedOldTitle;
+  const userTitleSuffix = stripGeneratedPrefixRecursively(
+    rawTitleCore,
+    normalizedPrefix,
+  );
 
   const mergedTitle = userTitleSuffix
     ? `${normalizedPrefix}_${userTitleSuffix}`
@@ -140,12 +203,7 @@ const buildUpdatedTitle = (
   if (tagMatch) {
     finalTag = tagMatch[1];
   } else {
-    const bodyLower = oldBody.toLowerCase();
-    if (bodyLower.includes('请求适配') || bodyLower.includes('feature')) {
-      finalTag = '[Feature]';
-    } else if (bodyLower.includes('报告 bug') || bodyLower.includes('bug')) {
-      finalTag = '[Bug]';
-    }
+    finalTag = detectIssueTag(oldBody);
   }
 
   return finalTag ? `${finalTag} ${mergedTitle}`.trim() : mergedTitle;
@@ -174,17 +232,25 @@ const main = async () => {
 
   await fs.mkdir(outDir, { recursive: true });
 
-  const [oldTitle, oldBody, newBlock, remainingBody, enhancedSnapshotSection] =
-    await Promise.all([
-      fs.readFile(path.resolve(process.cwd(), args.issueTitleFile), 'utf8'),
-      fs.readFile(path.resolve(process.cwd(), args.issueBodyFile), 'utf8'),
-      fs.readFile(path.resolve(process.cwd(), args.blockFile), 'utf8'),
-      fs.readFile(path.resolve(process.cwd(), args.remainingBodyFile), 'utf8'),
-      fs.readFile(
-        path.resolve(process.cwd(), args.snapshotSectionFile),
-        'utf8',
-      ),
-    ]);
+  const [
+    rawTitle,
+    rawBody,
+    rawBlock,
+    rawRemainingBody,
+    rawEnhancedSnapshotSection,
+  ] = await Promise.all([
+    fs.readFile(path.resolve(process.cwd(), args.issueTitleFile), 'utf8'),
+    fs.readFile(path.resolve(process.cwd(), args.issueBodyFile), 'utf8'),
+    fs.readFile(path.resolve(process.cwd(), args.blockFile), 'utf8'),
+    fs.readFile(path.resolve(process.cwd(), args.remainingBodyFile), 'utf8'),
+    fs.readFile(path.resolve(process.cwd(), args.snapshotSectionFile), 'utf8'),
+  ]);
+
+  const oldTitle = stripBom(rawTitle);
+  const oldBody = stripBom(rawBody);
+  const newBlock = stripBom(rawBlock);
+  const remainingBody = stripBom(rawRemainingBody);
+  const enhancedSnapshotSection = stripBom(rawEnhancedSnapshotSection);
 
   const nextTitle = buildUpdatedTitle(oldTitle, oldBody, args.prefix);
   const nextBody = buildUpdatedBody(
