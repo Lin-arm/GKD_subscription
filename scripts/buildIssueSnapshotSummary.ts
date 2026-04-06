@@ -11,6 +11,8 @@ type ParsedArgs = {
 type SnapshotRoot = Record<string, unknown>;
 type SnapshotNode = Record<string, unknown>;
 
+// 每条原始快照最终都会先规整成这一层扁平记录。
+// 后续的页面汇总、环境汇总、提醒判断都只依赖这份兼容后的中间结果。
 type NormalizedSnapshotRecord = {
   sourceUrl: string;
   appName: string;
@@ -33,6 +35,8 @@ type NormalizedSnapshotRecord = {
   hasQfSignals: boolean;
 };
 
+// 页面主表和折叠技术详情都基于页面粒度聚合。
+// 这里保留主表显示字段，以及生成备注和提醒需要的状态位。
 type PageSummary = {
   appName: string;
   appId: string;
@@ -57,6 +61,8 @@ type EnvSummary = {
   gkdInfo: string;
 };
 
+// summary.json 是 workflow 与脚本之间的稳定接口。
+// workflow 只读取这里的结果决定是否回写 issue，以及标题前缀和概览数字。
 type IssueSnapshotSummary = {
   success: boolean;
   sourceCount: number;
@@ -78,6 +84,8 @@ const SNAPSHOT_SHARE_RE =
   /^https?:\/\/(i\.gkd\.li|igkd\.li)\/(i|import)\/([0-9]+)(?:\?.*)?$/i;
 const DIRECT_ZIP_RE = /^https?:\/\/[^\s]+\.zip(?:\?[^\s]*)?$/i;
 
+// CLI 入口只接受 workflow 传入的 urls-file 和 out-dir。
+// 这里不做业务解析，只负责把脚本输入约束成稳定参数。
 const parseArgs = (argv: string[]): ParsedArgs => {
   let urlsFile = '';
   let outDir = '';
@@ -163,6 +171,8 @@ const rangeText = (values: number[]) => {
   return min === max ? String(min) : `${min}~${max}`;
 };
 
+// 主表里的界面 ID 需要尽量保留原始值，同时压住横向宽度。
+// 这里仅在超长时按接近阈值的点号换 1 次行，不做语义裁剪，完整值留给折叠详情。
 const formatActivityIdForMainTable = (activityId: string) => {
   const normalized = cleanCell(activityId);
 
@@ -201,6 +211,8 @@ const formatActivityIdForMainTable = (activityId: string) => {
   return `${formatInlineCode(firstLine)}<br>${formatInlineCode(secondLine)}`;
 };
 
+// 页面技术详情里的备注只汇总 reviewer 真正关心的状态位。
+// 这一层不再重复主表已有数字，避免折叠区也变成第二个宽表。
 const buildPageRemarkList = (summary: PageSummary) => {
   const remarks: string[] = [];
 
@@ -242,6 +254,8 @@ const classifyErrorHttpStatus = (status: number): 'invalid' | 'uncertain' => {
   return status >= 500 ? 'uncertain' : 'invalid';
 };
 
+// 统一处理网络请求与超时，并把成功结果收敛成 Buffer。
+// 后续无论是直接 zip 还是分享页解析出的 zip，都复用这一层下载结果。
 const fetchBuffer = async (url: string): Promise<FetchResult> => {
   try {
     const response = await fetch(url, buildFetchInit());
@@ -265,6 +279,8 @@ const fetchBuffer = async (url: string): Promise<FetchResult> => {
   }
 };
 
+// 公开分享链接并不直接等于 zip 地址，这里负责从分享页 HTML 中提取真实附件链接。
+// 这样 i.gkd.li 分享链接和直接 zip 链接最终都能收敛到同一套解压逻辑。
 const resolveZipUrlFromSharePage = async (
   url: string,
 ): Promise<
@@ -322,6 +338,8 @@ const runCommand = async (command: string, args: string[]) => {
   });
 };
 
+// 解压实现单独抽出来，是为了统一处理不同平台上的 zip 解压能力。
+// workflow 跑在 Linux，本地调试可能在 Windows，这里把平台差异收在一处。
 const extractArchive = async (zipPath: string, destination: string) => {
   if (process.platform === 'win32') {
     const escapePowerShellPath = (value: string) =>
@@ -374,6 +392,8 @@ const isValidSnapshotObject = (value: unknown): value is SnapshotRoot => {
   );
 };
 
+// 压缩包里可能含有多个 JSON 或无效 JSON 片段。
+// 这里负责找到第一个“像快照根对象”的 JSON，后面统一按快照解析。
 const findSnapshotJson = async (extractDir: string) => {
   const candidateFiles = (await walkFiles(extractDir))
     .filter((file) => file.toLowerCase().endsWith('.json'))
@@ -393,6 +413,8 @@ const findSnapshotJson = async (extractDir: string) => {
   return null;
 };
 
+// 这是“公开分享链接 -> zip -> 解压 -> 找有效快照 JSON”的总入口。
+// 它屏蔽了直链 zip、分享页跳转、解压失败和无效快照这些差异，最终只返回有效快照或失败原因。
 const loadSnapshotFromUrl = async (
   url: string,
 ): Promise<
@@ -507,6 +529,8 @@ const toSnapshotNodes = (value: unknown) => {
     : [];
 };
 
+// 这里把新旧快照 JSON 统一规整成扁平记录。
+// 应用/GKD 字段兼容、节点规模统计、QF 统计、缺失字段标记都在这一层完成，后面不再直接读原始 JSON。
 const normalizeSnapshotRecord = (
   snapshot: SnapshotRoot,
   sourceUrl: string,
@@ -623,6 +647,8 @@ const sortRecords = (records: NormalizedSnapshotRecord[]) =>
     );
   });
 
+// 页面主表按 app + version + activityId 分组。
+// 这样同一页面的多张快照会合并成一行，主表优先服务“快速筛单”，不让 issue 正文被重复页面撑长。
 const summarizePageGroups = (records: NormalizedSnapshotRecord[]) => {
   const groups = new Map<string, NormalizedSnapshotRecord[]>();
 
@@ -723,6 +749,8 @@ const summarizePageGroups = (records: NormalizedSnapshotRecord[]) => {
   return pageSummaries;
 };
 
+// 运行环境仍按设备相关字段去重，避免同设备多快照重复占行。
+// 这里与页面主表分离，是为了让 reviewer 单独看“页面差异”和“环境差异”。
 const summarizeEnvGroups = (records: NormalizedSnapshotRecord[]) => {
   const groups = new Map<string, EnvSummary>();
 
@@ -786,6 +814,8 @@ const buildTitlePrefix = (records: NormalizedSnapshotRecord[]) => {
   ).join('/');
 };
 
+// 页面主表故意只保留最值得一眼扫过的信息。
+// 应用列合并名称和包名，界面 ID 使用主表专用换行策略，减少横向宽度。
 const renderPageRows = (pageSummaries: PageSummary[]) => {
   return pageSummaries
     .map(
@@ -799,6 +829,8 @@ const renderPageRows = (pageSummaries: PageSummary[]) => {
     .join('\n');
 };
 
+// 折叠详情专门承接主表为了压缩宽度而挪出去的信息。
+// 完整 activityId、完整快查文本和备注都放这里，避免主表再次变宽。
 const renderPageDetailRows = (pageSummaries: PageSummary[]) => {
   return pageSummaries
     .map(
@@ -823,6 +855,8 @@ const renderEnvRows = (envSummaries: EnvSummary[]) => {
     .join('\n');
 };
 
+// “值得注意”只放 issue 级别的高价值提醒。
+// 逐页面的细节不在这里展开，而是留给折叠技术详情，避免顶部提示过于吵闹。
 const buildWarningLines = (
   records: NormalizedSnapshotRecord[],
   pageSummaries: PageSummary[],
@@ -852,6 +886,8 @@ const buildWarningLines = (
   return warningLines;
 };
 
+// block.md 是 workflow 回写 issue 正文时直接插入的完整区块。
+// 这里统一组装概览、提醒、主表、折叠详情和环境表，确保渲染结构只在一处维护。
 const buildMarkdownBlock = (params: {
   summary: IssueSnapshotSummary;
   pageRows: string;
@@ -907,6 +943,8 @@ const buildMarkdownBlock = (params: {
   return `${sections.join('\n')}\n`;
 };
 
+// 这是脚本内部真正的业务主入口：逐个加载快照、规整、聚合，然后产出 summary 和 markdown block。
+// 如果一个有效快照都没有，这里直接返回 success=false，让 workflow 继续沿用现有 invalid 提醒链路。
 const buildSummary = async (sourceUrls: string[]) => {
   const records: NormalizedSnapshotRecord[] = [];
   let parsedCount = 0;
@@ -964,6 +1002,9 @@ const buildSummary = async (sourceUrls: string[]) => {
   };
 };
 
+// 脚本最终只产出两个文件：
+// 1. summary.json：给 workflow 读取状态、标题前缀和概览数字
+// 2. block.md：给 workflow 原样回写到 issue 正文
 const main = async () => {
   const args = parseArgs(process.argv.slice(2));
   const urlsFile = path.resolve(process.cwd(), args.urlsFile);
