@@ -216,7 +216,12 @@ const rebuildSnapshotCopyGroups = (section: string) => {
       return;
     }
 
+    if (result.length > 0 && result[result.length - 1].trim() !== '') {
+      result.push('');
+    }
+
     result.push(renderCopyDetailsBlock(currentGroup.urls));
+    result.push('');
     currentGroup = null;
   };
 
