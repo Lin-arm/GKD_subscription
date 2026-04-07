@@ -333,16 +333,15 @@ export default defineGkdApp({
           key: 0,
           fastQuery: true,
           activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
-          matches: '@ImageView[height<0 && right<getPrev(0).width.div(2)] <<n [parent=null]',
+          matches:
+            '@ImageView[height<0 && right<getPrev(0).width.div(2)] <<n [parent=null]',
           actionMaximum: 1,
           position: {
             left: 'width * 0.5',
             top: 'width * 0.5',
           },
           exampleUrls: 'https://e.gkd.li/d8949efa-e2f7-49d2-a8d7-4837ed349aef',
-          snapshotUrls: [
-            'https://i.gkd.li/i/26528931',
-          ],
+          snapshotUrls: ['https://i.gkd.li/i/26528931'],
         },
       ],
     },
