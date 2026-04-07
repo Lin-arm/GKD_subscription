@@ -363,6 +363,24 @@ export default defineGkdApp({
           ],
         },
         {
+          key: 1,
+          fastQuery: true,
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          matches: '@ImageView < ViewGroup[desc*="关闭" && desc!*="秒"]',
+          position: {
+            left: 'width * 0.5',
+            top: 'width * 0.5',
+          },
+          exampleUrls: [
+            'https://e.gkd.li/9cd91c80-9cba-48e8-97cd-dac5968694e4',
+            'https://e.gkd.li/2d42c1ab-67b6-49af-9091-f259dd8714c2',
+          ],
+          snapshotUrls: [
+            'https://i.gkd.li/i/26530262',
+            'https://i.gkd.li/i/26530263',
+          ],
+        },
+        {
           key: 99,
           fastQuery: true,
           activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
