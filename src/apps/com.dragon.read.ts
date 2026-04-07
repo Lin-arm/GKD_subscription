@@ -371,14 +371,12 @@ export default defineGkdApp({
             left: 'width * 0.5',
             top: 'width * 0.5',
           },
-          exampleUrls: [
-            'https://e.gkd.li/9cd91c80-9cba-48e8-97cd-dac5968694e4',
-            'https://e.gkd.li/2d42c1ab-67b6-49af-9091-f259dd8714c2',
-          ],
+          exampleUrls: 'https://e.gkd.li/9cd91c80-9cba-48e8-97cd-dac5968694e4',
           snapshotUrls: [
             'https://i.gkd.li/i/26530262',
             'https://i.gkd.li/i/26530263',
           ],
+          excludeSnapshotUrls: 'https://i.gkd.li/i/26528931',
         },
         {
           key: 99,
@@ -421,7 +419,7 @@ export default defineGkdApp({
             top: 'width * 0.5',
           },
           exampleUrls: 'https://e.gkd.li/d8949efa-e2f7-49d2-a8d7-4837ed349aef',
-          snapshotUrls: ['https://i.gkd.li/i/26528931'],
+          snapshotUrls: 'https://i.gkd.li/i/26528931',
         },
       ],
     },
