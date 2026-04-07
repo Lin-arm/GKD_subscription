@@ -334,8 +334,9 @@ export default defineGkdApp({
           fastQuery: true,
           activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
           matches:
-            '@ImageView[height<0 && right<getPrev(0).width.div(2)] <<n [parent=null]',
+            '@ImageView[childCount=0][width<100] <<2 ViewGroup[childCount=1] + ViewGroup >2 [desc*="关闭"]',
           actionMaximum: 1,
+          resetMatch: 'activity',
           position: {
             left: 'width * 0.5',
             top: 'width * 0.5',
