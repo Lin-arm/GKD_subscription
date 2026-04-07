@@ -326,27 +326,6 @@ export default defineGkdApp({
       ],
     },
     {
-      key: 15,
-      name: '功能类-观看广告自动静音',
-      rules: [
-        {
-          key: 0,
-          fastQuery: true,
-          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
-          matches:
-            '@ImageView[childCount=0][width<100] <<2 ViewGroup[childCount=1] + ViewGroup >2 [desc*="关闭"]',
-          actionMaximum: 1,
-          resetMatch: 'activity',
-          position: {
-            left: 'width * 0.5',
-            top: 'width * 0.5',
-          },
-          exampleUrls: 'https://e.gkd.li/d8949efa-e2f7-49d2-a8d7-4837ed349aef',
-          snapshotUrls: ['https://i.gkd.li/i/26528931'],
-        },
-      ],
-    },
-    {
       key: 16,
       name: '功能类-观看广告自动领取奖励',
       rules: [
@@ -422,6 +401,27 @@ export default defineGkdApp({
           activityIds: '.reader.ui.ReaderActivity',
           matches: ['[text="点评此书"]', '[text="取消"][clickable=true]'],
           snapshotUrls: 'https://i.gkd.li/i/21589381',
+        },
+      ],
+    },
+    {
+      key: 18,
+      name: '功能类-观看广告自动静音',
+      rules: [
+        {
+          key: 0,
+          fastQuery: true,
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          matches:
+            '@ImageView[childCount=0][width<100] <<2 ViewGroup[childCount=1] + ViewGroup >2 [desc*="关闭"]',
+          actionMaximum: 1,
+          resetMatch: 'activity',
+          position: {
+            left: 'width * 0.5',
+            top: 'width * 0.5',
+          },
+          exampleUrls: 'https://e.gkd.li/d8949efa-e2f7-49d2-a8d7-4837ed349aef',
+          snapshotUrls: ['https://i.gkd.li/i/26528931'],
         },
       ],
     },
