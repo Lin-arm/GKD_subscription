@@ -326,6 +326,27 @@ export default defineGkdApp({
       ],
     },
     {
+      key: 15,
+      name: '功能类-观看广告自动静音',
+      rules: [
+        {
+          key: 0,
+          fastQuery: true,
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          matches: '@ImageView[height<0 && right<getPrev(0).width.div(2)] <<n [parent=null]',
+          actionMaximum: 1,
+          position: {
+            left: 'width * 0.5',
+            top: 'width * 0.5',
+          },
+          exampleUrls: 'https://e.gkd.li/d8949efa-e2f7-49d2-a8d7-4837ed349aef',
+          snapshotUrls: [
+            'https://i.gkd.li/i/26528931',
+          ],
+        },
+      ],
+    },
+    {
       key: 16,
       name: '功能类-观看广告自动领取奖励',
       rules: [
