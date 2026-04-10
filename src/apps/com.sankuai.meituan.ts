@@ -302,8 +302,7 @@ export default defineGkdApp({
           action: 'clickCenter', // https://github.com/AIsouler/GKD_subscription/issues/1028
           activityIds:
             'com.meituan.android.hybridcashier.HybridCashierActivity',
-          matches:
-            '[text="支付成功"] >(5,7) [text="完成"][visibleToUser=true]',
+          matches: '[text="支付成功"] >(5,7) [text="完成"][visibleToUser=true]',
           snapshotUrls: [
             'https://i.gkd.li/i/14392284',
             'https://i.gkd.li/i/26628762',
