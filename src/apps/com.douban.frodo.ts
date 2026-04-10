@@ -7,89 +7,90 @@ export default defineGkdApp({
     {
       key: -1,
       name: '开屏广告',
+      fastQuery: true,
       matchTime: 10000,
       // actionMaximum: 2,
       resetMatch: 'app',
-      actionMaximumKey: 0,
+      // actionMaximumKey: 0,
       priorityTime: 10000,
       rules: [
         {
           key: 0,
-          fastQuery: true,
-          anyMatches: [
-            '@View[text=null][clickable=true][childCount=0][visibleToUser=true][width<200&&height<200] +(1,2) TextView[index=parent.childCount.minus(1)][childCount=0] <n FrameLayout[childCount>2][text=null][desc=null] >(n+6) [text*="第三方应用" || text*="扭动手机" || text*="点击或上滑" || text*="省钱好物" || text*="扭一扭"][visibleToUser=true]',
-            'FrameLayout > FrameLayout[childCount>2][text=null][desc=null] > @View[text=null][clickable=true][childCount=0][visibleToUser=true][width<200&&height<200] +(1,2) TextView[index=parent.childCount.minus(1)][childCount=0][visibleToUser=true]',
-          ],
+          matches:
+            '@View[text=null][clickable=true][childCount=0][visibleToUser=true][width<200 && height<200] +(1,2) TextView[index=parent.childCount.minus(1)][childCount=0] <n FrameLayout[childCount>2][text=null][desc=null] >(n+6) [text*="第三方应用" || text*="扭动手机" || text*="点击或上滑" || text*="省钱好物" || text*="扭一扭"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/15981630',
         },
         {
           key: 1,
-          fastQuery: true,
-          position: {
-            left: 'width * 0.875',
-            top: 'width * 0.17', // height可能会变化，不建议使用
-          },
           matches:
-            '[vid="ad_parent"][visibleToUser=true][width>=1200 && width!=1224]',
-          snapshotUrls: [
-            'https://i.gkd.li/i/13601755',
-            'https://i.gkd.li/i/16054268',
-            'https://i.gkd.li/i/23324118',
-            'https://i.gkd.li/i/23324139',
-            'https://i.gkd.li/i/23652259',
-            'https://i.gkd.li/i/24191638',
-            'https://i.gkd.li/i/24362806',
-          ],
-          excludeSnapshotUrls: [
-            'https://i.gkd.li/i/23283060',
-            'https://i.gkd.li/i/23382528',
-            'https://i.gkd.li/i/23982586',
-          ],
+            '@[clickable=true] >2 [text*="跳过"][text.length<10][width<500 && height<300][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/26608409', // issue #110
         },
         {
           key: 2,
-          fastQuery: true,
-          position: {
-            left: 'width * 0.875',
-            top: 'width * 0.137', // height可能会变化，不建议使用
-          },
-          matches:
-            '[vid="ad_parent"][visibleToUser=true][width<1200 || width=1224]',
-          snapshotUrls: [
-            'https://i.gkd.li/i/13575257',
-            'https://i.gkd.li/i/13575547',
-            'https://i.gkd.li/i/18423724',
-            'https://i.gkd.li/i/23982586',
-          ],
-        },
-        {
-          key: 3,
-          fastQuery: true,
           excludeMatches: '[text="去绑定邮箱"][visibleToUser=true]',
           matches:
             '[text*="跳过"][text.length<10][width<500 && height<300][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/17687115',
           excludeSnapshotUrls: 'https://i.gkd.li/i/23283375',
         },
+
+        // 坐标点击的放后面, 从上往下依次点击按钮[跳过]附近的坐标, 总有一个能点中[跳过]
         {
-          key: 4,
-          fastQuery: true,
-          position: {
-            left: 'width * 0.868',
-            top: 'width * 0.09', // height可能会变化，不建议使用
-          },
-          matches: '[vid="ad_parent"][visibleToUser=true][width=1216]',
-          snapshotUrls: 'https://i.gkd.li/i/23283060',
-        },
-        {
-          key: 5,
-          fastQuery: true,
+          key: 10,
+          name: '坐标点击①',
+          // actionMaximum: 1, // 打开豆瓣-->启动白屏-->显示开屏广告, 只点1次会在白屏阶段被触发掉, 导致后续不再触发
           position: {
             left: 'width * 0.875',
-            top: 'width * 0.125',
+            top: 'width * 0.10', // 目标节点的height变化太大，不建议使用
           },
-          matches: '[vid="ad_parent"][visibleToUser=true][width=1440]',
-          snapshotUrls: 'https://i.gkd.li/i/23382528',
+          matches: '[vid="ad_parent"][visibleToUser=true][width>=720]',
+          snapshotUrls: 'https://i.gkd.li/i/23283060', // 按钮[跳过]的位置的top在 (0.05 ~ 0.12) * 宽度1216 范围内
+        },
+        {
+          key: 11,
+          preKeys: [10],
+          name: '坐标点击②',
+          position: {
+            left: 'width * 0.875',
+            top: 'width * 0.135',
+          },
+          matches: '[vid="ad_parent"][visibleToUser=true][width>=720]', // 选择器跟前面一样,只是点击位置不同
+          snapshotUrls: [
+            'https://i.gkd.li/i/13575257', // (旧快照) top在 (0.10 ~ 0.17) * 1080 内
+            'https://i.gkd.li/i/18423724', // (0.11 ~ 0.16) * 1080
+            'https://i.gkd.li/i/23982586', // (0.10 ~ 0.15) * 1224
+            'https://i.gkd.li/i/23382528', // (0.11 ~ 0.14) * 1440
+          ],
+        },
+        {
+          key: 12,
+          preKeys: [11],
+          name: '坐标点击③',
+          position: {
+            left: 'width * 0.875',
+            top: 'width * 0.17',
+          },
+          matches: '[vid="ad_parent"][visibleToUser=true][width>=720]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/13601755', // (旧快照) top在 (0.11 ~ 0.18) * 1200 内
+            'https://i.gkd.li/i/23324118', // (0.13 ~ 0.20) * 1280
+            'https://i.gkd.li/i/23324139', // (0.14 ~ 0.20) * 1220
+            'https://i.gkd.li/i/23652259', // (0.12 ~ 0.19) * 1216
+            'https://i.gkd.li/i/24191638', // (0.13 ~ 0.19) * 1260
+            'https://i.gkd.li/i/24362806', // (0.13 ~ 0.20) * 1440
+          ],
+        },
+        {
+          key: 13,
+          preKeys: [12],
+          name: '坐标点击④',
+          position: {
+            left: 'width * 0.875',
+            top: 'width * 0.20',
+          },
+          matches: '[vid="ad_parent"][visibleToUser=true][width>=720]',
+          snapshotUrls: 'https://i.gkd.li/i/16054268', // (0.15 ~ 0.22) * 1200
         },
       ],
     },
