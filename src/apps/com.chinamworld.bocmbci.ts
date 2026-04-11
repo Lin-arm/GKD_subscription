@@ -36,7 +36,7 @@ export default defineGkdApp({
           activityIds:
             'com.boc.bocsoft.mobile.bocmobile.buss.system.main.ui.MainActivity',
           matches:
-            '@Image[width<78 && height<81][visibleToUser=true][index=parent.childCount.minus(1)] - View[childCount=2] <<3 * -n * < [id="app"] <<4 [vid="webview_layout"]',
+            '@Image[width<80 && height<80] <2 View[childCount=2] <<2 View[index=parent.childCount.minus(1)] <n [id="app"] <<4 [vid="webview_layout"]',
           exampleUrls: 'https://e.gkd.li/98cd7f08-a225-4fcc-8c4f-bd92e1359bda',
           snapshotUrls: 'https://i.gkd.li/i/26644706',
         },
