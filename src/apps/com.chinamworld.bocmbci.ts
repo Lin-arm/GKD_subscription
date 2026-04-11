@@ -31,6 +31,15 @@ export default defineGkdApp({
           exampleUrls: 'https://e.gkd.li/13b6fa95-5198-41f5-b39c-d40166a624fb',
           snapshotUrls: 'https://i.gkd.li/i/19567854',
         },
+        {
+          key: 2,
+          activityIds:
+            'com.boc.bocsoft.mobile.bocmobile.buss.system.main.ui.MainActivity',
+          matches:
+            'Image[width<78 && height<81][visibleToUser=true][desc=null][text.length=0][index=parent.childCount.minus(1)]',
+          exampleUrls: 'https://e.gkd.li/98cd7f08-a225-4fcc-8c4f-bd92e1359bda',
+          snapshotUrls: 'https://i.gkd.li/i/26644706',
+        },
       ],
     },
   ],
