@@ -229,5 +229,20 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 10,
+      name: '局部广告-悬浮广告',
+      desc: '商品详情页右侧-x掉',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: '.detail.DetailActivity',
+          matches:
+            'Image[width<60 && height<60] < @View <n [childCount=2] < [id="root"] <<2 * <2 WebView <<2 [vid="fish_layer_container_id"]',
+          snapshotUrls: 'https://i.gkd.li/i/26837679',
+          exampleUrls: 'https://e.gkd.li/d08c424f-8411-4d65-ba23-02703e328176',
+        },
+      ],
+    },
   ],
 });
