@@ -249,21 +249,24 @@ export default defineGkdApp({
       key: 13,
       name: '功能类-关闭小额免密支付',
       desc: '在支付前/后出现',
+      fastQuery: true,
+      activityIds: 'com.alipay.android.msp.ui.views.MspContainerActivity',
       rules: [
         {
           key: 0,
-          fastQuery: true,
-          activityIds: 'com.alipay.android.msp.ui.views.MspContainerActivity',
+          name: '①点击[关闭]或[不感兴趣]',
           matches:
-            '[text="关闭"] < @[clickable=true] <3 * < * + * >3 [text$="小额免密支付"]',
+            '[text="关闭" || text="不感兴趣"] < @[clickable=true] <3 * < * + * >3 [text$="小额免密支付"]',
           exampleUrls:
             'https://m.gkd.li/57941037/2322af2e-52e2-4059-9757-f26940f4b2fc',
-          snapshotUrls: 'https://i.gkd.li/i/13438414',
+          snapshotUrls: [
+            'https://i.gkd.li/i/13438414', // 关闭
+            'https://i.gkd.li/i/26826092', // 不感兴趣
+          ],
         },
         {
           key: 1,
-          fastQuery: true,
-          activityIds: 'com.alipay.android.msp.ui.views.MspContainerActivity',
+          name: '②取消勾选',
           matches: '@[checked=true] < * - [text="开通淘宝小额免密支付"]',
           exampleUrls:
             'https://m.gkd.li/57941037/3ae78555-c0a5-4f76-8096-c4d1593ebb77',
