@@ -23,11 +23,12 @@ export default defineGkdApp({
     },
     {
       key: 2,
-      name: '权限提示-VIOV-指定媒体内容',
+      name: '权限提示-vivo-指定媒体内容',
       desc: 'app最小权限原则授予指定图片/视频',
       fastQuery: true,
       actionMaximum: 1,
       actionDelay: 400, // 等待400ms，确保节点稳定
+      forcedTime: 6000, // 主动查询6s
       activityIds: '.permission.ui.GrantPermissionsActivity',
       rules: [
         {
