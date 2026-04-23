@@ -97,6 +97,11 @@ export default defineGkdApp({
       key: 2,
       name: '分段广告',
       fastQuery: true,
+      activityIds: [
+        'com.qzone.reborn.feedpro.activity.QzoneFriendFeedProActivity',
+        '.activity.SplashActivity',
+        '.guild.base.QPublicFragmentActivityForMainWebActivity',
+      ],
       rules: [
         {
           key: 0,
@@ -117,22 +122,29 @@ export default defineGkdApp({
             '@[desc="更多"][clickable=true] - [desc="广告"][visibleToUser=true] - LinearLayout > [text="今天"]',
           snapshotUrls: 'https://i.gkd.li/i/24381585',
         },
+
+        // 第二段
         {
+          key: 50,
           preKeys: [0, 1],
           name: '②点击[关闭]此条广告',
-          activityIds: [
-            'com.qzone.reborn.feedpro.activity.QzoneFriendFeedProActivity',
-            '.activity.SplashActivity',
-            '.guild.base.QPublicFragmentActivityForMainWebActivity',
-          ],
           matches:
             '@[clickable=true] >(1,2) [text^="关闭"][text*="条"][text.length<10]',
           snapshotUrls: [
             'https://i.gkd.li/i/21947698',
             'https://i.gkd.li/i/24381598',
             'https://i.gkd.li/i/24406932',
-            'https://i.gkd.li/i/26953118', // 关闭这条
+            'https://i.gkd.li/i/26997293', // 关闭这条
           ],
+        },
+
+        // 第三段
+        {
+          key: 100,
+          preKeys: [50],
+          name: '③点击[直接关闭]',
+          matches: '[text="直接关闭"][clickable=true]',
+          snapshotUrls: 'https://i.gkd.li/i/26997174',
         },
       ],
     },
