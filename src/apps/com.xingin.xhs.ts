@@ -267,7 +267,7 @@ export default defineGkdApp({
         {
           preKeys: [0],
           matches:
-            '[text="倍速"] + [vid="video_speed_setting_ll"] > [text="0.75"]',
+            '[vid="video_speed_setting_ll"] > [vid="speed_selection_1"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/25854394',
           exampleUrls: [
             'https://e.gkd.li/3d621ea3-af7b-49cf-95bb-4fd54fcc5b54', // 倍速弹窗
@@ -295,7 +295,7 @@ export default defineGkdApp({
         {
           preKeys: [0],
           matches:
-            '[text="倍速"] + [vid="video_speed_setting_ll"] > [text="1.25"]',
+            '[vid="video_speed_setting_ll"] > [vid="speed_selection_3"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/25854394',
           exampleUrls: [
             'https://e.gkd.li/3d621ea3-af7b-49cf-95bb-4fd54fcc5b54', // 倍速弹窗
@@ -322,7 +322,7 @@ export default defineGkdApp({
         {
           preKeys: [0],
           matches:
-            '[text="倍速"] + [vid="video_speed_setting_ll"] > [text="1.5"]',
+            '[vid="video_speed_setting_ll"] > [vid="speed_selection_4"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/25854394',
           exampleUrls: [
             'https://e.gkd.li/3d621ea3-af7b-49cf-95bb-4fd54fcc5b54', // 倍速弹窗
@@ -349,7 +349,7 @@ export default defineGkdApp({
         {
           preKeys: [0],
           matches:
-            '[text="倍速"] + [vid="video_speed_setting_ll"] > [text="2.0"]',
+            '[vid="video_speed_setting_ll"] > [vid="speed_selection_5"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/25854394',
           exampleUrls: [
             'https://e.gkd.li/3d621ea3-af7b-49cf-95bb-4fd54fcc5b54', // 倍速弹窗
@@ -377,7 +377,7 @@ export default defineGkdApp({
         {
           preKeys: [0],
           matches:
-            '[text="倍速"] + [vid="video_speed_setting_ll"] > [text="3.0"]',
+            '[vid="video_speed_setting_ll"] >2 [vid="speed_selection_6"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/25854394',
           exampleUrls: [
             'https://e.gkd.li/3d621ea3-af7b-49cf-95bb-4fd54fcc5b54', // 倍速弹窗
