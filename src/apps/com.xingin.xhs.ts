@@ -135,8 +135,8 @@ export default defineGkdApp({
           ],
           excludeSnapshotUrls: 'https://i.gkd.li/i/14392171', // 防止反复触发规则
           exampleUrls: [
-            'https://e.gkd.li/255822f2-7f48-4b1e-83bd-50411727bd29',
-            'https://e.gkd.li/0034d36d-f3a3-4255-991f-c3d6c258c8ae',
+            'https://e.gkd.li/728542d5-d6fe-44ab-91b2-a96ee34abdf8',
+            'https://e.gkd.li/a5d7871e-05e1-4a77-b0f5-3d94d7fd7663',
           ],
         },
         {
