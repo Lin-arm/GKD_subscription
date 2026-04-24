@@ -243,7 +243,10 @@ export default defineGkdApp({
       name: '功能类-订阅至最新章后自动[返回]',
       desc: '返回小说正文页 (对于自定义订阅不可用)',
       fastQuery: true,
-      activityIds: '.ui.activity.QDDirectoryActivity',
+      activityIds: [
+        '.ui.activity.QDDirectoryActivity',
+        '.ui.activity.SplashActivity',
+      ],
       rules: [
         {
           key: 1,
@@ -259,7 +262,10 @@ export default defineGkdApp({
           name: '②已订最新章-返回键',
           action: 'back',
           matches: '[text="已订阅至最新章节"]',
-          snapshotUrls: 'https://i.gkd.li/i/26220488',
+          snapshotUrls: [
+            'https://i.gkd.li/i/26220488',
+            'https://i.gkd.li/i/27051045',
+          ],
           exampleUrls: 'https://e.gkd.li/40df3df2-a5a5-4044-bf82-8622396bf39a',
         },
         {
