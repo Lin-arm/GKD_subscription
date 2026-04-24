@@ -142,7 +142,7 @@ export default defineGkdApp({
           key: 5,
           activityIds: '.pb.pb.main.PbActivity',
           matches:
-            'ImageView[childCount=0] < @FrameLayout[clickable=true][childCount=1][visibleToUser=true] <2 RelativeLayout + RelativeLayout >3 [text="广告"] ',
+            'ImageView[childCount=0] < @FrameLayout[clickable=true][childCount=1][visibleToUser=true] <2 RelativeLayout + RelativeLayout >3 [text="广告"]',
           exampleUrls: 'https://e.gkd.li/0d5fea40-44ac-4b47-8b3c-e8388640e37d',
           snapshotUrls: 'https://i.gkd.li/i/24541094',
         },
@@ -174,11 +174,18 @@ export default defineGkdApp({
             'https://i.gkd.li/i/26634661', // [已经看过]
           ],
         },
+        {
+          key: 52,
+          preKeys: [0, 1, 2, 3, 4, 5],
+          name: '②选[不喜欢]该直播',
+          matches: '@[clickable=true] >3 [text="不喜欢"]',
+          snapshotUrls: 'https://i.gkd.li/i/27052244', // [不喜欢] 直播
+        },
 
         // 第三段
         {
           key: 100,
-          preKeys: [51],
+          preKeys: [51, 52],
           name: '③点击[确定]',
           matches: '@[clickable=true] - [text^="已选"][text$="理由"]',
           snapshotUrls: 'https://i.gkd.li/i/26934788',
