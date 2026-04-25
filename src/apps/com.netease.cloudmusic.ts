@@ -136,21 +136,22 @@ export default defineGkdApp({
           excludeMatches:
             '[text="当前场景" || vid="mainDrawerContainer"][visibleToUser=true]',
           matches:
-            '[vid="dsl_dialog_root" || text^="邀您开通VIP" || text^="本周已免费试听" || text^="免费听模式体验中" || text^="续费后，即可畅听" || text*="小组件到桌面"][visibleToUser=true]',
+            '[vid="dsl_dialog_root" || text^="邀您开通VIP" || text^="本周已免费试听" || text^="免费听模式体验中" || text^="续费后，即可畅听" || text*="小组件到桌面" || text$="开通VIP畅听"][visibleToUser=true]',
           snapshotUrls: [
-            'https://i.gkd.li/i/13804534',
+            'https://i.gkd.li/i/13804534', // [vid="dsl_dialog_root"]
             'https://i.gkd.li/i/13848913',
             'https://i.gkd.li/i/13962214',
             'https://i.gkd.li/i/14036940',
             'https://i.gkd.li/i/15047126',
             'https://i.gkd.li/i/15125892',
             'https://i.gkd.li/i/15244091',
-            'https://i.gkd.li/i/20097535',
-            'https://i.gkd.li/i/20097609',
-            'https://i.gkd.li/i/20115012',
-            'https://i.gkd.li/i/22451511',
             'https://i.gkd.li/i/23770986',
-            'https://i.gkd.li/i/23770978',
+            'https://i.gkd.li/i/20097535', // 免费听模式体验中
+            'https://i.gkd.li/i/20097609', // 本周已免费试听
+            'https://i.gkd.li/i/20115012', // 邀您开通VIP，畅享千万级会员曲库
+            'https://i.gkd.li/i/22451511', // 续费后，即可畅听TA们的歌
+            'https://i.gkd.li/i/23770978', // 添加「乐评日历」小组件到桌面
+            'https://i.gkd.li/i/27080453', // 含334首VIP歌曲，开通VIP畅听
           ],
           excludeSnapshotUrls: [
             'https://i.gkd.li/i/15404777',
