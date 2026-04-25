@@ -52,6 +52,13 @@ export default defineGkdApp({
             'https://i.gkd.li/i/18245546',
           ],
         },
+        {
+          key: 2,
+          fastQuery: true,
+          matches:
+            '@ImageView[childCount=0] < ViewGroup < ViewGroup +2 ViewGroup >2 [text="广告"][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/27078867',
+        },
       ],
     },
     {
