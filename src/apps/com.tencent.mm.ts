@@ -1021,7 +1021,7 @@ export default defineGkdApp({
           fastQuery: true,
           activityIds: '.ui.chatting.TextPreviewUI',
           matches:
-            'TextView[visibleToUser=true] < * < ScrollView + @LinearLayout[clickable=true] <<n [id="android:id/content"]',
+            '@LinearLayout[clickable=true] - * ->2 TextView[visibleToUser=true] < * < ScrollView < * < * < * < [id="android:id/content"]',
           snapshotUrls: 'https://i.gkd.li/i/26310231',
           exampleUrls: 'https://e.gkd.li/9b2b5ed6-bf1d-4b13-aba5-b51e978df562',
         },
