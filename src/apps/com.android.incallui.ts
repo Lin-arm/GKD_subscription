@@ -33,9 +33,9 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
+          actionCd: 3000, // cd 太短会重复点击
           activityIds: '.InCallActivity',
-          matches:
-            '@[vid="audioButton"][checkable=true][checked=false] >2 [text="免提"]',
+          matches: '@[vid="audioButton"][checked=false] >2 [text="免提"]',
           snapshotUrls: 'https://i.gkd.li/i/25824399', //未开[免提]
           excludeSnapshotUrls: 'https://i.gkd.li/i/25824401', //已开[免提] [checked=true]
         },
