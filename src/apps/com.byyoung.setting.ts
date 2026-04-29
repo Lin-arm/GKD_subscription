@@ -16,7 +16,7 @@ export default defineGkdApp({
       ],
     },
     {
-      key: 1,
+      key: 2,
       name: '功能类-每日自动签到',
       fastQuery: true,
       activityIds: '.HomePage.activitys.MainActivity',
