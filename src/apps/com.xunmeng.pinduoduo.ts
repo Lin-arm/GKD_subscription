@@ -196,7 +196,7 @@ export default defineGkdApp({
     {
       key: 8,
       name: '局部广告-商品详情页视频讲解窗口',
-      desc: '点击关闭',
+      desc: '点击关闭⚠️需禁止pdd悬浮窗权限,否则无焦点导致失效',
       rules: [
         {
           fastQuery: true,
