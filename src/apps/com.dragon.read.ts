@@ -307,6 +307,8 @@ export default defineGkdApp({
       fastQuery: true,
       rules: [
         {
+          key: 0,
+          name: '首页',
           matchTime: 10000,
           actionMaximum: 1,
           resetMatch: 'app',
@@ -324,6 +326,8 @@ export default defineGkdApp({
           ],
         },
         {
+          key: 1, // 通知权限对话框可能多次触发 https://github.com/Lin-arm/GKD_subscription/pull/135
+          nmae: '小说阅读页', 
           activityIds: '.reader.ui.ReaderActivity',
           matches: [
             '[text="开启推送通知"][visibleToUser=true]',
