@@ -237,21 +237,33 @@ export default defineGkdApp({
     {
       key: 9,
       name: '局部广告',
-      activityIds: 'com.kugou.common.useraccount.app.KgUserLoginAndRegActivity',
+      activityIds: [
+        'com.kugou.common.useraccount.app.KgUserLoginAndRegActivity',
+        'com.kugou.android.app.MediaActivity',
+      ],
+      fastQuery: true,
       rules: [
         {
           key: 0,
-          fastQuery: true,
+          name: '播放器背景',
           matches: '@[text*="跳过"] + [text*="广告"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/25021020',
+          exampleUrls: 'https://e.gkd.li/4d41ba0c-d2b0-41cf-9153-b602d66a2570',
         },
         {
           key: 1,
-          fastQuery: true,
+          name: '[左下角Ad]Toast',
           matches:
             '@ImageView[clickable=true][parent.childCount<4][index=parent.childCount.minus(1)] <3 LinearLayout +(6,7) LinearLayout > [text="评论"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/25021318',
           excludeSnapshotUrls: 'https://i.gkd.li/i/25021659', // 给key6活路
+        },
+        {
+          key: 2,
+          name: '[设为铃声]Toast',
+          matches:
+            '@[desc="关闭"] - [text^="喜欢就设为铃声"][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/27210121',
         },
       ],
     },
