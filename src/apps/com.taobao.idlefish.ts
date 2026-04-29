@@ -149,12 +149,17 @@ export default defineGkdApp({
       name: '功能类-自动点击[查看原图]',
       rules: [
         {
-          activityIds:
+          activityIds: [
+            'com.idlefish.flutterbridge.flutterboost.boost.FishFlutterBoostTransparencyActivity',
             'com.idlefish.flutterbridge.flutterboost.boost.FishFlutterBoostActivity',
+          ],
           matches: '[desc="查看原图"][visibleToUser=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/15463399',
+            'https://i.gkd.li/i/27207770',
+          ],
           exampleUrls:
             'https://m.gkd.li/57941037/12b60303-4fb8-4786-b636-4efef10f3d78',
-          snapshotUrls: 'https://i.gkd.li/i/15463399',
         },
       ],
     },
