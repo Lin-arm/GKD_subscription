@@ -454,18 +454,19 @@ export default defineGkdApp({
         },
       ],
     },
-    {
-      key: 18,
-      name: '功能类-评论自动翻译',
-      rules: [
-        {
-          fastQuery: true,
-          activityIds: 'com.xingin.matrix.notedetail.NoteDetailActivity',
-          matches: '[text$="回复 翻译"][visibleToUser=true]',
-          snapshotUrls: 'https://i.gkd.li/i/26643975',
-          exampleUrls: 'https://e.gkd.li/fc8d70d4-f743-45df-a9d2-f343e419ccd9',
-        },
-      ],
-    },
+    // 存在`执行选择器`可用,但规则里就不可用问题
+    // {
+    //   key: 18,
+    //   name: '功能类-评论自动翻译',
+    //   rules: [
+    //     {
+    //       fastQuery: true,
+    //       activityIds: 'com.xingin.matrix.notedetail.NoteDetailActivity',
+    //       matches: '[text$="回复 翻译"][visibleToUser=true]',
+    //       snapshotUrls: 'https://i.gkd.li/i/26643975',
+    //       exampleUrls: 'https://e.gkd.li/fc8d70d4-f743-45df-a9d2-f343e419ccd9',
+    //     },
+    //   ],
+    // },
   ],
 });
