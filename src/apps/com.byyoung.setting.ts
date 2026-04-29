@@ -15,5 +15,19 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 1,
+      name: '功能类-每日自动签到',
+      fastQuery: true,
+      activityIds: '.HomePage.activitys.MainActivity',
+      actionDelay: 3000, // 等待3秒，确保页面(后台)加载完成
+      rules: [
+        {
+          matches: '[vid="userIsLogin"] >2 [text="签到"]', // 尝试不进个人页直接签到
+          snapshotUrls: 'https://i.gkd.li/i/27209865',
+          exampleUrls: 'https://e.gkd.li/febcaadd-d766-4970-b8ee-edbccf4022ac',
+        },
+      ],
+    },
   ],
 });
