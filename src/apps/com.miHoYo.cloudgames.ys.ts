@@ -48,14 +48,23 @@ export default defineGkdApp({
     {
       key: 2,
       name: '功能类-中断自动重连',
-      desc: '连接中断-尝试重连',
+      desc: '连接中断-尝试重连/重试',
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.mihoyo.gamecloud.playcenter.main.MainActivity',
-          matches: '[text="尝试重连"][clickable=true]',
-          snapshotUrls: 'https://i.gkd.li/i/26311100',
-          exampleUrls: 'https://e.gkd.li/649824e2-e15e-4ddd-849a-b093357e3a7f',
+          activityIds: [
+            'com.mihoyo.gamecloud.playcenter.main.MainActivity',
+            'com.mihoyo.cloudgame.main.MiHoYoCloudMainActivity',
+          ],
+          matches: '[text="尝试重连" || text="重试"][clickable=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/26311100',
+            'https://i.gkd.li/i/27207520',
+          ],
+          exampleUrls: [
+            'https://e.gkd.li/649824e2-e15e-4ddd-849a-b093357e3a7f',
+            'https://e.gkd.li/71a3b3ff-4588-42e0-9750-a207a0c63d8e',
+          ],
         },
       ],
     },
