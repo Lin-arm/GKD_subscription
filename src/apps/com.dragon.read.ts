@@ -305,11 +305,11 @@ export default defineGkdApp({
       name: '权限提示-通知权限',
       desc: '点击"取消"',
       fastQuery: true,
-      matchTime: 10000,
-      actionMaximum: 1,
-      resetMatch: 'app',
       rules: [
         {
+          matchTime: 10000,
+          actionMaximum: 1,
+          resetMatch: 'app',
           activityIds: [
             '.widget.ConfirmDialogBuilder',
             '.pages.main.MainFragmentActivity',
@@ -322,6 +322,14 @@ export default defineGkdApp({
             'https://i.gkd.li/i/12716592',
             'https://i.gkd.li/i/21589667',
           ],
+        },
+        {
+          activityIds: '.reader.ui.ReaderActivity',
+          matches: [
+            '[text="开启推送通知"][visibleToUser=true]',
+            '[text="取消"][visibleToUser=true]',
+          ],
+          snapshotUrls: 'https://i.gkd.li/i/27190449',
         },
       ],
     },
