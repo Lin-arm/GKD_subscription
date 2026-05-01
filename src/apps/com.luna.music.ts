@@ -161,6 +161,7 @@ export default defineGkdApp({
           key: 3,
           name: '①x掉-坐标轮询点击_2', // 第二种节点树形式
           fastQuery: true,
+          actionDelay: 8000,
           activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
           matches:
             '@ImageView[width<56 && height<56][visibleToUser=true] <2 [childCount=2] <n * <<6 [id="android:id/content"]',
@@ -307,6 +308,7 @@ export default defineGkdApp({
           key: 3,
           name: '①x掉-坐标轮询点击_2', // 第二种节点树形式
           fastQuery: true,
+          actionDelay: 8000,
           activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
           matches:
             '@ImageView[width<56 && height<56][visibleToUser=true] <2 [childCount=2] <n * <<6 [id="android:id/content"]',
