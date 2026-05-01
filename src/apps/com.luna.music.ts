@@ -335,7 +335,7 @@ export default defineGkdApp({
           excludeSnapshotUrls: 'https://i.gkd.li/i/24521416',
         },
         {
-          key: 3,
+          key: 4,
           name: '③今日结束退出',
           fastQuery: true,
           actionDelay: 500,
@@ -349,7 +349,7 @@ export default defineGkdApp({
           exampleUrls: 'https://e.gkd.li/8cc22cd9-f48e-4aaa-8c5c-a04a752e6df6',
         },
         {
-          preKeys: [3],
+          preKeys: [4],
           name: '④再看视频?-返回操作',
           fastQuery: true,
           activityIds: 'com.luna.biz.main.main.MainActivity',
