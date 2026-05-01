@@ -132,7 +132,7 @@ export default defineGkdApp({
           key: 1,
           name: '①x掉-坐标轮询点击',
           fastQuery: true,
-          actionDelay: 10000,
+          actionDelay: 8000,
           position: {
             left: 'width * 3.28',
             top: 'width * 0.2',
@@ -269,7 +269,7 @@ export default defineGkdApp({
           name: '①x掉-坐标轮询点击', // 形式1-主要
           key: 1,
           fastQuery: true,
-          actionDelay: 10000,
+          actionDelay: 8000,
           position: {
             left: 'width * 3.28',
             top: 'width * 0.2',
