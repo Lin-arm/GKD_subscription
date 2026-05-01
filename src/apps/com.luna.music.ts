@@ -158,7 +158,16 @@ export default defineGkdApp({
           snapshotUrls: 'https://i.gkd.li/i/24522627',
         },
         {
-          preKeys: [1, 2], // 轮询判断是否已领取
+          key: 3,
+          name: '①x掉-坐标轮询点击_2', // 第二种节点树形式
+          fastQuery: true,
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          matches:
+            '@ImageView[width<56 && height<56][visibleToUser=true] <2 [childCount=2] <n * <<6 [id="android:id/content"]',
+          snapshotUrls: 'https://i.gkd.li/i/27272574',
+        },
+        {
+          preKeys: [1, 2, 3], // 轮询判断是否已领取
           name: '②没结束-继续轮询',
           fastQuery: true,
           actionDelay: 500,
@@ -295,8 +304,17 @@ export default defineGkdApp({
           snapshotUrls: 'https://i.gkd.li/i/24522627',
         },
         {
+          key: 3,
+          name: '①x掉-坐标轮询点击_2', // 第二种节点树形式
+          fastQuery: true,
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          matches:
+            '@ImageView[width<56 && height<56][visibleToUser=true] <2 [childCount=2] <n * <<6 [id="android:id/content"]',
+          snapshotUrls: 'https://i.gkd.li/i/27272574',
+        },
+        {
           name: '②没结束-继续轮询',
-          preKeys: [1, 2], // 轮询判断是否已领取
+          preKeys: [1, 2, 3], // 轮询判断是否已领取
           fastQuery: true,
           actionDelay: 500,
           activityIds: [
