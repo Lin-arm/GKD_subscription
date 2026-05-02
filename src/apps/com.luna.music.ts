@@ -164,7 +164,7 @@ export default defineGkdApp({
           actionDelay: 8000,
           activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
           matches:
-            '@ImageView[width<56 && height<56][visibleToUser=true] <2 [childCount=2] <n * <<6 [id="android:id/content"]',
+            '@ImageView[width<56 && height<56][visibleToUser=true] <2 [childCount=2] <n [childCount>6] <<6 [id="android:id/content"]',
           snapshotUrls: 'https://i.gkd.li/i/27272574',
         },
         {
@@ -311,7 +311,7 @@ export default defineGkdApp({
           actionDelay: 8000,
           activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
           matches:
-            '@ImageView[width<56 && height<56][visibleToUser=true] <2 [childCount=2] <n * <<6 [id="android:id/content"]',
+            '@ImageView[width<56 && height<56][visibleToUser=true] <2 [childCount=2] <n [childCount>6] <<6 [id="android:id/content"]',
           snapshotUrls: 'https://i.gkd.li/i/27272574',
         },
         {
