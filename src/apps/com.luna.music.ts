@@ -158,7 +158,17 @@ export default defineGkdApp({
           snapshotUrls: 'https://i.gkd.li/i/24522627',
         },
         {
-          preKeys: [1, 2], // 轮询判断是否已领取
+          key: 3,
+          name: '①x掉-坐标轮询点击_2', // 第二种节点树形式
+          fastQuery: true,
+          actionDelay: 8000,
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          matches:
+            '@ImageView[width<56 && height<56][visibleToUser=true] <2 [childCount=2] <n [childCount>6] <<6 [id="android:id/content"]',
+          snapshotUrls: 'https://i.gkd.li/i/27272574',
+        },
+        {
+          preKeys: [1, 2, 3], // 轮询判断是否已领取
           name: '②没结束-继续轮询',
           fastQuery: true,
           actionDelay: 500,
@@ -295,8 +305,18 @@ export default defineGkdApp({
           snapshotUrls: 'https://i.gkd.li/i/24522627',
         },
         {
+          key: 3,
+          name: '①x掉-坐标轮询点击_2', // 第二种节点树形式
+          fastQuery: true,
+          actionDelay: 8000,
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          matches:
+            '@ImageView[width<56 && height<56][visibleToUser=true] <2 [childCount=2] <n [childCount>6] <<6 [id="android:id/content"]',
+          snapshotUrls: 'https://i.gkd.li/i/27272574',
+        },
+        {
           name: '②没结束-继续轮询',
-          preKeys: [1, 2], // 轮询判断是否已领取
+          preKeys: [1, 2, 3], // 轮询判断是否已领取
           fastQuery: true,
           actionDelay: 500,
           activityIds: [
@@ -317,7 +337,7 @@ export default defineGkdApp({
           excludeSnapshotUrls: 'https://i.gkd.li/i/24521416',
         },
         {
-          key: 3,
+          key: 4,
           name: '③今日结束退出',
           fastQuery: true,
           actionDelay: 500,
@@ -331,7 +351,7 @@ export default defineGkdApp({
           exampleUrls: 'https://e.gkd.li/8cc22cd9-f48e-4aaa-8c5c-a04a752e6df6',
         },
         {
-          preKeys: [3],
+          preKeys: [4],
           name: '④再看视频?-返回操作',
           fastQuery: true,
           activityIds: 'com.luna.biz.main.main.MainActivity',
