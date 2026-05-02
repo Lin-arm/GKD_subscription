@@ -71,9 +71,15 @@ export default defineGkdApp({
           fastQuery: true,
           activityIds: 'org.chromium.chrome.browser.ChromeTabbedActivity',
           matches:
-            '[text*="想要打开外部应用"][visibleToUser=true] +2 [childCount=3] > [vid="button1"]',
-          snapshotUrls: 'https://i.gkd.li/i/27094149',
-          exampleUrls: 'https://e.gkd.li/69bfe8dd-80c6-41c9-9f8c-35d214ebcac8',
+            '[text*="想要打开外部应用" || text*="想要開啟外部應用"][visibleToUser=true] +2 [childCount=3] > [vid="button1"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/27094149',
+            'https://i.gkd.li/i/27301310',
+          ],
+          exampleUrls: [
+            'https://e.gkd.li/69bfe8dd-80c6-41c9-9f8c-35d214ebcac8',
+            'https://e.gkd.li/ef904338-6c7a-4939-9333-dde30089f409',
+          ],
         },
       ],
     },
