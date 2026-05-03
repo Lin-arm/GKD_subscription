@@ -7,6 +7,7 @@ export default defineGkdApp({
     {
       key: 0,
       name: '开屏广告',
+      fastQuery: true,
       matchTime: 10000,
       actionMaximum: 1,
       resetMatch: 'app',
@@ -15,21 +16,29 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          fastQuery: true,
           matches: '[vid="skip_container"][visibleToUser=true]', // https://github.com/AIsouler/GKD_subscription/issues/749
           exampleUrls: 'https://e.gkd.li/5f3509d5-0b0b-4d79-b0e6-275a591ef2f5',
           snapshotUrls: 'https://i.gkd.li/i/18587428',
         },
         {
           key: 1,
-          fastQuery: true,
           matches:
-            '([text*="跳过"][text.length<10][width<500 && height<300][visibleToUser=true]) || ([visibleToUser=true][text*="跳过"][text.length<10][width<500 && height<200])',
+            '[text*="跳过"][text.length<10][width<500 && height<300][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/19724417',
+        },
+        {
+          key: 2,
+          matches:
+            '@[text.length<10][text*="跳过"] + * > [text*="跳转"][text$="第三方应用"]',
+          snapshotUrls: 'https://i.gkd.li/i/19724959',
           exampleUrls: 'https://e.gkd.li/5c6579f4-77bb-4970-851f-087c2f86d6ad',
-          snapshotUrls: [
-            'https://i.gkd.li/i/19724959', // 无法快速查询
-            'https://i.gkd.li/i/19724417',
-          ],
+        },
+        {
+          key: 3,
+          matches:
+            '@View[clickable=true][width<135 && height<135] <3 FrameLayout <2 FrameLayout < [vid="ad_container"]',
+          snapshotUrls: 'https://i.gkd.li/i/27316377',
+          exampleUrls: 'https://e.gkd.li/e7a1e2b1-5694-40cf-9db4-68983de45a9a',
         },
       ],
     },
