@@ -96,5 +96,22 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 6,
+      name: '评价提示',
+      actionMaximum: 1,
+      resetMatch: 'app',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: 'com.cmvideo.capability.vod.VodActivity',
+          matches:
+            '@[vid="rating_Bar"][childCount=5] <4 [vid="mg_share_dialog_root"]',
+          action: 'back',
+          snapshotUrls: 'https://i.gkd.li/i/27368603',
+          exampleUrls: 'https://e.gkd.li/aff1fce9-4295-406f-9a56-c26090b57abb',
+        },
+      ],
+    },
   ],
 });
