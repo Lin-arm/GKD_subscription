@@ -81,7 +81,7 @@ export default defineGkdApp({
     },
     {
       key: 5,
-      name: '全屏广告-弹窗广告',
+      name: '全屏广告-首页',
       fastQuery: true,
       matchTime: 10000,
       actionMaximum: 1,
@@ -90,9 +90,15 @@ export default defineGkdApp({
         {
           matchRoot: true,
           activityIds: '.main.application.CompatibleMainActivity',
-          matches: '[vid="iv_big_close"]',
-          exampleUrls: 'https://e.gkd.li/ece7eb54-9b9b-40e2-9402-fc350f4734bb',
-          snapshotUrls: 'https://i.gkd.li/i/16503612',
+          matches: '[vid="iv_big_close" || vid="close_bg_single"]',
+          exampleUrls: [
+            'https://e.gkd.li/ece7eb54-9b9b-40e2-9402-fc350f4734bb',
+            'https://e.gkd.li/5a577aa5-7d8a-4f7b-8a4a-230263775fbc',
+          ],
+          snapshotUrls: [
+            'https://i.gkd.li/i/16503612',
+            'https://i.gkd.li/i/27368845',
+          ],
         },
       ],
     },
