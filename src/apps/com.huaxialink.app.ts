@@ -14,8 +14,7 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: '.MainActivity',
-          matches:
-            '[text="每日签到"] < [childCount=2] + [text="签到"][index=parent.childCount.minus(1)]',
+          matches: '[text="每日签到"] < [childCount=2] + [text="签到"]',
           snapshotUrls: 'https://i.gkd.li/i/27374402',
           exampleUrls: 'https://e.gkd.li/ad4a4cff-3bb7-4f06-94f1-57378afc10ab',
         },

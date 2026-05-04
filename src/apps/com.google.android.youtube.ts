@@ -46,7 +46,7 @@ export default defineGkdApp({
         {
           key: 1,
           matches:
-            '@[clickable=true][index=parent.childCount.minus(1)] -3 [text$="广告" || text*="ad " || desc$="广告" || desc*="ad "] <<3 [vid="panel_header"]',
+            '@[clickable=true][index=parent.childCount.minus(1)] -n [text$="广告" || text*="ad " || desc$="广告" || desc*="ad "] <<3 [vid="panel_header"]',
           snapshotUrls: [
             'https://i.gkd.li/i/27373744',
             'https://i.gkd.li/i/27373748',
