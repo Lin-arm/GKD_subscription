@@ -159,16 +159,23 @@ export default defineGkdApp({
         },
         {
           key: 3,
-          name: '①x掉-坐标轮询点击_2', // 第二种节点树形式
+          name: '①x掉-领取成功_2', // 第二种节点树形式_可直接区分非轮询(版本19.1.0以上)
+          versionCode: { minimum: 100191030 },
           fastQuery: true,
-          actionDelay: 8000,
+          forcedTime: 560000, // (UI更新不通知)一个Ad平均40s,两个/day,七天14个Ad,9min20s
+          actionDelay: 1200, //稳定节点树时间
+          actionCd: 8000,
           activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
           matches:
-            '@ImageView[width<56 && height<56][visibleToUser=true] <2 [childCount=2] <n [childCount>6] <<6 [id="android:id/content"]',
-          snapshotUrls: 'https://i.gkd.li/i/27272574',
+            '@ImageView[width<56 && height<56][visibleToUser=true] < [childCount=1] <n [childCount>6] <<(6,7) [id="android:id/content"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/27359402', // 领取成功
+            'https://i.gkd.li/i/27363266',
+          ],
+          excludeSnapshotUrls: 'https://i.gkd.li/i/27272574', // 未领取
         },
         {
-          preKeys: [1, 2, 3], // 轮询判断是否已领取
+          preKeys: [1, 2], // 轮询判断是否已领取
           name: '②没结束-继续轮询',
           fastQuery: true,
           actionDelay: 500,
@@ -186,6 +193,37 @@ export default defineGkdApp({
             'https://i.gkd.li/i/24521516',
           ],
           exampleUrls: 'https://e.gkd.li/3b2a0948-3b77-419b-8acf-2166e1cd445c',
+        },
+        {
+          preKeys: [3],
+          name: '②领取奖励',
+          versionCode: { minimum: 100191030 },
+          fastQuery: true,
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          actionMaximum: 13, // 限制次数
+          order: 0,
+          matches:
+            '@[childCount=2] + ImageView[index=parent.childCount.minus(1)] <n [childCount=5] <<5 [id="android:id/content"]',
+          position: {
+            left: 'width * 0.50',
+            top: 'width * 0.85',
+          },
+          snapshotUrls: 'https://i.gkd.li/i/27359717',
+        },
+        {
+          preKeys: [3],
+          name: '③结束^_^',
+          versionCode: { minimum: 100191030 },
+          order: 1,
+          fastQuery: true,
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          matches:
+            '@[childCount=2] + ImageView[index=parent.childCount.minus(1)] <n [childCount=5] <<5 [id="android:id/content"]',
+          position: {
+            left: 'width * 0.50',
+            top: 'width * 1.00',
+          },
+          snapshotUrls: 'https://i.gkd.li/i/27359717',
         },
         {
           key: 99,
@@ -306,17 +344,24 @@ export default defineGkdApp({
         },
         {
           key: 3,
-          name: '①x掉-坐标轮询点击_2', // 第二种节点树形式
+          name: '①x掉-领取成功_2', // 第二种节点树形式_可直接区分非轮询(版本19.1.0以上)
+          versionCode: { minimum: 100191030 },
           fastQuery: true,
-          actionDelay: 8000,
+          forcedTime: 88000, // (UI更新不通知)一个Ad平均40s,两个/day,+8s冗余
+          actionDelay: 1200, //稳定节点树时间
+          actionCd: 8000,
           activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
           matches:
-            '@ImageView[width<56 && height<56][visibleToUser=true] <2 [childCount=2] <n [childCount>6] <<6 [id="android:id/content"]',
-          snapshotUrls: 'https://i.gkd.li/i/27272574',
+            '@ImageView[width<56 && height<56][visibleToUser=true] < [childCount=1] <n [childCount>6] <<(6,7) [id="android:id/content"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/27359402', // 领取成功
+            'https://i.gkd.li/i/27363266',
+          ],
+          excludeSnapshotUrls: 'https://i.gkd.li/i/27272574', // 未领取
         },
         {
           name: '②没结束-继续轮询',
-          preKeys: [1, 2, 3], // 轮询判断是否已领取
+          preKeys: [1, 2], // 轮询判断是否已领取
           fastQuery: true,
           actionDelay: 500,
           activityIds: [
@@ -337,6 +382,22 @@ export default defineGkdApp({
           excludeSnapshotUrls: 'https://i.gkd.li/i/24521416',
         },
         {
+          preKeys: [3],
+          name: '②领取奖励',
+          versionCode: { minimum: 100191030 },
+          actionMaximum: 1, // 限制次数
+          order: 0,
+          fastQuery: true,
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          matches:
+            '@[childCount=2] + ImageView[index=parent.childCount.minus(1)] <n [childCount=5] <<5 [id="android:id/content"]',
+          position: {
+            left: 'width * 0.50',
+            top: 'width * 0.85',
+          },
+          snapshotUrls: 'https://i.gkd.li/i/27359717',
+        },
+        {
           key: 4,
           name: '③今日结束退出',
           fastQuery: true,
@@ -349,6 +410,21 @@ export default defineGkdApp({
           matches: '[text$="提前得"] +n [text="坚持退出"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/24521416',
           exampleUrls: 'https://e.gkd.li/8cc22cd9-f48e-4aaa-8c5c-a04a752e6df6',
+        },
+        {
+          preKeys: [3],
+          name: '③今日结束结束^_^_2',
+          versionCode: { minimum: 100191030 },
+          order: 1,
+          fastQuery: true,
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          matches:
+            '@[childCount=2] + ImageView[index=parent.childCount.minus(1)] <n [childCount=5] <<5 [id="android:id/content"]',
+          position: {
+            left: 'width * 0.50',
+            top: 'width * 1.00',
+          },
+          snapshotUrls: 'https://i.gkd.li/i/27359717',
         },
         {
           preKeys: [4],
