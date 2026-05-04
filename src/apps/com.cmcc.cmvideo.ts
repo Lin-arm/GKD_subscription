@@ -6,11 +6,25 @@ export default defineGkdApp({
   groups: [
     {
       key: 2,
-      name: '局部广告-右下角小广告',
+      name: '局部广告-悬浮窗小广告',
+      desc: '点击x掉',
       fastQuery: true,
-      activityIds: '.main.application.CompatibleMainActivity',
-      rules: '[vid="iv_right_bottom_close"]',
-      snapshotUrls: 'https://i.gkd.li/i/12498315',
+      rules: [
+        {
+          key: 0,
+          activityIds: '.main.application.CompatibleMainActivity',
+          matches: '[vid="iv_right_bottom_close"]',
+          snapshotUrls: 'https://i.gkd.li/i/12498315',
+        },
+        {
+          key: 1,
+          activityIds:
+            'com.cmvideo.capability.mglivependant.palyerdetail.service.SingleTaskActivity',
+          matches:
+            '@ImageView[clickable=true][width<114 && height<114] <2 * < * < [vid="fl_container"][width<500 && height<500]',
+          snapshotUrls: 'https://i.gkd.li/i/27330895', // 横屏视频播放页
+        },
+      ],
     },
     {
       key: 3,
