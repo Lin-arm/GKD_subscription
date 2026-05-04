@@ -218,5 +218,35 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 11,
+      name: '功能类-跳过视频内容警告',
+      desc: '该内容可能不适合/包含x腥/bao力',
+      fastQuery: true,
+      activityIds:
+        'com.google.android.apps.youtube.app.watchwhile.MainActivity',
+      rules: [
+        {
+          key: 0,
+          matches:
+            '[text^="该内容可能" || text^="This content may be"] +2 [childCount=2] > [text="继续" || text="Continue"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/27373127',
+            'https://i.gkd.li/i/27373130',
+          ],
+          exampleUrls: 'https://e.gkd.li/6ae91912-dbe8-4bd5-983c-06790e39e2a7',
+        },
+        {
+          key: 1,
+          matches:
+            '[text^="以下内容可能包含" || text^="The following content may contain"] <<4 [id="android:id/contentPanel"] + [id="android:id/buttonPanel"] >2 [text="确认" || text="Confirm"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/27373143',
+            'https://i.gkd.li/i/27373252',
+          ],
+          exampleUrls: 'https://e.gkd.li/5f20a4f8-82ea-4520-b191-95782a45341c',
+        },
+      ],
+    },
   ],
 });
