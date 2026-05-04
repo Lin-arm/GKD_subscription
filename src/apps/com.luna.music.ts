@@ -240,11 +240,23 @@ export default defineGkdApp({
       name: '功能类-关闭广告的声音',
       rules: [
         {
+          key: 0,
           fastQuery: true,
           activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
           matches: '[text="开启声音"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/24522999',
           excludeSnapshotUrls: 'https://i.gkd.li/i/24521440',
+        },
+        {
+          key: 1,
+          fastQuery: true,
+          actionCd: 40000,
+          versionCode: { minimum: 100191030 },
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          matches:
+            '@ImageView[width<57 && height<78][visibleToUser=true] - ScrollView <n [childCount>6] <<(6,7) [id="android:id/content"]',
+          snapshotUrls: 'https://i.gkd.li/i/27365536',
+          exampleUrls: 'https://e.gkd.li/7d86c22c-bbf3-419e-bd6f-eecdaf357872',
         },
       ],
     },
