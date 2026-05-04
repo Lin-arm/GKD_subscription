@@ -260,7 +260,7 @@ export default defineGkdApp({
       desc: '适合观看细节场景需求',
       fastQuery: true,
       actionMaximum: 1,
-      actionCd: 3000, // 界面稳定后执行
+      actionDelay: 3000, // 界面稳定后执行
       activityIds: 'com.xingin.matrix.detail.activity.DetailFeedActivity',
       rules: [
         {
@@ -288,7 +288,7 @@ export default defineGkdApp({
       desc: '适合日常效率需求',
       fastQuery: true,
       actionMaximum: 1,
-      actionCd: 3000, // 界面稳定后执行
+      actionDelay: 3000, // 界面稳定后执行
       activityIds: 'com.xingin.matrix.detail.activity.DetailFeedActivity',
       rules: [
         {
@@ -315,7 +315,7 @@ export default defineGkdApp({
       name: '功能类-自动倍速⏩x1.5⚠️五选一',
       fastQuery: true,
       actionMaximum: 1,
-      actionCd: 3000, // 界面稳定后执行
+      actionDelay: 3000, // 界面稳定后执行
       activityIds: 'com.xingin.matrix.detail.activity.DetailFeedActivity',
       rules: [
         {
@@ -342,7 +342,7 @@ export default defineGkdApp({
       name: '功能类-自动倍速⏩x2.0⚠️五选一',
       fastQuery: true,
       actionMaximum: 1,
-      actionCd: 3000, // 界面稳定后执行
+      actionDelay: 3000, // 界面稳定后执行
       activityIds: 'com.xingin.matrix.detail.activity.DetailFeedActivity',
       rules: [
         {
@@ -370,7 +370,7 @@ export default defineGkdApp({
       desc: 'Max效率需求',
       fastQuery: true,
       actionMaximum: 1,
-      actionCd: 3000, // 界面稳定后执行
+      actionDelay: 3000, // 界面稳定后执行
       activityIds: 'com.xingin.matrix.detail.activity.DetailFeedActivity',
       rules: [
         {
