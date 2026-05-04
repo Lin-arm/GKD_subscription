@@ -83,5 +83,27 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 8,
+      name: '功能类-分享预览页选择在 Edge 中打开',
+      desc: '在 Edge Drop 分享预览页中，自动点击「在 Edge 中打开」选项',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds:
+            'org.chromium.chrome.browser.edge_hub.e_drop.ui.EDropSharePreviewActivity',
+          matches:
+            '@[vid="ms_layout_drop_send_link"][clickable=true] > [text="在 Edge 中打开" || text="在 Edge 中開啟"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/27327732',
+            'https://i.gkd.li/i/27328349',
+          ],
+          exampleUrls: [
+            'https://e.gkd.li/be567e4a-059c-4ba8-b825-77fcb3c93831',
+            'https://e.gkd.li/07e82326-38a4-4742-bf54-ed24b7769f0c',
+          ],
+        },
+      ],
+    },
   ],
 });
