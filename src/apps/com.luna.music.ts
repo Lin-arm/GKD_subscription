@@ -115,8 +115,9 @@ export default defineGkdApp({
       name: '功能类-全自动看广告领VIP',
       desc: '⚠️二选一,广告一直看下去直到手动干预退出,适合需要领多天vip的用户,与单日规则互斥',
       rules: [
+        // 主页界面
         {
-          name: '开屏自动看视频',
+          name: '开屏自动看视频', // 启动App出现的弹窗
           key: 0,
           fastQuery: true,
           activityIds: 'com.luna.biz.main.main.MainActivity',
@@ -128,9 +129,11 @@ export default defineGkdApp({
           snapshotUrls: 'https://i.gkd.li/i/26758188',
           exampleUrls: 'https://e.gkd.li/194773d6-a9c0-48c4-84bf-e1a57449434b',
         },
+        // 视频播放界面
+        // 旧版节点树(轮询法)
         {
           key: 1,
-          name: '①x掉-坐标轮询点击',
+          name: '①x掉-坐标轮询点击', // 反复点击x来判断是否已领取奖励
           fastQuery: true,
           actionDelay: 8000,
           position: {
@@ -139,7 +142,7 @@ export default defineGkdApp({
           },
           activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
           matches:
-            'FlattenUIText[text="广告"] + [text$="声音"] + [text="反馈"][visibleToUser=true]', // [反馈]相对坐标点击成功率高大概率
+            'FlattenUIText[text="广告"] + [text$="声音"] + [text="反馈"][visibleToUser=true]', // [反馈]相对坐标点击成功率高
           snapshotUrls: [
             'https://i.gkd.li/i/24521440', // 18s后可领取奖励
             'https://i.gkd.li/i/26401083', // 38s后？？？
@@ -150,29 +153,12 @@ export default defineGkdApp({
           exampleUrls: 'https://e.gkd.li/87c7201a-f413-4d82-9198-2dc9455c4f23',
         },
         {
-          key: 2,
+          key: 2, // 老UI(遗弃?)
           name: '①跳过',
           activityIds:
             'com.bytedance.sdk.openadsdk.core.component.reward.activity.TTRewardVideoActivity',
           matches: '[visibleToUser=true][text="奖励已领取"]',
           snapshotUrls: 'https://i.gkd.li/i/24522627',
-        },
-        {
-          key: 3,
-          name: '①x掉-领取成功_2', // 第二种节点树形式_可直接区分非轮询(版本19.1.0以上)
-          versionCode: { minimum: 100191030 },
-          fastQuery: true,
-          forcedTime: 560000, // (UI更新不通知)一个Ad平均40s,两个/day,七天14个Ad,9min20s
-          actionDelay: 1200, //稳定节点树时间
-          actionCd: 8000,
-          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
-          matches:
-            '@ImageView[width<56 && height<56][visibleToUser=true] < [childCount=1] <n [childCount>6] <<(6,7) [id="android:id/content"]',
-          snapshotUrls: [
-            'https://i.gkd.li/i/27359402', // 领取成功
-            'https://i.gkd.li/i/27363266',
-          ],
-          excludeSnapshotUrls: 'https://i.gkd.li/i/27272574', // 未领取
         },
         {
           preKeys: [1, 2], // 轮询判断是否已领取
@@ -194,6 +180,25 @@ export default defineGkdApp({
           ],
           exampleUrls: 'https://e.gkd.li/3b2a0948-3b77-419b-8acf-2166e1cd445c',
         },
+        // 新版本节点树(可直接识别状态领取奖励)
+        {
+          key: 3,
+          name: '①x掉-领取成功', // 节点树可直接区分状态(版本19.1.0以上)
+          versionCode: { minimum: 100191030 },
+          fastQuery: true,
+          matchRoot: true,
+          actionDelay: 1200, //稳定节点树时间
+          actionCd: 8000,
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          matches:
+            '@ImageView[width<56 && height<56][visibleToUser=true] < [childCount=1] <n [childCount>6] <<(6,7) [id="android:id/content"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/27359402', // 领取成功
+            'https://i.gkd.li/i/27363266',
+          ],
+          excludeSnapshotUrls: 'https://i.gkd.li/i/27272574', // 未领取
+        },
+        // 领取奖励继续看视频(到第14个Ad后由order1接管)
         {
           preKeys: [3],
           name: '②领取奖励',
@@ -210,6 +215,7 @@ export default defineGkdApp({
           },
           snapshotUrls: 'https://i.gkd.li/i/27359717',
         },
+        // 接管最后一个Ad观看点击结束
         {
           preKeys: [3],
           name: '③结束^_^',
@@ -225,6 +231,7 @@ export default defineGkdApp({
           },
           snapshotUrls: 'https://i.gkd.li/i/27359717',
         },
+        //其他情况-无视频
         {
           key: 99,
           fastQuery: true,
@@ -313,6 +320,7 @@ export default defineGkdApp({
       desc: '⚠️二选一,领到今天vip收手退出,适合只想领一天vip的用户,与多日规则互斥',
       rules: [
         {
+          // 主页界面
           name: '开屏自动看视频',
           key: 0,
           fastQuery: true,
@@ -325,8 +333,10 @@ export default defineGkdApp({
           snapshotUrls: 'https://i.gkd.li/i/26758188',
           exampleUrls: 'https://e.gkd.li/194773d6-a9c0-48c4-84bf-e1a57449434b',
         },
+        // 视频播放界面
+        // 旧版节点树(轮询法)
         {
-          name: '①x掉-坐标轮询点击', // 形式1-主要
+          name: '①x掉-坐标轮询点击', // 反复点击x来判断是否已领取奖励
           key: 1,
           fastQuery: true,
           actionDelay: 8000,
@@ -336,7 +346,7 @@ export default defineGkdApp({
           },
           activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
           matches:
-            'FlattenUIText[text="广告"] + [text$="声音"] + [text="反馈"][visibleToUser=true]', // [反馈]相对坐标点击成功率高大概率
+            'FlattenUIText[text="广告"] + [text$="声音"] + [text="反馈"][visibleToUser=true]', // [反馈]相对坐标点击成功率高
           snapshotUrls: [
             'https://i.gkd.li/i/24521440', // 18s后可领取奖励
             'https://i.gkd.li/i/26401083', // 38s后？？？
@@ -347,7 +357,7 @@ export default defineGkdApp({
           exampleUrls: 'https://e.gkd.li/87c7201a-f413-4d82-9198-2dc9455c4f23',
         },
         {
-          name: '①跳过', // 形式2
+          name: '①跳过', // 老UI(遗弃?)
           key: 2,
           activityIds:
             'com.bytedance.sdk.openadsdk.core.component.reward.activity.TTRewardVideoActivity',
@@ -355,24 +365,7 @@ export default defineGkdApp({
           snapshotUrls: 'https://i.gkd.li/i/24522627',
         },
         {
-          key: 3,
-          name: '①x掉-领取成功_2', // 第二种节点树形式_可直接区分非轮询(版本19.1.0以上)
-          versionCode: { minimum: 100191030 },
-          fastQuery: true,
-          forcedTime: 88000, // (UI更新不通知)一个Ad平均40s,两个/day,+8s冗余
-          actionDelay: 1200, //稳定节点树时间
-          actionCd: 8000,
-          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
-          matches:
-            '@ImageView[width<56 && height<56][visibleToUser=true] < [childCount=1] <n [childCount>6] <<(6,7) [id="android:id/content"]',
-          snapshotUrls: [
-            'https://i.gkd.li/i/27359402', // 领取成功
-            'https://i.gkd.li/i/27363266',
-          ],
-          excludeSnapshotUrls: 'https://i.gkd.li/i/27272574', // 未领取
-        },
-        {
-          name: '②没结束-继续轮询',
+          name: '②没结束?继续轮询',
           preKeys: [1, 2], // 轮询判断是否已领取
           fastQuery: true,
           actionDelay: 500,
@@ -393,8 +386,42 @@ export default defineGkdApp({
           exampleUrls: 'https://e.gkd.li/3b2a0948-3b77-419b-8acf-2166e1cd445c',
           excludeSnapshotUrls: 'https://i.gkd.li/i/24521416',
         },
+        // 完成目标:今日畅听vip
         {
-          preKeys: [3],
+          key: 3,
+          name: '③今日结束退出',
+          fastQuery: true,
+          actionDelay: 500,
+          activityIds: [
+            'com.bytedance.sdk.openadsdk.core.component.reward.activity.TTRewardVideoActivity',
+            'com.bytedance.sdk.openadsdk.stub.activity.Stub_Standard_Portrait_Activity',
+            'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          ],
+          matches: '[text$="提前得"] +n [text="坚持退出"][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/24521416',
+          exampleUrls: 'https://e.gkd.li/8cc22cd9-f48e-4aaa-8c5c-a04a752e6df6',
+        },
+        // 新版本节点树(可直接识别状态领取奖励)
+        {
+          key: 4,
+          name: '①x掉-领取成功_2', // 第二种节点树形式_可直接区分非轮询(版本19.1.0以上)
+          versionCode: { minimum: 100191030 },
+          fastQuery: true,
+          matchRoot: true,
+          actionDelay: 1200, //稳定节点树时间
+          actionCd: 8000,
+          activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
+          matches:
+            '@ImageView[width<56 && height<56][visibleToUser=true] < [childCount=1] <n [childCount>6] <<(6,7) [id="android:id/content"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/27359402', // 领取成功
+            'https://i.gkd.li/i/27363266',
+          ],
+          excludeSnapshotUrls: 'https://i.gkd.li/i/27272574', // 未领取
+        },
+        // 领取奖励继续看视频(到第2个Ad后由order1接管)
+        {
+          preKeys: [4],
           name: '②领取奖励',
           versionCode: { minimum: 100191030 },
           actionMaximum: 1, // 限制次数
@@ -409,22 +436,9 @@ export default defineGkdApp({
           },
           snapshotUrls: 'https://i.gkd.li/i/27359717',
         },
+        // 接管最后一个Ad观看点击结束
         {
-          key: 4,
-          name: '③今日结束退出',
-          fastQuery: true,
-          actionDelay: 500,
-          activityIds: [
-            'com.bytedance.sdk.openadsdk.core.component.reward.activity.TTRewardVideoActivity',
-            'com.bytedance.sdk.openadsdk.stub.activity.Stub_Standard_Portrait_Activity',
-            'com.ss.android.excitingvideo.ExcitingVideoActivity',
-          ],
-          matches: '[text$="提前得"] +n [text="坚持退出"][visibleToUser=true]',
-          snapshotUrls: 'https://i.gkd.li/i/24521416',
-          exampleUrls: 'https://e.gkd.li/8cc22cd9-f48e-4aaa-8c5c-a04a752e6df6',
-        },
-        {
-          preKeys: [3],
+          preKeys: [4],
           name: '③今日结束结束^_^_2',
           versionCode: { minimum: 100191030 },
           order: 1,
@@ -438,8 +452,9 @@ export default defineGkdApp({
           },
           snapshotUrls: 'https://i.gkd.li/i/27359717',
         },
+        // 返回主页
         {
-          preKeys: [4],
+          preKeys: [3, 4],
           name: '④再看视频?-返回操作',
           fastQuery: true,
           activityIds: 'com.luna.biz.main.main.MainActivity',
@@ -451,8 +466,9 @@ export default defineGkdApp({
           ],
           exampleUrls: 'https://e.gkd.li/d3902ed0-5e8d-4c0c-b8ae-5bf3f64c84a8',
         },
+        //其他情况-无视频
         {
-          key: 99, // 未知
+          key: 99,
           fastQuery: true,
           activityIds: 'com.ss.android.excitingvideo.ExcitingVideoActivity',
           matches:
