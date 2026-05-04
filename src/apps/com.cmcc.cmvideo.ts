@@ -18,15 +18,20 @@ export default defineGkdApp({
         },
         {
           key: 1,
+          name: '首页',
           matches:
             '@ImageView[clickable=true][width<114 && height<114] - RecyclerView[width<500 && height<500] < [childCount=2] < FrameLayout - [vid="root_view"]',
           snapshotUrls: 'https://i.gkd.li/i/27367393',
         },
         {
           key: 2,
+          name: '直播预约',
           matches:
-            'ImageView < @[clickable=true][width<75 && height<75][childCount=2] - [vid="h5_content_container"]',
-          snapshotUrls: 'https://i.gkd.li/i/27367465', // 横幅-直播预约
+            'ImageView <(1,2) @[clickable=true][width<75 && height<75][childCount=2] - [vid="h5_content_container"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/27367465', // 横幅-直播预约
+            'https://i.gkd.li/i/27375928', // 横幅-直播商品购买
+          ],
         },
         {
           key: 3,
@@ -36,6 +41,7 @@ export default defineGkdApp({
         },
         {
           key: 4,
+          name: '横屏播放页',
           activityIds:
             'com.cmvideo.capability.mglivependant.palyerdetail.service.SingleTaskActivity',
           matches:
@@ -44,6 +50,7 @@ export default defineGkdApp({
         },
         {
           key: 5,
+          name: '直播间',
           activityIds:
             'com.cmvideo.capability.mglivependant.palyerdetail.service.SingleTaskActivity',
           matches: '[vid="gift_pop_close"][desc*="关闭"]',
