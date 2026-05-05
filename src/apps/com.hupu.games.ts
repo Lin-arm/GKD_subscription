@@ -40,5 +40,18 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 2,
+      name: '全屏广告',
+      desc: '点击x掉',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: '.main.MainActivity',
+          matches: '[vid="iv_close"][clickable=true]',
+          snapshotUrls: 'https://i.gkd.li/i/27383159',
+        },
+      ],
+    },
   ],
 });
