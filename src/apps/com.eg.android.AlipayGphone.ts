@@ -166,7 +166,7 @@ export default defineGkdApp({
     {
       key: 4,
       name: '全屏广告-小组件弹窗',
-      desc: '点击[近期不再提醒我]',
+      desc: '点击[关闭/近期不再提醒我]',
       rules: [
         {
           key: 0,
@@ -180,6 +180,15 @@ export default defineGkdApp({
         },
         {
           key: 1,
+          fastQuery: true,
+          activityIds:
+            'com.alipay.mobile.nebulax.xriver.activity.XRiverActivity',
+          matches:
+            '@Image[width<80 && height<80][visibleToUser=true] < View < View < View < View < WebView[text*="半浮层容器"] < WebView <2 * < * < [id="android:id/content"]',
+          snapshotUrls: 'https://i.gkd.li/i/27384135',
+        },
+        {
+          key: 2,
           activityIds: [
             'com.alipay.mobile.nebulax.integration.mpaas.activity.NebulaActivity$Main',
             'com.alipay.mobile.nebulax.xriver.activity.XRiverActivity',
