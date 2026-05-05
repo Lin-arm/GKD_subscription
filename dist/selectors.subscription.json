@@ -58,7 +58,7 @@
     {
       "name": "青少年模式2",
       "order": 78,
-      "selector": "[text*=\"知道了\" || text*=\"我已知晓\" || text*=\"已满\" || text*=\"不再提醒\" || text=\"关闭\"][text.length<8][childCount=0][visibleToUser=true]"
+      "selector": "[text*=\"知道了\" || text*=\"我已知晓\" || text*=\"已满\" || text*=\"不再提\" || text=\"关闭\"][text.length<8][childCount=0][visibleToUser=true]"
     },
     {
       "name": "字节SDK-1",
