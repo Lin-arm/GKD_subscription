@@ -23,5 +23,26 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 2,
+      name: '通知提示-套餐到期',
+      desc: '①选[不再提示] ②点击x掉',
+      fastQuery: true,
+      activityIds: '.activity.MainActivity',
+      rules: [
+        {
+          key: 0,
+          actionMaximum: 1,
+          resetMatch: 'app',
+          matches: '[vid="tvNotNotice"]',
+          // snapshotUrls: 'https://i.gkd.li/i/27383310', // 参考key1快照
+        },
+        {
+          key: 1,
+          matches: '[vid="ivClose"][clickable=true]',
+          snapshotUrls: 'https://i.gkd.li/i/27383310',
+        },
+      ],
+    },
   ],
 });
