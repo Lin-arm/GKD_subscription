@@ -9,23 +9,30 @@ export default defineGkdApp({
       name: '局部广告',
       desc: '点击x掉',
       fastQuery: true,
-      activityIds: '.main.application.CompatibleMainActivity', // 该 Activity 在子key内出现较多,放外一层
+      activityIds:
+        'com.cmvideo.capability.mglivependant.palyerdetail.service.SingleTaskActivity', // 该 Activity 在子key内出现较多且长,放外一层
       rules: [
         {
           key: 0,
+          activityIds: '.main.application.CompatibleMainActivity',
           matches: '[vid="iv_right_bottom_close"]',
           snapshotUrls: 'https://i.gkd.li/i/12498315', // 旧快照,无vid,无快查
         },
         {
           key: 1,
           name: '首页',
+          activityIds: '.main.application.CompatibleMainActivity',
           matches:
-            '@ImageView[clickable=true][width<114 && height<114] - RecyclerView[width<500 && height<500] < [childCount=2] < FrameLayout - [vid="root_view"]',
-          snapshotUrls: 'https://i.gkd.li/i/27367393',
+            '@ImageView[clickable=true][width<114 && height<114] - RecyclerView[width<500 && height<500] <<(1,2) FrameLayout - [vid="root_view"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/27367393', // <<2
+            'https://i.gkd.li/i/27382399', // <<
+          ],
         },
         {
           key: 2,
           name: '直播预约',
+          activityIds: '.main.application.CompatibleMainActivity',
           matches:
             'ImageView <(1,2) @[clickable=true][width<75 && height<75][childCount=2] - [vid="h5_content_container"]',
           snapshotUrls: [
@@ -42,17 +49,22 @@ export default defineGkdApp({
         {
           key: 4,
           name: '横屏播放页',
-          activityIds:
-            'com.cmvideo.capability.mglivependant.palyerdetail.service.SingleTaskActivity',
           matches:
-            '@ImageView[clickable=true][width<114 && height<114] <2 * < * < [vid="fl_container"][width<500 && height<500]',
-          snapshotUrls: 'https://i.gkd.li/i/27330895', // 横屏视频播放页
+            '@ImageView[clickable=true][width<114 && height<114] <(2,3) FrameLayout <<(1,2) [vid="fl_container"][width<500 && height<500]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/27330895', // 横屏视频播放页
+            'https://i.gkd.li/i/27382514',
+          ],
         },
         {
           key: 5,
+          name: '横屏播放页',
+          matches: '[vid="lv_ad_mark"][clickable=true]',
+          snapshotUrls: 'https://i.gkd.li/i/27382514',
+        },
+        {
+          key: 6,
           name: '直播间',
-          activityIds:
-            'com.cmvideo.capability.mglivependant.palyerdetail.service.SingleTaskActivity',
           matches: '[vid="gift_pop_close"][desc*="关闭"]',
           snapshotUrls: 'https://i.gkd.li/i/27368007', // 直播间
         },
