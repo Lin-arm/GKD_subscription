@@ -278,5 +278,33 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 13,
+      name: '全屏广告-Shorts-赞助商广告',
+      desc: '[赞助商Ad]视频自动划掉',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds:
+            'com.google.android.apps.youtube.app.watchwhile.MainActivity',
+          matches:
+            '[text="赞助商广告"] <<3 [desc$="广告"] <<2 [childCount<=2] <2 * <<3 [vid="reel_player_delegated_overlay"]',
+          action: 'swipe',
+          swipeArg: {
+            start: {
+              left: 'width * 0.5',
+              top: 'width * 1.5',
+            },
+            end: {
+              left: 'width * 0.6',
+              top: 'width * 1.0',
+            },
+            duration: 114,
+          },
+          snapshotUrls: 'https://i.gkd.li/i/27376863',
+          exampleUrls: 'https://e.gkd.li/a144a709-4fa2-492a-9776-a78a1e45b1e4',
+        },
+      ],
+    },
   ],
 });
