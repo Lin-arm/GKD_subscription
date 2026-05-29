@@ -4,34 +4,111 @@ on:
   issues:
     types: [opened]
 
+# 允许修改 Issue（标签、评论、关闭）
+permissions:
+  issues: write
+
 jobs:
   check-issue-content:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 缺少快照时自动标记并关闭 Issue
-        if: |
-          contains(github.event.issue.body, 'i.gkd.li/') == false &&
-          contains(github.event.issue.body, '.zip') == false
-        uses: actions-cool/issues-helper@v3
-        with:
-          actions: add-labels,create-comment,close-issue
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ github.event.issue.number }}
-          labels: 'invalid'
-          body: |
-            您好 ${{ github.event.issue.user.login }}，由于您没有提供快照，此issue已被自动关闭。
+      - name: 检查 Issue 内容并自动处理
+        env:
+          # GitHub CLI 认证
+          GH_TOKEN: ${{ github.token }}
 
-      - name: 快照链接不可访问时自动标记并提醒
-        if: contains(github.event.issue.body, 'i.gkd.li/snapshot/') == true
-        uses: actions-cool/issues-helper@v3
-        with:
-          actions: add-labels,create-comment
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ github.event.issue.number }}
-          labels: 'invalid'
-          body: |
-            您好 ${{ github.event.issue.user.login }}，检测到您提供了他人无法访问的链接，
-            请点击查看 [正确的分享快照方式说明](https://gkd.li/guide/snapshot#share-note) 。
+          # 当前仓库（owner/repo）
+          GH_REPO: ${{ github.repository }}
 
-            可在下方评论区补充
+          # 当前 Issue 信息
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_USER: ${{ github.event.issue.user.login }}
+
+        run: |
+          set -euo pipefail
+
+          # ====================
+          # GitHub Issue 操作
+          # ====================
+
+          # 添加 invalid 标签
+          add_invalid_label() {
+            gh issue edit "$ISSUE_NUMBER" \
+              --repo "$GH_REPO" \
+              --add-label invalid
+          }
+
+          # 发表评论
+          comment_issue() {
+            gh issue comment "$ISSUE_NUMBER" \
+              --repo "$GH_REPO" \
+              --body "$1"
+          }
+
+          # 关闭 Issue
+          close_issue() {
+            gh issue close "$ISSUE_NUMBER" \
+              --repo "$GH_REPO"
+          }
+
+          # ====================
+          # 内容检查规则
+          # ====================
+
+          # 判断是否缺少快照
+          #
+          # 满足任意一种情况即可：
+          # - GKD 分享链接
+          # - ZIP 快照附件
+          #
+          # 两者都不存在时返回 true
+          missing_snapshot() {
+            [[ "$ISSUE_BODY" != *"i.gkd.li/"* &&
+               "$ISSUE_BODY" != *".zip"* ]]
+          }
+
+          # 判断是否使用了不可分享的本地快照链接
+          #
+          # 例如：
+          # https://i.gkd.li/snapshot/xxx
+          #
+          # 此类链接仅作者可访问
+          unreachable_snapshot_link() {
+            [[ "$ISSUE_BODY" == *"i.gkd.li/snapshot/"* ]]
+          }
+
+          # ====================
+          # 自动处理逻辑
+          # ====================
+
+          # 未提供快照
+          #
+          # 处理方式：
+          # 1. 标记 invalid
+          # 2. 自动回复
+          # 3. 自动关闭
+          if missing_snapshot; then
+            add_invalid_label
+
+            comment_issue \
+              "您好 @${ISSUE_USER}，由于您没有提供快照，此 issue 已被自动关闭。"
+
+            close_issue
+            exit 0
+          fi
+
+          # 检测到不可访问的快照链接
+          #
+          # 处理方式：
+          # 1. 标记 invalid
+          # 2. 自动提醒修正
+          #
+          # 不自动关闭，允许用户补充
+          if unreachable_snapshot_link; then
+            add_invalid_label
+
+            comment_issue \
+              "您好 @${ISSUE_USER}，检测到您提供了他人无法访问的链接，请点击查看 [正确的分享快照方式说明](https://gkd.li/guide/snapshot#share-note) 。可在下方评论区补充。"
+          fi
