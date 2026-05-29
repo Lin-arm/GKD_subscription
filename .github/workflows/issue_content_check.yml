@@ -95,7 +95,7 @@ jobs:
             comment_issue \
               "您好 @${ISSUE_USER}，由于您没有提供快照，此 issue 已被自动关闭。"
 
-            close_issue
+            gh issue close "${ISSUE_NUMBER}" --reason "not planned"
             exit 0
           fi
 
