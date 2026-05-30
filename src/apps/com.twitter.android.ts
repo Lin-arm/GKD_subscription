@@ -47,12 +47,13 @@ export default defineGkdApp({
           key: 10,
           name: '点击[我不喜欢这个广告]',
           matches:
-            '@ViewGroup[clickable=true] > [text="我不喜欢这个广告" || text^="屏蔽"][visibleToUser=true]',
+            '@ViewGroup[clickable=true] > [text="我不喜欢这个广告" || text="我不喜歡這個廣告" || text^="屏蔽" || text="封鎖" || text^="Block" ][visibleToUser=true]',
           snapshotUrls: [
             'https://i.gkd.li/i/12798810',
             'https://i.gkd.li/i/14782902',
-            'https://i.gkd.li/i/20239421',
             'https://i.gkd.li/i/24359537',
+            'https://i.gkd.li/i/28415651', // 我不喜欢*-zh_TW
+            'https://i.gkd.li/i/20239421', // ^屏蔽
           ],
         },
       ],
@@ -100,7 +101,7 @@ export default defineGkdApp({
           key: 3,
           name: '点击屏蔽/隐藏,如果机会全用完需要取消遍再屏蔽',
           matches:
-            '@ViewGroup > [vid="action_sheet_item_title"][text^="屏蔽"||text^="Block"||text^="隐藏 @"||text^="Mute @"||text^="Unblock @"||text^="Unmute @"]',
+            '@ViewGroup > [vid="action_sheet_item_title"][text^="屏蔽" || text^="Block" || text^="隐藏 @" || text^="Mute @"||text^="Unblock @"||text^="Unmute @"]',
           snapshotUrls: [
             'https://i.gkd.li/i/12828815',
             'https://i.gkd.li/i/12847600',
@@ -159,7 +160,7 @@ export default defineGkdApp({
           key: 10,
           name: '点击[我不喜欢这个广告]',
           matches:
-            '@ViewGroup > [vid="action_sheet_item_title"][text="我不喜欢这个广告"]',
+            '@ViewGroup > [vid="action_sheet_item_title"][text="我不喜欢这个广告" || text="我不喜歡這個廣告"]',
           snapshotUrls: 'https://i.gkd.li/i/12798810',
         },
       ],
