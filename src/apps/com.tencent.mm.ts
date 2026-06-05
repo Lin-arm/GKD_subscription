@@ -68,6 +68,7 @@ export default defineGkdApp({
             '@LinearLayout[clickable=true] > [text="关闭该广告" || text*="Close"][visibleToUser=true]', //2
             '@LinearLayout[index=1][clickable=true] <2 * < * - [text*="广告"]', //3
             '@[text="关闭该广告"] -2 [text^="对这条广告不感兴趣"][visibleToUser=true]', //4
+            '[text="直接关闭"][clickable=true][visibleToUser=true]', //5
           ],
           snapshotUrls: [
             //1
@@ -84,6 +85,8 @@ export default defineGkdApp({
             'https://i.gkd.li/i/19666176',
             //4
             'https://i.gkd.li/i/19633486',
+            //5
+            'https://i.gkd.li/i/28643685',
           ],
         },
 
