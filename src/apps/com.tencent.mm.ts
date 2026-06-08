@@ -86,7 +86,7 @@ export default defineGkdApp({
             //4
             'https://i.gkd.li/i/19633486',
             //5
-            'https://i.gkd.li/i/28643685',
+            'https://i.gkd.li/i/28643685', // 疑似 微信v8.0.72 将第三段改到了第二段
           ],
         },
 
