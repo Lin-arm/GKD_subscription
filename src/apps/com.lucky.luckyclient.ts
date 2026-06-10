@@ -57,6 +57,7 @@ export default defineGkdApp({
           matches:
             '@Image[width=93][height=93][visibleToUser=true] <<n [vid="webview_dialog"]',
           action: 'back',
+          snapshotUrls: 'https://i.gkd.li/i/28737243',
         },
       ],
     },
