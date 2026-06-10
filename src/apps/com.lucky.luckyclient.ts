@@ -45,5 +45,20 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 4,
+      name: '全屏广告-添加瑞幸幸运官',
+      desc: '匹配93x93关闭按钮，点击后执行返回键关闭添加瑞幸幸运官弹窗',
+      matchTime: 15000,
+      actionMaximum: 1,
+      rules: [
+        {
+          activityIds: 'com.lucky.luckincoffee.MainActivity',
+          matches:
+            '@Image[width=93][height=93][visibleToUser=true] <<n [vid="webview_dialog"]',
+          action: 'back',
+        },
+      ],
+    },
   ],
 });
