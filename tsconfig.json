@@ -10,7 +10,8 @@
     "sourceMap": false,
     "noUnusedLocals": true,
     "esModuleInterop": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "types": ["node"]
   },
   "include": ["src", "scripts"]
 }
