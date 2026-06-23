@@ -43,14 +43,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: 配置 pnpm 包管理器
+        uses: pnpm/action-setup@v6
 
       - name: 配置 Node.js 运行环境
         uses: actions/setup-node@v4
         with:
           node-version: 25
-
-      - name: 配置 pnpm 包管理器
-        uses: pnpm/action-setup@v6
+          cache: pnpm
 
       - name: 安装项目依赖
         run: pnpm install
