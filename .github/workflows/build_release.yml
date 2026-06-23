@@ -11,7 +11,7 @@ jobs:
     outputs:
       changed: ${{ steps.changes.outputs.changed }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - id: changes
@@ -50,7 +50,7 @@ jobs:
           node-version: 25
 
       - name: 配置 pnpm 包管理器
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: 安装项目依赖
         run: pnpm install
@@ -89,7 +89,7 @@ jobs:
       - name: 创建 GitHub 发行版
         id: create_release
         if: ${{ steps.commit.outcome == 'success' }}
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
