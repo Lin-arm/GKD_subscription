@@ -40,14 +40,14 @@ jobs:
       version: ${{ steps.version.outputs.version }}
     steps:
       - name: 检出仓库代码
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: 配置 pnpm 包管理器
         uses: pnpm/action-setup@v6
 
       - name: 配置 Node.js 运行环境
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 25
           cache: pnpm

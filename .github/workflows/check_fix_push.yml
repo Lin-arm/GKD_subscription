@@ -7,9 +7,6 @@ on:
 
 permissions: write-all
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -25,7 +22,7 @@ jobs:
           corepack prepare pnpm@latest --activate
 
       - name: 配置 Node.js 运行环境
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 25
           cache: pnpm
