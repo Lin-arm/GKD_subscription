@@ -22,7 +22,7 @@ export default defineGkdApp({
           snapshotUrls: 'https://i.gkd.li/i/20903066',
         },
         {
-          key: 1,
+          key: 2,
           position: {
             left: 'width * 0.8759',
             top: 'width * 2.0519',
