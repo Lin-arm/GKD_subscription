@@ -801,5 +801,21 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 32,
+      name: '局部广告-视频页-即将展示Ad',
+      desc: '视频途中[x秒后展示广告] -> 取消',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds:
+            'com.bilibili.ship.theseus.detail.UnitedBizDetailsActivity',
+          matches:
+            '@[text="取消"][clickable=true][visibleToUser=true] - [text="后将展示广告"] <2 View[childCount=3] <<2 ComposeView <<3 FrameLayout[childCount=1] <n * < [vid="video_container"]',
+          snapshotUrls: 'https://i.gkd.li/i/29379312',
+          exampleUrls: 'https://e.gkd.li/2fed6260-9cd4-4546-a8ea-de89fce88b5d',
+        },
+      ],
+    },
   ],
 });
