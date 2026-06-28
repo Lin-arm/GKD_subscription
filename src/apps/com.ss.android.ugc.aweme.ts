@@ -313,7 +313,7 @@ export default defineGkdApp({
     {
       key: 24,
       name: '功能类-刷到推广视频时[上滑]',
-      desc: '应用/购物/游戏/咨询/服务/预约/子薇剧场 等推广视频',
+      desc: '广告/应用/购物/游戏/咨询/服务/预约/子薇剧场 等推广视频',
       rules: [
         {
           fastQuery: true,
@@ -332,10 +332,15 @@ export default defineGkdApp({
           },
           activityIds: '.main.MainActivity',
           matches:
-            '([text$="广告" || text$="（推广）"][vid="desc"][visibleToUser=true]) || ([text="应用" || text="购物" || text$="游戏" || text="咨询" || text="服务" || text="预约" || text="子薇剧场"][text.length<6][index=1][visibleToUser=true])',
+            '([visibleToUser=true] > [text$="广告" || text$="（推广）"][vid="desc" || desc="广告"]) || ([text="应用" || text="购物" || text$="游戏" || text="咨询" || text="服务" || text="预约" || text="子薇剧场"][text.length<6][index=1][visibleToUser=true])', // (选择器A) || (选择器B)
           snapshotUrls: [
-            'https://i.gkd.li/i/21142063', // [text$="广告"]
-            'https://i.gkd.li/i/29403811', // [text$="（推广）"] (标题里)
+            // 选择器A
+            'https://i.gkd.li/i/21142063', // [text$="广告"][vid="desc"]
+            'https://i.gkd.li/i/29403811', // [text$="（推广）"][vid="desc"]
+            'https://i.gkd.li/i/29403704', // [text$="广告"][desc="广告"]
+            'https://i.gkd.li/i/29403301', // [text$="广告"][desc="广告"] [visibleToUser=false]
+
+            // 选择器B
             'https://i.gkd.li/i/21142589', //应用
             'https://i.gkd.li/i/21142249', //购物
             'https://i.gkd.li/i/21142871', //游戏
@@ -344,9 +349,6 @@ export default defineGkdApp({
             'https://i.gkd.li/i/29403479', //服务
             'https://i.gkd.li/i/21765934', //预约
             'https://i.gkd.li/i/21523849', //子薇剧场
-            // 未实现
-            'https://i.gkd.li/i/29403704', //购物[index=0]
-            'https://i.gkd.li/i/29403301', //广告[vid=null]
           ],
         },
       ],
