@@ -20,15 +20,26 @@ export default defineGkdApp({
     {
       key: 2,
       name: '评价提示',
-      desc: '点击[残忍拒绝]',
+      desc: '①勾选[不再显示] ②点击x掉',
+      fastQuery: true,
+      actionMaximum: 1,
+      resetMatch: 'app',
+      activityIds: '.MainActivity',
       rules: [
         {
-          fastQuery: true,
-          actionMaximum: 1,
-          resetMatch: 'app',
-          activityIds: 'com.One.WoodenLetter.MainActivity',
-          matches: '[childCount=2] > Button[text="残忍拒绝"][clickable=true]',
-          snapshotUrls: 'https://i.gkd.li/i/28805036',
+          key: 0,
+          name: '①勾选[不再显示]',
+          matches: '[text="不再显示"][checked=false]',
+          snapshotUrls: 'https://i.gkd.li/i/29465827', // 未勾选
+        },
+        {
+          key: 1,
+          name: '②点击x掉',
+          matches: ['[text*="好评"]', '[vid="dialog_close_view"]'],
+          snapshotUrls: [
+            'https://i.gkd.li/i/28805036',
+            'https://i.gkd.li/i/29465828', // 已勾选 [checked=true]
+          ],
         },
       ],
     },
