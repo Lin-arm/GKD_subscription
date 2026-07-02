@@ -144,7 +144,12 @@ export default defineGkdApp({
           activityIds: 'dev.xesam.chelaile.app.module.PanelHostActivity',
           matches:
             '@FrameLayout[clickable=true][getChild(0).vid="fav_line_layout"] - LinearLayout >2 [text="我的收藏"][visibleToUser=true]',
+          excludeMatches: ['[text="不在运营时间"]', '[text="末班时间已过"]'],
           snapshotUrls: 'https://i.gkd.li/i/25091170',
+          excludeSnapshotUrls: [
+            'https://i.gkd.li/i/29600340', // 不在运营时间
+            'https://i.gkd.li/i/29600413', // 末班时间已过
+          ],
         },
       ],
     },
@@ -161,7 +166,12 @@ export default defineGkdApp({
           activityIds: 'dev.xesam.chelaile.app.module.PanelHostActivity',
           matches:
             '@FrameLayout[clickable=true][getChild(0).vid="fav_line_layout"] - LinearLayout >2 [text="我的收藏"][visibleToUser=true]',
+          excludeMatches: ['[text="不在运营时间"]', '[text="末班时间已过"]'],
           snapshotUrls: 'https://i.gkd.li/i/25091170',
+          excludeSnapshotUrls: [
+            'https://i.gkd.li/i/29600340', // 不在运营时间
+            'https://i.gkd.li/i/29600413', // 末班时间已过
+          ],
         },
         {
           preKeys: [0],
