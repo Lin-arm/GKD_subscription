@@ -35,7 +35,7 @@ export default defineGkdApp({
           ],
           excludeMatches: '[text="选择下车站"][visibleToUser=true]',
           matches:
-            '[vid="cll_line_single_ad_close" || vid="cll_close" || vid="cll_card_single_ad_close"][visibleToUser=true][width<110 && height<110]',
+            '[text!="收藏成功"] + [vid="cll_line_single_ad_close" || vid="cll_close" || vid="cll_card_single_ad_close"][visibleToUser=true][width<110 && height<110]',
           exampleUrls: 'https://e.gkd.li/7d7b7d94-eb64-41a5-a5c2-c8418d6371a1',
           snapshotUrls: [
             'https://i.gkd.li/i/13625374',
@@ -43,7 +43,10 @@ export default defineGkdApp({
             'https://i.gkd.li/i/16987313',
             'https://i.gkd.li/i/16988894',
           ],
-          excludeSnapshotUrls: 'https://i.gkd.li/i/25092999',
+          excludeSnapshotUrls: [
+            'https://i.gkd.li/i/25092999',
+            'https://i.gkd.li/i/29597847', //收藏成功
+          ],
         },
         {
           key: 2,
