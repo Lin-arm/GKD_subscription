@@ -12,9 +12,10 @@ export default defineGkdApp({
         {
           fastQuery: true,
           activityIds: '.root.view.RootActivity',
+          action: 'clickCenter',
           matches: '@[clickable=true][text="关闭广告"] <<n [vid="chart_wbv"]',
-          exampleUrls: 'https://e.gkd.li/3798ab1b-2cd3-471e-8303-b8124746e9d8',
-          snapshotUrls: 'https://i.gkd.li/i/16725697',
+          exampleUrls: 'https://e.gkd.li/b1a372a2-f722-4d1f-ad86-32ea1cd4d83d',
+          snapshotUrls: 'https://i.gkd.li/i/29629766',
         },
       ],
     },
