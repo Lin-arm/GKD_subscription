@@ -73,34 +73,27 @@ export default defineGkdApp({
       ],
     },
     {
-      key: 4,
-      name: '局部广告-悬浮广告',
-      desc: '点击关闭',
-      rules: [
-        {
-          fastQuery: true,
-          activityIds: 'com.yxcorp.gifshow.HomeActivity',
-          matches: '[vid="close_icon"][visibleToUser=true]',
-          exampleUrls:
-            'https://m.gkd.li/57941037/12059549-21c2-47b7-9acf-ec221cc14f25',
-          snapshotUrls: 'https://i.gkd.li/i/15747381',
-        },
-      ],
-    },
-    {
       key: 5,
       name: '分段广告-悬浮广告',
+      desc: '①点击x掉 ②点击[确定]',
       fastQuery: true,
       activityIds: 'com.yxcorp.gifshow.HomeActivity',
       rules: [
         {
           key: 0,
-          matches: '[vid="close_pendant"][visibleToUser=true]',
-          exampleUrls: 'https://e.gkd.li/8f56e57f-b2d7-457c-8376-6351568ec14a',
-          snapshotUrls: 'https://i.gkd.li/i/23431963',
+          name: '①点击x掉',
+          matches:
+            '[vid="close_icon" || vid="close_pendant"][visibleToUser=true]',
+          exampleUrls:
+            'https://m.gkd.li/57941037/12059549-21c2-47b7-9acf-ec221cc14f25',
+          snapshotUrls: [
+            'https://i.gkd.li/i/15747381',
+            'https://i.gkd.li/i/23431963',
+          ],
         },
         {
           preKeys: [0],
+          name: '②点击[确定]',
           matches: '[text="确定"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/89294dbb-4398-4561-91b7-4943ec7c98c7',
           snapshotUrls: 'https://i.gkd.li/i/23431964',
