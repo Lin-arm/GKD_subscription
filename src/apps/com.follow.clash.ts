@@ -14,8 +14,11 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: '.MainActivity',
-          matches: '@Button[clickable=true][desc=null] -4 * > [desc="代理"]',
-          snapshotUrls: 'https://i.gkd.li/i/26210674',
+          matches: '@Button[clickable=true] -4 * > [desc="代理"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/26210674',
+            'https://i.gkd.li/i/29658034',
+          ],
         },
       ],
     },
