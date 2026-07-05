@@ -1144,5 +1144,27 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 55,
+      name: '其他-支付时关闭默认免密支付',
+      desc: '支付时默认开通免密支付开关关掉',
+      actionMaximum: 1, // 只点击一次,想要可以再打开
+      rules: [
+        {
+          fastQuery: true,
+          activityIds:
+            'com.tencent.mm.plugin.lite.ui.WxaLiteAppTransparentLiteUI',
+          matches:
+            '@Button[desc^="开通"][desc*="免密支付"][desc$="打开"] <2 View[childCount=8] <<7 FrameLayout <<3 [id="android:id/content"]',
+          position: {
+            right: 0.1, //距离右边10%
+            top: 'height/2', //顶部1/2
+          },
+          snapshotUrls: 'https://i.gkd.li/i/29682457',
+          excludeSnapshotUrls: 'https://i.gkd.li/i/29682465',
+          exampleUrls: 'https://e.gkd.li/59fb8537-9721-459a-992d-1d1e58d9c29f',
+        },
+      ],
+    },
   ],
 });
