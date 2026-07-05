@@ -290,6 +290,7 @@ export default defineGkdApp({
       key: 12,
       name: '全屏广告-下单后出现的弹窗',
       desc: '点击关闭',
+      fastQuery: true,
       rules: [
         {
           key: 0,
@@ -312,7 +313,6 @@ export default defineGkdApp({
           preKeys: [0],
           name: '二级全屏推荐',
           matchTime: 10000,
-          fastQuery: true,
           activityIds: '.activity.NewPageActivity',
           matches:
             '@LinearLayout[clickable=true][width<105 && height<99] + * > [text$="下单成功"][visibleToUser=true]',
