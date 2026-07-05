@@ -624,5 +624,20 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 31,
+      name: '功能类-下单后一键取消收藏',
+      desc: '一键取消收藏购刚买的商品',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: '.activity.NewPageMaskActivity',
+          matches:
+            '@[text="一键取消收藏以上商品"][visibleToUser=true] < View[childCount=2] - View[childCount=5] <<(1,2) View[id="main"] <<2 WebView[text="拼多多"] <<3 FrameLayout[vid!=null] <2 ViewGroup <2 FrameLayout <<3 [id="android:id/content"]',
+          snapshotUrls: 'https://i.gkd.li/i/29681036',
+          exampleUrls: 'https://e.gkd.li/d2a316ea-24f1-4b0b-9768-294835cbe2c7',
+        },
+      ],
+    },
   ],
 });
