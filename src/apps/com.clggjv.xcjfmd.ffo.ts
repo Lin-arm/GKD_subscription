@@ -8,12 +8,17 @@ export default defineGkdApp({
       key: 1,
       name: '通知提示-公告弹窗',
       desc: '点击[已知晓]',
+      matchTime: 18000,
+      actionMaximum: 1,
+      resetMatch: 'app',
       rules: [
         {
-          matches: '@Button[desc="已知晓"][clickable=true]',
           fastQuery: true,
           activityIds: '.MainActivity',
-          snapshotUrls: 'https://i.gkd.li/i/29703051',
+          matches:
+            '@Button[desc="已知晓"][clickable=true] <2 View[childCount=2][desc!=null][visibleToUser=true] <<6 FrameLayout < [id="android:id/content"]',
+            snapshotUrls: 'https://i.gkd.li/i/29703051',
+            exampleUrls: 'https://e.gkd.li/96567525-3f64-4e6e-af40-6e41a81fac96',
         },
       ],
     },
