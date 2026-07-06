@@ -17,8 +17,8 @@ export default defineGkdApp({
           activityIds: '.MainActivity',
           matches:
             '@Button[desc="已知晓"][clickable=true] <2 View[childCount=2][desc!=null][visibleToUser=true] <<6 FrameLayout < [id="android:id/content"]',
-            snapshotUrls: 'https://i.gkd.li/i/29703051',
-            exampleUrls: 'https://e.gkd.li/96567525-3f64-4e6e-af40-6e41a81fac96',
+          snapshotUrls: 'https://i.gkd.li/i/29703051',
+          exampleUrls: 'https://e.gkd.li/96567525-3f64-4e6e-af40-6e41a81fac96',
         },
       ],
     },
