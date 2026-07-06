@@ -28,14 +28,17 @@ export default defineGkdApp({
       desc: '倒计时结束后点击[暂时跳过]',
       rules: [
         {
-          matches: '[desc*="暂时跳过"]',
-          actionDelay: 5000,
           fastQuery: true,
           activityIds: '.MainActivity',
-          snapshotUrls: [
-            'https://i.gkd.li/i/29703192',
-            'https://i.gkd.li/i/29703246',
-          ],
+          matches:
+            '@Button[desc="立即观看"] <4 View[desc*="\\n暂时跳过\\n"][childCount=4][desc!=null][desc.length>20] <<6 FrameLayout < [id="android:id/content"]',
+          position: {
+            left: 'width * -0.4', // 控件左侧部分为基准-40%
+            top: 'height/2', // 距离上边除2(50%)
+          },
+          snapshotUrls: 'https://i.gkd.li/i/29703246',
+          excludeSnapshotUrls: 'https://i.gkd.li/i/29703192', // 倒计时ing...
+          exampleUrls: 'https://e.gkd.li/93c04052-3d24-4684-83ec-ccaf13557f22',
         },
       ],
     },
