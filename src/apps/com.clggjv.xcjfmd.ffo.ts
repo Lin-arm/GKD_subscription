@@ -2,13 +2,14 @@ import { defineGkdApp } from '@gkd-kit/define';
 
 export default defineGkdApp({
   id: 'com.clggjv.xcjfmd.ffo',
-  name: 'Lanerc',
+  name: 'Lanerc', //此App使用Flutter框架开发
   groups: [
     {
       key: 1,
       name: '通知提示-公告弹窗',
       desc: '点击[已知晓]',
-      matchTime: 18000,
+      matchTime: 14000,
+      forcedTime: 14000, // 因为没反应
       actionMaximum: 1,
       resetMatch: 'app',
       rules: [
@@ -29,13 +30,11 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
+          matchRoot: true,
+          // forcedTime: 14000, // 这个主动查询需要常驻,耗电情况未知
           activityIds: '.MainActivity',
           matches:
-            '@Button[desc="立即观看"] <4 View[desc*="\\n暂时跳过\\n"][childCount=4][desc!=null][desc.length>20] <<6 FrameLayout < [id="android:id/content"]',
-          position: {
-            left: 'width * -0.4', // 控件左侧部分为基准-40%
-            top: 'height/2', // 距离上边除2(50%)
-          },
+            '@View[desc*="\\n暂时跳过\\n"][childCount=4][desc!=null][desc.length>20] <<6 FrameLayout < [id="android:id/content"]',
           snapshotUrls: 'https://i.gkd.li/i/29703246',
           excludeSnapshotUrls: 'https://i.gkd.li/i/29703192', // 倒计时ing...
           exampleUrls: 'https://e.gkd.li/93c04052-3d24-4684-83ec-ccaf13557f22',
