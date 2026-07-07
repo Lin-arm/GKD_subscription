@@ -98,7 +98,7 @@ export default defineGkdApp({
     {
       key: 5,
       name: '分段广告-信息流广告',
-      desc: '⚠️含有[长按]操作,滑动太快的慎用', // https://github.com/AIsouler/GKD_subscription/issues/828
+      desc: '警告⚠️: 该规则有可能会误触,请谨慎开启', // https://github.com/AIsouler/GKD_subscription/issues/828
       fastQuery: true,
       forcedTime: 100000,
       rules: [
@@ -114,15 +114,17 @@ export default defineGkdApp({
           key: 2,
           action: 'longClick',
           activityIds: [
-            '.maincontainer.activity.MainActivity', //首页
+            '.maincontainer.activity.MainActivity',
             '.detail.DetailActivity',
           ],
           matches:
-            '@[longClickable=true][childCount=0] < [childCount>1] >(1,4) [text="广告"][visibleToUser=true]',
+            '@[longClickable=true][childCount=0][height>width] < [childCount>1] >(1,4) [text="广告"][visibleToUser=true]',
           snapshotUrls: [
             'https://i.gkd.li/i/19604324',
             'https://i.gkd.li/i/29751786',
+            'https://i.gkd.li/i/29753749', //同城商品页
           ],
+          excludeSnapshotUrls: 'https://i.gkd.li/i/29753324', // 广告的上半部分被遮住时,[长按]广告不会出现弹窗, 用 [height>width] 排除
           exampleUrls: 'https://e.gkd.li/738c623e-58fe-45a1-9a28-957f0f812c72',
         },
         {
@@ -141,7 +143,8 @@ export default defineGkdApp({
           key: 20,
           name: '②点击[引起不适]',
           preKeys: [1, 2, 3, 20], //有时候需点击第2次,故包含 key20 自身
-          actionCd: 300,
+          actionCd: 500,
+          actionDelay: 50, // 在首页时点击太早容易误触
           activityIds: [
             'com.idlefish.flutterbridge.flutterboost.boost.FishFlutterBoostActivity',
             'com.idlefish.flutterbridge.flutterboost.boost.FishFlutterBoostTransparencyActivity',
@@ -153,6 +156,14 @@ export default defineGkdApp({
             'https://i.gkd.li/i/19604317',
             'https://i.gkd.li/i/29751857',
           ],
+        },
+        {
+          key: 21,
+          name: '②点击[不感兴趣]',
+          preKeys: [2],
+          activityIds: '.maincontainer.activity.MainActivity',
+          matches: '@[clickable=true] +2 [text="商品不感兴趣"]',
+          snapshotUrls: 'https://i.gkd.li/i/29753752', //同城商品页
         },
       ],
     },
