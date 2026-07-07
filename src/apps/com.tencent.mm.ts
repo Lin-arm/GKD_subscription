@@ -306,8 +306,10 @@ export default defineGkdApp({
         {
           key: 1,
           fastQuery: true,
-          matches:
+          anyMatches: [
             '@[desc^="未选中" || desc^="未選定" || desc^="Unselected"][visibleToUser=true] + [text="原图" || text="原圖" || text="Full Image"]',
+            '@[desc^="未选中" || desc^="未選定" || desc^="Unselected"][visibleToUser=true]', //兜底,无快查的
+          ],
           exampleUrls: [
             'https://e.gkd.li/32dc0943-e85f-416d-bb01-6ed610d4bdd8',
             'https://e.gkd.li/93d41161-ab69-4c2d-83bb-637d7292f5e6',
