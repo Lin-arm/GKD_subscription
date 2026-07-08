@@ -53,21 +53,28 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
+          name: '全屏',
           activityIds: [
             '.AlipayLogin',
             'com.alipay.mobile.nebulax.xriver.activity.XRiverActivity$App',
             'com.alipay.mobile.beehive.cityselect.ui.CeilingHomeCitySelectActivity',
           ],
-          matches: '@[desc="取消"] + [text*="位置权限"][visibleToUser=true]',
-          exampleUrls: 'https://e.gkd.li/caa96cc4-9943-40d8-8cb6-8c89aa60b20f',
+          matches:
+            '@[desc="取消"] + [text*="位置权限" || text="支付宝本地服务"][visibleToUser=true]',
+          exampleUrls: [
+            'https://e.gkd.li/caa96cc4-9943-40d8-8cb6-8c89aa60b20f',
+            'https://e.gkd.li/3d87f8db-acc0-417c-9815-ea6c347baf5d',
+          ],
           snapshotUrls: [
             'https://i.gkd.li/i/18549931',
             'https://i.gkd.li/i/23415365',
             'https://i.gkd.li/i/23415366',
+            'https://i.gkd.li/i/29814624', // 支付宝本地服务
           ],
         },
         {
           key: 1,
+          name: 'Toast',
           activityIds: '.AlipayLogin',
           matches:
             '@[desc="关闭"] - LinearLayout >(2,4) [text^="定位到" || text^="开启定位权限"][visibleToUser=true]',
