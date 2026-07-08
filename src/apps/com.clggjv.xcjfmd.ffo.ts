@@ -8,8 +8,8 @@ export default defineGkdApp({
       key: 1,
       name: '通知提示-公告弹窗',
       desc: '点击[已知晓]',
-      matchTime: 10000,
-      forcedTime: 10000, // 因为没反应
+      matchTime: 12000,
+      forcedTime: 12000, // 主动查询12s
       actionMaximum: 1,
       resetMatch: 'app',
       rules: [
@@ -26,13 +26,12 @@ export default defineGkdApp({
     {
       key: 2,
       name: '全屏广告-弹窗广告',
-      desc: '倒计时结束后点击[暂时跳过]',
+      desc: '警告⚠️：会显著增加耗电,请谨慎开启!倒计时结束后点击[暂时跳过]',
       rules: [
         {
-          actionCd: 2000,
           fastQuery: true,
           matchRoot: true,
-          forcedTime: 14000, // 这个主动查询需要常驻,耗电情况未知
+          forcedTime: 21600000, // 这个主动查询需要常驻(6h),耗电情况未知
           activityIds: '.MainActivity',
           matches:
             '@View[desc*="\\n暂时跳过\\n"][childCount=4][desc!=null][desc.length>20] <<6 FrameLayout < [id="android:id/content"]',
