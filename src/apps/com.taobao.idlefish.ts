@@ -165,6 +165,24 @@ export default defineGkdApp({
           matches: '@[clickable=true] +2 [text="商品不感兴趣"]',
           snapshotUrls: 'https://i.gkd.li/i/29753752', //同城商品页
         },
+
+        // 第三段
+        // 跳完分段广告后,如果手动长按商品,出现弹窗,还是会触发 key20 点击[引起不适], 故利用 activityId 的变换来消除
+        // 当然,对于触发顺序为 `key3 --> key20 --> 回到原界面` 来说, Activity 并没有变换,此法就用不了了
+        // 不过我用的 闲鱼v7.26.41 测试, 并没有遇到过 key3 , 可能是旧版才有....
+        {
+          key: 50,
+          preKeys: [20],
+          name: '③仅消除preKeys=20蓄势',
+          action: 'none',
+          actionMaximum: 1,
+          activityIds: [
+            '.detail.DetailActivity',
+            '.maincontainer.activity.MainActivity',
+            '.search_implement.SearchResultActivity',
+          ],
+          matches: '[parent=null]',
+        },
       ],
     },
     {
