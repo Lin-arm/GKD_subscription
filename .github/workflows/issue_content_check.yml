@@ -57,11 +57,12 @@ jobs:
         id: analyze
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_COMMENT_BODY: ${{ github.event.comment.body || '' }}
           ISSUE_USER: ${{ github.event.issue.user.login }}
           ISSUE_ACTION: ${{ github.event_name == 'issue_comment' && 'comment' || github.event.action }}
         run: python3 scripts/python/check_issue.py
 
-  # ── 处理分支一：缺失快照 → 打标签 + 评论 + 关闭 ──
+  # ── 线性步骤一：缺失快照 → 打标签 + 评论 + 关闭（致命，阻断后续所有 Job） ──
 
   handle-missing-snapshot:
     name: 处理缺失快照
@@ -97,12 +98,15 @@ jobs:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: gh issue close "$ISSUE_NUMBER" --reason "not planned"
 
-  # ── 处理分支二：不可访问快照 → 打标签 + 评论（不关闭）──
+  # ── 线性步骤二：不可访问快照 → 打标签 + 评论（非致命，不阻断后续） ──
 
   handle-unreachable-snapshot:
     name: 处理不可访问快照
-    needs: analyze
-    if: needs.analyze.outputs.has_unreachable == 'true'
+    needs: [analyze, handle-missing-snapshot]
+    if: >-
+      always() &&
+      needs.handle-missing-snapshot.result == 'skipped' &&
+      needs.analyze.outputs.has_unreachable == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: 打标签「需补充链接」
@@ -127,12 +131,15 @@ jobs:
           body: ${{ needs.analyze.outputs.comment_unreachable }}
           edit-mode: replace
 
-  # ── 处理分支三：链接不可访问（404）→ 打标签 + 评论（不关闭）──
+  # ── 分支步骤三：链接不可访问（404）→ 打标签 + 评论（非致命，阻断转换） ──
 
   handle-network-404:
     name: 处理链接不可访问(404)
-    needs: analyze
-    if: needs.analyze.outputs.network_status == '404'
+    needs: [analyze, handle-missing-snapshot]
+    if: >-
+      always() &&
+      needs.handle-missing-snapshot.result == 'skipped' &&
+      needs.analyze.outputs.network_status == '404'
     runs-on: ubuntu-latest
     steps:
       - name: 打标签「链接无法访问」
@@ -157,12 +164,15 @@ jobs:
           body: ${{ needs.analyze.outputs.comment_404 }}
           edit-mode: replace
 
-  # ── 处理分支四：网络不确定（403/5xx）→ 打标签 + 折叠评论（不关闭）──
+  # ── 分支步骤三：网络不确定（403/5xx）→ 打标签 + 折叠评论（非致命，阻断转换） ──
 
   handle-network-uncertain:
     name: 处理网络不确定(403/5xx)
-    needs: analyze
-    if: needs.analyze.outputs.network_status == 'uncertain'
+    needs: [analyze, handle-missing-snapshot]
+    if: >-
+      always() &&
+      needs.handle-missing-snapshot.result == 'skipped' &&
+      needs.analyze.outputs.network_status == 'uncertain'
     runs-on: ubuntu-latest
     steps:
       - name: 打标签「链接无法访问」（不确定）
@@ -187,12 +197,23 @@ jobs:
           body: ${{ needs.analyze.outputs.comment_uncertain }}
           edit-mode: replace
 
-  # ── 处理分支五：链接转换 + Bot 评论（含有 GitHub 附件链接时）──
+  # ── 步骤四：链接转换 + Bot 评论（仅当缺失未触发 + 网络可访问时） ──
 
   handle-convert:
     name: 处理链接转换
-    needs: analyze
-    if: needs.analyze.outputs.has_convertible == 'true'
+    needs:
+      [
+        analyze,
+        handle-missing-snapshot,
+        handle-network-404,
+        handle-network-uncertain,
+      ]
+    if: >-
+      always() &&
+      needs.handle-missing-snapshot.result == 'skipped' &&
+      needs.handle-network-404.result == 'skipped' &&
+      needs.handle-network-uncertain.result == 'skipped' &&
+      needs.analyze.outputs.has_convertible == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: 查找已有 Bot 评论
@@ -211,12 +232,23 @@ jobs:
           body: ${{ needs.analyze.outputs.comment_bot }}
           edit-mode: replace
 
-  # ── 处理分支六：编辑/评论恢复（移除旧标签 + 重新打开 Issue）──
+  # ── 步骤五：编辑/评论恢复（仅当缺失未触发 + 所有检查通过时） ──
 
   handle-recovery:
     name: 处理编辑/评论后恢复issue状态
-    needs: analyze
-    if: needs.analyze.outputs.warning_type == 'recovery'
+    needs:
+      [
+        analyze,
+        handle-missing-snapshot,
+        handle-unreachable-snapshot,
+        handle-network-404,
+        handle-network-uncertain,
+        handle-convert,
+      ]
+    if: >-
+      always() &&
+      needs.handle-missing-snapshot.result == 'skipped' &&
+      needs.analyze.outputs.warning_type == 'recovery'
     runs-on: ubuntu-latest
     steps:
       - name: 移除所有本工作流管理的标签

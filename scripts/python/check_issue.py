@@ -74,8 +74,12 @@ class _NetworkCheckResult:
 
 def main():
     body = os.environ.get("ISSUE_BODY", "") or ""
+    comment_body = os.environ.get("ISSUE_COMMENT_BODY", "") or ""
     issue_user = os.environ.get("ISSUE_USER", "")
     issue_action = os.environ.get("ISSUE_ACTION", "")
+
+    # 合并 Issue Body 和评论内容一起分析（评论补充的链接也参与检查）
+    full_text = body + "\n" + comment_body if comment_body else body
 
     has_snapshot = "true"
     has_unreachable = "false"
@@ -91,7 +95,7 @@ def main():
     comment_bot = ""
 
     # ── 第一步：提取所有链接 ──
-    links = extract_links(body)
+    links = extract_links(full_text)
 
     # ── 第二步：判断是否缺少快照（唯一致命 → 提前返回） ──
     has_any_snapshot = any(lnk.kind in _SNAPSHOT_KINDS for lnk in links)
