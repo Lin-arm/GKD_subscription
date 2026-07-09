@@ -290,3 +290,14 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           body: ${{ needs.analyze.outputs.comment_recovery }}
           edit-mode: replace
+
+      - name: 清理残留警告评论
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          comment_ids=$(gh api "repos/$GH_REPO/issues/$ISSUE_NUMBER/comments" \
+            --jq '.[] | select(.user.login == "github-actions[bot]") | select(.body | test("gkd-warning")) | select(.body | test("gkd-warning-recovery") | not) | .id')
+          for id in $comment_ids; do
+            gh api "repos/$GH_REPO/issues/comments/$id" -X DELETE 2>/dev/null || true
+          done
