@@ -12,7 +12,6 @@ import os
 
 MANAGED_LABELS = [
     "缺失快照(missing-snapshot)",
-    "本地链接(local-link)",
     "需补充链接(need-supplement-link)",
     "链接无法访问(inaccessible-link)",
 ]
