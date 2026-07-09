@@ -2,8 +2,8 @@
 评论格式化模块
 
 负责生成所有 Bot 评论的 Markdown 内容，包括：
-- 各类警告评论（缺失快照 / 本地链接 / 不可访问快照 / 链接无法访问 / 不确定）
-- 编辑恢复评论
+- 各类警告评论（缺失快照 / 不可访问快照 / 链接无法访问 / 不确定）
+- 编辑/评论恢复评论
 - 快照转换 Bot 评论（按 App > Activity 分组）
 
 每类评论使用独立的 HTML 标记，供 YAML 工作流中 find-comment 按场景查找。
@@ -17,21 +17,11 @@ from converter import ConvertedLink
 
 
 def build_warning_missing(user: str) -> str:
-    """缺失快照时的警告评论"""
+    """缺失快照时的警告评论（关闭 Issue）"""
     return (
         "<!-- gkd-warning-missing -->\n"
         f"您好 @{user}，由于您没有提供快照链接，此 Issue 已被自动关闭。\n\n"
         "请提供正确的快照链接后重新打开或提交新的 Issue。"
-    )
-
-
-def build_warning_local(user: str) -> str:
-    """检测到本地链接时的警告评论（不关闭 Issue）"""
-    return (
-        "<!-- gkd-warning-local -->\n"
-        f"您好 @{user}，检测到您使用了不可分享的本地链接"
-        "（如 localhost、127.0.0.1、file:// 等），他人无法访问该链接。\n\n"
-        "请使用正确的分享方式上传快照。"
     )
 
 
@@ -47,12 +37,12 @@ def build_warning_unreachable(user: str) -> str:
 
 
 def build_warning_inaccessible(user: str, url: str) -> str:
-    """链接不可访问（404）时的警告评论"""
+    """链接不可访问（404）时的警告评论（不关闭 Issue）"""
     return (
         "<!-- gkd-warning-404 -->\n"
         f"您好 @{user}，检测到您提供的快照链接无法访问：\n\n"
         f"`{url}`\n\n"
-        "此 Issue 已被自动关闭。请确认链接正确后重新提交。"
+        "请确认链接正确后在评论区补充有效的快照链接。"
     )
 
 
@@ -70,7 +60,7 @@ def build_warning_uncertain(
 
 
 def build_recovery_comment(user: str) -> str:
-    """编辑修正后检查通过时的恢复评论"""
+    """编辑/评论补充有效链接后检查通过时的恢复评论"""
     return (
         "<!-- gkd-warning-recovery -->\n"
         f"✅ 您好 @{user}，快照链接检查已通过，之前的标记已移除。"
