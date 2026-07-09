@@ -2,113 +2,85 @@ name: issue_content_check
 
 on:
   issues:
-    types: [opened]
+    types: [opened, edited]
 
-# 允许修改 Issue（标签、评论、关闭）
 permissions:
   issues: write
 
 jobs:
   check-issue-content:
     runs-on: ubuntu-latest
-
     steps:
-      - name: 检查 Issue 内容并自动处理
+      # ── 环境准备 ──
+
+      - name: 检出代码仓库
+        uses: actions/checkout@v4
+
+      - name: 配置 Python 运行环境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # ── 核心分析（Python 负责）──
+
+      - name: 分析 Issue 快照链接
+        id: analyze
         env:
-          # GitHub CLI 认证
-          GH_TOKEN: ${{ github.token }}
-
-          # 当前仓库（owner/repo）
-          GH_REPO: ${{ github.repository }}
-
-          # 当前 Issue 信息
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_BODY: ${{ github.event.issue.body }}
           ISSUE_USER: ${{ github.event.issue.user.login }}
+          ISSUE_ACTION: ${{ github.action }}
+        run: python3 scripts/python/check_issue.py
 
+      # ── GitHub 操作（Actions / gh CLI 负责）──
+
+      - name: 添加标签
+        if: steps.analyze.outputs.labels_to_add != ''
+        env:
+          LABELS: ${{ steps.analyze.outputs.labels_to_add }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
-          set -euo pipefail
+          IFS=',' read -ra LABELS <<< "$LABELS"
+          for label in "${LABELS[@]}"; do
+            gh issue edit "$ISSUE_NUMBER" --add-label "$label"
+          done
 
-          # ====================
-          # GitHub Issue 操作
-          # ====================
+      - name: 移除旧标签
+        if: steps.analyze.outputs.labels_to_remove != ''
+        env:
+          LABELS: ${{ steps.analyze.outputs.labels_to_remove }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          IFS=',' read -ra LABELS <<< "$LABELS"
+          for label in "${LABELS[@]}"; do
+            gh issue edit "$ISSUE_NUMBER" --remove-label "$label" || true
+          done
 
-          # 添加 invalid 标签
-          add_invalid_label() {
-            gh issue edit "$ISSUE_NUMBER" \
-              --repo "$GH_REPO" \
-              --add-label invalid
-          }
+      - name: 发布/更新警告评论
+        if: steps.analyze.outputs.warning_comment != ''
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '<!-- gkd-warning -->'
+          body: ${{ steps.analyze.outputs.warning_comment }}
 
-          # 发表评论
-          comment_issue() {
-            gh issue comment "$ISSUE_NUMBER" \
-              --repo "$GH_REPO" \
-              --body "$1"
-          }
+      - name: 发布/更新快照转换评论
+        if: steps.analyze.outputs.bot_comment != ''
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '<!-- gkd-bot-comment -->'
+          body: ${{ steps.analyze.outputs.bot_comment }}
 
-          # 关闭 Issue
-          close_issue() {
-            gh issue close "$ISSUE_NUMBER" \
-              --repo "$GH_REPO"
-          }
+      - name: 关闭 Issue
+        if: steps.analyze.outputs.should_close == 'true'
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: gh issue close "$ISSUE_NUMBER" --reason "not planned"
 
-          # ====================
-          # 内容检查规则
-          # ====================
-
-          # 判断是否缺少快照
-          #
-          # 满足任意一种情况即可：
-          # - GKD 分享链接
-          # - ZIP 快照附件
-          #
-          # 两者都不存在时返回 true
-          missing_snapshot() {
-            [[ "$ISSUE_BODY" != *"i.gkd.li/"* &&
-               "$ISSUE_BODY" != *".zip"* ]]
-          }
-
-          # 判断是否使用了不可分享的本地快照链接
-          #
-          # 例如：
-          # https://i.gkd.li/snapshot/xxx
-          #
-          # 此类链接仅作者可访问
-          unreachable_snapshot_link() {
-            [[ "$ISSUE_BODY" == *"i.gkd.li/snapshot/"* ]]
-          }
-
-          # ====================
-          # 自动处理逻辑
-          # ====================
-
-          # 未提供快照
-          #
-          # 处理方式：
-          # 1. 标记 invalid
-          # 2. 自动回复
-          # 3. 自动关闭
-          if missing_snapshot; then
-            add_invalid_label
-
-            comment_issue \
-              "您好 @${ISSUE_USER}，由于您没有提供快照，此 issue 已被自动关闭。"
-
-            gh issue close "${ISSUE_NUMBER}" --reason "not planned"
-            exit 0
-          fi
-
-          # 检测到不可访问的快照链接
-          #
-          # 处理方式：
-          # 1. 标记 invalid
-          # 2. 自动提醒修正
-          #
-          # 不自动关闭，允许用户补充
-          if unreachable_snapshot_link; then
-            add_invalid_label
-
-            comment_issue \
-              "您好 @${ISSUE_USER}，检测到您提供了他人无法访问的链接，请点击查看 [正确的分享快照方式说明](https://gkd.li/guide/snapshot#share-note) 。可在下方评论区补充。"
-          fi
+      - name: 重新打开 Issue
+        if: steps.analyze.outputs.should_reopen == 'true'
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: gh issue reopen "$ISSUE_NUMBER" || true
