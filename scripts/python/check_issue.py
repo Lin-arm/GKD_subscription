@@ -255,7 +255,7 @@ def _parse_all_snapshots(links: list) -> tuple[list[SnapshotInfo], list[tuple[st
             seen_activities.add(act_key)
             snapshots.append(snap)
 
-    # 再处理 GKD 分享链接
+    # 再处理 GKD 分享链接（GKD 链接原样保留，不套代理模板）
     for lnk in links:
         if lnk.kind != "gkd":
             continue
@@ -264,16 +264,15 @@ def _parse_all_snapshots(links: list) -> tuple[list[SnapshotInfo], list[tuple[st
         if not gh_url:
             continue
 
-        converted_url = GKD_PROXY_TEMPLATE.format(url=lnk.url)
-        snap = download_and_parse(gh_url, converted_url)
+        snap = download_and_parse(gh_url, lnk.url)
 
         if snap is None:
-            gkd_links.append((lnk.display_text or lnk.url, converted_url))
+            gkd_links.append((lnk.display_text or lnk.url, lnk.url))
             continue
 
         act_key = f"{snap.app_id}|{snap.activity_id}"
         if act_key in seen_activities:
-            gkd_links.append((snap.snapshot_id or lnk.url, converted_url))
+            gkd_links.append((snap.snapshot_id or lnk.url, lnk.url))
         else:
             seen_activities.add(act_key)
             snapshots.append(snap)
