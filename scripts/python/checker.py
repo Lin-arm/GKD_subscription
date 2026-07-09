@@ -1,14 +1,16 @@
 """
 链接检查模块
 
-负责三类检查：
-1. 本地链接检查：识别 localhost / 127.0.0.1 / file:// 等不可分享链接
-2. 不可访问快照链接检查：识别 i.gkd.li/snapshot/ 链接
-3. 网络有效性检查：对 GitHub 附件链接发起 HTTP 请求，验证可访问性
+负责两类检查：
+1. 不可访问快照链接检查：识别 i.gkd.li/snapshot/ 链接
+2. 网络有效性检查：对链接发起 HTTP 请求，验证可访问性
+   - GitHub 附件链接直接检查
+   - GKD 分享链接先转换为 GH 附件 URL 再检查
 
 本模块只返回检查结果，不做任何业务判断（如是否关闭 Issue）。
 """
 
+import re
 from dataclasses import dataclass
 
 from extractor import LinkInfo
@@ -26,16 +28,27 @@ class NetworkResult:
     detail: str = ""       # 错误详情（供折叠展示）
 
 
-# ── 本地链接检查 ──
+# ── GKD 链接 → GH 附件 URL 转换 ──
+
+# 从 GKD 分享链接中提取数字 ID
+_RE_GKD_ID = re.compile(r"https://i\.gkd\.li/i/(\d+)")
+
+# GH 附件 URL 模板：{id} 为 GKD 链接中的数字，file.zip 为固定占位符
+_GH_ATTACHMENT_TEMPLATE = "https://github.com/user-attachments/files/{id}/file.zip"
 
 
-def check_local_links(links: list[LinkInfo]) -> list[LinkInfo]:
+def gkd_to_gh_attachment_url(gkd_url: str) -> str | None:
     """
-    筛选出所有本地不可分享链接。
+    将 GKD 分享链接转换为 GitHub 附件 URL，用于网络可访问性检查。
 
-    返回值为空列表时表示没有本地链接。
+    例如：https://i.gkd.li/i/29722723 → https://github.com/user-attachments/files/29722723/file.zip
+
+    返回 None 表示 URL 不符合 GKD 分享链接格式。
     """
-    return [lnk for lnk in links if lnk.kind == "local"]
+    match = _RE_GKD_ID.match(gkd_url)
+    if not match:
+        return None
+    return _GH_ATTACHMENT_TEMPLATE.format(id=match.group(1))
 
 
 # ── 不可访问快照链接检查 ──
@@ -69,12 +82,10 @@ def check_network_links(url: str, timeout: int = 20) -> NetworkResult:
     import urllib.request
     import urllib.error
 
-    # 尝试 HEAD 请求
     result = _try_head_request(url, timeout)
     if result is not None:
         return result
 
-    # HEAD 不被支持，回退到 GET + Range
     return _try_get_range_request(url, timeout)
 
 
