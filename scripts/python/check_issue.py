@@ -152,12 +152,11 @@ def main():
 
     # ── 第六步：编辑/评论恢复判断 ──
     # 当 edited 或 issue_comment 触发且所有检查均通过时，触发恢复流程
-    all_clean = (
-        has_unreachable == "false"
-        and network_status in ("ok", "skipped")
-    )
+    # 恢复条件：edited/comment + 至少有一个有效快照链接 + 网络OK
+    # 不要求旧问题链接消失——作者补充有效链接即可恢复
+    has_valid_snapshot = any(lnk.kind in ("gkd", "github_attachment") for lnk in links)
 
-    if issue_action in ("edited", "comment") and all_clean:
+    if issue_action in ("edited", "comment") and has_valid_snapshot and network_status in ("ok", "skipped"):
         warning_type = "recovery"
         comment_recovery = build_recovery_comment(issue_user)
 
