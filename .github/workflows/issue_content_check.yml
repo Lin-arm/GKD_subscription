@@ -38,6 +38,7 @@ jobs:
         env:
           LABELS: ${{ steps.analyze.outputs.labels_to_add }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           IFS=',' read -ra LABELS <<< "$LABELS"
           for label in "${LABELS[@]}"; do
@@ -49,6 +50,7 @@ jobs:
         env:
           LABELS: ${{ steps.analyze.outputs.labels_to_remove }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           IFS=',' read -ra LABELS <<< "$LABELS"
           for label in "${LABELS[@]}"; do
@@ -77,10 +79,12 @@ jobs:
         if: steps.analyze.outputs.should_close == 'true'
         env:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh issue close "$ISSUE_NUMBER" --reason "not planned"
 
       - name: 重新打开 Issue
         if: steps.analyze.outputs.should_reopen == 'true'
         env:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh issue reopen "$ISSUE_NUMBER" || true
