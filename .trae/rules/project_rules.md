@@ -24,9 +24,9 @@ Python (scripts/python/) = Worker（分析器）
 - Job / Step 编排与条件分支（if）
 - 环境准备（checkout、setup-python）
 - 标签操作（gh CLI）
-- 评论操作（peter-evans/create-or-update-comment@v5）
+- 评论操作（find-comment + create-or-update-comment）
 - Issue 关闭 / 重新打开（gh CLI）
-- 读取 Python 输出，决定执行哪些 Step
+- 读取 Python 输出，决定执行哪些 Job
 
 **原则：GitHub Actions 能完成的事，不允许放进 Python。**
 
@@ -48,42 +48,100 @@ Python (scripts/python/) = Worker（分析器）
 
 ---
 
-## 工作流业务流程
+## 工作流业务流程（多 Job 架构）
 
 ```
 接收到 Issue (opened / edited)
     │
     ▼
-环境准备 (checkout + setup-python)
-    │
-    ▼
-Python 分析 Issue Body（只运行一次）
-  输出原子化标志到 GITHUB_OUTPUT
-    │
-    ▼
-是否缺少快照? ──是──> BAN（标签 + 评论 + 关闭）
-    │否
-    ▼
-是否本地链接? ──是──> BAN（标签 + 评论 + 关闭）
-    │否
-    ▼
-是否有不可访问快照(i.gkd.li/snapshot/)? ──是──> 提醒补充（标签 + 评论，不关闭）
-    │
-    ▼
-网络检查 GitHub 附件链接
-    │
-    ├─ 404 ──> BAN（标签 + 评论 + 关闭）
-    ├─ 不确定(403/5xx) ──> 提醒人工核查（标签 + 折叠错误详情，不关闭）
-    │
-    ▼ 可访问
-链接转换 + Bot 评论生成
-    │
-    ▼
-发布/更新 Bot 评论 (create-or-update-comment)
-    │
-    ▼
-编辑恢复处理（edited 触发时：移除旧标签 + 重新打开 + 恢复评论）
+┌─────────────────────────────────┐
+│  analyze Job                    │
+│  环境准备 + Python 分析（一次）  │
+│  输出原子化标志到 GITHUB_OUTPUT  │
+└──────────────┬──────────────────┘
+               │
+    ┌──────────┼──────────────────────────────┐
+    │          │                              │
+    ▼          ▼                              ▼
+ has_snapshot   has_local_link          network_status
+  == 'false'    == 'true'               == '404'
+    │          && status!='404'              │
+    ▼          ▼                              ▼
+┌─────────┐ ┌──────────┐              ┌──────────────┐
+│ handle- │ │ handle-  │              │ handle-      │
+│ missing │ │ local-   │              │ network-404  │
+│ snapshot│ │ link     │              │ 标签+评论+关闭│
+│标签+评论│ │标签+评论 │              └──────────────┘
+│ +关闭   │ │(不关闭)  │
+└─────────┘ └──────────┘
+               │
+               ▼
+         has_unreachable == 'true'
+         && status != '404'
+               │
+               ▼
+         ┌──────────────┐
+         │ handle-      │
+         │ unreachable- │
+         │ snapshot     │
+         │ 标签+评论    │
+         │ (不关闭)     │
+         └──────────────┘
+               │
+               ▼
+         network_status == 'uncertain'
+               │
+               ▼
+         ┌──────────────┐
+         │ handle-      │
+         │ network-     │
+         │ uncertain    │
+         │ 标签+折叠评论│
+         │ (不关闭)     │
+         └──────────────┘
+               │
+               ▼ 可访问
+         has_convertible == 'true'
+               │
+               ▼
+         ┌──────────────┐
+         │ handle-      │
+         │ convert      │
+         │ Bot 评论     │
+         └──────────────┘
+               │
+               ▼
+         warning_type == 'recovery'
+         (edited + 全部检查通过)
+               │
+               ▼
+         ┌──────────────┐
+         │ handle-      │
+         │ recovery     │
+         │ 移除标签     │
+         │ 重新打开     │
+         │ 恢复评论     │
+         └──────────────┘
 ```
+
+### Job 划分方案
+
+| Job 名称                      | 触发条件                                               | 动作                       |
+| ----------------------------- | ------------------------------------------------------ | -------------------------- |
+| `analyze`                     | 始终执行                                               | 运行 Python 分析           |
+| `handle-missing-snapshot`     | `has_snapshot == 'false'`                              | 标签 + 评论 + 关闭         |
+| `handle-local-link`           | `has_local_link == 'true' && network_status != '404'`  | 标签 + 评论（不关闭）      |
+| `handle-unreachable-snapshot` | `has_unreachable == 'true' && network_status != '404'` | 标签 + 评论（不关闭）      |
+| `handle-network-404`          | `network_status == '404'`                              | 标签 + 评论 + 关闭         |
+| `handle-network-uncertain`    | `network_status == 'uncertain'`                        | 标签 + 折叠评论（不关闭）  |
+| `handle-convert`              | `has_convertible == 'true'`                            | Bot 评论                   |
+| `handle-recovery`             | `warning_type == 'recovery'`                           | 移除标签 + 重新打开 + 评论 |
+
+### Job 互斥设计
+
+- `handle-local-link` 和 `handle-unreachable-snapshot` 添加 `network_status != '404'` 条件
+- 当 404 发生时，高优先级的 `handle-network-404` 抑制低优先级的非致命场景
+- 避免同一 Issue 上同时出现语义冲突的标签和评论
 
 ---
 
@@ -91,8 +149,8 @@ Python 分析 Issue Body（只运行一次）
 
 ### 1. Python 只运行一次
 
-Python 脚本只执行一次，输出所有原子化布尔标志。
-YAML 根据这些标志决定执行哪些 Step。
+Python 脚本只在 `analyze` Job 中执行一次，输出所有原子化布尔标志和按场景独立的评论内容。
+各处理 Job 根据这些标志决定是否执行。
 
 **原因：** 减少 setup 开销，避免重复解析 Issue Body。
 
@@ -110,23 +168,48 @@ YAML 根据这些标志决定执行哪些 Step。
 
 ### 4. 评论防刷屏
 
-使用 `peter-evans/find-comment@v4` 查找已有评论 ID，再用 `peter-evans/create-or-update-comment@v5` + `comment-id` + `edit-mode: replace` 更新，而非重复创建。
+使用 `peter-evans/find-comment@v4` 按场景独立标记查找已有评论 ID，
+再用 `peter-evans/create-or-update-comment@v5` + `comment-id` + `edit-mode: replace` 更新，而非重复创建。
+
+每个场景使用独立的 HTML 标记：
+- `<!-- gkd-warning-missing -->` — 缺失快照
+- `<!-- gkd-warning-local -->` — 本地链接
+- `<!-- gkd-warning-unreachable -->` — 不可访问快照
+- `<!-- gkd-warning-404 -->` — 链接 404
+- `<!-- gkd-warning-uncertain -->` — 网络不确定
+- `<!-- gkd-warning-recovery -->` — 编辑恢复
+- `<!-- gkd-bot-comment -->` — Bot 转换评论
+
+恢复场景使用 `<!-- gkd-warning` 前缀匹配，可找到任意类型的旧警告评论并替换。
+
+### 5. 多 Job 架构
+
+Workflow 使用多个 Job 表达业务分支，每个 Job 对应一个明确的业务节点。
+Job = 业务节点 / 流程分支，Step = 节点内部执行动作。
+
+**原因：** 本项目本质是 Issue 审核决策树，需要事件驱动 + 条件 Job 设计，
+而非普通 CI 线性流水线。
 
 ---
 
 ## Python 输出变量
 
-| 变量名            | 类型   | 含义                                                                                             |
-| ----------------- | ------ | ------------------------------------------------------------------------------------------------ |
-| `has_snapshot`    | bool   | 是否包含任何快照链接                                                                             |
-| `has_local_link`  | bool   | 是否包含本地链接                                                                                 |
-| `has_unreachable` | bool   | 是否包含不可访问快照                                                                             |
-| `network_status`  | string | 网络检查结果：`ok` / `404` / `uncertain` / `skipped`                                             |
-| `network_detail`  | string | 网络错误详情（折叠展示用）                                                                       |
-| `has_convertible` | bool   | 是否有可转换的 GitHub 附件                                                                       |
-| `warning_type`    | string | 警告类型：`missing` / `local` / `unreachable` / `inaccessible` / `uncertain` / `recovery` / `""` |
-| `warning_comment` | string | 警告评论 Markdown（含 `<!-- gkd-warning -->` 标记）                                              |
-| `bot_comment`     | string | Bot 评论 Markdown（含 `<!-- gkd-bot-comment -->` 标记）                                          |
+| 变量名                | 类型   | 含义                                                                                             |
+| --------------------- | ------ | ------------------------------------------------------------------------------------------------ |
+| `has_snapshot`        | bool   | 是否包含任何快照链接                                                                             |
+| `has_local_link`      | bool   | 是否包含本地链接                                                                                 |
+| `has_unreachable`     | bool   | 是否包含不可访问快照                                                                             |
+| `network_status`      | string | 网络检查结果：`ok` / `404` / `uncertain` / `skipped`                                             |
+| `network_detail`      | string | 网络错误详情（折叠展示用）                                                                       |
+| `has_convertible`     | bool   | 是否有可转换的 GitHub 附件                                                                       |
+| `warning_type`        | string | 警告类型：`missing` / `local` / `unreachable` / `inaccessible` / `uncertain` / `recovery` / `""` |
+| `comment_missing`     | string | 缺失快照评论 Markdown（含 `<!-- gkd-warning-missing -->` 标记）                                  |
+| `comment_local`       | string | 本地链接评论 Markdown（含 `<!-- gkd-warning-local -->` 标记）                                    |
+| `comment_unreachable` | string | 不可访问快照评论 Markdown（含 `<!-- gkd-warning-unreachable -->` 标记）                          |
+| `comment_404`         | string | 链接 404 评论 Markdown（含 `<!-- gkd-warning-404 -->` 标记）                                     |
+| `comment_uncertain`   | string | 网络不确定评论 Markdown（含 `<!-- gkd-warning-uncertain -->` 标记）                              |
+| `comment_recovery`    | string | 恢复评论 Markdown（含 `<!-- gkd-warning-recovery -->` 标记）                                     |
+| `comment_bot`         | string | Bot 评论 Markdown（含 `<!-- gkd-bot-comment -->` 标记）                                          |
 
 ---
 
@@ -135,7 +218,7 @@ YAML 根据这些标志决定执行哪些 Step。
 | 场景                      | 标签名                             | 是否关闭 Issue         |
 | ------------------------- | ---------------------------------- | ---------------------- |
 | 缺失快照                  | `缺失快照(missing-snapshot)`       | ✅ 关闭（not planned）  |
-| 本地链接                  | `本地链接(local-link)`             | ✅ 关闭（not planned）  |
+| 本地链接                  | `本地链接(local-link)`             | ❌ 不关闭               |
 | 不可访问快照链接          | `需补充链接(need-supplement-link)` | ❌ 不关闭               |
 | 链接无法访问(404/403/5xx) | `链接无法访问(inaccessible-link)`  | 404关闭，403/5xx不关闭 |
 
