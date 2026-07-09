@@ -5,7 +5,11 @@ on:
     types: [opened, edited]
 
 permissions:
+  contents: read
   issues: write
+
+env:
+  GH_REPO: ${{ github.repository }}
 
 jobs:
   # ── 分析节点：Python 只运行一次，输出所有原子化标志 ──
