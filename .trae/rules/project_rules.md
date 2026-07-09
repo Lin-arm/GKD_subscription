@@ -53,103 +53,41 @@ Python (scripts/python/) = Worker（分析器）
 ## 工作流业务流程（多 Job 架构）
 
 ```
-接收到 Issue (opened / edited) 或 Issue 作者评论 (issue_comment)
-    │
-    ▼
-┌─────────────────────────────────┐
-│  analyze Job                    │
-│  环境准备 + Python 分析（一次）  │
-│  输出原子化标志到 GITHUB_OUTPUT  │
-│  (issue_comment 仅处理作者评论)  │
-└──────────────┬──────────────────┘
-               │
-               ▼
-        has_snapshot == 'false'
-               │
-               ▼
-        ┌──────────────┐
-        │ handle-      │
-        │ missing-     │
-        │ snapshot     │
-        │ 标签+评论    │
-        │ +关闭        │
-        └──────────────┘
-
-               │ has_snapshot == 'true'
-               ▼
-        has_unreachable == 'true'
-               │
-               ▼
-        ┌──────────────┐
-        │ handle-      │
-        │ unreachable- │
-        │ snapshot     │
-        │ 标签+评论    │
-        │ (不关闭)     │
-        └──────────────┘
-
-               │
-               ▼
-        network_status == '404'
-               │
-               ▼
-        ┌──────────────┐
-        │ handle-      │
-        │ network-404  │
-        │ 标签+评论    │
-        │ (不关闭)     │
-        └──────────────┘
-
-               │
-               ▼
-        network_status == 'uncertain'
-               │
-               ▼
-        ┌──────────────┐
-        │ handle-      │
-        │ network-     │
-        │ uncertain    │
-        │ 标签+折叠评论│
-        │ (不关闭)     │
-        └──────────────┘
-
-               │
-               ▼ 含有 GitHub 附件链接
-        has_convertible == 'true'
-               │
-               ▼
-        ┌──────────────┐
-        │ handle-      │
-        │ convert      │
-        │ Bot 评论     │
-        └──────────────┘
-
-               │
-               ▼ edited/comment + 全部检查通过
-        warning_type == 'recovery'
-               │
-               ▼
-        ┌──────────────┐
-        │ handle-      │
-        │ recovery     │
-        │ 移除标签     │
-        │ 重新打开     │
-        │ 恢复评论     │
-        │ 清理残留     │
-        └──────────────┘
+1. analyze
+   - 合并 Issue Body + 评论内容
+   - issue_comment 仅处理作者评论
+   |
+   +-- has_snapshot == 'false'
+   |   └─> handle-missing-snapshot: 标签+评论+关闭 (阻断后续所有 Job)
+   |
+   +-- has_snapshot == 'true'
+       |
+       +-- has_unreachable == 'true'
+       |   └─> handle-unreachable-snapshot: 标签+评论 (不关闭, 不阻断后续)
+       |
+       +-- network_status 分支 (并行):
+       |   +-- '404'       ──> handle-network-404:       标签+评论 (不关闭, 阻断转换)
+       |   +-- 'uncertain' ──> handle-network-uncertain: 标签+评论 (不关闭, 阻断转换)
+       |   +-- 'ok'        ──> (无动作, 继续后续)
+       |
+       +-- has_convertible == 'true' (仅当 404/uncertain 均 skipped)
+       |   └─> handle-convert: Bot 评论
+       |
+       └─> warning_type == 'recovery' (仅当 missing-skipped + 全部检查通过)
+           └─> handle-recovery: 移除标签+重新打开+恢复评论+清理残留
 ```
 
 ### Job 划分方案
 
-| Job 名称                      | 触发条件                                 | 动作                                  |
-| ----------------------------- | ---------------------------------------- | ------------------------------------- |
-| `analyze`                     | 始终执行（issue_comment 仅处理作者评论） | 运行 Python 分析 + 预创建标签         |
-| `handle-missing-snapshot`     | `has_snapshot == 'false'`                | 标签 + 评论 + 关闭                    |
-| `handle-unreachable-snapshot` | `has_unreachable == 'true'`              | 标签 + 评论（不关闭）                 |
-| `handle-network-404`          | `network_status == '404'`                | 标签 + 评论（不关闭）                 |
-| `handle-network-uncertain`    | `network_status == 'uncertain'`          | 标签 + 折叠评论（不关闭）             |
-| `handle-convert`              | `has_convertible == 'true'`              | Bot 评论                              |
-| `handle-recovery`             | `warning_type == 'recovery'`             | 移除标签 + 重新打开 + 评论 + 清理残留 |
+| Job 名称                      | 依赖                                | 触发条件                                              | 动作                                   |
+| ----------------------------- | ----------------------------------- | ----------------------------------------------------- | -------------------------------------- |
+| `analyze`                     | 无                                  | 始终执行（issue_comment 仅处理作者评论）              | 运行 Python 分析 + 预创建标签          |
+| `handle-missing-snapshot`     | analyze                             | `has_snapshot == 'false'`                             | 标签 + 评论 + 关闭（阻断后续所有 Job） |
+| `handle-unreachable-snapshot` | analyze + handle-missing-snapshot   | missing-skipped && `has_unreachable == 'true'`        | 标签 + 评论（不关闭，不阻断后续）      |
+| `handle-network-404`          | analyze + handle-missing-snapshot   | missing-skipped && `network_status == '404'`          | 标签 + 评论（不关闭，阻断转换）        |
+| `handle-network-uncertain`    | analyze + handle-missing-snapshot   | missing-skipped && `network_status == 'uncertain'`    | 标签 + 折叠评论（不关闭，阻断转换）    |
+| `handle-convert`              | analyze + missing + 404 + uncertain | missing/404/uncertain 均 skipped && `has_convertible` | Bot 评论                               |
+| `handle-recovery`             | analyze + 所有上述 Job              | missing-skipped && `warning_type == 'recovery'`       | 移除标签 + 重新打开 + 评论 + 清理残留  |
 
 ### 多种警告可共存
 
