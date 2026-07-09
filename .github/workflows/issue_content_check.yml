@@ -41,6 +41,15 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: 创建工作流所需标签
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create "缺失快照(missing-snapshot)" --color "e74c3c" --description "Issue缺少快照链接" --force
+          gh label create "本地链接(local-link)" --color "e67e22" --description "Issue包含本地链接" --force
+          gh label create "需补充链接(need-supplement-link)" --color "f39c12" --description "Issue包含不可访问的快照链接" --force
+          gh label create "链接无法访问(inaccessible-link)" --color "c0392b" --description "Issue中的链接无法访问" --force
+
       - name: 分析 Issue 快照链接
         id: analyze
         env:
