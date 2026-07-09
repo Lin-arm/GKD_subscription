@@ -4,7 +4,6 @@
 从 Issue Body 中提取所有快照相关链接，并分类为：
 - gkd：GKD 分享链接 (https://i.gkd.li/i/XXXXXXXX)
 - github_attachment：GitHub 附件链接 (github.com/user-attachments/files/)
-- local：不可分享的本地链接 (localhost / 127.0.0.1 / file://)
 - unreachable_snapshot：不可访问的快照链接 (i.gkd.li/snapshot/)
 
 本模块只负责提取和分类，不做任何检查或判断。
@@ -22,7 +21,7 @@ class LinkInfo:
     """提取出的单条链接信息"""
 
     url: str          # 完整 URL
-    kind: str         # 分类：gkd / github_attachment / local / unreachable_snapshot
+    kind: str         # 分类：gkd / github_attachment / unreachable_snapshot
     display_text: str  # Markdown 链接的显示文字，纯文本时为空
 
 
@@ -42,13 +41,6 @@ _RE_GITHUB_ATTACHMENT = re.compile(
 # 不可访问的快照链接：https://i.gkd.li/snapshot/...
 _RE_UNREACHABLE_SNAPSHOT = re.compile(r"https://i\.gkd\.li/snapshot/[^\s\)]*")
 
-# 本地链接：localhost / 127.0.0.1 / file:// 等
-_RE_LOCAL_LINK = re.compile(
-    r"(?:https?://(?:localhost|127\.0\.0\.1|0\.0\.0\.0)[^\s\)]*"
-    r"|file://[^\s\)]*)",
-    re.IGNORECASE,
-)
-
 
 # ── 分类函数 ──
 
@@ -60,12 +52,9 @@ def _classify_url(url: str) -> str | None:
     返回值：
     - "gkd"：GKD 分享链接
     - "github_attachment"：GitHub 附件链接
-    - "local"：本地不可分享链接
     - "unreachable_snapshot"：不可访问的快照链接
     - None：不属于以上任何类别（忽略）
     """
-    if _RE_LOCAL_LINK.match(url):
-        return "local"
     if _RE_UNREACHABLE_SNAPSHOT.match(url):
         return "unreachable_snapshot"
     if _RE_GKD_LINK.match(url):
@@ -102,7 +91,6 @@ def extract_links(body: str) -> list[LinkInfo]:
 
     # 再提取纯文本 URL（排除已被 Markdown 链接捕获的）
     all_url_patterns = [
-        (_RE_LOCAL_LINK, "local"),
         (_RE_UNREACHABLE_SNAPSHOT, "unreachable_snapshot"),
         (_RE_GKD_LINK, "gkd"),
         (_RE_GITHUB_ATTACHMENT, "github_attachment"),
