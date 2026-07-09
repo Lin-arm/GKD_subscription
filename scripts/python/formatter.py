@@ -4,13 +4,13 @@
 负责生成所有 Bot 评论的 Markdown 内容，包括：
 - 各类警告评论（缺失快照 / 不可访问快照 / 链接无法访问 / 不确定）
 - 编辑/评论恢复评论
-- 快照转换 Bot 评论（按 App > Activity 分组）
+- 快照转换 Bot 评论（基于 SnapshotInfo 按 App > Activity 分组）
 
 每类评论使用独立的 HTML 标记，供 YAML 工作流中 find-comment 按场景查找。
 本模块只负责内容生成，不负责评论发布（由 YAML 工作流完成）。
 """
 
-from converter import ConvertedLink
+from snapshot_parser import SnapshotInfo
 
 
 # ── 警告评论生成 ──
@@ -70,74 +70,256 @@ def build_recovery_comment(user: str) -> str:
 # ── Bot 转换评论生成 ──
 
 
-def build_bot_comment(converted: list[ConvertedLink]) -> str:
+def build_bot_comment(snapshots: list[SnapshotInfo], gkd_links: list[tuple[str, str]]) -> str:
     """
     生成快照转换 Bot 评论内容。
 
-    格式：
-    ### AppName
-    #### ActivityName
-    [timestamp](转换后URL) 或 [display_text](转换后URL)
+    主区域：App 标题 + Activity 行（快查/深度/可点击/节点数）+ 链接
+    折叠区：App 详细信息表 + 设备信息表
 
-    不匹配文件名模式的附件不分组，逐条列出。
-
-    底部 <details> 折叠区包含所有原始附件 URL（快速复制）。
+    参数：
+    - snapshots：解析成功的 SnapshotInfo 列表（按 Activity 去重后）
+    - gkd_links：无法解析的 GKD 链接列表 [(display_text, converted_url), ...]
     """
-    if not converted:
+    if not snapshots and not gkd_links:
         return ""
-
-    grouped: dict[str, dict[str, list[ConvertedLink]]] = {}
-    ungrouped: list[ConvertedLink] = []
-
-    for item in converted:
-        if item.app_name and item.activity_name:
-            grouped.setdefault(item.app_name, {}).setdefault(
-                item.activity_name, []
-            ).append(item)
-        else:
-            ungrouped.append(item)
 
     lines: list[str] = []
 
-    for app_name in grouped:
-        activities = grouped[app_name]
-        lines.append(f"### {app_name}")
-        for activity_name in activities:
-            items = activities[activity_name]
-            lines.append(f"#### {activity_name}")
-            for item in items:
-                lines.append(_format_link_line(item))
-            lines.append("")
+    # 按 appId 分组
+    app_groups = _group_by_app(snapshots)
 
-    if ungrouped:
-        for item in ungrouped:
-            lines.append(_format_link_line(item))
+    # 主区域：按 App 输出
+    for app_key, app_snapshots in app_groups.items():
+        _render_app_section(lines, app_key, app_snapshots)
+
+    # GKD 链接（无法下载解析的）
+    if gkd_links:
+        lines.append("**GKD 链接**")
+        link_parts = [f"[{dt}]({url})" for dt, url in gkd_links]
+        lines.append(" · ".join(link_parts))
         lines.append("")
 
-    lines.append("<details>")
-    lines.append("<summary>快速复制</summary>")
-    lines.append("")
-    lines.append("## 快速复制")
-    lines.append("```")
-    for item in converted:
-        lines.append(item.original_url)
-    lines.append("```")
-    lines.append("</details>")
+    # 折叠区：详细信息
+    detail_lines = _render_detail_section(snapshots)
+    if detail_lines:
+        lines.append("<details>")
+        lines.append("<summary>详细信息</summary>")
+        lines.append("")
+        lines.extend(detail_lines)
+        lines.append("</details>")
 
     return "\n".join(lines)
 
 
-def _format_link_line(item: ConvertedLink) -> str:
-    """
-    格式化单条链接行。
+# ── 分组与去重 ──
 
-    优先级：
-    1. 有 display_text 时：[display_text](converted_url)
-    2. 有 timestamp 时：[timestamp](converted_url)
-    3. 否则：直接输出 converted_url
+
+def _group_by_app(snapshots: list[SnapshotInfo]) -> dict[str, list[SnapshotInfo]]:
     """
-    if item.display_text:
-        return f"[{item.display_text}]({item.converted_url})"
-    if item.timestamp:
-        return f"[{item.timestamp}]({item.converted_url})"
-    return item.converted_url
+    按 appId 分组，同 appId 下按 activityId 分组。
+
+    同 activityId 只保留第一个（代表快照），其余只记录链接。
+    返回有序字典：key = "appName `appId` versionName"
+    """
+    from collections import OrderedDict
+
+    groups: dict[str, list[SnapshotInfo]] = OrderedDict()
+    seen_activities: dict[str, list[SnapshotInfo]] = {}
+
+    for snap in snapshots:
+        app_key = f"{snap.app_name} `{snap.app_id}` {snap.app_version_name}"
+        groups.setdefault(app_key, [])
+
+        act_key = f"{snap.app_id}|{snap.activity_id}"
+        if act_key not in seen_activities:
+            seen_activities[act_key] = [snap]
+            groups[app_key].append(snap)
+        else:
+            seen_activities[act_key].append(snap)
+
+    return groups
+
+
+def _get_activity_links(snapshots: list[SnapshotInfo], activity_id: str) -> list[tuple[str, str]]:
+    """
+    获取同一 Activity 下所有快照的链接列表。
+
+    返回 [(snapshot_id, converted_url), ...]
+    """
+    links = []
+    for snap in snapshots:
+        if snap.activity_id == activity_id:
+            display = snap.snapshot_id or snap.original_url.split("/")[-1]
+            url = snap.converted_url or snap.original_url
+            links.append((display, url))
+    return links
+
+
+# ── 主区域渲染 ──
+
+
+def _render_app_section(lines: list[str], app_key: str, snapshots: list[SnapshotInfo]):
+    """
+    渲染单个 App 的主区域内容。
+
+    格式：
+    ## AppName `appId` versionName
+    device_model · Android release · GKD version
+
+    **Activity** — 快查 ID:x Text:x · 深度x · 可点击x · xxx节点
+    [id1](url) · [id2](url)
+    """
+    # App 标题
+    lines.append(f"## {app_key}")
+
+    # App 副标题：设备 + Android + GKD（取第一个快照的设备信息）
+    first = snapshots[0]
+    subtitle_parts = []
+    if first.device_model:
+        subtitle_parts.append(first.device_model)
+    if first.device_release:
+        subtitle_parts.append(f"Android {first.device_release}")
+    if first.gkd_version_name:
+        subtitle_parts.append(f"GKD {first.gkd_version_name}")
+    if subtitle_parts:
+        lines.append(" · ".join(subtitle_parts))
+    lines.append("")
+
+    # 按 Activity 渲染
+    seen_activities: set[str] = set()
+    for snap in snapshots:
+        if snap.activity_id in seen_activities:
+            continue
+        seen_activities.add(snap.activity_id)
+
+        _render_activity_line(lines, snap)
+
+
+def _render_activity_line(lines: list[str], snap: SnapshotInfo):
+    """
+    渲染单个 Activity 行。
+
+    格式：**Activity** — 快查 ID:x Text:x · 深度x · 可点击x · xxx节点
+    """
+    # Activity 名称取最后一段（类名简写）
+    act_display = _short_activity_name(snap.activity_id)
+
+    # 统计信息行
+    stats = (
+        f"快查 ID:{snap.id_qf_count} Text:{snap.text_qf_count}"
+        f" · 深度{snap.max_depth}"
+        f" · 可点击{snap.clickable_nodes}"
+        f" · {snap.total_nodes}节点"
+    )
+    lines.append(f"**{act_display}** — {stats}")
+
+    # 链接行
+    link_url = snap.converted_url or snap.original_url
+    link_display = snap.snapshot_id or _extract_filename(snap.original_url)
+    lines.append(f"[{link_display}]({link_url})")
+    lines.append("")
+
+
+# ── 折叠区渲染 ──
+
+
+def _render_detail_section(snapshots: list[SnapshotInfo]) -> list[str]:
+    """
+    渲染折叠区内容。
+
+    包含：
+    - 按 App 分组的详细信息表（可见/分辨率/方向/appVersionCode/GKD/userId）
+    - 设备信息表（去重）
+    """
+    if not snapshots:
+        return []
+
+    lines: list[str] = []
+
+    # 按 App 分组渲染详细信息表
+    app_groups: dict[str, list[SnapshotInfo]] = {}
+    for snap in snapshots:
+        app_key = f"{snap.app_name} `{snap.app_id}`"
+        app_groups.setdefault(app_key, []).append(snap)
+
+    for app_key, app_snaps in app_groups.items():
+        lines.append(f"**{app_key}**")
+        lines.append("")
+        lines.append(
+            "| Activity | 可见 | 分辨率 | 方向 | appVersionCode | GKD | userId |"
+        )
+        lines.append(
+            "|----------|------|--------|------|----------------|-----|--------|"
+        )
+        for snap in app_snaps:
+            orientation = "横屏" if snap.is_landscape else "竖屏"
+            resolution = f"{snap.screen_width}×{snap.screen_height}"
+            gkd_info = f"{snap.gkd_version_name} ({snap.gkd_version_code})" if snap.gkd_version_name else ""
+            act_display = _short_activity_name(snap.activity_id)
+            lines.append(
+                f"| {act_display} | {snap.visible_nodes} | {resolution} | {orientation} "
+                f"| {snap.app_version_code} | {gkd_info} | {snap.gkd_user_id} |"
+            )
+        lines.append("")
+
+    # 设备信息表（去重）
+    devices = _deduplicate_devices(snapshots)
+    if len(devices) >= 1:
+        lines.append("**设备信息**")
+        lines.append("")
+        lines.append("| 代号 | 型号 | 制造商 | 品牌 | SDK | Android |")
+        lines.append("|------|------|--------|------|-----|---------|")
+        for dev in devices:
+            lines.append(
+                f"| {dev['code']} | {dev['model']} | {dev['manufacturer']} "
+                f"| {dev['brand']} | {dev['sdk']} | {dev['release']} |"
+            )
+        lines.append("")
+
+    return lines
+
+
+def _deduplicate_devices(snapshots: list[SnapshotInfo]) -> list[dict]:
+    """
+    设备信息去重。
+
+    按 (device_code, device_model) 组合去重。
+    """
+    seen: set[tuple[str, str]] = set()
+    result: list[dict] = []
+
+    for snap in snapshots:
+        key = (snap.device_code, snap.device_model)
+        if key in seen:
+            continue
+        seen.add(key)
+        result.append({
+            "code": snap.device_code,
+            "model": snap.device_model,
+            "manufacturer": snap.device_manufacturer,
+            "brand": snap.device_brand,
+            "sdk": str(snap.device_sdk),
+            "release": snap.device_release,
+        })
+
+    return result
+
+
+# ── 工具函数 ──
+
+
+def _short_activity_name(activity_id: str) -> str:
+    """
+    Activity 类名取最后一段。
+
+    例如：com.mihoyo.cloudgame.main.MiHoYoCloudMainActivity → MiHoYoCloudMainActivity
+    """
+    if "." in activity_id:
+        return activity_id.rsplit(".", 1)[-1]
+    return activity_id
+
+
+def _extract_filename(url: str) -> str:
+    """从 URL 中提取文件名"""
+    return url.rsplit("/", 1)[-1] if "/" in url else url
