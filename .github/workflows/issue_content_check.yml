@@ -11,6 +11,7 @@ jobs:
   # ── 分析节点：Python 只运行一次，输出所有原子化标志 ──
 
   analyze:
+    name: 分析 Issue 快照链接
     runs-on: ubuntu-latest
     outputs:
       has_snapshot: ${{ steps.analyze.outputs.has_snapshot }}
@@ -47,6 +48,7 @@ jobs:
   # ── 处理分支一：缺失快照 → 打标签 + 评论 + 关闭 ──
 
   handle-missing-snapshot:
+    name: 处理缺失快照
     needs: analyze
     if: needs.analyze.outputs.has_snapshot == 'false'
     runs-on: ubuntu-latest
@@ -82,6 +84,7 @@ jobs:
   # ── 处理分支二：本地链接 → 打标签 + 评论（不关闭）──
 
   handle-local-link:
+    name: 处理本地链接
     needs: analyze
     if: >
       needs.analyze.outputs.has_local_link == 'true' &&
@@ -113,6 +116,7 @@ jobs:
   # ── 处理分支三：不可访问快照 → 打标签 + 评论（不关闭）──
 
   handle-unreachable-snapshot:
+    name: 处理不可访问快照
     needs: analyze
     if: >
       needs.analyze.outputs.has_unreachable == 'true' &&
@@ -144,6 +148,7 @@ jobs:
   # ── 处理分支四：链接不可访问（404）→ 打标签 + 评论 + 关闭 ──
 
   handle-network-404:
+    name: 处理链接不可访问(404)
     needs: analyze
     if: needs.analyze.outputs.network_status == '404'
     runs-on: ubuntu-latest
@@ -179,6 +184,7 @@ jobs:
   # ── 处理分支五：网络不确定（403/5xx）→ 打标签 + 折叠评论（不关闭）──
 
   handle-network-uncertain:
+    name: 处理网络不确定(403/5xx)
     needs: analyze
     if: needs.analyze.outputs.network_status == 'uncertain'
     runs-on: ubuntu-latest
@@ -208,6 +214,7 @@ jobs:
   # ── 处理分支六：链接转换 + Bot 评论（检查通过）──
 
   handle-convert:
+    name: 处理链接转换
     needs: analyze
     if: needs.analyze.outputs.has_convertible == 'true'
     runs-on: ubuntu-latest
@@ -231,6 +238,7 @@ jobs:
   # ── 处理分支七：编辑恢复（移除旧标签 + 重新打开 Issue）──
 
   handle-recovery:
+    name: 处理编辑后恢复issue状态
     needs: analyze
     if: needs.analyze.outputs.warning_type == 'recovery'
     runs-on: ubuntu-latest
