@@ -3,6 +3,8 @@ name: issue_content_check
 on:
   issues:
     types: [opened, edited]
+  issue_comment:
+    types: [created]
 
 permissions:
   contents: read
@@ -17,16 +19,18 @@ jobs:
   analyze:
     name: 分析 Issue 快照链接
     runs-on: ubuntu-latest
+    # issue_comment 事件仅处理 Issue 作者本人的评论
+    if: >
+      github.event_name != 'issue_comment' ||
+      github.event.comment.user.login == github.event.issue.user.login
     outputs:
       has_snapshot: ${{ steps.analyze.outputs.has_snapshot }}
-      has_local_link: ${{ steps.analyze.outputs.has_local_link }}
       has_unreachable: ${{ steps.analyze.outputs.has_unreachable }}
       network_status: ${{ steps.analyze.outputs.network_status }}
       network_detail: ${{ steps.analyze.outputs.network_detail }}
       has_convertible: ${{ steps.analyze.outputs.has_convertible }}
       warning_type: ${{ steps.analyze.outputs.warning_type }}
       comment_missing: ${{ steps.analyze.outputs.comment_missing }}
-      comment_local: ${{ steps.analyze.outputs.comment_local }}
       comment_unreachable: ${{ steps.analyze.outputs.comment_unreachable }}
       comment_404: ${{ steps.analyze.outputs.comment_404 }}
       comment_uncertain: ${{ steps.analyze.outputs.comment_uncertain }}
@@ -46,7 +50,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh label create "缺失快照(missing-snapshot)" --color "e74c3c" --description "Issue缺少快照链接" --force
-          gh label create "本地链接(local-link)" --color "e67e22" --description "Issue包含本地链接" --force
           gh label create "需补充链接(need-supplement-link)" --color "f39c12" --description "Issue包含不可访问的快照链接" --force
           gh label create "链接无法访问(inaccessible-link)" --color "c0392b" --description "Issue中的链接无法访问" --force
 
@@ -55,7 +58,7 @@ jobs:
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
           ISSUE_USER: ${{ github.event.issue.user.login }}
-          ISSUE_ACTION: ${{ github.event.action }}
+          ISSUE_ACTION: ${{ github.event_name == 'issue_comment' && 'comment' || github.event.action }}
         run: python3 scripts/python/check_issue.py
 
   # ── 处理分支一：缺失快照 → 打标签 + 评论 + 关闭 ──
@@ -94,46 +97,12 @@ jobs:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: gh issue close "$ISSUE_NUMBER" --reason "not planned"
 
-  # ── 处理分支二：本地链接 → 打标签 + 评论（不关闭）──
-
-  handle-local-link:
-    name: 处理本地链接
-    needs: analyze
-    if: >
-      needs.analyze.outputs.has_local_link == 'true' &&
-      needs.analyze.outputs.network_status != '404'
-    runs-on: ubuntu-latest
-    steps:
-      - name: 打标签「本地链接」
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
-        run: gh issue edit "$ISSUE_NUMBER" --add-label "本地链接(local-link)"
-
-      - name: 查找已有警告评论
-        id: find-warning
-        uses: peter-evans/find-comment@v4
-        with:
-          issue-number: ${{ github.event.issue.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: '<!-- gkd-warning-local -->'
-
-      - name: 发布本地链接警告评论
-        uses: peter-evans/create-or-update-comment@v5
-        with:
-          comment-id: ${{ steps.find-warning.outputs.comment-id }}
-          issue-number: ${{ github.event.issue.number }}
-          body: ${{ needs.analyze.outputs.comment_local }}
-          edit-mode: replace
-
-  # ── 处理分支三：不可访问快照 → 打标签 + 评论（不关闭）──
+  # ── 处理分支二：不可访问快照 → 打标签 + 评论（不关闭）──
 
   handle-unreachable-snapshot:
     name: 处理不可访问快照
     needs: analyze
-    if: >
-      needs.analyze.outputs.has_unreachable == 'true' &&
-      needs.analyze.outputs.network_status != '404'
+    if: needs.analyze.outputs.has_unreachable == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: 打标签「需补充链接」
@@ -158,7 +127,7 @@ jobs:
           body: ${{ needs.analyze.outputs.comment_unreachable }}
           edit-mode: replace
 
-  # ── 处理分支四：链接不可访问（404）→ 打标签 + 评论 + 关闭 ──
+  # ── 处理分支三：链接不可访问（404）→ 打标签 + 评论（不关闭）──
 
   handle-network-404:
     name: 处理链接不可访问(404)
@@ -180,7 +149,7 @@ jobs:
           comment-author: 'github-actions[bot]'
           body-includes: '<!-- gkd-warning-404 -->'
 
-      - name: 发布链接不可访问警告评论
+      - name: 发布链接不可访问提醒评论
         uses: peter-evans/create-or-update-comment@v5
         with:
           comment-id: ${{ steps.find-warning.outputs.comment-id }}
@@ -188,13 +157,7 @@ jobs:
           body: ${{ needs.analyze.outputs.comment_404 }}
           edit-mode: replace
 
-      - name: 关闭 Issue（链接不可访问）
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
-        run: gh issue close "$ISSUE_NUMBER" --reason "not planned"
-
-  # ── 处理分支五：网络不确定（403/5xx）→ 打标签 + 折叠评论（不关闭）──
+  # ── 处理分支四：网络不确定（403/5xx）→ 打标签 + 折叠评论（不关闭）──
 
   handle-network-uncertain:
     name: 处理网络不确定(403/5xx)
@@ -224,7 +187,7 @@ jobs:
           body: ${{ needs.analyze.outputs.comment_uncertain }}
           edit-mode: replace
 
-  # ── 处理分支六：链接转换 + Bot 评论（检查通过）──
+  # ── 处理分支五：链接转换 + Bot 评论（含有 GitHub 附件链接时）──
 
   handle-convert:
     name: 处理链接转换
@@ -248,10 +211,10 @@ jobs:
           body: ${{ needs.analyze.outputs.comment_bot }}
           edit-mode: replace
 
-  # ── 处理分支七：编辑恢复（移除旧标签 + 重新打开 Issue）──
+  # ── 处理分支六：编辑/评论恢复（移除旧标签 + 重新打开 Issue）──
 
   handle-recovery:
-    name: 处理编辑后恢复issue状态
+    name: 处理编辑/评论后恢复issue状态
     needs: analyze
     if: needs.analyze.outputs.warning_type == 'recovery'
     runs-on: ubuntu-latest
@@ -263,7 +226,6 @@ jobs:
         run: |
           for label in \
             "缺失快照(missing-snapshot)" \
-            "本地链接(local-link)" \
             "需补充链接(need-supplement-link)" \
             "链接无法访问(inaccessible-link)"; do
             gh issue edit "$ISSUE_NUMBER" --remove-label "$label" 2>/dev/null || true
