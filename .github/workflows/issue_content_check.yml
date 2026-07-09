@@ -37,15 +37,43 @@ jobs:
       comment_recovery: ${{ steps.analyze.outputs.comment_recovery }}
       comment_bot: ${{ steps.analyze.outputs.comment_bot }}
     steps:
+      - name: 预检查是否需要分析（仅 issue_comment 事件）
+        id: pre-check
+        if: github.event_name == 'issue_comment'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          state=$(gh issue view "$ISSUE_NUMBER" --json state -q .state)
+          labels=$(gh issue view "$ISSUE_NUMBER" --json labels -q '.labels[].name')
+          needs="false"
+          [ "$state" = "CLOSED" ] && needs="true"
+          for label in $labels; do
+            case "$label" in
+              "缺失快照(missing-snapshot)"|"需补充链接(need-supplement-link)"|"链接无法访问(inaccessible-link)")
+                needs="true" ;;
+            esac
+          done
+          echo "needs_analysis=$needs" >> "$GITHUB_OUTPUT"
+
       - name: 检出代码仓库
+        if: >-
+          github.event_name != 'issue_comment' ||
+          steps.pre-check.outputs.needs_analysis != 'false'
         uses: actions/checkout@v7
 
       - name: 配置 Python 运行环境
+        if: >-
+          github.event_name != 'issue_comment' ||
+          steps.pre-check.outputs.needs_analysis != 'false'
         uses: actions/setup-python@v6
         with:
           python-version: '3.12'
 
       - name: 创建工作流所需标签
+        if: >-
+          github.event_name != 'issue_comment' ||
+          steps.pre-check.outputs.needs_analysis != 'false'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -60,7 +88,26 @@ jobs:
           ISSUE_COMMENT_BODY: ${{ github.event.comment.body || '' }}
           ISSUE_USER: ${{ github.event.issue.user.login }}
           ISSUE_ACTION: ${{ github.event_name == 'issue_comment' && 'comment' || github.event.action }}
-        run: python3 scripts/python/check_issue.py
+          SKIP_ANALYSIS: ${{ github.event_name == 'issue_comment' && steps.pre-check.outputs.needs_analysis == 'false' }}
+        run: |
+          if [ "$SKIP_ANALYSIS" = "true" ]; then
+            cat >> "$GITHUB_OUTPUT" <<EOF
+          has_snapshot=true
+          has_unreachable=false
+          network_status=ok
+          network_detail=
+          has_convertible=false
+          warning_type=
+          comment_missing=
+          comment_unreachable=
+          comment_404=
+          comment_uncertain=
+          comment_recovery=
+          comment_bot=
+          EOF
+          else
+            python3 scripts/python/check_issue.py
+          fi
 
   # ── 线性步骤一：缺失快照 → 打标签 + 评论 + 关闭（致命，阻断后续所有 Job） ──
 
