@@ -38,6 +38,7 @@ from checker import (
     gkd_to_gh_attachment_url,
 )
 from converter import convert_github_attachments
+from snapshot_parser import download_and_parse, SnapshotInfo
 from formatter import (
     build_warning_missing,
     build_warning_unreachable,
@@ -141,14 +142,13 @@ def main():
             net_result.uncertain_detail,
         )
 
-    # ── 第五步：链接转换 + Bot 评论生成（仅当含有 GitHub 附件链接时） ──
-    attachment_links = [lnk for lnk in links if lnk.kind == "github_attachment"]
-    if attachment_links:
-        converted = convert_github_attachments(attachment_links)
-        has_convertible = "true" if converted else "false"
-        if converted:
-            comment_body = build_bot_comment(converted)
-            comment_bot = "<!-- gkd-bot-comment -->\n" + comment_body
+    # ── 第五步：链接转换 + 快照解析 + Bot 评论生成 ──
+    # 仅当含有可下载的快照链接（GH 附件或 GKD 分享链接）时执行
+    snapshots, gkd_links = _parse_all_snapshots(links)
+    if snapshots or gkd_links:
+        has_convertible = "true"
+        comment_body = build_bot_comment(snapshots, gkd_links)
+        comment_bot = "<!-- gkd-bot-comment -->\n" + comment_body
 
     # ── 第六步：编辑/评论恢复判断 ──
     # 当 edited 或 issue_comment 触发且所有检查均通过时，触发恢复流程
@@ -216,6 +216,74 @@ def _check_all_links(links: list) -> _NetworkCheckResult:
             result.uncertain_detail = check.detail
 
     return result
+
+
+def _parse_all_snapshots(links: list) -> tuple[list[SnapshotInfo], list[tuple[str, str]]]:
+    """
+    下载并解析所有快照链接，同 Activity 只下载一个代表。
+
+    返回：
+    - snapshots：解析成功的 SnapshotInfo 列表
+    - gkd_links：无法下载解析的 GKD 链接 [(display_text, converted_url), ...]
+    """
+    from converter import GKD_PROXY_TEMPLATE
+
+    snapshots: list[SnapshotInfo] = []
+    gkd_links: list[tuple[str, str]] = []
+
+    # 已下载的 Activity 集合，用于去重
+    seen_activities: set[str] = set()
+
+    # 先处理 GitHub 附件链接
+    for lnk in links:
+        if lnk.kind != "github_attachment":
+            continue
+
+        converted_url = GKD_PROXY_TEMPLATE.format(url=lnk.url)
+        snap = download_and_parse(lnk.url, converted_url)
+
+        if snap is None:
+            # 下载失败，仍作为可转换链接保留
+            gkd_links.append((lnk.display_text or _extract_filename(lnk.url), converted_url))
+            continue
+
+        act_key = f"{snap.app_id}|{snap.activity_id}"
+        if act_key in seen_activities:
+            # 同 Activity 已有代表，只记录链接
+            gkd_links.append((snap.snapshot_id or _extract_filename(lnk.url), converted_url))
+        else:
+            seen_activities.add(act_key)
+            snapshots.append(snap)
+
+    # 再处理 GKD 分享链接
+    for lnk in links:
+        if lnk.kind != "gkd":
+            continue
+
+        gh_url = gkd_to_gh_attachment_url(lnk.url)
+        if not gh_url:
+            continue
+
+        converted_url = GKD_PROXY_TEMPLATE.format(url=lnk.url)
+        snap = download_and_parse(gh_url, converted_url)
+
+        if snap is None:
+            gkd_links.append((lnk.display_text or lnk.url, converted_url))
+            continue
+
+        act_key = f"{snap.app_id}|{snap.activity_id}"
+        if act_key in seen_activities:
+            gkd_links.append((snap.snapshot_id or lnk.url, converted_url))
+        else:
+            seen_activities.add(act_key)
+            snapshots.append(snap)
+
+    return snapshots, gkd_links
+
+
+def _extract_filename(url: str) -> str:
+    """从 URL 中提取文件名"""
+    return url.rsplit("/", 1)[-1] if "/" in url else url
 
 
 def _output(**kwargs):
