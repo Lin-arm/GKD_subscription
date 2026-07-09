@@ -5,6 +5,8 @@
 1. 本地链接检查：识别 localhost / 127.0.0.1 / file:// 等不可分享链接
 2. 不可访问快照链接检查：识别 i.gkd.li/snapshot/ 链接
 3. 网络有效性检查：对 GitHub 附件链接发起 HTTP 请求，验证可访问性
+
+本模块只返回检查结果，不做任何业务判断（如是否关闭 Issue）。
 """
 
 from dataclasses import dataclass
@@ -19,9 +21,9 @@ from extractor import LinkInfo
 class NetworkResult:
     """网络请求检查结果"""
 
-    status: str  # "ok" / "404" / "uncertain"
-    status_code: int = 0
-    detail: str = ""
+    status: str       # "ok" / "404" / "uncertain"
+    status_code: int = 0   # HTTP 状态码
+    detail: str = ""       # 错误详情（供折叠展示）
 
 
 # ── 本地链接检查 ──
@@ -31,7 +33,7 @@ def check_local_links(links: list[LinkInfo]) -> list[LinkInfo]:
     """
     筛选出所有本地不可分享链接。
 
-    返回值为空列表时表示没有本地链接，可继续后续检查。
+    返回值为空列表时表示没有本地链接。
     """
     return [lnk for lnk in links if lnk.kind == "local"]
 
@@ -95,13 +97,12 @@ def _try_head_request(url: str, timeout: int) -> NetworkResult | None:
         if e.code == 404:
             return NetworkResult(status="404", status_code=404)
         if e.code == 405:
-            # 服务器不支持 HEAD 方法，回退
             return None
         if e.code == 403:
             return NetworkResult(
                 status="uncertain",
                 status_code=403,
-                detail=f"HTTP 403 Forbidden — 服务器拒绝访问，可能是权限问题",
+                detail="HTTP 403 Forbidden — 服务器拒绝访问，可能是权限问题",
             )
         if 500 <= e.code < 600:
             return NetworkResult(
@@ -137,7 +138,6 @@ def _try_get_range_request(url: str, timeout: int) -> NetworkResult:
         req.add_header("Range", "bytes=0-0")
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             code = resp.status
-            # 206 = Partial Content（正常），200 = 服务器忽略了 Range 头也算正常
             if code in (200, 206):
                 return NetworkResult(status="ok", status_code=code)
             return NetworkResult(
@@ -152,7 +152,7 @@ def _try_get_range_request(url: str, timeout: int) -> NetworkResult:
             return NetworkResult(
                 status="uncertain",
                 status_code=403,
-                detail=f"HTTP 403 Forbidden — 服务器拒绝访问，可能是权限问题",
+                detail="HTTP 403 Forbidden — 服务器拒绝访问，可能是权限问题",
             )
         if 500 <= e.code < 600:
             return NetworkResult(

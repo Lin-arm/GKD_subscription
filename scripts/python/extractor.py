@@ -1,23 +1,28 @@
 """
-链接提取模块
+链接提取与分类模块
 
 从 Issue Body 中提取所有快照相关链接，并分类为：
 - gkd：GKD 分享链接 (https://i.gkd.li/i/XXXXXXXX)
 - github_attachment：GitHub 附件链接 (github.com/user-attachments/files/)
 - local：不可分享的本地链接 (localhost / 127.0.0.1 / file://)
 - unreachable_snapshot：不可访问的快照链接 (i.gkd.li/snapshot/)
+
+本模块只负责提取和分类，不做任何检查或判断。
 """
 
 import re
 from dataclasses import dataclass
 
 
+# ── 数据结构 ──
+
+
 @dataclass
 class LinkInfo:
     """提取出的单条链接信息"""
 
-    url: str
-    kind: str  # gkd / github_attachment / local / unreachable_snapshot
+    url: str          # 完整 URL
+    kind: str         # 分类：gkd / github_attachment / local / unreachable_snapshot
     display_text: str  # Markdown 链接的显示文字，纯文本时为空
 
 
@@ -45,6 +50,9 @@ _RE_LOCAL_LINK = re.compile(
 )
 
 
+# ── 分类函数 ──
+
+
 def _classify_url(url: str) -> str | None:
     """
     对单个 URL 进行分类。
@@ -54,7 +62,7 @@ def _classify_url(url: str) -> str | None:
     - "github_attachment"：GitHub 附件链接
     - "local"：本地不可分享链接
     - "unreachable_snapshot"：不可访问的快照链接
-    - None：不属于以上任何类别
+    - None：不属于以上任何类别（忽略）
     """
     if _RE_LOCAL_LINK.match(url):
         return "local"
@@ -67,6 +75,9 @@ def _classify_url(url: str) -> str | None:
     return None
 
 
+# ── 主提取函数 ──
+
+
 def extract_links(body: str) -> list[LinkInfo]:
     """
     从 Issue Body 中提取所有快照相关链接。
@@ -74,11 +85,13 @@ def extract_links(body: str) -> list[LinkInfo]:
     处理两种格式：
     1. Markdown 链接：[文字](URL) → 保留显示文字
     2. 纯文本 URL：直接匹配 → display_text 为空
+
+    去重策略：同一 URL 只保留首次出现。
     """
     seen: set[str] = set()
     results: list[LinkInfo] = []
 
-    # 先提取 Markdown 格式链接
+    # 先提取 Markdown 格式链接（优先保留显示文字）
     for match in _RE_MD_LINK.finditer(body):
         display_text = match.group(1)
         url = match.group(2)
