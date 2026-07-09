@@ -38,10 +38,10 @@ jobs:
       comment_bot: ${{ steps.analyze.outputs.comment_bot }}
     steps:
       - name: 检出代码仓库
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: 配置 Python 运行环境
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.12'
 

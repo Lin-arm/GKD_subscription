@@ -296,8 +296,8 @@ scripts/python/
 
 | Action                                    | 用途                        |
 | ----------------------------------------- | --------------------------- |
-| `actions/checkout@v4`                     | 拉取仓库代码                |
-| `actions/setup-python@v5`                 | 初始化 Python 环境          |
+| `actions/checkout@v7`                     | 拉取仓库代码                |
+| `actions/setup-python@v6`                 | 初始化 Python 环境          |
 | `peter-evans/find-comment@v4`             | 查找已有评论（按作者+内容） |
 | `peter-evans/create-or-update-comment@v5` | 发布/更新评论（防刷屏）     |
 | `gh` CLI（内置）                          | 标签操作、关闭/打开 Issue   |
