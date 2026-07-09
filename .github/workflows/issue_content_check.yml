@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      # ── 核心分析（Python 负责）──
+      # ── 核心分析(Python 只运行一次，输出原子化标志)──
 
       - name: 分析 Issue 快照链接
         id: analyze
@@ -31,60 +31,174 @@ jobs:
           ISSUE_ACTION: ${{ github.action }}
         run: python3 scripts/python/check_issue.py
 
-      # ── GitHub 操作（Actions / gh CLI 负责）──
+      # ── 查找已有评论(两种标记各查一次)──
 
-      - name: 添加标签
-        if: steps.analyze.outputs.labels_to_add != ''
-        env:
-          LABELS: ${{ steps.analyze.outputs.labels_to_add }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          IFS=',' read -ra LABELS <<< "$LABELS"
-          for label in "${LABELS[@]}"; do
-            gh issue edit "$ISSUE_NUMBER" --add-label "$label"
-          done
-
-      - name: 移除旧标签
-        if: steps.analyze.outputs.labels_to_remove != ''
-        env:
-          LABELS: ${{ steps.analyze.outputs.labels_to_remove }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          IFS=',' read -ra LABELS <<< "$LABELS"
-          for label in "${LABELS[@]}"; do
-            gh issue edit "$ISSUE_NUMBER" --remove-label "$label" || true
-          done
-
-      - name: 发布/更新警告评论
-        if: steps.analyze.outputs.warning_comment != ''
-        uses: peter-evans/create-or-update-comment@v4
+      - name: 查找已有警告评论
+        id: find-warning
+        uses: peter-evans/find-comment@v4
         with:
           issue-number: ${{ github.event.issue.number }}
           comment-author: 'github-actions[bot]'
           body-includes: '<!-- gkd-warning -->'
-          body: ${{ steps.analyze.outputs.warning_comment }}
 
-      - name: 发布/更新快照转换评论
-        if: steps.analyze.outputs.bot_comment != ''
-        uses: peter-evans/create-or-update-comment@v4
+      - name: 查找已有 Bot 评论
+        id: find-bot
+        uses: peter-evans/find-comment@v4
         with:
           issue-number: ${{ github.event.issue.number }}
           comment-author: 'github-actions[bot]'
           body-includes: '<!-- gkd-bot-comment -->'
-          body: ${{ steps.analyze.outputs.bot_comment }}
 
-      - name: 关闭 Issue
-        if: steps.analyze.outputs.should_close == 'true'
+      # ── 场景一：缺失快照 → 打标签 + 评论 + 关闭 ──
+
+      - name: 打标签「缺失快照」
+        if: steps.analyze.outputs.has_snapshot == 'false'
         env:
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: gh issue edit "$ISSUE_NUMBER" --add-label "缺失快照(missing-snapshot)"
+
+      - name: 发布缺失快照警告评论
+        if: steps.analyze.outputs.has_snapshot == 'false'
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          comment-id: ${{ steps.find-warning.outputs.comment-id }}
+          issue-number: ${{ github.event.issue.number }}
+          body: ${{ steps.analyze.outputs.warning_comment }}
+          edit-mode: replace
+
+      - name: 关闭 Issue(缺失快照)
+        if: steps.analyze.outputs.has_snapshot == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: gh issue close "$ISSUE_NUMBER" --reason "not planned"
 
-      - name: 重新打开 Issue
-        if: steps.analyze.outputs.should_reopen == 'true'
+      # ── 场景二：本地链接 → 打标签 + 评论 + 关闭 ──
+
+      - name: 打标签「本地链接」
+        if: steps.analyze.outputs.has_local_link == 'true'
         env:
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: gh issue edit "$ISSUE_NUMBER" --add-label "本地链接(local-link)"
+
+      - name: 发布本地链接警告评论
+        if: steps.analyze.outputs.has_local_link == 'true'
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          comment-id: ${{ steps.find-warning.outputs.comment-id }}
+          issue-number: ${{ github.event.issue.number }}
+          body: ${{ steps.analyze.outputs.warning_comment }}
+          edit-mode: replace
+
+      - name: 关闭 Issue(本地链接)
+        if: steps.analyze.outputs.has_local_link == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: gh issue close "$ISSUE_NUMBER" --reason "not planned"
+
+      # ── 场景三：不可访问快照 → 打标签 + 评论(不关闭)──
+
+      - name: 打标签「需补充链接」
+        if: steps.analyze.outputs.has_unreachable == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: gh issue edit "$ISSUE_NUMBER" --add-label "需补充链接(need-supplement-link)"
+
+      - name: 发布不可访问快照提醒评论
+        if: steps.analyze.outputs.has_unreachable == 'true'
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          comment-id: ${{ steps.find-warning.outputs.comment-id }}
+          issue-number: ${{ github.event.issue.number }}
+          body: ${{ steps.analyze.outputs.warning_comment }}
+          edit-mode: replace
+
+      # ── 场景四：链接不可访问(404)→ 打标签 + 评论 + 关闭 ──
+
+      - name: 打标签「链接无法访问」
+        if: steps.analyze.outputs.network_status == '404'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: gh issue edit "$ISSUE_NUMBER" --add-label "链接无法访问(inaccessible-link)"
+
+      - name: 发布链接不可访问警告评论
+        if: steps.analyze.outputs.network_status == '404'
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          comment-id: ${{ steps.find-warning.outputs.comment-id }}
+          issue-number: ${{ github.event.issue.number }}
+          body: ${{ steps.analyze.outputs.warning_comment }}
+          edit-mode: replace
+
+      - name: 关闭 Issue(链接不可访问)
+        if: steps.analyze.outputs.network_status == '404'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: gh issue close "$ISSUE_NUMBER" --reason "not planned"
+
+      # ── 场景五：网络不确定(403/5xx)→ 打标签 + 折叠评论(不关闭)──
+
+      - name: 打标签「链接无法访问」(不确定)
+        if: steps.analyze.outputs.network_status == 'uncertain'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: gh issue edit "$ISSUE_NUMBER" --add-label "链接无法访问(inaccessible-link)"
+
+      - name: 发布网络不确定提醒评论
+        if: steps.analyze.outputs.network_status == 'uncertain'
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          comment-id: ${{ steps.find-warning.outputs.comment-id }}
+          issue-number: ${{ github.event.issue.number }}
+          body: ${{ steps.analyze.outputs.warning_comment }}
+          edit-mode: replace
+
+      # ── 场景六：链接转换 + Bot 评论(检查全部通过)──
+
+      - name: 发布/更新快照转换评论
+        if: steps.analyze.outputs.has_convertible == 'true'
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          comment-id: ${{ steps.find-bot.outputs.comment-id }}
+          issue-number: ${{ github.event.issue.number }}
+          body: ${{ steps.analyze.outputs.bot_comment }}
+          edit-mode: replace
+
+      # ── 场景七：编辑恢复(移除旧标签 + 重新打开 Issue)──
+
+      - name: 移除所有本工作流管理的标签
+        if: steps.analyze.outputs.warning_type == 'recovery'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          for label in \
+            "缺失快照(missing-snapshot)" \
+            "本地链接(local-link)" \
+            "需补充链接(need-supplement-link)" \
+            "链接无法访问(inaccessible-link)"; do
+            gh issue edit "$ISSUE_NUMBER" --remove-label "$label" 2>/dev/null || true
+          done
+
+      - name: 重新打开 Issue
+        if: steps.analyze.outputs.warning_type == 'recovery'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: gh issue reopen "$ISSUE_NUMBER" || true
+
+      - name: 发布恢复评论
+        if: steps.analyze.outputs.warning_type == 'recovery'
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          comment-id: ${{ steps.find-warning.outputs.comment-id }}
+          issue-number: ${{ github.event.issue.number }}
+          body: ${{ steps.analyze.outputs.warning_comment }}
+          edit-mode: replace
