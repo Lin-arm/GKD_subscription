@@ -29,7 +29,14 @@ Issue 快照链接检查主入口
 """
 
 import os
+import sys
+from pathlib import Path
 from dataclasses import dataclass
+
+# 自动设置模块搜索路径，确保能在任意目录下执行
+_script_dir = Path(__file__).parent.parent  # 指向 scripts/python 目录
+if str(_script_dir) not in sys.path:
+    sys.path.insert(0, str(_script_dir))
 
 from utils.models import LinkInfo, SnapshotInfo
 from utils.common import extract_filename
