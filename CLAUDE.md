@@ -187,11 +187,15 @@ scripts/python/
 
 ## Python 脚本
 
-`scripts/python/` 包含 GitHub Issue 自动化工具：
-- `check_issue.py` — 分析 Issue 内容中的快照链接（缺失、不可访问、可转换）
-- `snapshot_parser.py` — 解析快照节点树
-- `formatter.py` — 从快照数据格式化规则模板
-- `converter.py` — 将快照转换为 GKD 规则格式
+`scripts/python/` 包含 GitHub Issue 自动化工具，按职责分层组织：
+
+- `entry/check_issue.py` — Issue 场景主入口，分析快照链接并输出结果
+- `core/snapshot_parser.py` — 下载并解析快照 zip 文件
+- `formatter.py` — 生成 Bot 评论的 Markdown 内容
+- `core/converter.py` — GitHub 附件 → GKD 代理链接转换
+- `api/link_checker.py` — 可复用的链接检查 API（可在其他 CI 中使用）
+
+详细说明见 `scripts/python/README.md`
 
 ## 构建输出
 

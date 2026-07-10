@@ -277,13 +277,24 @@ device_model · Android release · GKD version
 
 ```
 scripts/python/
-  ├── check_issue.py    # 主入口：协调各模块，输出分析结果
-  ├── extractor.py      # 链接提取与分类
-  ├── checker.py        # 两类检查（不可访问快照/网络）+ GKD→GH 转换
-  ├── converter.py      # GitHub 附件 → GKD 代理链接转换
-  ├── snapshot_parser.py # 快照 zip 下载+解析，输出 SnapshotInfo
-  ├── formatter.py      # Bot 评论 Markdown 格式化生成
-  └── utils.py          # 公共工具函数（GITHUB_OUTPUT 写入等）
+  ├── core/              # 核心功能层
+  │   ├── extractor.py   # 链接提取与分类
+  │   ├── checker.py     # 网络检查
+  │   ├── converter.py   # 链接转换
+  │   └── snapshot_parser.py  # 快照解析
+  ├── utils/             # 工具模块层
+  │   ├── models.py      # 数据结构定义
+  │   ├── common.py      # 通用工具函数
+  │   └── utils.py       # GITHUB_OUTPUT 工具
+  ├── api/               # 高层 API 层
+  │   └── link_checker.py  # 可复用的链接检查器
+  ├── entry/             # 入口脚本层
+  │   └── check_issue.py   # Issue 场景主入口
+  ├── tests/             # 测试层
+  │   ├── verify.py      # 本地验证脚本
+  │   └── test_scenarios.json  # 测试场景配置
+  ├── formatter.py       # 评论格式化（跨层使用）
+  └── README.md          # 模块说明文档
 ```
 
 ### 模块化要求
