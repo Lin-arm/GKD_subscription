@@ -10,7 +10,8 @@
 本模块只负责内容生成，不负责评论发布（由 YAML 工作流完成）。
 """
 
-from snapshot_parser import SnapshotInfo
+from utils.models import SnapshotInfo
+from utils.common import extract_filename, short_activity_name
 
 
 # ── 警告评论生成 ──
@@ -203,7 +204,7 @@ def _render_activity_line(lines: list[str], snap: SnapshotInfo):
     格式：**Activity** — 快查 ID:x Text:x · 深度x · 可点击x · xxx节点
     """
     # Activity 名称取最后一段（类名简写）
-    act_display = _short_activity_name(snap.activity_id)
+    act_display = short_activity_name(snap.activity_id)
 
     # 统计信息行
     stats = (
@@ -216,7 +217,7 @@ def _render_activity_line(lines: list[str], snap: SnapshotInfo):
 
     # 链接行
     link_url = snap.converted_url or snap.original_url
-    link_display = snap.snapshot_id or _extract_filename(snap.original_url)
+    link_display = snap.snapshot_id or extract_filename(snap.original_url)
     lines.append(f"[{link_display}]({link_url})")
     lines.append("")
 
@@ -256,7 +257,7 @@ def _render_detail_section(snapshots: list[SnapshotInfo]) -> list[str]:
             orientation = "横屏" if snap.is_landscape else "竖屏"
             resolution = f"{snap.screen_width}×{snap.screen_height}"
             gkd_info = f"{snap.gkd_version_name} ({snap.gkd_version_code})" if snap.gkd_version_name else ""
-            act_display = _short_activity_name(snap.activity_id)
+            act_display = short_activity_name(snap.activity_id)
             lines.append(
                 f"| {act_display} | {snap.visible_nodes} | {resolution} | {orientation} "
                 f"| {snap.app_version_code} | {gkd_info} | {snap.gkd_user_id} |"
@@ -309,17 +310,3 @@ def _deduplicate_devices(snapshots: list[SnapshotInfo]) -> list[dict]:
 # ── 工具函数 ──
 
 
-def _short_activity_name(activity_id: str) -> str:
-    """
-    Activity 类名取最后一段。
-
-    例如：com.mihoyo.cloudgame.main.MiHoYoCloudMainActivity → MiHoYoCloudMainActivity
-    """
-    if "." in activity_id:
-        return activity_id.rsplit(".", 1)[-1]
-    return activity_id
-
-
-def _extract_filename(url: str) -> str:
-    """从 URL 中提取文件名"""
-    return url.rsplit("/", 1)[-1] if "/" in url else url
