@@ -92,11 +92,15 @@ export default defineGkdApp({
           ],
         },
         {
-          preKeys: [0],
+          key: 1,
+          preKeys: [0, 1], // 刚打开app可能有点卡, key0 连着触发两次, 导致key1 需点击两次[确定]
           name: '②点击[确定]',
           matches: '[text="确定"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/89294dbb-4398-4561-91b7-4943ec7c98c7',
-          snapshotUrls: 'https://i.gkd.li/i/23431964',
+          snapshotUrls: [
+            'https://i.gkd.li/i/23431964',
+            'https://i.gkd.li/i/29888736', // 第二次出现的弹窗
+          ],
         },
       ],
     },
