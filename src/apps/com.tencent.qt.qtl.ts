@@ -48,10 +48,16 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: 'com.tencent.zone.main.MainZoneHomeActivity',
+          activityIds: [
+            'com.tencent.zone.main.MainZoneHomeActivity',
+            'com.tencent.zone.main.notice.NoticeActivity',
+          ],
           matches: '[vid="notice_close_pic"]',
           exampleUrls: 'https://e.gkd.li/d1747892-c416-4877-a706-fb3c16e5b049',
-          snapshotUrls: 'https://i.gkd.li/i/16581606',
+          snapshotUrls: [
+            'https://i.gkd.li/i/16581606',
+            'https://i.gkd.li/i/29888372',
+          ],
         },
       ],
     },
