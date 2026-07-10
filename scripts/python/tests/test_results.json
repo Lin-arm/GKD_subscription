@@ -1,0 +1,277 @@
+{
+  "total": 10,
+  "passed": 10,
+  "failed": 0,
+  "results": [
+    {
+      "name": "正常场景：单个GKD链接",
+      "description": "Issue 包含一个有效的 GKD 分享链接",
+      "passed": true,
+      "output": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "network_detail": "",
+        "has_convertible": "true",
+        "warning_type": "",
+        "comment_missing": "",
+        "comment_unreachable": "",
+        "comment_404": "",
+        "comment_uncertain": "",
+        "comment_recovery": "",
+        "comment_bot": "<!-- gkd-bot-comment -->\n## 栗子漫画 `com.hbsclj.uth` 1.1.0\nMEIZU 20 · Android 16 · GKD 1.12.1\n\n**MainActivity** — 快查 ID:1 Text:0 · 深度14 · 可点击1 · 21节点\n[1783704841971](https://i.gkd.li/i/29899905)\n\n<details>\n<summary>详细信息</summary>\n\n**栗子漫画 `com.hbsclj.uth`**\n\n| Activity | 可见 | 分辨率 | 方向 | appVersionCode | GKD | userId |\n|----------|------|--------|------|----------------|-----|--------|\n| MainActivity | 21 | 1080×2400 | 竖屏 | 3 | 1.12.1 (92) | 0 |\n\n**设备信息**\n\n| 代号 | 型号 | 制造商 | 品牌 | SDK | Android |\n|------|------|--------|------|-----|---------|\n| meizu20 | MEIZU 20 | meizu | meizu | 36 | 16 |\n\n</details>"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "has_convertible": "true",
+        "warning_type": ""
+      },
+      "mismatches": []
+    },
+    {
+      "name": "正常场景：多个GKD链接",
+      "description": "Issue 包含多个有效的 GKD 分享链接",
+      "passed": true,
+      "output": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "network_detail": "",
+        "has_convertible": "true",
+        "warning_type": "",
+        "comment_missing": "",
+        "comment_unreachable": "",
+        "comment_404": "",
+        "comment_uncertain": "",
+        "comment_recovery": "",
+        "comment_bot": "<!-- gkd-bot-comment -->\n## 栗子漫画 `com.hbsclj.uth` 1.1.0\nMEIZU 20 · Android 16 · GKD 1.12.1\n\n**MainActivity** — 快查 ID:1 Text:0 · 深度14 · 可点击1 · 21节点\n[1783704841971](https://i.gkd.li/i/29899905)\n\n**GKD 链接**\n[1783704920484](https://i.gkd.li/i/29899896)\n\n<details>\n<summary>详细信息</summary>\n\n**栗子漫画 `com.hbsclj.uth`**\n\n| Activity | 可见 | 分辨率 | 方向 | appVersionCode | GKD | userId |\n|----------|------|--------|------|----------------|-----|--------|\n| MainActivity | 21 | 1080×2400 | 竖屏 | 3 | 1.12.1 (92) | 0 |\n\n**设备信息**\n\n| 代号 | 型号 | 制造商 | 品牌 | SDK | Android |\n|------|------|--------|------|-----|---------|\n| meizu20 | MEIZU 20 | meizu | meizu | 36 | 16 |\n\n</details>"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "has_convertible": "true",
+        "warning_type": ""
+      },
+      "mismatches": []
+    },
+    {
+      "name": "缺失快照：没有链接",
+      "description": "Issue 没有提供任何快照链接",
+      "passed": true,
+      "output": {
+        "has_snapshot": "false",
+        "has_unreachable": "false",
+        "network_status": "skipped",
+        "network_detail": "",
+        "has_convertible": "false",
+        "warning_type": "missing",
+        "comment_missing": "<!-- gkd-warning-missing -->\n您好 @testuser，由于您没有提供快照链接，此 Issue 已被自动关闭。\n\n请提供正确的快照链接后重新打开或提交新的 Issue。",
+        "comment_unreachable": "",
+        "comment_404": "",
+        "comment_uncertain": "",
+        "comment_recovery": "",
+        "comment_bot": ""
+      },
+      "expected": {
+        "has_snapshot": "false",
+        "has_unreachable": "false",
+        "network_status": "skipped",
+        "has_convertible": "false",
+        "warning_type": "missing"
+      },
+      "mismatches": []
+    },
+    {
+      "name": "不可访问快照：包含snapshot链接",
+      "description": "Issue 包含不可访问的快照链接（i.gkd.li/snapshot/）",
+      "passed": true,
+      "output": {
+        "has_snapshot": "true",
+        "has_unreachable": "true",
+        "network_status": "skipped",
+        "network_detail": "",
+        "has_convertible": "false",
+        "warning_type": "",
+        "comment_missing": "",
+        "comment_unreachable": "<!-- gkd-warning-unreachable -->\n您好 @testuser，检测到您提供了他人无法访问的快照链接（i.gkd.li/snapshot/），请点击查看 [正确的分享快照方式说明](https://gkd.li/guide/snapshot#share-note) 。可在下方评论区补充。",
+        "comment_404": "",
+        "comment_uncertain": "",
+        "comment_recovery": "",
+        "comment_bot": ""
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "true",
+        "network_status": "skipped",
+        "has_convertible": "false",
+        "warning_type": ""
+      },
+      "mismatches": []
+    },
+    {
+      "name": "链接404：无效链接",
+      "description": "Issue 包含返回 404 的链接",
+      "passed": true,
+      "output": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "404",
+        "network_detail": "",
+        "has_convertible": "false",
+        "warning_type": "",
+        "comment_missing": "",
+        "comment_unreachable": "",
+        "comment_404": "<!-- gkd-warning-404 -->\n您好 @testuser，检测到您提供的快照链接无法访问：\n\n`https://i.gkd.li/i/99999999`\n\n请确认链接正确后在评论区补充有效的快照链接。",
+        "comment_uncertain": "",
+        "comment_recovery": "",
+        "comment_bot": ""
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "404",
+        "has_convertible": "false",
+        "warning_type": ""
+      },
+      "mismatches": []
+    },
+    {
+      "name": "混合场景：有效+不可访问",
+      "description": "Issue 同时包含有效链接和不可访问快照链接",
+      "passed": true,
+      "output": {
+        "has_snapshot": "true",
+        "has_unreachable": "true",
+        "network_status": "ok",
+        "network_detail": "",
+        "has_convertible": "true",
+        "warning_type": "",
+        "comment_missing": "",
+        "comment_unreachable": "<!-- gkd-warning-unreachable -->\n您好 @testuser，检测到您提供了他人无法访问的快照链接（i.gkd.li/snapshot/），请点击查看 [正确的分享快照方式说明](https://gkd.li/guide/snapshot#share-note) 。可在下方评论区补充。",
+        "comment_404": "",
+        "comment_uncertain": "",
+        "comment_recovery": "",
+        "comment_bot": "<!-- gkd-bot-comment -->\n## 栗子漫画 `com.hbsclj.uth` 1.1.0\nMEIZU 20 · Android 16 · GKD 1.12.1\n\n**MainActivity** — 快查 ID:1 Text:0 · 深度14 · 可点击1 · 21节点\n[1783704841971](https://i.gkd.li/i/29899905)\n\n<details>\n<summary>详细信息</summary>\n\n**栗子漫画 `com.hbsclj.uth`**\n\n| Activity | 可见 | 分辨率 | 方向 | appVersionCode | GKD | userId |\n|----------|------|--------|------|----------------|-----|--------|\n| MainActivity | 21 | 1080×2400 | 竖屏 | 3 | 1.12.1 (92) | 0 |\n\n**设备信息**\n\n| 代号 | 型号 | 制造商 | 品牌 | SDK | Android |\n|------|------|--------|------|-----|---------|\n| meizu20 | MEIZU 20 | meizu | meizu | 36 | 16 |\n\n</details>"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "true",
+        "network_status": "ok",
+        "has_convertible": "true",
+        "warning_type": ""
+      },
+      "mismatches": []
+    },
+    {
+      "name": "评论补充链接",
+      "description": "用户在评论中补充快照链接",
+      "passed": true,
+      "output": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "network_detail": "",
+        "has_convertible": "true",
+        "warning_type": "recovery",
+        "comment_missing": "",
+        "comment_unreachable": "",
+        "comment_404": "",
+        "comment_uncertain": "",
+        "comment_recovery": "<!-- gkd-warning-recovery -->\n✅ 您好 @testuser，快照链接检查已通过，之前的标记已移除。",
+        "comment_bot": "<!-- gkd-bot-comment -->\n## 栗子漫画 `com.hbsclj.uth` 1.1.0\nMEIZU 20 · Android 16 · GKD 1.12.1\n\n**MainActivity** — 快查 ID:1 Text:0 · 深度14 · 可点击1 · 21节点\n[1783704841971](https://i.gkd.li/i/29899905)\n\n<details>\n<summary>详细信息</summary>\n\n**栗子漫画 `com.hbsclj.uth`**\n\n| Activity | 可见 | 分辨率 | 方向 | appVersionCode | GKD | userId |\n|----------|------|--------|------|----------------|-----|--------|\n| MainActivity | 21 | 1080×2400 | 竖屏 | 3 | 1.12.1 (92) | 0 |\n\n**设备信息**\n\n| 代号 | 型号 | 制造商 | 品牌 | SDK | Android |\n|------|------|--------|------|-----|---------|\n| meizu20 | MEIZU 20 | meizu | meizu | 36 | 16 |\n\n</details>"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "has_convertible": "true",
+        "warning_type": "recovery"
+      },
+      "mismatches": []
+    },
+    {
+      "name": "编辑后恢复",
+      "description": "用户编辑 Issue 后补充了有效链接",
+      "passed": true,
+      "output": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "network_detail": "",
+        "has_convertible": "true",
+        "warning_type": "recovery",
+        "comment_missing": "",
+        "comment_unreachable": "",
+        "comment_404": "",
+        "comment_uncertain": "",
+        "comment_recovery": "<!-- gkd-warning-recovery -->\n✅ 您好 @testuser，快照链接检查已通过，之前的标记已移除。",
+        "comment_bot": "<!-- gkd-bot-comment -->\n## 栗子漫画 `com.hbsclj.uth` 1.1.0\nMEIZU 20 · Android 16 · GKD 1.12.1\n\n**MainActivity** — 快查 ID:1 Text:0 · 深度14 · 可点击1 · 21节点\n[1783704841971](https://i.gkd.li/i/29899905)\n\n<details>\n<summary>详细信息</summary>\n\n**栗子漫画 `com.hbsclj.uth`**\n\n| Activity | 可见 | 分辨率 | 方向 | appVersionCode | GKD | userId |\n|----------|------|--------|------|----------------|-----|--------|\n| MainActivity | 21 | 1080×2400 | 竖屏 | 3 | 1.12.1 (92) | 0 |\n\n**设备信息**\n\n| 代号 | 型号 | 制造商 | 品牌 | SDK | Android |\n|------|------|--------|------|-----|---------|\n| meizu20 | MEIZU 20 | meizu | meizu | 36 | 16 |\n\n</details>"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "has_convertible": "true",
+        "warning_type": "recovery"
+      },
+      "mismatches": []
+    },
+    {
+      "name": "GitHub附件链接",
+      "description": "Issue 包含 GitHub 附件链接（虚构链接，预期返回404）",
+      "passed": true,
+      "output": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "404",
+        "network_detail": "",
+        "has_convertible": "false",
+        "warning_type": "",
+        "comment_missing": "",
+        "comment_unreachable": "",
+        "comment_404": "<!-- gkd-warning-404 -->\n您好 @testuser，检测到您提供的快照链接无法访问：\n\n`https://github.com/user-attachments/files/12345/snapshot.zip`\n\n请确认链接正确后在评论区补充有效的快照链接。",
+        "comment_uncertain": "",
+        "comment_recovery": "",
+        "comment_bot": ""
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "404",
+        "has_convertible": "false",
+        "warning_type": ""
+      },
+      "mismatches": []
+    },
+    {
+      "name": "Markdown格式链接",
+      "description": "Issue 使用 Markdown 格式提供链接",
+      "passed": true,
+      "output": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "network_detail": "",
+        "has_convertible": "true",
+        "warning_type": "",
+        "comment_missing": "",
+        "comment_unreachable": "",
+        "comment_404": "",
+        "comment_uncertain": "",
+        "comment_recovery": "",
+        "comment_bot": "<!-- gkd-bot-comment -->\n## 栗子漫画 `com.hbsclj.uth` 1.1.0\nMEIZU 20 · Android 16 · GKD 1.12.1\n\n**MainActivity** — 快查 ID:1 Text:0 · 深度14 · 可点击1 · 21节点\n[1783704841971](https://i.gkd.li/i/29899905)\n\n**GKD 链接**\n[1783704920484](https://i.gkd.li/i/29899896)\n\n<details>\n<summary>详细信息</summary>\n\n**栗子漫画 `com.hbsclj.uth`**\n\n| Activity | 可见 | 分辨率 | 方向 | appVersionCode | GKD | userId |\n|----------|------|--------|------|----------------|-----|--------|\n| MainActivity | 21 | 1080×2400 | 竖屏 | 3 | 1.12.1 (92) | 0 |\n\n**设备信息**\n\n| 代号 | 型号 | 制造商 | 品牌 | SDK | Android |\n|------|------|--------|------|-----|---------|\n| meizu20 | MEIZU 20 | meizu | meizu | 36 | 16 |\n\n</details>"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "has_convertible": "true",
+        "warning_type": ""
+      },
+      "mismatches": []
+    }
+  ]
+}
