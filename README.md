@@ -4,7 +4,7 @@
 
 [![SVG Banners](https://svg-banners.vercel.app/api?type=origin&text1=GKD第三方订阅规则&text2=💖%20GKD_subscription&width=800&height=350)](https://github.com/Lin-arm/GKD_subscription)
 
-[![Release](https://img.shields.io/badge/发行版-v537-blue)](https://github.com/Lin-arm/GKD_subscription/releases/latest)
+[![Release](https://img.shields.io/badge/发行版-v538-blue)](https://github.com/Lin-arm/GKD_subscription/releases/latest)
 [![已适配应用](https://img.shields.io/badge/已适配应用-956-brightgreen)](./dist/README.md#应用规则)
 [![全局规则组](https://img.shields.io/badge/全局规则组-3-blueviolet)](./dist/README.md#全局规则)
 [![应用规则组](https://img.shields.io/badge/应用规则组-2354-orange)](./dist/README.md#应用规则)
@@ -56,7 +56,7 @@
 
 </details>
 
-<!-- > 当前版本: v537
+<!-- > 当前版本: v538
 > 
 > 当前订阅文件已适配 956 个应用，共有 2354 应用规则组，3 全局规则组
 > 
@@ -97,7 +97,7 @@
 
 ## 🥇感谢以下开发者的贡献
 
-![img](https://contrib.rocks/image?repo=Lin-arm/GKD_subscription&max=200&_v=537)
+![img](https://contrib.rocks/image?repo=Lin-arm/GKD_subscription&max=200&_v=538)
 
 <!-- repobeats 已失效 -->
 <!-- ![Alt](https://repobeats.axiom.co/api/embed/db6f46a4bdc4e760fb51976db276f1febef5bdce.svg "报告分析图") -->
