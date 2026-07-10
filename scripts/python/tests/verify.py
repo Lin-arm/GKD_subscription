@@ -96,6 +96,13 @@ def run_check_issue(env_vars: dict) -> dict[str, str]:
 
     env["GITHUB_OUTPUT"] = output_file
 
+    # 设置 PYTHONPATH 为 scripts/python 目录，确保模块导入正常
+    python_path = str(SCRIPT_DIR)
+    if "PYTHONPATH" in env:
+        env["PYTHONPATH"] = python_path + os.pathsep + env["PYTHONPATH"]
+    else:
+        env["PYTHONPATH"] = python_path
+
     try:
         # 运行脚本
         result = subprocess.run(

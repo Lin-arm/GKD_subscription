@@ -235,7 +235,7 @@ def _parse_all_snapshots(links: list) -> tuple[list[SnapshotInfo], list[tuple[st
     - snapshots：解析成功的 SnapshotInfo 列表
     - gkd_links：无法下载解析的 GKD 链接 [(display_text, converted_url), ...]
     """
-    from converter import GKD_PROXY_TEMPLATE
+    from core.converter import GKD_PROXY_TEMPLATE
 
     snapshots: list[SnapshotInfo] = []
     gkd_links: list[tuple[str, str]] = []
