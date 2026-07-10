@@ -106,7 +106,7 @@ jobs:
           comment_bot=
           EOF
           else
-            python3 scripts/python/check_issue.py
+            python3 scripts/python/entry/check_issue.py
           fi
 
   # ── 线性步骤一：缺失快照 → 打标签 + 评论 + 关闭（致命，阻断后续所有 Job） ──
