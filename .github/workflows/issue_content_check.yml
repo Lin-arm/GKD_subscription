@@ -145,10 +145,10 @@ jobs:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: gh issue close "$ISSUE_NUMBER" --reason "not planned"
 
-  # ── 线性步骤二：不可访问快照 → 打标签 + 评论（非致命，不阻断后续） ──
+  # ── 线性步骤二：本地快照链接 → 打标签 + 评论（非致命，不阻断后续） ──
 
   handle-unreachable-snapshot:
-    name: 处理不可访问快照
+    name: 处理本地快照链接
     needs: [analyze, handle-missing-snapshot]
     if: >-
       always() &&
@@ -171,7 +171,7 @@ jobs:
           comment-author: 'github-actions[bot]'
           body-includes: '<!-- gkd-warning-unreachable -->'
 
-      - name: 发布不可访问快照提醒评论
+      - name: 发布本地快照提醒评论
         uses: peter-evans/create-or-update-comment@v5
         with:
           comment-id: ${{ steps.find-warning.outputs.comment-id }}
