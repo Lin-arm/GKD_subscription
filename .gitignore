@@ -22,4 +22,4 @@ node_modules
 package-lock.json
 yarn.lock
 
-__pycache__/
+__pycache__/scripts/python/test_results.json
