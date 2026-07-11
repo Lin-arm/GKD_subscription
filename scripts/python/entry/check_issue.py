@@ -88,8 +88,12 @@ def main():
     issue_user = os.environ.get("ISSUE_USER", "")
     issue_action = os.environ.get("ISSUE_ACTION", "")
 
-    # 合并 Issue Body 和评论内容一起分析（评论补充的链接也参与检查）
-    full_text = body + "\n" + comment_body if comment_body else body
+    # 当评论事件时，只分析评论内容（以最新评论为主）
+    # 当 opened/edited 事件时，分析 Issue Body
+    if issue_action == "comment" and comment_body:
+        full_text = comment_body
+    else:
+        full_text = body
 
     has_snapshot = "true"
     has_unreachable = "false"

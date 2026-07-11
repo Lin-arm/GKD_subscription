@@ -169,6 +169,23 @@
         "has_convertible": "true",
         "warning_type": ""
       }
+    },
+    {
+      "name": "Issue失效链接+评论补充有效链接",
+      "description": "Issue 原始链接失效（404），用户在评论中补充有效 GKD 链接，应触发 recovery",
+      "input": {
+        "ISSUE_BODY": "## 适配请求\n\n请适配这个应用的广告\n\n快照：https://github.com/user-attachments/files/12345/snapshot.zip",
+        "ISSUE_COMMENT_BODY": "补充有效快照：https://i.gkd.li/i/29899905",
+        "ISSUE_USER": "testuser",
+        "ISSUE_ACTION": "comment"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "has_convertible": "true",
+        "warning_type": "recovery"
+      }
     }
   ]
 }
