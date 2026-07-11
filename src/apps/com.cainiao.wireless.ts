@@ -210,5 +210,19 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 12,
+      name: '局部广告-超时享服务',
+      desc: 'x掉',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: '.homepage.view.activity.HomePageActivity',
+          matches:
+            '[desc^="激活超时享服务"] -2 @[clickable=true] < FrameLayout < FrameLayout < FrameLayout < FrameLayout < [vid="package_dx_container"]',
+          snapshotUrls: 'https://i.gkd.li/i/29924327',
+        },
+      ],
+    },
   ],
 });
