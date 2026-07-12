@@ -164,6 +164,9 @@ def _render_app_section(lines: list[str], app_key: str, snapshots: list[Snapshot
     **Activity** — 快查 ID:x Text:x · 深度x · 可点击x · xxx节点
     [id1](url) · [id2](url)
     """
+    if not snapshots:
+        return
+
     # App 标题
     lines.append(f"## {app_key}")
 
