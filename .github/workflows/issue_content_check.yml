@@ -109,6 +109,15 @@ jobs:
             echo "EOF" >> "$GITHUB_OUTPUT"
           fi
 
+      # 恢复快照缓存（所有事件都可读取）
+      - name: 恢复快照缓存
+        uses: actions/cache/restore@v4
+        with:
+          path: /tmp/snapshot_cache
+          key: snapshots-${{ github.event.issue.number }}
+          restore-keys: |
+            snapshots-
+
       - name: 分析 Issue 快照链接
         id: analyze
         env:
@@ -138,6 +147,14 @@ jobs:
           else
             python3 scripts/python/entry/check_issue.py
           fi
+
+      # 保存快照缓存（仅 issues 事件有写权限）
+      - name: 保存快照缓存
+        if: github.event_name == 'issues'
+        uses: actions/cache/save@v4
+        with:
+          path: /tmp/snapshot_cache
+          key: snapshots-${{ github.event.issue.number }}
 
   # ── 线性步骤一：缺失快照 → 打标签 + 评论 + 关闭（致命，阻断后续所有 Job） ──
 

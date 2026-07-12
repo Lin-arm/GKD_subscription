@@ -263,6 +263,8 @@ def _parse_all_snapshots(links: list) -> tuple[list[SnapshotInfo], list[tuple[st
     """
     下载并解析所有快照链接，同 Activity 的所有快照都保留。
 
+    支持缓存：优先从缓存读取，命中则跳过下载。
+
     返回：
     - snapshots：解析成功的 SnapshotInfo 列表（同 Activity 的所有快照都在）
     - gkd_links：无法下载解析的 GKD 链接 [(display_text, converted_url), ...]
@@ -272,18 +274,36 @@ def _parse_all_snapshots(links: list) -> tuple[list[SnapshotInfo], list[tuple[st
     snapshots: list[SnapshotInfo] = []
     gkd_links: list[tuple[str, str]] = []
 
+    # 加载缓存
+    cache = _load_cache()
+    cache_updated = False
+
     # 先处理 GitHub 附件链接
     for lnk in links:
         if lnk.kind != "github_attachment":
             continue
 
         converted_url = GKD_PROXY_TEMPLATE.format(url=lnk.url)
+
+        # 尝试从缓存读取
+        snap = _snapshot_from_cache(lnk.url, cache)
+        if snap:
+            # 缓存命中，使用缓存的 converted_url
+            snap.converted_url = converted_url
+            snapshots.append(snap)
+            continue
+
+        # 缓存未命中，下载解析
         snap = download_and_parse(lnk.url, converted_url)
 
         if snap is None:
             # 下载失败，仍作为可转换链接保留
             gkd_links.append((lnk.display_text or _extract_filename(lnk.url), converted_url))
             continue
+
+        # 保存到缓存
+        _snapshot_to_cache(lnk.url, snap, cache)
+        cache_updated = True
 
         # 所有成功解析的快照都添加到 snapshots 列表
         snapshots.append(snap)
@@ -297,14 +317,29 @@ def _parse_all_snapshots(links: list) -> tuple[list[SnapshotInfo], list[tuple[st
         if not gh_url:
             continue
 
+        # 尝试从缓存读取（GKD 链接使用转换后的 URL 作为 key）
+        snap = _snapshot_from_cache(lnk.url, cache)
+        if snap:
+            snapshots.append(snap)
+            continue
+
+        # 缓存未命中，下载解析
         snap = download_and_parse(gh_url, lnk.url)
 
         if snap is None:
             gkd_links.append((lnk.display_text or lnk.url, lnk.url))
             continue
 
+        # 保存到缓存
+        _snapshot_to_cache(lnk.url, snap, cache)
+        cache_updated = True
+
         # 所有成功解析的快照都添加到 snapshots 列表
         snapshots.append(snap)
+
+    # 保存缓存（如果有更新）
+    if cache_updated:
+        _save_cache(cache)
 
     return snapshots, gkd_links
 
@@ -318,6 +353,73 @@ def _output(**kwargs):
     """将所有分析结果写入 GITHUB_OUTPUT。"""
     for key, value in kwargs.items():
         write_output(key, value)
+
+
+# ── 缓存相关函数 ──
+
+_CACHE_DIR = "/tmp/snapshot_cache"
+_CACHE_FILE = "snapshots.json"
+
+
+def _load_cache() -> dict[str, dict]:
+    """
+    加载快照缓存。
+
+    缓存结构：{url: SnapshotInfo_dict, ...}
+    """
+    import json
+    import os
+
+    cache_file = os.path.join(_CACHE_DIR, _CACHE_FILE)
+    if not os.path.exists(cache_file):
+        return {}
+
+    try:
+        with open(cache_file, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
+def _save_cache(cache: dict[str, dict]):
+    """
+    保存快照缓存。
+
+    缓存结构：{url: SnapshotInfo_dict, ...}
+    """
+    import json
+    import os
+
+    os.makedirs(_CACHE_DIR, exist_ok=True)
+    cache_file = os.path.join(_CACHE_DIR, _CACHE_FILE)
+
+    with open(cache_file, "w", encoding="utf-8") as f:
+        json.dump(cache, f, ensure_ascii=False, indent=2)
+
+
+def _snapshot_from_cache(url: str, cache: dict[str, dict]) -> SnapshotInfo | None:
+    """
+    从缓存中恢复 SnapshotInfo。
+
+    如果 URL 在缓存中且数据有效，返回 SnapshotInfo；否则返回 None。
+    """
+    if url not in cache:
+        return None
+
+    try:
+        data = cache[url]
+        return SnapshotInfo(**data)
+    except Exception:
+        return None
+
+
+def _snapshot_to_cache(url: str, snap: SnapshotInfo, cache: dict[str, dict]):
+    """
+    将 SnapshotInfo 保存到缓存。
+    """
+    from dataclasses import asdict
+
+    cache[url] = asdict(snap)
 
 
 def _merge_links_dedup(history_links: list[LinkInfo], new_links: list[LinkInfo]) -> list[LinkInfo]:
