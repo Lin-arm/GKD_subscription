@@ -81,6 +81,33 @@ jobs:
           gh label create "需补充链接(need-supplement-link)" --color "f39c12" --description "Issue包含不可访问的快照链接" --force
           gh label create "链接无法访问(inaccessible-link)" --color "c0392b" --description "Issue中的链接无法访问" --force
 
+      # issue_comment 事件时，获取旧 Bot 评论或所有评论作为历史链接来源
+      - name: 获取历史链接
+        id: get-history
+        if: github.event_name == 'issue_comment'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          # 1. 尝试读取旧 Bot 评论（已解析成功的快照链接）
+          old_bot=$(gh api "repos/$GH_REPO/issues/$ISSUE_NUMBER/comments" \
+            --jq '.[] | select(.user.login == "github-actions[bot]") | select(.body | contains("gkd-bot-comment")) | .body' 2>/dev/null | head -1)
+
+          if [ -n "$old_bot" ]; then
+            echo "history_source=old_bot" >> "$GITHUB_OUTPUT"
+            echo "history_content<<EOF" >> "$GITHUB_OUTPUT"
+            echo "$old_bot" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+          else
+            # 2. Fallback: 获取所有评论
+            all_comments=$(gh api "repos/$GH_REPO/issues/$ISSUE_NUMBER/comments" \
+              --jq '.[].body' 2>/dev/null | sed ':a;N;$!ba;s/\n/\\n/g')
+            echo "history_source=all_comments" >> "$GITHUB_OUTPUT"
+            echo "history_content<<EOF" >> "$GITHUB_OUTPUT"
+            echo "$all_comments" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: 分析 Issue 快照链接
         id: analyze
         env:
@@ -89,6 +116,8 @@ jobs:
           ISSUE_USER: ${{ github.event.issue.user.login }}
           ISSUE_ACTION: ${{ github.event_name == 'issue_comment' && 'comment' || github.event.action }}
           SKIP_ANALYSIS: ${{ github.event_name == 'issue_comment' && steps.pre-check.outputs.needs_analysis == 'false' }}
+          HISTORY_CONTENT: ${{ steps.get-history.outputs.history_content || '' }}
+          HISTORY_SOURCE: ${{ steps.get-history.outputs.history_source || '' }}
         run: |
           if [ "$SKIP_ANALYSIS" = "true" ]; then
             cat >> "$GITHUB_OUTPUT" <<EOF

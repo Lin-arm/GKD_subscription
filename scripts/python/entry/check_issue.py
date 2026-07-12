@@ -40,7 +40,7 @@ if str(_script_dir) not in sys.path:
 
 from utils.models import LinkInfo, SnapshotInfo
 from utils.common import extract_filename
-from core.extractor import extract_links
+from core.extractor import extract_links, extract_links_from_bot_comment
 from core.checker import (
     check_unreachable_links,
     check_network_links,
@@ -87,13 +87,37 @@ def main():
     comment_body = os.environ.get("ISSUE_COMMENT_BODY", "") or ""
     issue_user = os.environ.get("ISSUE_USER", "")
     issue_action = os.environ.get("ISSUE_ACTION", "")
+    history_content = os.environ.get("HISTORY_CONTENT", "") or ""
+    history_source = os.environ.get("HISTORY_SOURCE", "") or ""
 
-    # 当评论事件时，只分析评论内容（以最新评论为主）
-    # 当 opened/edited 事件时，分析 Issue Body
+    # 当评论事件时，合并历史链接 + 新评论链接
+    # 当 opened/edited 事件时，只分析 Issue Body
     if issue_action == "comment" and comment_body:
-        full_text = comment_body
+        # 提取新评论中的链接
+        new_links = extract_links(comment_body)
+
+        # 提取历史链接
+        history_links: list[LinkInfo] = []
+        if history_content:
+            if history_source == "old_bot":
+                # 从旧 Bot 评论中提取快照链接
+                history_links = extract_links_from_bot_comment(history_content)
+            else:
+                # 从所有评论中提取链接
+                history_links = extract_links(history_content)
+
+        # 合并去重：历史链接 + 新链接
+        # 使用 URL 作为去重键，保留首次出现的链接
+        all_links = _merge_links_dedup(history_links, new_links)
+
+        # 用于后续处理的链接列表
+        links = all_links
+
+        # 用于检查缺失快照的文本（合并后的内容）
+        full_text = _build_full_text_from_links(links)
     else:
         full_text = body
+        links = extract_links(full_text)
 
     has_snapshot = "true"
     has_unreachable = "false"
@@ -107,9 +131,6 @@ def main():
     comment_uncertain = ""
     comment_recovery = ""
     comment_bot = ""
-
-    # ── 第一步：提取所有链接 ──
-    links = extract_links(full_text)
 
     # ── 第二步：判断是否缺少快照（唯一致命 → 提前返回） ──
     has_any_snapshot = any(lnk.kind in _SNAPSHOT_KINDS for lnk in links)
@@ -297,6 +318,45 @@ def _output(**kwargs):
     """将所有分析结果写入 GITHUB_OUTPUT。"""
     for key, value in kwargs.items():
         write_output(key, value)
+
+
+def _merge_links_dedup(history_links: list[LinkInfo], new_links: list[LinkInfo]) -> list[LinkInfo]:
+    """
+    合并历史链接和新链接，基于 URL 去重。
+
+    策略：保留首次出现的链接（历史链接优先）
+    """
+    seen: set[str] = set()
+    result: list[LinkInfo] = []
+
+    # 先添加历史链接（优先级高）
+    for lnk in history_links:
+        if lnk.url not in seen:
+            seen.add(lnk.url)
+            result.append(lnk)
+
+    # 再添加新链接（排除已存在的）
+    for lnk in new_links:
+        if lnk.url not in seen:
+            seen.add(lnk.url)
+            result.append(lnk)
+
+    return result
+
+
+def _build_full_text_from_links(links: list[LinkInfo]) -> str:
+    """
+    从链接列表构建用于检查缺失快照的文本。
+
+    格式：每行一个链接，包含显示文字和 URL
+    """
+    parts: list[str] = []
+    for lnk in links:
+        if lnk.display_text:
+            parts.append(f"[{lnk.display_text}]({lnk.url})")
+        else:
+            parts.append(lnk.url)
+    return "\n".join(parts)
 
 
 if __name__ == "__main__":
