@@ -293,6 +293,44 @@ jobs:
       needs.analyze.outputs.has_convertible == 'true'
     runs-on: ubuntu-latest
     steps:
+      # issue_comment 事件时，隐藏旧 Bot 评论（折叠为 OUTDATED）
+      - name: 获取旧 Bot 评论的 Node ID
+        if: github.event_name == 'issue_comment'
+        id: get-old-bot-node
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node_id=$(gh api graphql -f query='
+          {
+            repository(owner: "${{ github.repository_owner }}", name: "${{ github.event.repository.name }}") {
+              issue(number: ${{ github.event.issue.number }}) {
+                comments(first: 100) {
+                  nodes {
+                    id
+                    body
+                    author { login }
+                  }
+                }
+              }
+            }
+          }' --jq '.data.repository.issue.comments.nodes[] | select(.author.login == "github-actions[bot]") | select(.body | contains("gkd-bot-comment")) | .id' 2>/dev/null | head -1)
+          echo "node_id=$node_id" >> "$GITHUB_OUTPUT"
+
+      - name: 隐藏旧 Bot 评论
+        if: github.event_name == 'issue_comment' && steps.get-old-bot-node.outputs.node_id != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api graphql -f query='
+          mutation MinimizeComment($subjectId: ID!, $classifier: ReportedContentClassifiers!) {
+            minimizeComment(input: { subjectId: $subjectId, classifier: $classifier }) {
+              minimizedComment {
+                isMinimized
+                minimizedReason
+              }
+            }
+          }' -f subjectId="${{ steps.get-old-bot-node.outputs.node_id }}" -f classifier="OUTDATED"
+
       - name: 查找已有 Bot 评论
         id: find-bot
         uses: peter-evans/find-comment@v4
