@@ -240,19 +240,16 @@ def _check_all_links(links: list) -> _NetworkCheckResult:
 
 def _parse_all_snapshots(links: list) -> tuple[list[SnapshotInfo], list[tuple[str, str]]]:
     """
-    下载并解析所有快照链接，同 Activity 只下载一个代表。
+    下载并解析所有快照链接，同 Activity 的所有快照都保留。
 
     返回：
-    - snapshots：解析成功的 SnapshotInfo 列表
+    - snapshots：解析成功的 SnapshotInfo 列表（同 Activity 的所有快照都在）
     - gkd_links：无法下载解析的 GKD 链接 [(display_text, converted_url), ...]
     """
     from core.converter import GKD_PROXY_TEMPLATE
 
     snapshots: list[SnapshotInfo] = []
     gkd_links: list[tuple[str, str]] = []
-
-    # 已下载的 Activity 集合，用于去重
-    seen_activities: set[str] = set()
 
     # 先处理 GitHub 附件链接
     for lnk in links:
@@ -267,13 +264,8 @@ def _parse_all_snapshots(links: list) -> tuple[list[SnapshotInfo], list[tuple[st
             gkd_links.append((lnk.display_text or _extract_filename(lnk.url), converted_url))
             continue
 
-        act_key = f"{snap.app_id}|{snap.activity_id}"
-        if act_key in seen_activities:
-            # 同 Activity 已有代表，只记录链接
-            gkd_links.append((snap.snapshot_id or _extract_filename(lnk.url), converted_url))
-        else:
-            seen_activities.add(act_key)
-            snapshots.append(snap)
+        # 所有成功解析的快照都添加到 snapshots 列表
+        snapshots.append(snap)
 
     # 再处理 GKD 分享链接（GKD 链接原样保留，不套代理模板）
     for lnk in links:
@@ -290,12 +282,8 @@ def _parse_all_snapshots(links: list) -> tuple[list[SnapshotInfo], list[tuple[st
             gkd_links.append((lnk.display_text or lnk.url, lnk.url))
             continue
 
-        act_key = f"{snap.app_id}|{snap.activity_id}"
-        if act_key in seen_activities:
-            gkd_links.append((snap.snapshot_id or lnk.url, lnk.url))
-        else:
-            seen_activities.add(act_key)
-            snapshots.append(snap)
+        # 所有成功解析的快照都添加到 snapshots 列表
+        snapshots.append(snap)
 
     return snapshots, gkd_links
 

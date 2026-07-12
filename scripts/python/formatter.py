@@ -79,7 +79,7 @@ def build_bot_comment(snapshots: list[SnapshotInfo], gkd_links: list[tuple[str, 
     折叠区：App 详细信息表 + 设备信息表
 
     参数：
-    - snapshots：解析成功的 SnapshotInfo 列表（按 Activity 去重后）
+    - snapshots：解析成功的 SnapshotInfo 列表（同 Activity 的所有快照都在）
     - gkd_links：无法解析的 GKD 链接列表 [(display_text, converted_url), ...]
     """
     if not snapshots and not gkd_links:
@@ -87,12 +87,12 @@ def build_bot_comment(snapshots: list[SnapshotInfo], gkd_links: list[tuple[str, 
 
     lines: list[str] = []
 
-    # 按 appId 分组
-    app_groups = _group_by_app(snapshots)
+    # 按 appId 分组，同 appId 下按 activityId 分组
+    app_groups, activity_links = _group_by_app(snapshots)
 
     # 主区域：按 App 输出
     for app_key, app_snapshots in app_groups.items():
-        _render_app_section(lines, app_key, app_snapshots)
+        _render_app_section(lines, app_key, app_snapshots, activity_links)
 
     # GKD 链接（无法下载解析的）
     if gkd_links:
@@ -116,51 +116,44 @@ def build_bot_comment(snapshots: list[SnapshotInfo], gkd_links: list[tuple[str, 
 # ── 分组与去重 ──
 
 
-def _group_by_app(snapshots: list[SnapshotInfo]) -> dict[str, list[SnapshotInfo]]:
+def _group_by_app(snapshots: list[SnapshotInfo]) -> tuple[dict[str, list[SnapshotInfo]], dict[str, list[tuple[str, str]]]]:
     """
     按 appId 分组，同 appId 下按 activityId 分组。
 
-    同 activityId 只保留第一个（代表快照），其余只记录链接。
-    返回有序字典：key = "appName `appId` versionName"
+    返回：
+    - groups：有序字典，key = "appName `appId` versionName"，value = 该 App 的代表快照列表（每个 Activity 一个）
+    - activity_links：字典，key = "appId|activityId"，value = 该 Activity 的所有快照链接 [(snapshot_id, converted_url), ...]
     """
     from collections import OrderedDict
 
     groups: dict[str, list[SnapshotInfo]] = OrderedDict()
-    seen_activities: dict[str, list[SnapshotInfo]] = {}
+    activity_links: dict[str, list[tuple[str, str]]] = {}
+    seen_activities: set[str] = set()
 
     for snap in snapshots:
         app_key = f"{snap.app_name} `{snap.app_id}` {snap.app_version_name}"
         groups.setdefault(app_key, [])
 
         act_key = f"{snap.app_id}|{snap.activity_id}"
+        activity_links.setdefault(act_key, [])
+
+        # 收集该 Activity 的所有快照链接
+        link_display = snap.snapshot_id or snap.original_url.split("/")[-1]
+        link_url = snap.converted_url or snap.original_url
+        activity_links[act_key].append((link_display, link_url))
+
+        # 每个 Activity 只保留第一个快照作为代表（用于显示统计信息）
         if act_key not in seen_activities:
-            seen_activities[act_key] = [snap]
+            seen_activities.add(act_key)
             groups[app_key].append(snap)
-        else:
-            seen_activities[act_key].append(snap)
 
-    return groups
-
-
-def _get_activity_links(snapshots: list[SnapshotInfo], activity_id: str) -> list[tuple[str, str]]:
-    """
-    获取同一 Activity 下所有快照的链接列表。
-
-    返回 [(snapshot_id, converted_url), ...]
-    """
-    links = []
-    for snap in snapshots:
-        if snap.activity_id == activity_id:
-            display = snap.snapshot_id or snap.original_url.split("/")[-1]
-            url = snap.converted_url or snap.original_url
-            links.append((display, url))
-    return links
+    return groups, activity_links
 
 
 # ── 主区域渲染 ──
 
 
-def _render_app_section(lines: list[str], app_key: str, snapshots: list[SnapshotInfo]):
+def _render_app_section(lines: list[str], app_key: str, snapshots: list[SnapshotInfo], activity_links: dict[str, list[tuple[str, str]]]):
     """
     渲染单个 App 的主区域内容。
 
@@ -194,14 +187,19 @@ def _render_app_section(lines: list[str], app_key: str, snapshots: list[Snapshot
             continue
         seen_activities.add(snap.activity_id)
 
-        _render_activity_line(lines, snap)
+        # 获取该 Activity 的所有快照链接
+        act_key = f"{snap.app_id}|{snap.activity_id}"
+        links = activity_links.get(act_key, [])
+
+        _render_activity_line(lines, snap, links)
 
 
-def _render_activity_line(lines: list[str], snap: SnapshotInfo):
+def _render_activity_line(lines: list[str], snap: SnapshotInfo, links: list[tuple[str, str]]):
     """
     渲染单个 Activity 行。
 
     格式：**Activity** — 快查 ID:x Text:x · 深度x · 可点击x · xxx节点
+    [id1](url) · [id2](url)
     """
     # Activity 名称取最后一段（类名简写）
     act_display = short_activity_name(snap.activity_id)
@@ -215,10 +213,10 @@ def _render_activity_line(lines: list[str], snap: SnapshotInfo):
     )
     lines.append(f"**{act_display}** — {stats}")
 
-    # 链接行
-    link_url = snap.converted_url or snap.original_url
-    link_display = snap.snapshot_id or extract_filename(snap.original_url)
-    lines.append(f"[{link_display}]({link_url})")
+    # 链接行（该 Activity 的所有快照链接）
+    if links:
+        link_parts = [f"[{dt}]({url})" for dt, url in links]
+        lines.append(" · ".join(link_parts))
     lines.append("")
 
 
