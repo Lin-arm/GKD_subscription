@@ -28,6 +28,10 @@
     ],
     "*.json": [
       "prettier --cache --write"
+    ],
+    "*.py": [
+      "ruff check --fix",
+      "ruff format"
     ]
   },
   "publishConfig": {

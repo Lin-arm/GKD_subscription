@@ -26,6 +26,17 @@ if [ "$need_test" = false ]; then
   exit 0
 fi
 
-echo "🔍 检测到 Python/YAML 文件变更，运行 Python 单元测试..."
+echo "🔍 检测到 Python/YAML 文件变更，运行 Python 静态检查 + 单元测试..."
+
+echo ""
+echo "── ruff check ──"
+ruff check scripts/python/
+
+echo ""
+echo "── ruff format check ──"
+ruff format --check scripts/python/
+
+echo ""
+echo "── unittest ──"
 cd scripts/python
 PYTHONPATH=. python -m unittest discover -s tests -p "test_*.py" -v

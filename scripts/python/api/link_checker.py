@@ -22,18 +22,17 @@
         print(f"{r.link.url}: {r.network_result.status}")
 """
 
+from core.checker import check_network_links, gkd_to_gh_attachment_url
+from core.converter import GKD_PROXY_TEMPLATE
+from core.extractor import extract_links
+from core.snapshot_parser import download_and_parse
 from utils.models import (
+    CheckReport,
+    LinkCheckResult,
     LinkInfo,
     NetworkResult,
     SnapshotInfo,
-    CheckReport,
-    LinkCheckResult,
 )
-from core.extractor import extract_links
-from core.checker import check_network_links, gkd_to_gh_attachment_url
-from core.converter import GKD_PROXY_TEMPLATE
-from core.snapshot_parser import download_and_parse
-
 
 # ── 快照相关链接类型集合 ──
 
@@ -136,10 +135,12 @@ class LinkChecker:
             check_url = self._get_check_url(link)
             if not check_url:
                 # 无法检查的链接类型，跳过网络检查
-                results.append(LinkCheckResult(
-                    link=link,
-                    network_result=NetworkResult(status="skipped"),
-                ))
+                results.append(
+                    LinkCheckResult(
+                        link=link,
+                        network_result=NetworkResult(status="skipped"),
+                    )
+                )
                 continue
 
             # 执行网络检查
@@ -150,12 +151,14 @@ class LinkChecker:
             if link.kind in ("github_attachment", "gkd"):
                 snapshot = self._try_parse_snapshot(link, check_url)
 
-            results.append(LinkCheckResult(
-                link=link,
-                network_result=net_result,
-                converted_url=check_url,
-                snapshot=snapshot,
-            ))
+            results.append(
+                LinkCheckResult(
+                    link=link,
+                    network_result=net_result,
+                    converted_url=check_url,
+                    snapshot=snapshot,
+                )
+            )
 
         # 统计结果
         ok_count = sum(1 for r in results if r.network_result.status == "ok")

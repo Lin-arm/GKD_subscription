@@ -16,7 +16,6 @@ import re
 
 from utils.models import LinkInfo
 
-
 # ── 正则模式 ──
 
 # Markdown 格式链接：[显示文字](URL)
@@ -26,9 +25,7 @@ _RE_MD_LINK = re.compile(r"\[([^\]]*)\]\(([^)]+)\)")
 _RE_GKD_LINK = re.compile(r"https://i\.gkd\.li/i/\d+")
 
 # GitHub 附件链接：https://github.com/user-attachments/files/...
-_RE_GITHUB_ATTACHMENT = re.compile(
-    r"https://github\.com/user-attachments/files/[^\s\)]+"
-)
+_RE_GITHUB_ATTACHMENT = re.compile(r"https://github\.com/user-attachments/files/[^\s\)]+")
 
 # 不可访问的快照链接：https://i.gkd.li/snapshot/...
 _RE_UNREACHABLE_SNAPSHOT = re.compile(r"https://i\.gkd\.li/snapshot/[^\s\)]*")

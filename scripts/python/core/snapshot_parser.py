@@ -13,13 +13,11 @@
 
 import io
 import json
+import urllib.error
+import urllib.request
 import zipfile
 
-import urllib.request
-import urllib.error
-
 from utils.models import SnapshotInfo
-
 
 # ── 下载与解析 ──
 

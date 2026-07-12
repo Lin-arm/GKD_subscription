@@ -14,7 +14,6 @@ import re
 
 from utils.models import LinkInfo, NetworkResult
 
-
 # ── GKD 链接 → GH 附件 URL 转换 ──
 
 # 从 GKD 分享链接中提取数字 ID
@@ -66,8 +65,6 @@ def check_network_links(url: str, timeout: int = 20) -> NetworkResult:
     - status="404"：链接返回 404，确认不可访问
     - status="uncertain"：返回 403/5xx 等不确定状态码
     """
-    import urllib.request
-    import urllib.error
 
     result = _try_head_request(url, timeout)
     if result is not None:
@@ -83,8 +80,8 @@ def _try_head_request(url: str, timeout: int) -> NetworkResult | None:
     返回 None 表示服务器不支持 HEAD（如返回 405），
     需要回退到 GET 请求。
     """
-    import urllib.request
     import urllib.error
+    import urllib.request
 
     try:
         req = urllib.request.Request(url, method="HEAD")
@@ -127,8 +124,8 @@ def _try_get_range_request(url: str, timeout: int) -> NetworkResult:
 
     用于兼容不支持 HEAD 方法的服务器。
     """
-    import urllib.request
     import urllib.error
+    import urllib.request
 
     try:
         req = urllib.request.Request(url, method="GET")

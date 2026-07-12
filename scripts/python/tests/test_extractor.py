@@ -7,6 +7,7 @@ extractor.py 单元测试
 """
 
 import unittest
+
 from core.extractor import extract_links, extract_links_from_bot_comment
 
 

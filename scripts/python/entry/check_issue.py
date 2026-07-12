@@ -30,34 +30,33 @@ Issue 快照链接检查主入口
 
 import os
 import sys
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
 
 # 自动设置模块搜索路径，确保能在任意目录下执行
 _script_dir = Path(__file__).parent.parent  # 指向 scripts/python 目录
 if str(_script_dir) not in sys.path:
     sys.path.insert(0, str(_script_dir))
 
-from utils.models import LinkInfo, SnapshotInfo
-from utils.common import extract_filename
-from core.extractor import extract_links, extract_links_from_bot_comment
-from core.checker import (
-    check_unreachable_links,
+from core.checker import (  # noqa: E402
     check_network_links,
+    check_unreachable_links,
     gkd_to_gh_attachment_url,
 )
-from core.converter import convert_github_attachments, GKD_PROXY_TEMPLATE
-from core.snapshot_parser import download_and_parse
-from formatter import (
-    build_warning_missing,
-    build_warning_unreachable,
-    build_warning_inaccessible,
-    build_warning_uncertain,
-    build_recovery_comment,
+from core.converter import GKD_PROXY_TEMPLATE  # noqa: E402
+from core.extractor import extract_links, extract_links_from_bot_comment  # noqa: E402
+from core.snapshot_parser import download_and_parse  # noqa: E402
+from formatter import (  # noqa: E402
     build_bot_comment,
+    build_recovery_comment,
+    build_warning_inaccessible,
+    build_warning_missing,
+    build_warning_uncertain,
+    build_warning_unreachable,
 )
-from utils.utils import write_output
-
+from utils.common import extract_filename  # noqa: E402
+from utils.models import LinkInfo, SnapshotInfo  # noqa: E402
+from utils.utils import write_output  # noqa: E402
 
 # ── 快照相关链接类型集合 ──
 
@@ -269,7 +268,6 @@ def _parse_all_snapshots(links: list) -> tuple[list[SnapshotInfo], list[tuple[st
     - snapshots：解析成功的 SnapshotInfo 列表（同 Activity 的所有快照都在）
     - gkd_links：无法下载解析的 GKD 链接 [(display_text, converted_url), ...]
     """
-    from core.converter import GKD_PROXY_TEMPLATE
 
     snapshots: list[SnapshotInfo] = []
     gkd_links: list[tuple[str, str]] = []

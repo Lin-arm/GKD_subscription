@@ -7,7 +7,8 @@ converter.py 单元测试
 """
 
 import unittest
-from core.converter import convert_github_attachments, GKD_PROXY_TEMPLATE
+
+from core.converter import GKD_PROXY_TEMPLATE, convert_github_attachments
 from utils.models import LinkInfo
 
 
@@ -25,17 +26,13 @@ class TestConvertGithubAttachments(unittest.TestCase):
         ]
         result = convert_github_attachments(links)
         self.assertEqual(len(result), 1)
-        expected_url = GKD_PROXY_TEMPLATE.format(
-            url="https://github.com/user-attachments/files/12345/snapshot.zip"
-        )
+        expected_url = GKD_PROXY_TEMPLATE.format(url="https://github.com/user-attachments/files/12345/snapshot.zip")
         self.assertEqual(result[0].converted_url, expected_url)
         self.assertEqual(result[0].original_url, links[0].url)
 
     def test_skip_non_github(self):
         """GKD 链接应被跳过，不返回结果"""
-        links = [
-            LinkInfo(url="https://i.gkd.li/i/29899905", kind="gkd", display_text="")
-        ]
+        links = [LinkInfo(url="https://i.gkd.li/i/29899905", kind="gkd", display_text="")]
         result = convert_github_attachments(links)
         self.assertEqual(result, [])
 

@@ -10,9 +10,8 @@
 本模块只负责内容生成，不负责评论发布（由 YAML 工作流完成）。
 """
 
+from utils.common import short_activity_name
 from utils.models import SnapshotInfo
-from utils.common import extract_filename, short_activity_name
-
 
 # ── 警告评论生成 ──
 
@@ -47,9 +46,7 @@ def build_warning_inaccessible(user: str, url: str) -> str:
     )
 
 
-def build_warning_uncertain(
-    user: str, url: str, status_code: int, detail: str
-) -> str:
+def build_warning_uncertain(user: str, url: str, status_code: int, detail: str) -> str:
     """链接返回不确定状态码时的提醒评论（不关闭，折叠错误详情）"""
     return (
         "<!-- gkd-warning-uncertain -->\n"
@@ -62,10 +59,7 @@ def build_warning_uncertain(
 
 def build_recovery_comment(user: str) -> str:
     """编辑/评论补充有效链接后检查通过时的恢复评论"""
-    return (
-        "<!-- gkd-warning-recovery -->\n"
-        f"✅ 您好 @{user}，快照链接检查已通过，之前的标记已移除。"
-    )
+    return f"<!-- gkd-warning-recovery -->\n✅ 您好 @{user}，快照链接检查已通过，之前的标记已移除。"
 
 
 # ── Bot 转换评论生成 ──
@@ -116,7 +110,9 @@ def build_bot_comment(snapshots: list[SnapshotInfo], gkd_links: list[tuple[str, 
 # ── 分组与去重 ──
 
 
-def _group_by_app(snapshots: list[SnapshotInfo]) -> tuple[dict[str, list[SnapshotInfo]], dict[str, list[tuple[str, str]]]]:
+def _group_by_app(
+    snapshots: list[SnapshotInfo],
+) -> tuple[dict[str, list[SnapshotInfo]], dict[str, list[tuple[str, str]]]]:
     """
     按 appId 分组，同 appId 下按 activityId 分组。
 
@@ -153,7 +149,9 @@ def _group_by_app(snapshots: list[SnapshotInfo]) -> tuple[dict[str, list[Snapsho
 # ── 主区域渲染 ──
 
 
-def _render_app_section(lines: list[str], app_key: str, snapshots: list[SnapshotInfo], activity_links: dict[str, list[tuple[str, str]]]):
+def _render_app_section(
+    lines: list[str], app_key: str, snapshots: list[SnapshotInfo], activity_links: dict[str, list[tuple[str, str]]]
+):
     """
     渲染单个 App 的主区域内容。
 
@@ -248,12 +246,8 @@ def _render_detail_section(snapshots: list[SnapshotInfo]) -> list[str]:
     for app_key, app_snaps in app_groups.items():
         lines.append(f"**{app_key}**")
         lines.append("")
-        lines.append(
-            "| Activity | 可见 | 分辨率 | 方向 | appVersionCode | GKD | userId |"
-        )
-        lines.append(
-            "|----------|------|--------|------|----------------|-----|--------|"
-        )
+        lines.append("| Activity | 可见 | 分辨率 | 方向 | appVersionCode | GKD | userId |")
+        lines.append("|----------|------|--------|------|----------------|-----|--------|")
         for snap in app_snaps:
             orientation = "横屏" if snap.is_landscape else "竖屏"
             resolution = f"{snap.screen_width}×{snap.screen_height}"
@@ -296,18 +290,18 @@ def _deduplicate_devices(snapshots: list[SnapshotInfo]) -> list[dict]:
         if key in seen:
             continue
         seen.add(key)
-        result.append({
-            "code": snap.device_code,
-            "model": snap.device_model,
-            "manufacturer": snap.device_manufacturer,
-            "brand": snap.device_brand,
-            "sdk": str(snap.device_sdk),
-            "release": snap.device_release,
-        })
+        result.append(
+            {
+                "code": snap.device_code,
+                "model": snap.device_model,
+                "manufacturer": snap.device_manufacturer,
+                "brand": snap.device_brand,
+                "sdk": str(snap.device_sdk),
+                "release": snap.device_release,
+            }
+        )
 
     return result
 
 
 # ── 工具函数 ──
-
-

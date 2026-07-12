@@ -7,13 +7,14 @@ formatter.py 单元测试
 """
 
 import unittest
+
 from formatter import (
-    build_warning_missing,
-    build_warning_unreachable,
-    build_warning_inaccessible,
-    build_warning_uncertain,
-    build_recovery_comment,
     build_bot_comment,
+    build_recovery_comment,
+    build_warning_inaccessible,
+    build_warning_missing,
+    build_warning_uncertain,
+    build_warning_unreachable,
 )
 from utils.models import SnapshotInfo
 
@@ -218,8 +219,8 @@ class TestBuildBotComment(unittest.TestCase):
 
         # 每个 Activity 行后应有各自的链接
         lines = result.split("\n")
-        act1_line_idx = next(i for i, l in enumerate(lines) if "**Activity1**" in l)
-        act2_line_idx = next(i for i, l in enumerate(lines) if "**Activity2**" in l)
+        act1_line_idx = next(i for i, line in enumerate(lines) if "**Activity1**" in line)
+        act2_line_idx = next(i for i, line in enumerate(lines) if "**Activity2**" in line)
 
         # 链接应在各自 Activity 行之后
         self.assertIn("111", lines[act1_line_idx + 1])

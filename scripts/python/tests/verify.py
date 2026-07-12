@@ -24,6 +24,7 @@ from pathlib import Path
 # 设置标准输出编码为 UTF-8（Windows 兼容）
 if sys.platform == "win32":
     import io
+
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
@@ -70,7 +71,7 @@ def load_scenarios() -> list[dict]:
     返回：
         场景列表
     """
-    with open(SCENARIOS_FILE, "r", encoding="utf-8") as f:
+    with open(SCENARIOS_FILE, encoding="utf-8") as f:
         data = json.load(f)
     return data.get("scenarios", [])
 
@@ -91,6 +92,7 @@ def run_check_issue(env_vars: dict) -> dict[str, str]:
 
     # 创建临时 GITHUB_OUTPUT 文件
     import tempfile
+
     with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
         output_file = f.name
 
@@ -119,7 +121,7 @@ def run_check_issue(env_vars: dict) -> dict[str, str]:
 
         # 解析 GITHUB_OUTPUT
         outputs = {}
-        with open(output_file, "r", encoding="utf-8") as f:
+        with open(output_file, encoding="utf-8") as f:
             content = f.read()
 
         # 解析 heredoc 格式：key<<GKD_OUTPUT_EOF\nvalue\nGKD_OUTPUT_EOF
@@ -163,10 +165,10 @@ def validate_scenario(scenario: dict) -> TestResult:
     description = scenario.get("description", "")
     result = TestResult(name, description)
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"测试场景: {name}")
     print(f"描述: {description}")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
     # 运行脚本
     print("  运行 check_issue.py ...")
@@ -221,10 +223,10 @@ def run_all_tests() -> list[TestResult]:
     scenarios = load_scenarios()
     results = []
 
-    print(f"\n{'#'*60}")
-    print(f"# 本地验证: Python 脚本功能测试")
+    print(f"\n{'#' * 60}")
+    print("# 本地验证: Python 脚本功能测试")
     print(f"# 共 {len(scenarios)} 个测试场景")
-    print(f"{'#'*60}")
+    print(f"{'#' * 60}")
 
     for i, scenario in enumerate(scenarios, 1):
         print(f"\n[{i}/{len(scenarios)}]", end="")
@@ -241,9 +243,9 @@ def print_summary(results: list[TestResult]):
     参数：
         results: 所有测试结果
     """
-    print(f"\n{'#'*60}")
-    print(f"# 验证摘要")
-    print(f"{'#'*60}")
+    print(f"\n{'#' * 60}")
+    print("# 验证摘要")
+    print(f"{'#' * 60}")
 
     passed = sum(1 for r in results if r.passed)
     failed = sum(1 for r in results if not r.passed)
@@ -253,7 +255,7 @@ def print_summary(results: list[TestResult]):
     print(f"失败: {failed} ❌")
 
     if failed > 0:
-        print(f"\n失败的场景:")
+        print("\n失败的场景:")
         for r in results:
             if not r.passed:
                 print(f"\n  ❌ {r.name}")

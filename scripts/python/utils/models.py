@@ -7,7 +7,6 @@
 
 from dataclasses import dataclass, field
 
-
 # ── 链接相关数据结构 ──
 
 
@@ -19,8 +18,8 @@ class LinkInfo:
     由 extractor.py 的 extract_links() 函数返回。
     """
 
-    url: str          # 完整 URL
-    kind: str         # 分类：gkd / github_attachment / unreachable_snapshot
+    url: str  # 完整 URL
+    kind: str  # 分类：gkd / github_attachment / unreachable_snapshot
     display_text: str  # Markdown 链接的显示文字，纯文本时为空
 
 
@@ -32,9 +31,9 @@ class NetworkResult:
     由 checker.py 的 check_network_links() 函数返回。
     """
 
-    status: str       # "ok" / "404" / "uncertain" / "skipped"
-    status_code: int = 0   # HTTP 状态码
-    detail: str = ""       # 错误详情（供折叠展示）
+    status: str  # "ok" / "404" / "uncertain" / "skipped"
+    status_code: int = 0  # HTTP 状态码
+    detail: str = ""  # 错误详情（供折叠展示）
 
 
 @dataclass
@@ -45,12 +44,12 @@ class ConvertedLink:
     由 converter.py 的 convert_github_attachments() 函数返回。
     """
 
-    original_url: str    # 原始 GitHub 附件 URL
-    converted_url: str   # 转换后的 GKD 代理 URL
-    display_text: str    # 原始 Markdown 链接的显示文字
-    app_name: str        # 从文件名提取的 App 名称（不匹配时为空）
-    activity_name: str   # 从文件名提取的 Activity 名称（不匹配时为空）
-    timestamp: str       # 从文件名提取的时间戳（不匹配时为空）
+    original_url: str  # 原始 GitHub 附件 URL
+    converted_url: str  # 转换后的 GKD 代理 URL
+    display_text: str  # 原始 Markdown 链接的显示文字
+    app_name: str  # 从文件名提取的 App 名称（不匹配时为空）
+    activity_name: str  # 从文件名提取的 Activity 名称（不匹配时为空）
+    timestamp: str  # 从文件名提取的时间戳（不匹配时为空）
 
 
 # ── 快照相关数据结构 ──
@@ -132,8 +131,8 @@ class CheckReport:
     包含统计信息和详细的检查结果列表。
     """
 
-    total_links: int      # 总链接数
-    ok_count: int         # 可访问链接数
-    fail_count: int       # 404 失败链接数
+    total_links: int  # 总链接数
+    ok_count: int  # 可访问链接数
+    fail_count: int  # 404 失败链接数
     uncertain_count: int  # 不确定链接数（403/5xx）
     links: list = field(default_factory=list)  # list[LinkCheckResult]
