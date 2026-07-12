@@ -9,6 +9,7 @@ on:
 permissions:
   contents: read
   issues: write
+  repository-projects: read
 
 env:
   GH_REPO: ${{ github.repository }}
@@ -299,11 +300,14 @@ jobs:
         id: get-old-bot-node
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          ISSUE_NUM: ${{ github.event.issue.number }}
         run: |
           node_id=$(gh api graphql -f query='
-          {
-            repository(owner: "${{ github.repository_owner }}", name: "${{ github.event.repository.name }}") {
-              issue(number: ${{ github.event.issue.number }}) {
+          query($owner: String!, $name: String!, $number: Int!) {
+            repository(owner: $owner, name: $name) {
+              issue(number: $number) {
                 comments(first: 100) {
                   nodes {
                     id
@@ -313,13 +317,14 @@ jobs:
                 }
               }
             }
-          }' --jq '.data.repository.issue.comments.nodes[] | select(.author.login == "github-actions[bot]") | select(.body | contains("gkd-bot-comment")) | .id' 2>/dev/null | head -1)
+          }' -f owner="$REPO_OWNER" -f name="$REPO_NAME" -f number="$ISSUE_NUM" --jq '.data.repository.issue.comments.nodes[] | select(.author.login == "github-actions[bot]") | select(.body | contains("gkd-bot-comment")) | .id' 2>/dev/null | head -1)
           echo "node_id=$node_id" >> "$GITHUB_OUTPUT"
 
       - name: 隐藏旧 Bot 评论
         if: github.event_name == 'issue_comment' && steps.get-old-bot-node.outputs.node_id != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_ID: ${{ steps.get-old-bot-node.outputs.node_id }}
         run: |
           gh api graphql -f query='
           mutation MinimizeComment($subjectId: ID!, $classifier: ReportedContentClassifiers!) {
@@ -329,7 +334,7 @@ jobs:
                 minimizedReason
               }
             }
-          }' -f subjectId="${{ steps.get-old-bot-node.outputs.node_id }}" -f classifier="OUTDATED"
+          }' -f subjectId="$NODE_ID" -f classifier="OUTDATED"
 
       - name: 查找已有 Bot 评论
         id: find-bot
