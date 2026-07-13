@@ -296,7 +296,7 @@ jobs:
           body: ${{ needs.analyze.outputs.comment_uncertain }}
           edit-mode: replace
 
-  # ── 步骤四：链接转换 + Bot 评论（仅当缺失未触发 + 网络可访问时） ──
+  # ── 步骤四：链接转换 + Bot 评论（仅当缺失未触发 + 有可转换链接时） ──
 
   handle-convert:
     name: 处理链接转换
@@ -304,14 +304,10 @@ jobs:
       [
         analyze,
         handle-missing-snapshot,
-        handle-network-404,
-        handle-network-uncertain,
       ]
     if: >-
       always() &&
       needs.handle-missing-snapshot.result == 'skipped' &&
-      needs.handle-network-404.result == 'skipped' &&
-      needs.handle-network-uncertain.result == 'skipped' &&
       needs.analyze.outputs.has_convertible == 'true'
     runs-on: ubuntu-latest
     steps:
