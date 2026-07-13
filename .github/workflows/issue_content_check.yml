@@ -104,9 +104,9 @@ jobs:
             echo "$old_bot" >> "$GITHUB_OUTPUT"
             echo "$separator" >> "$GITHUB_OUTPUT"
           else
-            # 2. Fallback: 获取所有评论
+            # 2. Fallback: 获取用户评论（排除 Bot 警告评论，避免重复提取链接）
             all_comments=$(gh api "repos/$GH_REPO/issues/$ISSUE_NUMBER/comments" \
-              --jq '.[].body' 2>/dev/null | sed ':a;N;$!ba;s/\n/\\n/g')
+              --jq '.[] | select(.user.login != "github-actions[bot]") | .body' 2>/dev/null | sed ':a;N;$!ba;s/\n/\\n/g')
             echo "history_source=all_comments" >> "$GITHUB_OUTPUT"
             echo "history_content<<$separator" >> "$GITHUB_OUTPUT"
             echo "$all_comments" >> "$GITHUB_OUTPUT"
