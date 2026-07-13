@@ -94,31 +94,38 @@ class TestWarningInaccessible(unittest.TestCase):
     """测试 build_warning_inaccessible()"""
 
     def test_contains_html_marker(self):
-        result = build_warning_inaccessible("testuser", "https://example.com")
+        result = build_warning_inaccessible("testuser", ["https://example.com"])
         self.assertIn("<!-- gkd-warning-404 -->", result)
 
     def test_contains_url(self):
         """应包含无法访问的 URL"""
         url = "https://i.gkd.li/i/99999999"
-        result = build_warning_inaccessible("testuser", url)
+        result = build_warning_inaccessible("testuser", [url])
         self.assertIn(url, result)
+
+    def test_multiple_urls(self):
+        """应包含多个无法访问的 URL"""
+        urls = ["https://i.gkd.li/i/11111111", "https://i.gkd.li/i/22222222"]
+        result = build_warning_inaccessible("testuser", urls)
+        self.assertIn(urls[0], result)
+        self.assertIn(urls[1], result)
 
 
 class TestWarningUncertain(unittest.TestCase):
     """测试 build_warning_uncertain()"""
 
     def test_contains_html_marker(self):
-        result = build_warning_uncertain("testuser", "https://example.com", 403, "Forbidden")
+        result = build_warning_uncertain("testuser", ["https://example.com"], 403, "Forbidden")
         self.assertIn("<!-- gkd-warning-uncertain -->", result)
 
     def test_contains_status_code(self):
         """应包含 HTTP 状态码"""
-        result = build_warning_uncertain("testuser", "https://example.com", 403, "Forbidden")
+        result = build_warning_uncertain("testuser", ["https://example.com"], 403, "Forbidden")
         self.assertIn("403", result)
 
     def test_contains_details_tag(self):
         """应包含折叠详情标签"""
-        result = build_warning_uncertain("testuser", "https://example.com", 500, "Server Error")
+        result = build_warning_uncertain("testuser", ["https://example.com"], 500, "Server Error")
         self.assertIn("<details>", result)
         self.assertIn("</details>", result)
 

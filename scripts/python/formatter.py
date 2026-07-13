@@ -36,23 +36,25 @@ def build_warning_unreachable(user: str) -> str:
     )
 
 
-def build_warning_inaccessible(user: str, url: str) -> str:
+def build_warning_inaccessible(user: str, urls: list[str]) -> str:
     """链接不可访问（404）时的警告评论（不关闭 Issue）"""
+    url_list = "\n".join(f"`{url}`" for url in urls)
     return (
         "<!-- gkd-warning-404 -->\n"
         f"您好 @{user}，检测到您提供的快照链接无法访问：\n\n"
-        f"`{url}`\n\n"
+        f"{url_list}\n\n"
         "请确认链接正确后在评论区补充有效的快照链接。"
     )
 
 
-def build_warning_uncertain(user: str, url: str, status_code: int, detail: str) -> str:
+def build_warning_uncertain(user: str, urls: list[str], status_code: int, detail: str) -> str:
     """链接返回不确定状态码时的提醒评论（不关闭，折叠错误详情）"""
+    url_list = "\n".join(f"`{url}`" for url in urls)
     return (
         "<!-- gkd-warning-uncertain -->\n"
         f"您好 @{user}，检测到快照链接访问异常（HTTP {status_code}），"
         "暂时无法确认链接是否有效，请人工核查：\n\n"
-        f"`{url}`\n\n"
+        f"{url_list}\n\n"
         f"<details>\n<summary>详细错误信息</summary>\n\n```\n{detail}\n```\n</details>"
     )
 

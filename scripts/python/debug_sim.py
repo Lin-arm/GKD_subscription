@@ -277,19 +277,24 @@ def analyze(
     _step_header(4, total_steps, "网络有效性检查")
     if with_network:
         net_result = _check_all_links_pipeline(links)
-        result["network_status"] = net_result["status"]
         result["network_detail"] = net_result["detail"]
 
-        if net_result["status"] == "404":
-            result["comment_404"] = build_warning_inaccessible(issue_user, net_result["fail_url"])
-
-        if net_result["status"] == "uncertain":
+        # 有坏链接时生成警告评论
+        if net_result["fail_urls"]:
+            result["comment_404"] = build_warning_inaccessible(issue_user, net_result["fail_urls"])
+        if net_result["uncertain_urls"]:
             result["comment_uncertain"] = build_warning_uncertain(
                 issue_user,
-                net_result["uncertain_url"],
+                net_result["uncertain_urls"],
                 net_result["uncertain_code"],
                 net_result["uncertain_detail"],
             )
+
+        # 有好链接就是 ok
+        if net_result["good_links"]:
+            result["network_status"] = "ok"
+        else:
+            result["network_status"] = net_result["status"] if net_result["status"] != "skipped" else "404"
     else:
         _info("离线模式，跳过网络检查")
         result["network_status"] = "skipped"
@@ -299,10 +304,12 @@ def analyze(
     network_ok = result["network_status"] in ("ok", "skipped")
 
     if network_ok:
+        # 只处理好链接
+        good_links = net_result["good_links"] if with_network else links
         if with_snapshot:
-            snapshots, gkd_links = _parse_all_snapshots_cached(links)
+            snapshots, gkd_links = _parse_all_snapshots_cached(good_links)
         else:
-            snapshots, gkd_links = [], _build_gkd_links_preview(links)
+            snapshots, gkd_links = [], _build_gkd_links_preview(good_links)
 
         if snapshots or gkd_links:
             result["has_convertible"] = "true"
@@ -315,8 +322,8 @@ def analyze(
         _warn("网络检查未通过，跳过快照解析和 Bot 评论")
 
     # ── 恢复判断 ──
-    has_valid_snapshot = any(lnk.kind in ("gkd", "github_attachment") for lnk in links)
-    if issue_action in ("edited", "comment") and has_valid_snapshot and network_ok:
+    has_valid_snapshot = any(lnk.kind in ("gkd", "github_attachment") for lnk in good_links)
+    if issue_action in ("edited", "comment") and has_valid_snapshot:
         result["warning_type"] = "recovery"
         result["comment_recovery"] = build_recovery_comment(issue_user)
         _ok("触发恢复流程 (recovery)")
@@ -329,17 +336,18 @@ def _check_all_links_pipeline(links: list) -> dict:
     网络检查（流水线版本）。
 
     与 check_issue.py._check_all_links() 逻辑一致：
-    - GKD 链接先转 GH 附件 URL 再检查
-    - Fail Fast：遇到 404 立即返回
-    - 403/5xx 记录为 uncertain 但不中断
+    - 检查所有链接，区分好链接和坏链接
+    - 好链接用于后续处理，坏链接记录但不阻断
     """
     result = {
         "status": "skipped",
         "detail": "",
-        "fail_url": "",
-        "uncertain_url": "",
+        "fail_urls": [],
+        "uncertain_urls": [],
         "uncertain_code": 0,
         "uncertain_detail": "",
+        "good_links": [],
+        "bad_links": [],
     }
 
     checkable = [lnk for lnk in links if lnk.kind in ("github_attachment", "gkd")]
@@ -362,27 +370,33 @@ def _check_all_links_pipeline(links: list) -> dict:
             _warn(f"请求异常: {e}")
             continue
 
-        if check.status == "404":
-            _fail(f"404 Not Found → {lnk.url}")
-            result["status"] = "404"
-            result["fail_url"] = lnk.url
-            return result
-
         if check.status == "ok":
             _ok(f"200 OK → {lnk.url}")
+            result["good_links"].append(lnk)
             if result["status"] == "skipped":
                 result["status"] = "ok"
-
-        if check.status == "uncertain" and result["status"] != "uncertain":
+        elif check.status == "404":
+            _fail(f"404 Not Found → {lnk.url}")
+            result["bad_links"].append(lnk)
+            result["fail_urls"].append(lnk.url)
+            if result["status"] == "skipped":
+                result["status"] = "404"
+        elif check.status == "uncertain":
             _warn(f"HTTP {check.status_code} → {lnk.url}")
-            result["status"] = "uncertain"
-            result["detail"] = f"HTTP {check.status_code}: {check.detail}"
-            result["uncertain_url"] = lnk.url
-            result["uncertain_code"] = check.status_code
-            result["uncertain_detail"] = check.detail
+            result["bad_links"].append(lnk)
+            result["uncertain_urls"].append(lnk.url)
+            if not result["uncertain_code"]:
+                result["uncertain_code"] = check.status_code
+                result["uncertain_detail"] = check.detail
+                result["detail"] = f"HTTP {check.status_code}: {check.detail}"
+            if result["status"] == "skipped":
+                result["status"] = "uncertain"
 
-    if result["status"] == "skipped":
-        _ok("所有链接检查完成")
+    # 最终状态判断：有好链接就是 ok，全部坏链接才保持 404/uncertain
+    if result["good_links"]:
+        result["status"] = "ok"
+    elif result["bad_links"] and result["status"] == "skipped":
+        result["status"] = "404"
 
     return result
 

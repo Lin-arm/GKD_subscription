@@ -30,7 +30,7 @@ Issue 快照链接检查主入口
 
 import os
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 # 自动设置模块搜索路径，确保能在任意目录下执行
@@ -72,14 +72,16 @@ _SNAPSHOT_KINDS = {"gkd", "github_attachment", "unreachable_snapshot"}
 
 @dataclass
 class _NetworkCheckResult:
-    """网络检查聚合结果，记录首次遇到的致命/不确定错误"""
+    """网络检查聚合结果，记录所有链接的检查状态"""
 
-    status: str = "skipped"  # 初始状态为 skipped，只有实际检查后才变为 ok/404/uncertain
+    status: str = "skipped"  # ok / 404 / uncertain / skipped
     detail: str = ""
-    fail_url: str = ""
-    uncertain_url: str = ""
+    fail_urls: list = field(default_factory=list)  # 404 链接列表
+    uncertain_urls: list = field(default_factory=list)  # uncertain 链接列表
     uncertain_code: int = 0
     uncertain_detail: str = ""
+    good_links: list = field(default_factory=list)  # 可访问的链接
+    bad_links: list = field(default_factory=list)  # 不可访问的链接
 
 
 # ── 主流程 ──
@@ -163,39 +165,40 @@ def main():
         comment_unreachable = build_warning_unreachable(issue_user)
 
     # ── 第四步：网络有效性检查 ──
-    # GKD 分享链接先转换为 GH 附件 URL 再检查，GH 附件链接直接检查
+    # 检查所有链接，区分好链接和坏链接
     net_result = _check_all_links(links)
-    network_status = net_result.status
     network_detail = net_result.detail
 
-    if network_status == "404":
-        comment_404 = build_warning_inaccessible(issue_user, net_result.fail_url)
-
-    if network_status == "uncertain":
+    # 有坏链接时生成警告评论（显示所有坏链接）
+    if net_result.fail_urls:
+        comment_404 = build_warning_inaccessible(issue_user, net_result.fail_urls)
+    if net_result.uncertain_urls:
         comment_uncertain = build_warning_uncertain(
             issue_user,
-            net_result.uncertain_url,
+            net_result.uncertain_urls,
             net_result.uncertain_code,
             net_result.uncertain_detail,
         )
 
     # ── 第五步：链接转换 + 快照解析 + Bot 评论生成 ──
-    # 仅当网络检查通过（ok/skipped）且含有可下载的快照链接时执行
-    # 如果网络检查失败（404/uncertain），不生成 Bot 评论
-    if network_status in ("ok", "skipped"):
-        snapshots, gkd_links = _parse_all_snapshots(links)
+    # 只处理好链接，跳过坏链接
+    # 只要有好链接就允许转换
+    if net_result.good_links:
+        network_status = "ok"
+        snapshots, gkd_links = _parse_all_snapshots(net_result.good_links)
         if snapshots or gkd_links:
             has_convertible = "true"
             comment_body = build_bot_comment(snapshots, gkd_links)
             comment_bot = "<!-- gkd-bot-comment -->\n" + comment_body
+    else:
+        # 全部都是坏链接
+        network_status = net_result.status if net_result.status != "skipped" else "404"
 
     # ── 第六步：编辑/评论恢复判断 ──
-    # 当 edited 或 issue_comment 触发且所有检查均通过时，触发恢复流程
-    # 恢复条件：edited/comment + 至少有一个有效快照链接 + 网络OK
-    # 不要求旧问题链接消失——作者补充有效链接即可恢复
-    has_valid_snapshot = any(lnk.kind in ("gkd", "github_attachment") for lnk in links)
+    # 当 edited 或 issue_comment 触发且有好链接时，触发恢复流程
+    has_valid_snapshot = any(lnk.kind in ("gkd", "github_attachment") for lnk in net_result.good_links)
 
-    if issue_action in ("edited", "comment") and has_valid_snapshot and network_status in ("ok", "skipped"):
+    if issue_action in ("edited", "comment") and has_valid_snapshot:
         warning_type = "recovery"
         comment_recovery = build_recovery_comment(issue_user)
 
@@ -223,10 +226,11 @@ def _check_all_links(links: list) -> _NetworkCheckResult:
     - GitHub 附件链接：直接检查原始 URL
     - GKD 分享链接：先转换为 GH 附件 URL 再检查
 
-    遵循 Fail Fast 原则：遇到 404 立即返回。
-    不确定结果（403/5xx）为非致命，记录但不中断。
+    新逻辑：检查所有链接，区分好链接和坏链接。
+    - 好链接：可以用于后续快照解析和转换
+    - 坏链接：记录但不阻断好链接的处理
 
-    返回：_NetworkCheckResult 聚合结果
+    返回：_NetworkCheckResult 包含 good_links 和 bad_links
     """
     result = _NetworkCheckResult()
 
@@ -242,22 +246,30 @@ def _check_all_links(links: list) -> _NetworkCheckResult:
 
         check = check_network_links(check_url)
 
-        if check.status == "404":
-            result.status = "404"
-            result.fail_url = lnk.url
-            return result
-
         if check.status == "ok":
-            # 检查成功，更新状态为 ok（只有首次成功时更新）
+            result.good_links.append(lnk)
             if result.status == "skipped":
                 result.status = "ok"
+        elif check.status == "404":
+            result.bad_links.append(lnk)
+            result.fail_urls.append(lnk.url)
+            if result.status == "skipped":
+                result.status = "404"
+        elif check.status == "uncertain":
+            result.bad_links.append(lnk)
+            result.uncertain_urls.append(lnk.url)
+            if not result.uncertain_code:
+                result.uncertain_code = check.status_code
+                result.uncertain_detail = check.detail
+                result.detail = f"HTTP {check.status_code}: {check.detail}"
+            if result.status == "skipped":
+                result.status = "uncertain"
 
-        if check.status == "uncertain" and result.status != "uncertain":
-            result.status = "uncertain"
-            result.detail = f"HTTP {check.status_code}: {check.detail}"
-            result.uncertain_url = lnk.url
-            result.uncertain_code = check.status_code
-            result.uncertain_detail = check.detail
+    # 最终状态判断：有好链接就是 ok，全部坏链接才保持 404/uncertain
+    if result.good_links:
+        result.status = "ok"
+    elif result.bad_links and result.status == "skipped":
+        result.status = "404"
 
     return result
 

@@ -338,7 +338,7 @@ jobs:
                 }
               }
             }
-          }' -f owner="$REPO_OWNER" -f name="$REPO_NAME" -f number="$ISSUE_NUM" --jq '.data.repository.issue.comments.nodes[] | select(.author.login == "github-actions[bot]") | select(.body | contains("gkd-bot-comment")) | .id' 2>/dev/null | head -1)
+          }' -f owner="$REPO_OWNER" -f name="$REPO_NAME" -F number="$ISSUE_NUM" --jq '.data.repository.issue.comments.nodes[] | select(.author.login == "github-actions[bot]") | select(.body | contains("gkd-bot-comment")) | .id' 2>/dev/null | head -1)
           echo "node_id=$node_id" >> "$GITHUB_OUTPUT"
 
       - name: 隐藏旧 Bot 评论
