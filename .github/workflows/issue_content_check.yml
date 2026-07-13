@@ -115,7 +115,7 @@ jobs:
 
       # 恢复快照缓存（所有事件都可读取）
       - name: 恢复快照缓存
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: /tmp/snapshot_cache
           key: snapshots-${{ github.event.issue.number }}
@@ -155,7 +155,7 @@ jobs:
       # 保存快照缓存（仅 issues 事件有写权限）
       - name: 保存快照缓存
         if: github.event_name == 'issues'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: /tmp/snapshot_cache
           key: snapshots-${{ github.event.issue.number }}
