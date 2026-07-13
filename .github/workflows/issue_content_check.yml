@@ -210,7 +210,7 @@ jobs:
     steps:
       - name: 打标签「需补充链接」
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}.
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: gh issue edit "$ISSUE_NUMBER" --add-label "需补充链接(needs-link)"
 
