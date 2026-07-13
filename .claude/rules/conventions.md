@@ -45,9 +45,9 @@ PR 检查强制要求每次 PR **最多修改 1 个订阅源文件**（即仅允
 
 通过 `simple-git-hooks` + `lint-staged` 实现：
 
-- **pre-commit**：对暂存的 `.ts`/`.tsx`/`.js`/`.mjs`/`.cjs` 文件执行 ESLint + Prettier；对 `.json` 文件执行 Prettier
+- **pre-commit**：对暂存的 `.ts`/`.tsx`/`.js`/`.mjs`/`.cjs` 文件执行 ESLint + Prettier；对 `.json` 文件执行 Prettier；对 `.py` 文件执行 ruff check + ruff format
 - **commit-msg**：commitlint（遵循 conventional commits，详见 `commitlint.config.ts`）
-- **pre-push**：`pnpm run check`
+- **pre-push**：`pnpm run check` + 条件运行 Python 测试（仅当 `scripts/python/` 或 `.github/workflows/` 有变更时触发 ruff check + 39 个单元测试）
 
 ## 代码风格
 
@@ -61,6 +61,7 @@ PR 检查强制要求每次 PR **最多修改 1 个订阅源文件**（即仅允
 - 文件使用 UTF-8 编码
 - 类型注解（Python 3.10+ 语法）
 - dataclass 用于数据结构
+- 遵循 ruff 静态检查（规则：E/W/F/I/B/UP）
 - 不使用第三方库，仅使用 Python 标准库
 - YAML Step 名称使用中文
 

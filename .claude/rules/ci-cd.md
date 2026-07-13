@@ -311,9 +311,15 @@ scripts/python/
   ├── entry/             # 入口脚本层
   │   └── check_issue.py   # Issue 场景主入口
   ├── tests/             # 测试层
-  │   ├── verify.py      # 本地验证脚本
-  │   └── test_scenarios.json  # 测试场景配置
+  │   ├── test_extractor.py   # extractor.py 单元测试
+  │   ├── test_converter.py   # converter.py 单元测试
+  │   ├── test_formatter.py   # formatter.py 单元测试
+  │   ├── run_tests.sh        # 条件运行脚本（pre-push 集成）
+  │   ├── verify.py           # 本地验证脚本
+  │   └── test_scenarios.json # 测试场景配置
+  ├── debug_sim.py       # Issue 模拟测试工具（交互式调试）
   ├── formatter.py       # 评论格式化（跨层使用）
+  ├── ruff.toml          # Python 静态检查配置
   └── README.md          # 模块说明文档
 ```
 
@@ -329,6 +335,7 @@ scripts/python/
 ## Python 脚本说明
 
 - `entry/check_issue.py` — Issue 场景主入口，分析快照链接并输出结果
+- `debug_sim.py` — Issue 模拟测试工具（交互式调试，与 check_issue.py 逻辑一致）
 - `core/snapshot_parser.py` — 下载并解析快照 zip 文件
 - `formatter.py` — 生成 Bot 评论的 Markdown 内容
 - `core/converter.py` — GitHub 附件 → GKD 代理链接转换
