@@ -264,7 +264,7 @@ def print_summary(results: list[TestResult]):
                     print(f"     - {mismatch}")
 
 
-def save_results(results: list[TestResult], output_file: Path = None):
+def save_results(results: list[TestResult], output_file: Path | None = None):
     """
     保存验证结果到 JSON 文件
 

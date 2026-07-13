@@ -108,7 +108,7 @@ class TestExtractLinksFromBotComment(unittest.TestCase):
 
     def test_none_comment(self):
         """None 应返回空列表"""
-        result = extract_links_from_bot_comment(None)
+        result = extract_links_from_bot_comment(None)  # type: ignore[arg-type]
         self.assertEqual(result, [])
 
 
