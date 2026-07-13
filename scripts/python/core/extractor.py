@@ -126,9 +126,8 @@ def extract_links_from_bot_comment(comment: str) -> list[LinkInfo]:
         url = match.group(2)
         if url not in seen:
             seen.add(url)
-            # 将代理链接转换为 GKD 分享链接格式
-            gkd_url = f"https://i.gkd.li/i/{snapshot_id}"
-            results.append(LinkInfo(url=gkd_url, kind="gkd", display_text=snapshot_id))
+            # 使用原始 URL（已经是 GKD 代理链接格式）
+            results.append(LinkInfo(url=url, kind="gkd", display_text=snapshot_id))
 
     # 提取纯文本 GKD 链接
     for match in _RE_BOT_GKD_LINK.finditer(comment):
