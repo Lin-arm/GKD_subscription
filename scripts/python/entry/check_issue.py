@@ -182,16 +182,21 @@ def main():
 
     # ── 第五步：链接转换 + 快照解析 + Bot 评论生成 ──
     # 只处理好链接，跳过坏链接
-    # 只要有好链接就允许转换
     if net_result.good_links:
-        network_status = "ok"
         snapshots, gkd_links = _parse_all_snapshots(net_result.good_links)
         if snapshots or gkd_links:
             has_convertible = "true"
             comment_body = build_bot_comment(snapshots, gkd_links)
             comment_bot = "<!-- gkd-bot-comment -->\n" + comment_body
+
+    # network_status 反映最差状态：有坏链接就是对应状态
+    if net_result.fail_urls:
+        network_status = "404"
+    elif net_result.uncertain_urls:
+        network_status = "uncertain"
+    elif net_result.good_links:
+        network_status = "ok"
     else:
-        # 全部都是坏链接
         network_status = net_result.status if net_result.status != "skipped" else "404"
 
     # ── 第六步：编辑/评论恢复判断 ──

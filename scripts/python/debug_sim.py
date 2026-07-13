@@ -290,8 +290,12 @@ def analyze(
                 net_result["uncertain_detail"],
             )
 
-        # 有好链接就是 ok
-        if net_result["good_links"]:
+        # network_status 反映最差状态：有坏链接就是对应状态
+        if net_result["fail_urls"]:
+            result["network_status"] = "404"
+        elif net_result["uncertain_urls"]:
+            result["network_status"] = "uncertain"
+        elif net_result["good_links"]:
             result["network_status"] = "ok"
         else:
             result["network_status"] = net_result["status"] if net_result["status"] != "skipped" else "404"
