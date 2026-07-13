@@ -2,6 +2,7 @@
 Issue 模拟测试工具
 
 本地交互式调试 check_issue.py 的分析逻辑，无需创建真实 GitHub Issue。
+默认启用网络检查（模拟真实 CI 环境），网络不可用时自动降级为离线模式。
 
 支持三种输入方式：
   1. 交互式：运行脚本后在终端输入 Issue Body，输入 END 结束
@@ -9,10 +10,10 @@ Issue 模拟测试工具
   3. 管道：echo "..." | python debug_sim.py
 
 使用方法：
-  python scripts/python/debug_sim.py                        # 交互式
-  python scripts/python/debug_sim.py --file issue.md        # 文件
-  python scripts/python/debug_sim.py --with-network         # 启用网络检查
-  python scripts/python/debug_sim.py --with-snapshot        # 启用快照下载
+  python scripts/python/debug_sim.py                        # 交互式（默认联网）
+  python scripts/python/debug_sim.py --file issue.md        # 文件输入
+  python scripts/python/debug_sim.py --offline              # 离线模式（跳过网络）
+  python scripts/python/debug_sim.py --no-snapshot          # 跳过快照下载
   python scripts/python/debug_sim.py --user testuser        # 指定用户名
   python scripts/python/debug_sim.py --action comment       # 模拟评论事件
 """
@@ -42,7 +43,37 @@ from formatter import (  # noqa: E402
 # ── 常量 ──
 
 _SNAPSHOT_KINDS = {"gkd", "github_attachment", "unreachable_snapshot"}
-_SEPARATOR = "─" * 40
+_WIDTH = 48
+_STEP_TEMPLATE = "[{idx}/{total}] {title}"
+
+
+# ── 流水线输出 ──
+
+
+def _step_header(idx: int, total: int, title: str):
+    """打印流水线步骤标题。"""
+    print(f"\n{_STEP_TEMPLATE.format(idx=idx, total=total, title=title)}")
+    print("─" * _WIDTH)
+
+
+def _ok(msg: str):
+    """打印成功标记。"""
+    print(f"  ✓ {msg}")
+
+
+def _warn(msg: str):
+    """打印警告标记。"""
+    print(f"  ⚠ {msg}")
+
+
+def _fail(msg: str):
+    """打印失败标记。"""
+    print(f"  ✗ {msg}")
+
+
+def _info(msg: str):
+    """打印信息行。"""
+    print(f"  → {msg}")
 
 
 # ── 输入处理 ──
@@ -73,7 +104,31 @@ def read_from_stdin() -> str:
     return sys.stdin.read()
 
 
-# ── 分析流程（复用 check_issue.py 逻辑） ──
+# ── 网络可达性预检 ──
+
+
+def _preflight_network() -> bool:
+    """
+    预检网络是否可用。
+
+    通过 HEAD 请求测试 GitHub 是否可达。
+    返回 True 表示网络可用，False 表示离线。
+    """
+    _info("预检网络连通性...")
+    try:
+        import urllib.request
+
+        req = urllib.request.Request("https://github.com", method="HEAD")
+        resp = urllib.request.urlopen(req, timeout=5)
+        resp.close()
+        _ok("网络可用")
+        return True
+    except Exception:
+        _warn("网络不可用，自动降级为离线模式")
+        return False
+
+
+# ── 分析流程（流水线版本） ──
 
 
 def analyze(
@@ -81,13 +136,13 @@ def analyze(
     comment_body: str = "",
     issue_user: str = "testuser",
     issue_action: str = "opened",
-    with_network: bool = False,
-    with_snapshot: bool = False,
+    with_network: bool = True,
+    with_snapshot: bool = True,
 ) -> dict:
     """
     执行 Issue 分析，返回所有结果。
 
-    参数与 check_issue.py.main() 对应，但输出到字典而非 GITHUB_OUTPUT。
+    流水线步骤与 check_issue.py 一一对应，终端实时输出过程。
     """
     # 合并链接（简化版：不处理 history_content）
     if issue_action == "comment" and comment_body:
@@ -112,24 +167,45 @@ def analyze(
         "comment_bot": "",
     }
 
-    # ── 判断是否缺少快照 ──
+    total_steps = 5
+
+    # ── Step 1: 链接提取 ──
+    _step_header(1, total_steps, "链接提取")
+    if not links:
+        _ok("提取到 0 个链接")
+    else:
+        _ok(f"提取到 {len(links)} 个链接")
+        for i, lnk in enumerate(links, 1):
+            display = f"[{lnk.display_text}]({lnk.url})" if lnk.display_text else lnk.url
+            print(f"     {i}. kind={lnk.kind}  {display}")
+
+    # ── Step 2: 判断是否缺少快照 ──
+    _step_header(2, total_steps, "快照检查")
     has_any_snapshot = any(lnk.kind in _SNAPSHOT_KINDS for lnk in links)
 
     if not has_any_snapshot:
+        _fail("未提供任何快照链接 → 将关闭 Issue")
         result["has_snapshot"] = "false"
         result["warning_type"] = "missing"
         result["comment_missing"] = build_warning_missing(issue_user)
         return result
 
-    # ── 检查不可访问快照链接 ──
+    _ok("快照链接存在")
+
+    # ── Step 3: 不可访问快照检查 ──
+    _step_header(3, total_steps, "不可访问快照检查")
     unreachable_links = check_unreachable_links(links)
     if unreachable_links:
+        _warn(f"发现 {len(unreachable_links)} 个不可访问快照 (i.gkd.li/snapshot/)")
         result["has_unreachable"] = "true"
         result["comment_unreachable"] = build_warning_unreachable(issue_user)
+    else:
+        _ok("无不可访问快照")
 
-    # ── 网络有效性检查 ──
+    # ── Step 4: 网络有效性检查 ──
+    _step_header(4, total_steps, "网络有效性检查")
     if with_network:
-        net_result = _check_all_links_interactive(links)
+        net_result = _check_all_links_pipeline(links)
         result["network_status"] = net_result["status"]
         result["network_detail"] = net_result["detail"]
 
@@ -144,9 +220,11 @@ def analyze(
                 net_result["uncertain_detail"],
             )
     else:
+        _info("离线模式，跳过网络检查")
         result["network_status"] = "skipped"
 
-    # ── 链接转换 + Bot 评论 ──
+    # ── Step 5: 链接转换 + Bot 评论 ──
+    _step_header(5, total_steps, "评论生成")
     network_ok = result["network_status"] in ("ok", "skipped")
 
     if network_ok:
@@ -159,18 +237,24 @@ def analyze(
             result["has_convertible"] = "true"
             comment_body_text = build_bot_comment(snapshots, gkd_links)
             result["comment_bot"] = "<!-- gkd-bot-comment -->\n" + comment_body_text
+            _ok(f"Bot 评论已生成 ({len(snapshots)} 快照, {len(gkd_links)} GKD 链接)")
+        else:
+            _info("无可转换链接，跳过 Bot 评论")
+    else:
+        _warn("网络检查未通过，跳过快照解析和 Bot 评论")
 
     # ── 恢复判断 ──
     has_valid_snapshot = any(lnk.kind in ("gkd", "github_attachment") for lnk in links)
     if issue_action in ("edited", "comment") and has_valid_snapshot and network_ok:
         result["warning_type"] = "recovery"
         result["comment_recovery"] = build_recovery_comment(issue_user)
+        _ok("触发恢复流程 (recovery)")
 
     return result
 
 
-def _check_all_links_interactive(links: list) -> dict:
-    """网络检查（交互式版本）。"""
+def _check_all_links_pipeline(links: list) -> dict:
+    """网络检查（流水线版本）。"""
     result = {
         "status": "skipped",
         "detail": "",
@@ -180,33 +264,47 @@ def _check_all_links_interactive(links: list) -> dict:
         "uncertain_detail": "",
     }
 
-    for lnk in links:
+    checkable = [lnk for lnk in links if lnk.kind in ("github_attachment", "gkd")]
+    if not checkable:
+        _info("无可检查链接")
+        return result
+
+    for lnk in checkable:
         if lnk.kind == "github_attachment":
             check_url = lnk.url
-        elif lnk.kind == "gkd":
+        else:
             check_url = gkd_to_gh_attachment_url(lnk.url)
             if not check_url:
                 continue
-        else:
+
+        _info(f"检查 {check_url[:72]}...")
+        try:
+            check = check_network_links(check_url)
+        except Exception as e:
+            _warn(f"请求异常: {e}")
             continue
 
-        print(f"  检查: {check_url[:80]}...")
-        check = check_network_links(check_url)
-
         if check.status == "404":
+            _fail(f"404 Not Found → {lnk.url}")
             result["status"] = "404"
             result["fail_url"] = lnk.url
             return result
 
-        if check.status == "ok" and result["status"] == "skipped":
-            result["status"] = "ok"
+        if check.status == "ok":
+            _ok(f"200 OK → {lnk.url}")
+            if result["status"] == "skipped":
+                result["status"] = "ok"
 
         if check.status == "uncertain" and result["status"] != "uncertain":
+            _warn(f"HTTP {check.status_code} → {lnk.url}")
             result["status"] = "uncertain"
             result["detail"] = f"HTTP {check.status_code}: {check.detail}"
             result["uncertain_url"] = lnk.url
             result["uncertain_code"] = check.status_code
             result["uncertain_detail"] = check.detail
+
+    if result["status"] == "skipped":
+        _ok("所有链接检查完成")
 
     return result
 
@@ -219,22 +317,36 @@ def _parse_all_snapshots(links: list) -> tuple[list, list[tuple[str, str]]]:
     for lnk in links:
         if lnk.kind == "github_attachment":
             converted_url = GKD_PROXY_TEMPLATE.format(url=lnk.url)
-            print(f"  下载快照: {lnk.url[:80]}...")
-            snap = download_and_parse(lnk.url, converted_url)
+            _info(f"下载快照 {lnk.url[:72]}...")
+            try:
+                snap = download_and_parse(lnk.url, converted_url)
+            except Exception as e:
+                _warn(f"下载失败: {e}")
+                snap = None
+
             if snap:
+                _ok(f"解析成功: {snap.app_id} / {snap.activity_id}")
                 snapshots.append(snap)
             else:
+                _warn("解析失败，保留为 GKD 链接")
                 gkd_links.append((lnk.display_text or lnk.url, converted_url))
 
         elif lnk.kind == "gkd":
             gh_url = gkd_to_gh_attachment_url(lnk.url)
             if not gh_url:
                 continue
-            print(f"  下载快照: {lnk.url}")
-            snap = download_and_parse(gh_url, lnk.url)
+            _info(f"下载快照 {lnk.url}...")
+            try:
+                snap = download_and_parse(gh_url, lnk.url)
+            except Exception as e:
+                _warn(f"下载失败: {e}")
+                snap = None
+
             if snap:
+                _ok(f"解析成功: {snap.app_id} / {snap.activity_id}")
                 snapshots.append(snap)
             else:
+                _warn("解析失败，保留为 GKD 链接")
                 gkd_links.append((lnk.display_text or lnk.url, lnk.url))
 
     return snapshots, gkd_links
@@ -253,30 +365,14 @@ def _build_gkd_links_preview(links: list) -> list[tuple[str, str]]:
     return gkd_links
 
 
-# ── 输出格式化 ──
+# ── 结果汇总输出 ──
 
 
-def print_links(links: list):
-    """打印提取的链接。"""
-    print(f"\n{_SEPARATOR}")
-    print("链接提取")
-    print(_SEPARATOR)
-
-    if not links:
-        print("  (无链接)")
-        return
-
-    for i, lnk in enumerate(links, 1):
-        display = f"  [{lnk.display_text}]({lnk.url})" if lnk.display_text else f"  {lnk.url}"
-        print(f"  [{i}] kind={lnk.kind}")
-        print(f"      {display}")
-
-
-def print_result(result: dict):
-    """打印分析结果。"""
-    print(f"\n{_SEPARATOR}")
-    print("分析结果")
-    print(_SEPARATOR)
+def print_summary(result: dict):
+    """打印结果汇总。"""
+    print(f"\n{'═' * _WIDTH}")
+    print("结果汇总")
+    print(f"{'═' * _WIDTH}")
 
     flags = [
         ("has_snapshot", result["has_snapshot"]),
@@ -288,13 +384,7 @@ def print_result(result: dict):
     for key, value in flags:
         print(f"  {key:<20s} = {value}")
 
-
-def print_warnings(result: dict):
-    """打印警告评论预览。"""
-    print(f"\n{_SEPARATOR}")
-    print("警告评论预览")
-    print(_SEPARATOR)
-
+    # 警告评论
     warnings = [
         ("missing", result["comment_missing"]),
         ("unreachable", result["comment_unreachable"]),
@@ -302,36 +392,26 @@ def print_warnings(result: dict):
         ("uncertain", result["comment_uncertain"]),
         ("recovery", result["comment_recovery"]),
     ]
+    has_warnings = any(c for _, c in warnings)
+    if has_warnings:
+        print(f"\n{'─' * _WIDTH}")
+        print("警告评论")
+        print(f"{'─' * _WIDTH}")
+        for label, comment in warnings:
+            if comment:
+                print(f"\n  ── {label} ──")
+                for line in comment.split("\n"):
+                    print(f"  {line}")
 
-    has_any = False
-    for label, comment in warnings:
-        if comment:
-            has_any = True
-            print(f"\n  ── {label} ──")
-            for line in comment.split("\n"):
-                print(f"  {line}")
-
-    if not has_any:
-        print("  (无警告)")
-
-
-def print_bot_comment(result: dict):
-    """打印 Bot 评论预览。"""
-    print(f"\n{_SEPARATOR}")
-    print("Bot 评论预览")
-    print(_SEPARATOR)
-
+    # Bot 评论
     comment = result["comment_bot"]
-    if not comment:
-        print("  (未生成 — 可能网络检查未通过或无可转换链接)")
-        return
-
-    # 去掉 HTML 标记行
-    lines = comment.split("\n")
-    content_lines = [line for line in lines if not line.startswith("<!--")]
-
-    for line in content_lines:
-        print(f"  {line}")
+    if comment:
+        print(f"\n{'─' * _WIDTH}")
+        print("Bot 评论预览")
+        print(f"{'─' * _WIDTH}")
+        content_lines = [line for line in comment.split("\n") if not line.startswith("<!--")]
+        for line in content_lines:
+            print(f"  {line}")
 
 
 # ── 主入口 ──
@@ -342,62 +422,62 @@ def main():
     parser.add_argument("--file", "-f", help="从文件读取 Issue Body")
     parser.add_argument("--user", "-u", default="testuser", help="模拟用户名 (默认: testuser)")
     parser.add_argument(
-        "--action", "-a", default="opened", choices=["opened", "edited", "comment"], help="触发事件类型 (默认: opened)"
+        "--action",
+        "-a",
+        default="opened",
+        choices=["opened", "edited", "comment"],
+        help="触发事件类型 (默认: opened)",
     )
     parser.add_argument("--comment", "-c", default="", help="评论内容 (用于 comment 事件)")
-    parser.add_argument("--with-network", "-n", action="store_true", help="启用网络检查")
-    parser.add_argument("--with-snapshot", "-s", action="store_true", help="启用快照下载+解析")
+    parser.add_argument("--offline", action="store_true", help="离线模式（跳过网络检查和快照下载）")
+    parser.add_argument("--no-snapshot", action="store_true", help="跳过快照下载+解析（保留网络检查）")
     args = parser.parse_args()
 
     print()
-    print("╔══════════════════════════════════════════╗")
-    print("║   GKD Issue 模拟测试工具                 ║")
-    print("╚══════════════════════════════════════════╝")
-    print()
+    print("╔══════════════════════════════════════════════════╗")
+    print("║   GKD Issue 模拟测试工具                         ║")
+    print("╚══════════════════════════════════════════════════╝")
 
     # 读取输入
     if args.file:
         body = read_from_file(args.file)
-        print(f"从文件读取: {args.file}")
+        print(f"\n从文件读取: {args.file}")
     elif not sys.stdin.isatty():
         body = read_from_stdin()
-        print("从标准输入读取")
+        print("\n从标准输入读取")
     else:
-        # 交互式
-        if args.action == "opened":
-            action_label = "opened"
-        elif args.action == "edited":
-            action_label = "edited"
-        else:
-            action_label = "comment"
-        print(f"模拟场景: {action_label}")
-        print()
+        action_label = args.action
+        print(f"\n模拟场景: {action_label}")
         body = read_interactive()
 
     if not body.strip():
-        print("错误: 输入内容为空")
+        print("\n错误: 输入内容为空")
         sys.exit(1)
 
-    # 执行分析
-    print(
-        f"\n分析中... (network={'on' if args.with_network else 'off'}, snapshot={'on' if args.with_snapshot else 'off'})"
-    )
+    # 网络模式判断
+    with_network = not args.offline
+    with_snapshot = not args.offline and not args.no_snapshot
 
+    if with_network:
+        network_ok = _preflight_network()
+        if not network_ok:
+            with_network = False
+            with_snapshot = False
+    else:
+        print("\n模式: 离线")
+
+    # 执行分析
     result = analyze(
         body=body,
         comment_body=args.comment,
         issue_user=args.user,
         issue_action=args.action,
-        with_network=args.with_network,
-        with_snapshot=args.with_snapshot,
+        with_network=with_network,
+        with_snapshot=with_snapshot,
     )
 
-    # 输出结果
-    links = extract_links(body)
-    print_links(links)
-    print_result(result)
-    print_warnings(result)
-    print_bot_comment(result)
+    # 输出汇总
+    print_summary(result)
     print()
 
 
