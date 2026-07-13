@@ -78,9 +78,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh label create "缺失快照(missing-snapshot)" --color "e74c3c" --description "Issue缺少快照链接" --force
-          gh label create "需补充链接(need-supplement-link)" --color "f39c12" --description "Issue包含不可访问的快照链接" --force
-          gh label create "链接无法访问(inaccessible-link)" --color "c0392b" --description "Issue中的链接无法访问" --force
+          gh label create "缺失快照(no-snapshot)" --color "#fd1b4d" --description "Issue缺少快照链接" --force
+          gh label create "需补充链接(needs-link)" --color "#581598" --description "Issue包含不可访问的快照链接" --force
+          gh label create "链接失效(broken-link)" --color "#12f540" --description "Issue中的链接无法访问" --force
 
       # issue_comment 事件时，获取旧 Bot 评论或所有评论作为历史链接来源
       - name: 获取历史链接

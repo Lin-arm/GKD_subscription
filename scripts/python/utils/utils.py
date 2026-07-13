@@ -10,9 +10,9 @@ import os
 # ── 本工作流管理的所有标签 ──
 
 MANAGED_LABELS = [
-    "缺失快照(missing-snapshot)",
-    "需补充链接(need-supplement-link)",
-    "链接无法访问(inaccessible-link)",
+    "缺失快照(no-snapshot)",
+    "需补充链接(needs-link)",
+    "链接失效(broken-link)",
 ]
 
 
