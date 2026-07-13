@@ -152,7 +152,7 @@ jobs:
             python3 scripts/python/entry/check_issue.py
           fi
 
-      # 保存快照缓存（仅 issues 事件有写权限）
+      # 保存快照缓存（仅 issues 事件有写权限，issue_comment 事件只读）
       - name: 保存快照缓存
         if: github.event_name == 'issues'
         uses: actions/cache/save@v6
@@ -353,21 +353,11 @@ jobs:
             }
           }' -f subjectId="$NODE_ID" -f classifier="OUTDATED"
 
-      - name: 查找已有 Bot 评论
-        id: find-bot
-        uses: peter-evans/find-comment@v4
-        with:
-          issue-number: ${{ github.event.issue.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: '<!-- gkd-bot-comment -->'
-
-      - name: 发布/更新快照转换评论
+      - name: 发布快照转换评论
         uses: peter-evans/create-or-update-comment@v5
         with:
-          comment-id: ${{ steps.find-bot.outputs.comment-id }}
           issue-number: ${{ github.event.issue.number }}
           body: ${{ needs.analyze.outputs.comment_bot }}
-          edit-mode: replace
 
   # ── 步骤五：编辑/评论恢复（仅当缺失未触发 + 所有检查通过时） ──
 
