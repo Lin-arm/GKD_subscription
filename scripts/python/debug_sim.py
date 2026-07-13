@@ -3,7 +3,7 @@ Issue 模拟测试工具
 
 本地交互式调试 check_issue.py 的分析逻辑，无需创建真实 GitHub Issue。
 默认启用网络检查（模拟真实 CI 环境），网络不可用时自动降级为离线模式。
-与 check_issue.py 保持逻辑一致：历史链接合并、快照缓存、Fail Fast 网络检查。
+与 check_issue.py 保持逻辑一致：历史链接合并、快照缓存、网络检查（检查全部，跳过坏链接）。
 
 支持三种输入方式：
   1. 交互式：运行脚本后在终端输入 Issue Body，输入 END 结束
@@ -204,7 +204,7 @@ def analyze(
     与 check_issue.py.main() 逻辑完全一致：
     - comment 事件合并历史链接 + 新链接
     - 支持 old_bot / all 两种历史来源
-    - 网络检查 Fail Fast
+    - 网络检查：检查全部链接，跳过坏链接
     - 快照缓存
     """
     # ── 链接提取（与 check_issue.py 一致） ──
