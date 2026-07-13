@@ -49,7 +49,10 @@ from formatter import (  # noqa: E402
     build_warning_uncertain,
     build_warning_unreachable,
 )
-from utils.common import extract_filename  # noqa: E402
+from utils.common import (  # noqa: E402
+    extract_filename,
+    merge_links_dedup,
+)
 from utils.models import LinkInfo, SnapshotInfo  # noqa: E402
 
 # ── 常量 ──
@@ -144,47 +147,6 @@ def _preflight_network() -> bool:
         return False
 
 
-# ── 链接合并（与 check_issue.py 一致） ──
-
-
-def _merge_links_dedup(history_links: list[LinkInfo], new_links: list[LinkInfo]) -> list[LinkInfo]:
-    """
-    合并历史链接和新链接，基于 URL 去重。
-
-    策略：保留首次出现的链接（历史链接优先）。
-    与 check_issue.py._merge_links_dedup() 完全一致。
-    """
-    seen: set[str] = set()
-    result: list[LinkInfo] = []
-
-    for lnk in history_links:
-        if lnk.url not in seen:
-            seen.add(lnk.url)
-            result.append(lnk)
-
-    for lnk in new_links:
-        if lnk.url not in seen:
-            seen.add(lnk.url)
-            result.append(lnk)
-
-    return result
-
-
-def _build_full_text_from_links(links: list[LinkInfo]) -> str:
-    """
-    从链接列表构建用于检查缺失快照的文本。
-
-    与 check_issue.py._build_full_text_from_links() 完全一致。
-    """
-    parts: list[str] = []
-    for lnk in links:
-        if lnk.display_text:
-            parts.append(f"[{lnk.display_text}]({lnk.url})")
-        else:
-            parts.append(lnk.url)
-    return "\n".join(parts)
-
-
 # ── 快照缓存（与 check_issue.py 逻辑一致，目录不同） ──
 
 
@@ -256,7 +218,7 @@ def analyze(
             else:
                 history_links = extract_links(history_content)
 
-        all_links = _merge_links_dedup(history_links, new_links)
+        all_links = merge_links_dedup(history_links, new_links)
         links = all_links
     else:
         links = extract_links(body)

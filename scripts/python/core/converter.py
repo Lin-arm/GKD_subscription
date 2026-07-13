@@ -10,25 +10,9 @@
 """
 
 import re
-from dataclasses import dataclass
 
 from utils.common import extract_github_filename
-from utils.models import LinkInfo
-
-# ── 数据结构 ──
-
-
-@dataclass
-class ConvertedLink:
-    """转换后的链接信息"""
-
-    original_url: str  # 原始 GitHub 附件 URL
-    converted_url: str  # 转换后的 GKD 代理 URL
-    display_text: str  # 原始 Markdown 链接的显示文字
-    app_name: str  # 从文件名提取的 App 名称（不匹配时为空）
-    activity_name: str  # 从文件名提取的 Activity 名称（不匹配时为空）
-    timestamp: str  # 从文件名提取的时间戳（不匹配时为空）
-
+from utils.models import ConvertedLink, LinkInfo
 
 # ── 常量 ──
 

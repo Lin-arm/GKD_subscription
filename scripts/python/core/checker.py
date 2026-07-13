@@ -11,6 +11,8 @@
 """
 
 import re
+import urllib.error
+import urllib.request
 
 from utils.models import LinkInfo, NetworkResult
 
@@ -31,7 +33,7 @@ def gkd_to_gh_attachment_url(gkd_url: str) -> str | None:
 
     返回 None 表示 URL 不符合 GKD 分享链接格式。
     """
-    match = _RE_GKD_ID.match(gkd_url)
+    match = _RE_GKD_ID.search(gkd_url.strip())
     if not match:
         return None
     return _GH_ATTACHMENT_TEMPLATE.format(id=match.group(1))
@@ -80,9 +82,6 @@ def _try_head_request(url: str, timeout: int) -> NetworkResult | None:
     返回 None 表示服务器不支持 HEAD（如返回 405），
     需要回退到 GET 请求。
     """
-    import urllib.error
-    import urllib.request
-
     try:
         req = urllib.request.Request(url, method="HEAD")
         req.add_header("User-Agent", "GKD-Issue-Checker/1.0")
@@ -124,9 +123,6 @@ def _try_get_range_request(url: str, timeout: int) -> NetworkResult:
 
     用于兼容不支持 HEAD 方法的服务器。
     """
-    import urllib.error
-    import urllib.request
-
     try:
         req = urllib.request.Request(url, method="GET")
         req.add_header("User-Agent", "GKD-Issue-Checker/1.0")

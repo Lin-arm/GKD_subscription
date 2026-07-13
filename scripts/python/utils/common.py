@@ -72,3 +72,54 @@ def short_activity_name(activity_id: str) -> str:
     if "." in activity_id:
         return activity_id.rsplit(".", 1)[-1]
     return activity_id
+
+
+# ── 链接合并函数 ──
+
+
+def merge_links_dedup(history_links: list, new_links: list) -> list:
+    """
+    合并历史链接和新链接，基于 URL 去重。
+
+    策略：保留首次出现的链接（历史链接优先）。
+
+    参数：
+        history_links: 历史链接列表（优先级高）
+        new_links: 新链接列表
+
+    返回：
+        去重后的链接列表
+    """
+    seen: set[str] = set()
+    result: list = []
+
+    for lnk in history_links:
+        if lnk.url not in seen:
+            seen.add(lnk.url)
+            result.append(lnk)
+
+    for lnk in new_links:
+        if lnk.url not in seen:
+            seen.add(lnk.url)
+            result.append(lnk)
+
+    return result
+
+
+def build_full_text_from_links(links: list) -> str:
+    """
+    从链接列表构建文本，每行一个链接，包含显示文字和 URL。
+
+    参数：
+        links: 链接列表
+
+    返回：
+        每行一个链接的文本字符串
+    """
+    parts: list[str] = []
+    for lnk in links:
+        if lnk.display_text:
+            parts.append(f"[{lnk.display_text}]({lnk.url})")
+        else:
+            parts.append(lnk.url)
+    return "\n".join(parts)

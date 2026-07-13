@@ -51,7 +51,7 @@ jobs:
           [ "$state" = "CLOSED" ] && needs="true"
           for label in $labels; do
             case "$label" in
-              "缺失快照(missing-snapshot)"|"需补充链接(need-supplement-link)"|"链接无法访问(inaccessible-link)")
+              "缺失快照(missing-snapshot)"|"缺失快照(no-snapshot)"|"链接无法访问(inaccessible-link)")
                 needs="true" ;;
             esac
           done
@@ -94,19 +94,22 @@ jobs:
           old_bot=$(gh api "repos/$GH_REPO/issues/$ISSUE_NUMBER/comments" \
             --jq '.[] | select(.user.login == "github-actions[bot]") | select(.body | contains("gkd-bot-comment")) | .body' 2>/dev/null | head -1)
 
+          # 使用随机分隔符避免内容冲突
+          separator=$(head -c 16 /dev/urandom | base64)
+
           if [ -n "$old_bot" ]; then
             echo "history_source=old_bot" >> "$GITHUB_OUTPUT"
-            echo "history_content<<EOF" >> "$GITHUB_OUTPUT"
+            echo "history_content<<$separator" >> "$GITHUB_OUTPUT"
             echo "$old_bot" >> "$GITHUB_OUTPUT"
-            echo "EOF" >> "$GITHUB_OUTPUT"
+            echo "$separator" >> "$GITHUB_OUTPUT"
           else
             # 2. Fallback: 获取所有评论
             all_comments=$(gh api "repos/$GH_REPO/issues/$ISSUE_NUMBER/comments" \
               --jq '.[].body' 2>/dev/null | sed ':a;N;$!ba;s/\n/\\n/g')
             echo "history_source=all_comments" >> "$GITHUB_OUTPUT"
-            echo "history_content<<EOF" >> "$GITHUB_OUTPUT"
+            echo "history_content<<$separator" >> "$GITHUB_OUTPUT"
             echo "$all_comments" >> "$GITHUB_OUTPUT"
-            echo "EOF" >> "$GITHUB_OUTPUT"
+            echo "$separator" >> "$GITHUB_OUTPUT"
           fi
 
       # 恢复快照缓存（所有事件都可读取）
@@ -208,7 +211,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-        run: gh issue edit "$ISSUE_NUMBER" --add-label "需补充链接(need-supplement-link)"
+        run: gh issue edit "$ISSUE_NUMBER" --add-label "缺失快照(no-snapshot)"
 
       - name: 查找已有警告评论
         id: find-warning
@@ -394,9 +397,9 @@ jobs:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
           for label in \
-            "缺失快照(missing-snapshot)" \
-            "需补充链接(need-supplement-link)" \
-            "链接无法访问(inaccessible-link)"; do
+            "缺失快照(no-snapshot)" \
+            "需补充链接(needs-link)" \
+            "链接失效(broken-link)"; do
             gh issue edit "$ISSUE_NUMBER" --remove-label "$label" 2>/dev/null || true
           done
 
