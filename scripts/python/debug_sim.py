@@ -3,6 +3,7 @@ Issue 模拟测试工具
 
 本地交互式调试 check_issue.py 的分析逻辑，无需创建真实 GitHub Issue。
 默认启用网络检查（模拟真实 CI 环境），网络不可用时自动降级为离线模式。
+与 check_issue.py 保持逻辑一致：历史链接合并、快照缓存、Fail Fast 网络检查。
 
 支持三种输入方式：
   1. 交互式：运行脚本后在终端输入 Issue Body，输入 END 结束
@@ -16,10 +17,15 @@ Issue 模拟测试工具
   python scripts/python/debug_sim.py --no-snapshot          # 跳过快照下载
   python scripts/python/debug_sim.py --user testuser        # 指定用户名
   python scripts/python/debug_sim.py --action comment       # 模拟评论事件
+  python scripts/python/debug_sim.py --action comment \\
+      --comment "补充快照：https://i.gkd.li/i/29899905" \\
+      --history old_bot.txt --history-source old_bot        # 模拟评论+历史链接合并
 """
 
 import argparse
+import json
 import sys
+from dataclasses import asdict
 from pathlib import Path
 
 # 自动设置模块搜索路径
@@ -27,9 +33,13 @@ _script_dir = Path(__file__).parent
 if str(_script_dir) not in sys.path:
     sys.path.insert(0, str(_script_dir))
 
-from core.checker import check_network_links, check_unreachable_links, gkd_to_gh_attachment_url  # noqa: E402
+from core.checker import (  # noqa: E402
+    check_network_links,
+    check_unreachable_links,
+    gkd_to_gh_attachment_url,
+)
 from core.converter import GKD_PROXY_TEMPLATE  # noqa: E402
-from core.extractor import extract_links  # noqa: E402
+from core.extractor import extract_links, extract_links_from_bot_comment  # noqa: E402
 from core.snapshot_parser import download_and_parse  # noqa: E402
 from formatter import (  # noqa: E402
     build_bot_comment,
@@ -39,12 +49,18 @@ from formatter import (  # noqa: E402
     build_warning_uncertain,
     build_warning_unreachable,
 )
+from utils.common import extract_filename  # noqa: E402
+from utils.models import LinkInfo, SnapshotInfo  # noqa: E402
 
 # ── 常量 ──
 
 _SNAPSHOT_KINDS = {"gkd", "github_attachment", "unreachable_snapshot"}
 _WIDTH = 48
 _STEP_TEMPLATE = "[{idx}/{total}] {title}"
+
+# 快照缓存（本地调试专用，与 CI 的 /tmp/snapshot_cache 隔离）
+_CACHE_DIR = Path.home() / ".cache" / "gkd_debug"
+_CACHE_FILE = "snapshots.json"
 
 
 # ── 流水线输出 ──
@@ -128,7 +144,86 @@ def _preflight_network() -> bool:
         return False
 
 
-# ── 分析流程（流水线版本） ──
+# ── 链接合并（与 check_issue.py 一致） ──
+
+
+def _merge_links_dedup(history_links: list[LinkInfo], new_links: list[LinkInfo]) -> list[LinkInfo]:
+    """
+    合并历史链接和新链接，基于 URL 去重。
+
+    策略：保留首次出现的链接（历史链接优先）。
+    与 check_issue.py._merge_links_dedup() 完全一致。
+    """
+    seen: set[str] = set()
+    result: list[LinkInfo] = []
+
+    for lnk in history_links:
+        if lnk.url not in seen:
+            seen.add(lnk.url)
+            result.append(lnk)
+
+    for lnk in new_links:
+        if lnk.url not in seen:
+            seen.add(lnk.url)
+            result.append(lnk)
+
+    return result
+
+
+def _build_full_text_from_links(links: list[LinkInfo]) -> str:
+    """
+    从链接列表构建用于检查缺失快照的文本。
+
+    与 check_issue.py._build_full_text_from_links() 完全一致。
+    """
+    parts: list[str] = []
+    for lnk in links:
+        if lnk.display_text:
+            parts.append(f"[{lnk.display_text}]({lnk.url})")
+        else:
+            parts.append(lnk.url)
+    return "\n".join(parts)
+
+
+# ── 快照缓存（与 check_issue.py 逻辑一致，目录不同） ──
+
+
+def _load_cache() -> dict[str, dict]:
+    """加载快照缓存。"""
+    cache_file = _CACHE_DIR / _CACHE_FILE
+    if not cache_file.exists():
+        return {}
+    try:
+        with open(cache_file, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
+def _save_cache(cache: dict[str, dict]):
+    """保存快照缓存。"""
+    _CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    cache_file = _CACHE_DIR / _CACHE_FILE
+    with open(cache_file, "w", encoding="utf-8") as f:
+        json.dump(cache, f, ensure_ascii=False, indent=2)
+
+
+def _snapshot_from_cache(url: str, cache: dict[str, dict]) -> SnapshotInfo | None:
+    """从缓存中恢复 SnapshotInfo。"""
+    if url not in cache:
+        return None
+    try:
+        return SnapshotInfo(**cache[url])
+    except Exception:
+        return None
+
+
+def _snapshot_to_cache(url: str, snap: SnapshotInfo, cache: dict[str, dict]):
+    """将 SnapshotInfo 保存到缓存。"""
+    cache[url] = asdict(snap)
+
+
+# ── 分析流程（流水线版本，与 check_issue.py 逻辑一致） ──
 
 
 def analyze(
@@ -138,19 +233,33 @@ def analyze(
     issue_action: str = "opened",
     with_network: bool = True,
     with_snapshot: bool = True,
+    history_content: str = "",
+    history_source: str = "",
 ) -> dict:
     """
     执行 Issue 分析，返回所有结果。
 
-    流水线步骤与 check_issue.py 一一对应，终端实时输出过程。
+    与 check_issue.py.main() 逻辑完全一致：
+    - comment 事件合并历史链接 + 新链接
+    - 支持 old_bot / all 两种历史来源
+    - 网络检查 Fail Fast
+    - 快照缓存
     """
-    # 合并链接（简化版：不处理 history_content）
+    # ── 链接提取（与 check_issue.py 一致） ──
     if issue_action == "comment" and comment_body:
-        links = extract_links(comment_body)
-        full_text = body
+        new_links = extract_links(comment_body)
+
+        history_links: list[LinkInfo] = []
+        if history_content:
+            if history_source == "old_bot":
+                history_links = extract_links_from_bot_comment(history_content)
+            else:
+                history_links = extract_links(history_content)
+
+        all_links = _merge_links_dedup(history_links, new_links)
+        links = all_links
     else:
-        full_text = body
-        links = extract_links(full_text)
+        links = extract_links(body)
 
     result = {
         "has_snapshot": "true",
@@ -223,13 +332,13 @@ def analyze(
         _info("离线模式，跳过网络检查")
         result["network_status"] = "skipped"
 
-    # ── Step 5: 链接转换 + Bot 评论 ──
+    # ── Step 5: 链接转换 + Bot 评论（带缓存） ──
     _step_header(5, total_steps, "评论生成")
     network_ok = result["network_status"] in ("ok", "skipped")
 
     if network_ok:
         if with_snapshot:
-            snapshots, gkd_links = _parse_all_snapshots(links)
+            snapshots, gkd_links = _parse_all_snapshots_cached(links)
         else:
             snapshots, gkd_links = [], _build_gkd_links_preview(links)
 
@@ -254,7 +363,14 @@ def analyze(
 
 
 def _check_all_links_pipeline(links: list) -> dict:
-    """网络检查（流水线版本）。"""
+    """
+    网络检查（流水线版本）。
+
+    与 check_issue.py._check_all_links() 逻辑一致：
+    - GKD 链接先转 GH 附件 URL 再检查
+    - Fail Fast：遇到 404 立即返回
+    - 403/5xx 记录为 uncertain 但不中断
+    """
     result = {
         "status": "skipped",
         "detail": "",
@@ -309,45 +425,83 @@ def _check_all_links_pipeline(links: list) -> dict:
     return result
 
 
-def _parse_all_snapshots(links: list) -> tuple[list, list[tuple[str, str]]]:
-    """下载并解析所有快照。"""
-    snapshots = []
-    gkd_links = []
+def _parse_all_snapshots_cached(links: list) -> tuple[list[SnapshotInfo], list[tuple[str, str]]]:
+    """
+    下载并解析所有快照（带缓存）。
 
+    与 check_issue.py._parse_all_snapshots() 逻辑一致：
+    - 优先从缓存读取，命中则跳过下载
+    - 下载失败仍保留为 GKD 链接
+    """
+    snapshots: list[SnapshotInfo] = []
+    gkd_links: list[tuple[str, str]] = []
+
+    cache = _load_cache()
+    cache_updated = False
+
+    # 先处理 GitHub 附件链接
     for lnk in links:
-        if lnk.kind == "github_attachment":
-            converted_url = GKD_PROXY_TEMPLATE.format(url=lnk.url)
-            _info(f"下载快照 {lnk.url[:72]}...")
-            try:
-                snap = download_and_parse(lnk.url, converted_url)
-            except Exception as e:
-                _warn(f"下载失败: {e}")
-                snap = None
+        if lnk.kind != "github_attachment":
+            continue
 
-            if snap:
-                _ok(f"解析成功: {snap.app_id} / {snap.activity_id}")
-                snapshots.append(snap)
-            else:
-                _warn("解析失败，保留为 GKD 链接")
-                gkd_links.append((lnk.display_text or lnk.url, converted_url))
+        converted_url = GKD_PROXY_TEMPLATE.format(url=lnk.url)
 
-        elif lnk.kind == "gkd":
-            gh_url = gkd_to_gh_attachment_url(lnk.url)
-            if not gh_url:
-                continue
-            _info(f"下载快照 {lnk.url}...")
-            try:
-                snap = download_and_parse(gh_url, lnk.url)
-            except Exception as e:
-                _warn(f"下载失败: {e}")
-                snap = None
+        snap = _snapshot_from_cache(lnk.url, cache)
+        if snap:
+            snap.converted_url = converted_url
+            snapshots.append(snap)
+            _info(f"缓存命中: {snap.app_id} / {snap.activity_id}")
+            continue
 
-            if snap:
-                _ok(f"解析成功: {snap.app_id} / {snap.activity_id}")
-                snapshots.append(snap)
-            else:
-                _warn("解析失败，保留为 GKD 链接")
-                gkd_links.append((lnk.display_text or lnk.url, lnk.url))
+        _info(f"下载快照 {lnk.url[:72]}...")
+        try:
+            snap = download_and_parse(lnk.url, converted_url)
+        except Exception as e:
+            _warn(f"下载失败: {e}")
+            snap = None
+
+        if snap is None:
+            gkd_links.append((lnk.display_text or extract_filename(lnk.url), converted_url))
+            continue
+
+        _snapshot_to_cache(lnk.url, snap, cache)
+        cache_updated = True
+        _ok(f"解析成功: {snap.app_id} / {snap.activity_id}")
+        snapshots.append(snap)
+
+    # 再处理 GKD 分享链接
+    for lnk in links:
+        if lnk.kind != "gkd":
+            continue
+
+        gh_url = gkd_to_gh_attachment_url(lnk.url)
+        if not gh_url:
+            continue
+
+        snap = _snapshot_from_cache(lnk.url, cache)
+        if snap:
+            snapshots.append(snap)
+            _info(f"缓存命中: {snap.app_id} / {snap.activity_id}")
+            continue
+
+        _info(f"下载快照 {lnk.url}...")
+        try:
+            snap = download_and_parse(gh_url, lnk.url)
+        except Exception as e:
+            _warn(f"下载失败: {e}")
+            snap = None
+
+        if snap is None:
+            gkd_links.append((lnk.display_text or lnk.url, lnk.url))
+            continue
+
+        _snapshot_to_cache(lnk.url, snap, cache)
+        cache_updated = True
+        _ok(f"解析成功: {snap.app_id} / {snap.activity_id}")
+        snapshots.append(snap)
+
+    if cache_updated:
+        _save_cache(cache)
 
     return snapshots, gkd_links
 
@@ -429,6 +583,13 @@ def main():
         help="触发事件类型 (默认: opened)",
     )
     parser.add_argument("--comment", "-c", default="", help="评论内容 (用于 comment 事件)")
+    parser.add_argument("--history", help="历史内容文件 (用于 comment 事件，模拟旧 Bot 评论或历史评论)")
+    parser.add_argument(
+        "--history-source",
+        default="",
+        choices=["", "old_bot", "all"],
+        help="历史来源: old_bot=旧Bot评论, all=所有评论 (默认: 从文件内容自动判断)",
+    )
     parser.add_argument("--offline", action="store_true", help="离线模式（跳过网络检查和快照下载）")
     parser.add_argument("--no-snapshot", action="store_true", help="跳过快照下载+解析（保留网络检查）")
     args = parser.parse_args()
@@ -454,6 +615,12 @@ def main():
         print("\n错误: 输入内容为空")
         sys.exit(1)
 
+    # 读取历史内容
+    history_content = ""
+    if args.history:
+        history_content = read_from_file(args.history)
+        print(f"历史内容: {args.history}")
+
     # 网络模式判断
     with_network = not args.offline
     with_snapshot = not args.offline and not args.no_snapshot
@@ -474,6 +641,8 @@ def main():
         issue_action=args.action,
         with_network=with_network,
         with_snapshot=with_snapshot,
+        history_content=history_content,
+        history_source=args.history_source,
     )
 
     # 输出汇总
