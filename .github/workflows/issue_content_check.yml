@@ -210,9 +210,9 @@ jobs:
     steps:
       - name: 打标签「需补充链接」
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}.
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-        run: gh issue edit "$ISSUE_NUMBER" --add-label "缺失快照(no-snapshot)"
+        run: gh issue edit "$ISSUE_NUMBER" --add-label "需补充链接(needs-link)"
 
       - name: 查找已有警告评论
         id: find-warning
@@ -245,7 +245,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-        run: gh issue edit "$ISSUE_NUMBER" --add-label "需补充链接(needs-link)"
+        run: gh issue edit "$ISSUE_NUMBER" --add-label "链接失效(broken-link)"
 
       - name: 查找已有警告评论
         id: find-warning
@@ -278,7 +278,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-        run: gh issue edit "$ISSUE_NUMBER" --add-label "需补充链接(needs-link)"
+        run: gh issue edit "$ISSUE_NUMBER" --add-label "链接失效(broken-link)"
 
       - name: 查找已有警告评论
         id: find-warning
