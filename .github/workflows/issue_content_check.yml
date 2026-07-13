@@ -95,6 +95,8 @@ jobs:
           old_bot=$(gh api "repos/$GH_REPO/issues/$ISSUE_NUMBER/comments" \
             --jq -r '[.[] | select(.user.login == "github-actions[bot]") | select(.body | contains("gkd-bot-comment")) | .body] | first // empty' 2>/dev/null)
 
+          echo "DEBUG old_bot length: ${#old_bot}"
+
           # 使用随机分隔符避免内容冲突
           separator=$(head -c 16 /dev/urandom | base64)
 
