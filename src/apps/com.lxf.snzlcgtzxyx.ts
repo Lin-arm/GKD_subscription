@@ -23,6 +23,18 @@ export default defineGkdApp({
             '@[getChild(0).name$="ImageView"] <2 [childCount=2] <2 [childCount=2] <2 [childCount=2] - FrameLayout > [text*="查看详情"]',
           snapshotUrls: 'https://i.gkd.li/i/28640601',
         },
+        {
+          key: 2,
+          matches:
+            '@[clickable=true][desc*="close"] < * < [visibleToUser=true] +n ViewGroup >3 [text="广告"]',
+          snapshotUrls: 'https://i.gkd.li/i/29998947',
+        },
+        {
+          key: 3,
+          matches:
+            'ImageView < @[width<88 && height<88] - [visibleToUser=true] >3 [text*="上滑" || text*="点击" || text*="扭动"]',
+          snapshotUrls: 'https://i.gkd.li/i/29999216',
+        },
       ],
     },
     {
