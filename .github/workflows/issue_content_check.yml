@@ -72,6 +72,12 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: 安装 Python 依赖
+        if: >-
+          github.event_name != 'issue_comment' ||
+          steps.pre-check.outputs.needs_analysis != 'false'
+        run: pip install httpx
+
       - name: 创建工作流所需标签
         if: >-
           github.event_name != 'issue_comment' ||
