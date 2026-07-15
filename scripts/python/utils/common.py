@@ -6,6 +6,15 @@
 """
 
 import re
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    pass
+
+# ── 常量 ──
+
+# 快照相关链接类型集合
+SNAPSHOT_KINDS = {"gkd", "github_attachment", "unreachable_snapshot"}
 
 # ── URL 处理函数 ──
 

@@ -11,10 +11,12 @@
 """
 
 import re
-import urllib.error
-import urllib.request
+from typing import TYPE_CHECKING
 
-from utils.models import LinkInfo, NetworkResult
+import httpx
+
+if TYPE_CHECKING:
+    from utils.models import NetworkResult
 
 # ── GKD 链接 → GH 附件 URL 转换 ──
 
@@ -42,7 +44,7 @@ def gkd_to_gh_attachment_url(gkd_url: str) -> str | None:
 # ── 不可访问快照链接检查 ──
 
 
-def check_unreachable_links(links: list[LinkInfo]) -> list[LinkInfo]:
+def check_unreachable_links(links: list) -> list:
     """
     筛选出所有 i.gkd.li/snapshot/ 类型的不可访问链接。
 
@@ -51,10 +53,59 @@ def check_unreachable_links(links: list[LinkInfo]) -> list[LinkInfo]:
     return [lnk for lnk in links if lnk.kind == "unreachable_snapshot"]
 
 
+# ── HTTP 异常处理 ──
+
+
+def _handle_http_error(e: httpx.HTTPError, url: str) -> "NetworkResult | None":
+    """
+    处理 HTTP 异常，返回对应的 NetworkResult。
+
+    返回 None 表示需要回退到其他请求方式（如 HEAD → GET）。
+    """
+    from utils.models import NetworkResult
+
+    if isinstance(e, httpx.HTTPStatusError):
+        code = e.response.status_code
+
+        if code == 404:
+            return NetworkResult(status="404", status_code=404)
+
+        if code == 405:
+            # HEAD 不支持，需要回退到 GET
+            return None
+
+        if code == 403:
+            return NetworkResult(
+                status="uncertain",
+                status_code=403,
+                detail="HTTP 403 Forbidden — 服务器拒绝访问，可能是权限问题",
+            )
+
+        if 500 <= code < 600:
+            return NetworkResult(
+                status="uncertain",
+                status_code=code,
+                detail=f"HTTP {code} — 服务器内部错误，可能是临时问题",
+            )
+
+        return NetworkResult(
+            status="uncertain",
+            status_code=code,
+            detail=f"HTTP {code} {e.response.reason_phrase}",
+        )
+
+    # 其他异常（连接错误、超时等）
+    return NetworkResult(
+        status="uncertain",
+        status_code=0,
+        detail=f"请求异常: {type(e).__name__}: {e}",
+    )
+
+
 # ── 网络有效性检查 ──
 
 
-def check_network_links(url: str, timeout: int = 20) -> NetworkResult:
+def check_network_links(url: str, timeout: int = 20) -> "NetworkResult":
     """
     对单个 URL 发起网络请求，验证其可访问性。
 
@@ -67,7 +118,6 @@ def check_network_links(url: str, timeout: int = 20) -> NetworkResult:
     - status="404"：链接返回 404，确认不可访问
     - status="uncertain"：返回 403/5xx 等不确定状态码
     """
-
     result = _try_head_request(url, timeout)
     if result is not None:
         return result
@@ -75,7 +125,7 @@ def check_network_links(url: str, timeout: int = 20) -> NetworkResult:
     return _try_get_range_request(url, timeout)
 
 
-def _try_head_request(url: str, timeout: int) -> NetworkResult | None:
+def _try_head_request(url: str, timeout: int) -> "NetworkResult | None":
     """
     发起 HEAD 请求。
 
@@ -83,33 +133,17 @@ def _try_head_request(url: str, timeout: int) -> NetworkResult | None:
     需要回退到 GET 请求。
     """
     try:
-        req = urllib.request.Request(url, method="HEAD")
-        req.add_header("User-Agent", "GKD-Issue-Checker/1.0")
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            return NetworkResult(status="ok", status_code=resp.status)
-    except urllib.error.HTTPError as e:
-        if e.code == 404:
-            return NetworkResult(status="404", status_code=404)
-        if e.code == 405:
-            return None
-        if e.code == 403:
-            return NetworkResult(
-                status="uncertain",
-                status_code=403,
-                detail="HTTP 403 Forbidden — 服务器拒绝访问，可能是权限问题",
-            )
-        if 500 <= e.code < 600:
-            return NetworkResult(
-                status="uncertain",
-                status_code=e.code,
-                detail=f"HTTP {e.code} — 服务器内部错误，可能是临时问题",
-            )
-        return NetworkResult(
-            status="uncertain",
-            status_code=e.code,
-            detail=f"HTTP {e.code} {e.reason}",
-        )
+        with httpx.Client(timeout=timeout, follow_redirects=True) as client:
+            resp = client.head(url, headers={"User-Agent": "GKD-Issue-Checker/1.0"})
+            resp.raise_for_status()
+            from utils.models import NetworkResult
+
+            return NetworkResult(status="ok", status_code=resp.status_code)
+    except httpx.HTTPError as e:
+        return _handle_http_error(e, url)
     except Exception as e:
+        from utils.models import NetworkResult
+
         return NetworkResult(
             status="uncertain",
             status_code=0,
@@ -117,44 +151,42 @@ def _try_head_request(url: str, timeout: int) -> NetworkResult | None:
         )
 
 
-def _try_get_range_request(url: str, timeout: int) -> NetworkResult:
+def _try_get_range_request(url: str, timeout: int) -> "NetworkResult":
     """
     发起 GET 请求 + Range 头（只请求前 1 字节）。
 
     用于兼容不支持 HEAD 方法的服务器。
     """
+    from utils.models import NetworkResult
+
     try:
-        req = urllib.request.Request(url, method="GET")
-        req.add_header("User-Agent", "GKD-Issue-Checker/1.0")
-        req.add_header("Range", "bytes=0-0")
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            code = resp.status
-            if code in (200, 206):
-                return NetworkResult(status="ok", status_code=code)
+        with httpx.Client(timeout=timeout, follow_redirects=True) as client:
+            resp = client.get(
+                url,
+                headers={
+                    "User-Agent": "GKD-Issue-Checker/1.0",
+                    "Range": "bytes=0-0",
+                },
+            )
+
+            # 处理 Range 请求的响应
+            if resp.status_code in (200, 206):
+                return NetworkResult(status="ok", status_code=resp.status_code)
+
             return NetworkResult(
                 status="uncertain",
-                status_code=code,
-                detail=f"GET 请求返回非预期状态码: {code}",
+                status_code=resp.status_code,
+                detail=f"GET 请求返回非预期状态码: {resp.status_code}",
             )
-    except urllib.error.HTTPError as e:
-        if e.code == 404:
-            return NetworkResult(status="404", status_code=404)
-        if e.code == 403:
-            return NetworkResult(
-                status="uncertain",
-                status_code=403,
-                detail="HTTP 403 Forbidden — 服务器拒绝访问，可能是权限问题",
-            )
-        if 500 <= e.code < 600:
-            return NetworkResult(
-                status="uncertain",
-                status_code=e.code,
-                detail=f"HTTP {e.code} — 服务器内部错误，可能是临时问题",
-            )
+    except httpx.HTTPError as e:
+        result = _handle_http_error(e, url)
+        if result is not None:
+            return result
+        # 如果返回 None（405），返回错误结果
         return NetworkResult(
             status="uncertain",
-            status_code=e.code,
-            detail=f"HTTP {e.code} {e.reason}",
+            status_code=0,
+            detail="GET 请求失败",
         )
     except Exception as e:
         return NetworkResult(
@@ -162,3 +194,50 @@ def _try_get_range_request(url: str, timeout: int) -> NetworkResult:
             status_code=0,
             detail=f"请求异常: {type(e).__name__}: {e}",
         )
+
+
+# ── 并发检查（新增） ──
+
+
+def check_urls_concurrent(
+    urls: list[str],
+    timeout: int = 20,
+    max_workers: int = 10,
+) -> list["NetworkResult"]:
+    """
+    并发检查多个 URL 的可访问性。
+
+    使用线程池并发执行，提高检查效率。
+
+    参数：
+        urls: URL 列表
+        timeout: 每个请求的超时时间（秒）
+        max_workers: 最大并发数
+
+    返回：
+        NetworkResult 列表，与输入 URL 顺序对应
+    """
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    from utils.models import NetworkResult
+
+    def check_one(url: str) -> NetworkResult:
+        return check_network_links(url, timeout)
+
+    results: list[NetworkResult | None] = [None] * len(urls)
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_idx = {executor.submit(check_one, url): i for i, url in enumerate(urls)}
+
+        for future in as_completed(future_to_idx):
+            idx = future_to_idx[future]
+            try:
+                results[idx] = future.result()
+            except Exception as e:
+                results[idx] = NetworkResult(
+                    status="uncertain",
+                    status_code=0,
+                    detail=f"并发检查异常: {type(e).__name__}: {e}",
+                )
+
+    return results  # type: ignore

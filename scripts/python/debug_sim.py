@@ -23,9 +23,7 @@ Issue 模拟测试工具
 """
 
 import argparse
-import json
 import sys
-from dataclasses import asdict
 from pathlib import Path
 
 # 自动设置模块搜索路径
@@ -33,37 +31,13 @@ _script_dir = Path(__file__).parent
 if str(_script_dir) not in sys.path:
     sys.path.insert(0, str(_script_dir))
 
-from core.checker import (  # noqa: E402
-    check_network_links,
-    check_unreachable_links,
-    gkd_to_gh_attachment_url,
-)
-from core.converter import GKD_PROXY_TEMPLATE  # noqa: E402
-from core.extractor import extract_links, extract_links_from_bot_comment  # noqa: E402
-from core.snapshot_parser import download_and_parse  # noqa: E402
-from formatter import (  # noqa: E402
-    build_bot_comment,
-    build_recovery_comment,
-    build_warning_inaccessible,
-    build_warning_missing,
-    build_warning_uncertain,
-    build_warning_unreachable,
-)
-from utils.common import (  # noqa: E402
-    extract_filename,
-    merge_links_dedup,
-)
-from utils.models import LinkInfo, SnapshotInfo  # noqa: E402
+from api.issue_checker import IssueChecker  # noqa: E402
+from utils.cache import get_debug_cache  # noqa: E402
 
 # ── 常量 ──
 
-_SNAPSHOT_KINDS = {"gkd", "github_attachment", "unreachable_snapshot"}
 _WIDTH = 48
 _STEP_TEMPLATE = "[{idx}/{total}] {title}"
-
-# 快照缓存（本地调试专用，与 CI 的 /tmp/snapshot_cache 隔离）
-_CACHE_DIR = Path.home() / ".cache" / "gkd_debug"
-_CACHE_FILE = "snapshots.json"
 
 
 # ── 流水线输出 ──
@@ -135,54 +109,16 @@ def _preflight_network() -> bool:
     """
     _info("预检网络连通性...")
     try:
-        import urllib.request
+        import httpx
 
-        req = urllib.request.Request("https://github.com", method="HEAD")
-        resp = urllib.request.urlopen(req, timeout=5)
-        resp.close()
+        with httpx.Client(timeout=5) as client:
+            resp = client.head("https://github.com", follow_redirects=True)
+            resp.raise_for_status()
         _ok("网络可用")
         return True
     except Exception:
         _warn("网络不可用，自动降级为离线模式")
         return False
-
-
-# ── 快照缓存（与 check_issue.py 逻辑一致，目录不同） ──
-
-
-def _load_cache() -> dict[str, dict]:
-    """加载快照缓存。"""
-    cache_file = _CACHE_DIR / _CACHE_FILE
-    if not cache_file.exists():
-        return {}
-    try:
-        with open(cache_file, encoding="utf-8") as f:
-            return json.load(f)
-    except Exception:
-        return {}
-
-
-def _save_cache(cache: dict[str, dict]):
-    """保存快照缓存。"""
-    _CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    cache_file = _CACHE_DIR / _CACHE_FILE
-    with open(cache_file, "w", encoding="utf-8") as f:
-        json.dump(cache, f, ensure_ascii=False, indent=2)
-
-
-def _snapshot_from_cache(url: str, cache: dict[str, dict]) -> SnapshotInfo | None:
-    """从缓存中恢复 SnapshotInfo。"""
-    if url not in cache:
-        return None
-    try:
-        return SnapshotInfo(**cache[url])
-    except Exception:
-        return None
-
-
-def _snapshot_to_cache(url: str, snap: SnapshotInfo, cache: dict[str, dict]):
-    """将 SnapshotInfo 保存到缓存。"""
-    cache[url] = asdict(snap)
 
 
 # ── 分析流程（流水线版本，与 check_issue.py 逻辑一致） ──
@@ -207,41 +143,13 @@ def analyze(
     - 网络检查：检查全部链接，跳过坏链接
     - 快照缓存
     """
-    # ── 链接提取（与 check_issue.py 一致） ──
-    if issue_action == "comment" and comment_body:
-        new_links = extract_links(comment_body)
+    # 创建检查器
+    cache = get_debug_cache()
+    checker = IssueChecker(cache=cache)
 
-        history_links: list[LinkInfo] = []
-        if history_content:
-            if history_source == "old_bot":
-                history_links = extract_links_from_bot_comment(history_content)
-            else:
-                history_links = extract_links(history_content)
-
-        all_links = merge_links_dedup(history_links, new_links)
-        links = all_links
-    else:
-        links = extract_links(body)
-
-    result = {
-        "has_snapshot": "true",
-        "has_unreachable": "false",
-        "network_status": "skipped",
-        "network_detail": "",
-        "has_convertible": "false",
-        "warning_type": "",
-        "comment_missing": "",
-        "comment_unreachable": "",
-        "comment_404": "",
-        "comment_uncertain": "",
-        "comment_recovery": "",
-        "comment_bot": "",
-    }
-
-    total_steps = 5
-
-    # ── Step 1: 链接提取 ──
-    _step_header(1, total_steps, "链接提取")
+    # Step 1: 链接提取
+    _step_header(1, 5, "链接提取")
+    links = checker._merge_links(body, comment_body, history_content, history_source)
     if not links:
         _ok("提取到 0 个链接")
     else:
@@ -250,253 +158,80 @@ def analyze(
             display = f"[{lnk.display_text}]({lnk.url})" if lnk.display_text else lnk.url
             print(f"     {i}. kind={lnk.kind}  {display}")
 
-    # ── Step 2: 判断是否缺少快照 ──
-    _step_header(2, total_steps, "快照检查")
-    has_any_snapshot = any(lnk.kind in _SNAPSHOT_KINDS for lnk in links)
-
-    if not has_any_snapshot:
+    # Step 2: 快照检查
+    _step_header(2, 5, "快照检查")
+    if not checker.has_snapshot(links):
         _fail("未提供任何快照链接 → 将关闭 Issue")
-        result["has_snapshot"] = "false"
-        result["warning_type"] = "missing"
-        result["comment_missing"] = build_warning_missing(issue_user)
-        return result
-
+        return {
+            "has_snapshot": "false",
+            "has_unreachable": "false",
+            "network_status": "skipped",
+            "network_detail": "",
+            "has_convertible": "false",
+            "warning_type": "missing",
+            "comment_missing": "",
+            "comment_unreachable": "",
+            "comment_404": "",
+            "comment_uncertain": "",
+            "comment_recovery": "",
+            "comment_bot": "",
+        }
     _ok("快照链接存在")
 
-    # ── Step 3: 不可访问快照检查 ──
-    _step_header(3, total_steps, "不可访问快照检查")
-    unreachable_links = check_unreachable_links(links)
+    # Step 3: 不可访问快照检查
+    _step_header(3, 5, "不可访问快照检查")
+    unreachable_links = checker.get_unreachable_links(links)
     if unreachable_links:
         _warn(f"发现 {len(unreachable_links)} 个不可访问快照 (i.gkd.li/snapshot/)")
-        result["has_unreachable"] = "true"
-        result["comment_unreachable"] = build_warning_unreachable(issue_user)
     else:
         _ok("无不可访问快照")
 
-    # ── Step 4: 网络有效性检查 ──
-    _step_header(4, total_steps, "网络有效性检查")
+    # Step 4: 网络有效性检查
+    _step_header(4, 5, "网络有效性检查")
     if with_network:
-        net_result = _check_all_links_pipeline(links)
-        result["network_detail"] = net_result["detail"]
+        net_result = checker.check_all_links(links)
 
-        # 有坏链接时生成警告评论
-        if net_result["fail_urls"]:
-            result["comment_404"] = build_warning_inaccessible(issue_user, net_result["fail_urls"])
-        if net_result["uncertain_urls"]:
-            result["comment_uncertain"] = build_warning_uncertain(
-                issue_user,
-                net_result["uncertain_urls"],
-                net_result["uncertain_code"],
-                net_result["uncertain_detail"],
-            )
+        # 打印检查结果
+        for lnk in net_result.good_links:
+            _ok(f"200 OK → {lnk.url}")
+        for lnk in net_result.bad_links:
+            _fail(f"不可访问 → {lnk.url}")
 
-        # network_status 反映最差状态：有坏链接就是对应状态
-        if net_result["fail_urls"]:
-            result["network_status"] = "404"
-        elif net_result["uncertain_urls"]:
-            result["network_status"] = "uncertain"
-        elif net_result["good_links"]:
-            result["network_status"] = "ok"
-        else:
-            result["network_status"] = net_result["status"] if net_result["status"] != "skipped" else "404"
+        _info(f"好链接: {len(net_result.good_links)}, 坏链接: {len(net_result.bad_links)}")
     else:
         _info("离线模式，跳过网络检查")
-        result["network_status"] = "skipped"
+        net_result = None
 
-    # ── Step 5: 链接转换 + Bot 评论（带缓存） ──
-    _step_header(5, total_steps, "评论生成")
-    network_ok = result["network_status"] in ("ok", "skipped")
-
-    if network_ok:
-        # 只处理好链接
-        good_links = net_result["good_links"] if with_network else links
+    # Step 5: 评论生成
+    _step_header(5, 5, "评论生成")
+    if with_network and net_result and net_result.good_links:
         if with_snapshot:
-            snapshots, gkd_links = _parse_all_snapshots_cached(good_links)
+            snapshots, gkd_links = checker.parse_all_snapshots(net_result.good_links)
         else:
-            snapshots, gkd_links = [], _build_gkd_links_preview(good_links)
+            snapshots, gkd_links = [], []
 
         if snapshots or gkd_links:
-            result["has_convertible"] = "true"
-            comment_body_text = build_bot_comment(snapshots, gkd_links)
-            result["comment_bot"] = "<!-- gkd-bot-comment -->\n" + comment_body_text
             _ok(f"Bot 评论已生成 ({len(snapshots)} 快照, {len(gkd_links)} GKD 链接)")
         else:
             _info("无可转换链接，跳过 Bot 评论")
     else:
         _warn("网络检查未通过，跳过快照解析和 Bot 评论")
 
-    # ── 恢复判断 ──
-    has_valid_snapshot = any(lnk.kind in ("gkd", "github_attachment") for lnk in good_links)
-    if issue_action in ("edited", "comment") and has_valid_snapshot:
-        result["warning_type"] = "recovery"
-        result["comment_recovery"] = build_recovery_comment(issue_user)
-        _ok("触发恢复流程 (recovery)")
+    # 保存缓存
+    if cache.updated:
+        cache.save()
+
+    # 构建完整结果
+    result = checker.analyze(
+        text=body,
+        comment_body=comment_body,
+        history_content=history_content,
+        history_source=history_source,
+        issue_action=issue_action,
+        issue_user=issue_user,
+    )
 
     return result
-
-
-def _check_all_links_pipeline(links: list) -> dict:
-    """
-    网络检查（流水线版本）。
-
-    与 check_issue.py._check_all_links() 逻辑一致：
-    - 检查所有链接，区分好链接和坏链接
-    - 好链接用于后续处理，坏链接记录但不阻断
-    """
-    result = {
-        "status": "skipped",
-        "detail": "",
-        "fail_urls": [],
-        "uncertain_urls": [],
-        "uncertain_code": 0,
-        "uncertain_detail": "",
-        "good_links": [],
-        "bad_links": [],
-    }
-
-    checkable = [lnk for lnk in links if lnk.kind in ("github_attachment", "gkd")]
-    if not checkable:
-        _info("无可检查链接")
-        return result
-
-    for lnk in checkable:
-        if lnk.kind == "github_attachment":
-            check_url = lnk.url
-        else:
-            check_url = gkd_to_gh_attachment_url(lnk.url)
-            if not check_url:
-                continue
-
-        _info(f"检查 {check_url[:72]}...")
-        try:
-            check = check_network_links(check_url)
-        except Exception as e:
-            _warn(f"请求异常: {e}")
-            continue
-
-        if check.status == "ok":
-            _ok(f"200 OK → {lnk.url}")
-            result["good_links"].append(lnk)
-            if result["status"] == "skipped":
-                result["status"] = "ok"
-        elif check.status == "404":
-            _fail(f"404 Not Found → {lnk.url}")
-            result["bad_links"].append(lnk)
-            result["fail_urls"].append(lnk.url)
-            if result["status"] == "skipped":
-                result["status"] = "404"
-        elif check.status == "uncertain":
-            _warn(f"HTTP {check.status_code} → {lnk.url}")
-            result["bad_links"].append(lnk)
-            result["uncertain_urls"].append(lnk.url)
-            if not result["uncertain_code"]:
-                result["uncertain_code"] = check.status_code
-                result["uncertain_detail"] = check.detail
-                result["detail"] = f"HTTP {check.status_code}: {check.detail}"
-            if result["status"] == "skipped":
-                result["status"] = "uncertain"
-
-    # 最终状态判断：有好链接就是 ok，全部坏链接才保持 404/uncertain
-    if result["good_links"]:
-        result["status"] = "ok"
-    elif result["bad_links"] and result["status"] == "skipped":
-        result["status"] = "404"
-
-    return result
-
-
-def _parse_all_snapshots_cached(links: list) -> tuple[list[SnapshotInfo], list[tuple[str, str]]]:
-    """
-    下载并解析所有快照（带缓存）。
-
-    与 check_issue.py._parse_all_snapshots() 逻辑一致：
-    - 优先从缓存读取，命中则跳过下载
-    - 下载失败仍保留为 GKD 链接
-    """
-    snapshots: list[SnapshotInfo] = []
-    gkd_links: list[tuple[str, str]] = []
-
-    cache = _load_cache()
-    cache_updated = False
-
-    # 先处理 GitHub 附件链接
-    for lnk in links:
-        if lnk.kind != "github_attachment":
-            continue
-
-        converted_url = GKD_PROXY_TEMPLATE.format(url=lnk.url)
-
-        snap = _snapshot_from_cache(lnk.url, cache)
-        if snap:
-            snap.converted_url = converted_url
-            snapshots.append(snap)
-            _info(f"缓存命中: {snap.app_id} / {snap.activity_id}")
-            continue
-
-        _info(f"下载快照 {lnk.url[:72]}...")
-        try:
-            snap = download_and_parse(lnk.url, converted_url)
-        except Exception as e:
-            _warn(f"下载失败: {e}")
-            snap = None
-
-        if snap is None:
-            gkd_links.append((lnk.display_text or extract_filename(lnk.url), converted_url))
-            continue
-
-        _snapshot_to_cache(lnk.url, snap, cache)
-        cache_updated = True
-        _ok(f"解析成功: {snap.app_id} / {snap.activity_id}")
-        snapshots.append(snap)
-
-    # 再处理 GKD 分享链接
-    for lnk in links:
-        if lnk.kind != "gkd":
-            continue
-
-        gh_url = gkd_to_gh_attachment_url(lnk.url)
-        if not gh_url:
-            continue
-
-        snap = _snapshot_from_cache(lnk.url, cache)
-        if snap:
-            snapshots.append(snap)
-            _info(f"缓存命中: {snap.app_id} / {snap.activity_id}")
-            continue
-
-        _info(f"下载快照 {lnk.url}...")
-        try:
-            snap = download_and_parse(gh_url, lnk.url)
-        except Exception as e:
-            _warn(f"下载失败: {e}")
-            snap = None
-
-        if snap is None:
-            gkd_links.append((lnk.display_text or lnk.url, lnk.url))
-            continue
-
-        _snapshot_to_cache(lnk.url, snap, cache)
-        cache_updated = True
-        _ok(f"解析成功: {snap.app_id} / {snap.activity_id}")
-        snapshots.append(snap)
-
-    if cache_updated:
-        _save_cache(cache)
-
-    return snapshots, gkd_links
-
-
-def _build_gkd_links_preview(links: list) -> list[tuple[str, str]]:
-    """构建 GKD 链接预览（不下载快照时使用）。"""
-    gkd_links = []
-    for lnk in links:
-        if lnk.kind == "github_attachment":
-            converted_url = GKD_PROXY_TEMPLATE.format(url=lnk.url)
-            display = lnk.display_text or converted_url.split("/")[-1]
-            gkd_links.append((display, converted_url))
-        elif lnk.kind == "gkd":
-            gkd_links.append((lnk.display_text or lnk.url, lnk.url))
-    return gkd_links
 
 
 # ── 结果汇总输出 ──
