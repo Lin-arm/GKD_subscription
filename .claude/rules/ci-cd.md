@@ -302,17 +302,23 @@ device_model · Android release · GKD version
 ```
 scripts/python/
   ├── core/              # 核心功能层
+  │   ├── __init__.py
   │   ├── extractor.py   # 链接提取与分类
-  │   ├── checker.py     # 网络检查
+  │   ├── checker.py     # 网络检查（使用 httpx）
   │   ├── converter.py   # 链接转换
   │   └── snapshot_parser.py  # 快照解析
   ├── utils/             # 工具模块层
+  │   ├── __init__.py
   │   ├── models.py      # 数据结构定义
-  │   ├── common.py      # 通用工具函数
+  │   ├── common.py      # 通用工具函数 + SNAPSHOT_KINDS 常量
+  │   ├── cache.py       # 缓存管理
   │   └── utils.py       # GITHUB_OUTPUT 工具
   ├── api/               # 高层 API 层
-  │   └── link_checker.py  # 可复用的链接检查器
+  │   ├── __init__.py
+  │   ├── base.py        # URLChecker 基类（支持多场景扩展）
+  │   └── issue_checker.py  # Issue 场景检查器
   ├── entry/             # 入口脚本层
+  │   ├── __init__.py
   │   └── check_issue.py   # Issue 场景主入口
   ├── tests/             # 测试层
   │   ├── test_extractor.py   # extractor.py 单元测试
@@ -343,6 +349,8 @@ scripts/python/
 - `core/snapshot_parser.py` — 下载并解析快照 zip 文件
 - `formatter.py` — 生成 Bot 评论的 Markdown 内容
 - `core/converter.py` — GitHub 附件 → GKD 代理链接转换
-- `api/link_checker.py` — 可复用的链接检查 API（可在其他 CI 中使用）
+- `api/base.py` — URLChecker 基类，支持多场景扩展（Issue/PR/Commit）
+- `api/issue_checker.py` — Issue 场景检查器，封装完整的 Issue 分析流程
+- `utils/cache.py` — 快照缓存管理，支持 CI 和本地调试两种模式
 
 详细说明见 `scripts/python/README.md`

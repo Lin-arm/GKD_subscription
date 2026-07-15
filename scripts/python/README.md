@@ -7,17 +7,23 @@
 ```
 scripts/python/
 ├── core/              # 核心功能层
+│   ├── __init__.py
 │   ├── extractor.py   # 链接提取与分类
-│   ├── checker.py     # 网络检查
+│   ├── checker.py     # 网络检查（使用 httpx）
 │   ├── converter.py   # 链接转换
 │   └── snapshot_parser.py  # 快照解析
 ├── utils/             # 工具模块层
+│   ├── __init__.py
 │   ├── models.py      # 数据结构定义
-│   ├── common.py      # 通用工具函数
+│   ├── common.py      # 通用工具函数 + SNAPSHOT_KINDS 常量
+│   ├── cache.py       # 缓存管理
 │   └── utils.py       # GITHUB_OUTPUT 工具
 ├── api/               # 高层 API 层
-│   └── link_checker.py  # 可复用的链接检查器
+│   ├── __init__.py
+│   ├── base.py        # URLChecker 基类（支持多场景扩展）
+│   └── issue_checker.py  # Issue 场景检查器
 ├── entry/             # 入口脚本层
+│   ├── __init__.py
 │   └── check_issue.py   # Issue 场景主入口
 ├── tests/             # 测试层
 │   ├── test_extractor.py   # extractor.py 单元测试
@@ -38,8 +44,8 @@ scripts/python/
 
 | 文件 | 职责 | 主要函数 |
 |------|------|---------|
-| `extractor.py` | 从文本提取链接 | `extract_links(text)` |
-| `checker.py` | 检查链接可访问性 | `check_network_links(url)`, `gkd_to_gh_attachment_url(url)` |
+| `extractor.py` | 从文本提取链接 | `extract_links(text)`, `extract_links_from_bot_comment(text)` |
+| `checker.py` | 检查链接可访问性 | `check_network_links(url)`, `gkd_to_gh_attachment_url(url)`, `check_urls_concurrent(urls)` |
 | `converter.py` | 链接格式转换 | `convert_github_attachments(links)` |
 | `snapshot_parser.py` | 下载解析快照zip | `download_and_parse(url)` |
 
@@ -48,14 +54,16 @@ scripts/python/
 | 文件 | 职责 | 主要函数/类 |
 |------|------|------------|
 | `models.py` | 数据结构定义 | `LinkInfo`, `NetworkResult`, `SnapshotInfo`, `CheckReport` |
-| `common.py` | 通用工具函数 | `extract_filename()`, `short_activity_name()` |
+| `common.py` | 通用工具函数 | `SNAPSHOT_KINDS`, `extract_filename()`, `short_activity_name()`, `merge_links_dedup()` |
+| `cache.py` | 缓存管理 | `SnapshotCache`, `get_ci_cache()`, `get_debug_cache()` |
 | `utils.py` | 工具函数 | `write_output()` |
 
 ### api/ - 高层 API 层
 
 | 文件 | 职责 | 主要函数/类 |
 |------|------|------------|
-| `link_checker.py` | 可复用的链接检查器 | `LinkChecker` 类, `check_links_in_text()` |
+| `base.py` | URL 检查器基类 | `URLChecker` 抽象类（支持继承扩展） |
+| `issue_checker.py` | Issue 场景检查器 | `IssueChecker` 类, `check_issue()` 便捷函数 |
 
 ### entry/ - 入口脚本层
 
@@ -76,21 +84,47 @@ scripts/python/
 
 ## 使用方式
 
-### 1. 在其他 CI 中复用（推荐）
+### 1. Issue 场景专用（推荐）
 
 ```python
-from api.link_checker import LinkChecker, check_links_in_text
+from api import IssueChecker, check_issue
 
 # 方式1：使用类
-checker = LinkChecker(timeout=20)
-report = checker.extract_and_check(text)
-print(f"检查完成: {report.ok_count} 成功, {report.fail_count} 失败")
+checker = IssueChecker(timeout=20)
+result = checker.analyze(
+    text=issue_body,
+    comment_body=comment_body,
+    issue_action="opened",
+    issue_user="testuser",
+)
+print(f"检查完成: has_snapshot={result['has_snapshot']}")
 
 # 方式2：使用便捷函数
-report = check_links_in_text(text)
+result = check_issue(
+    body=issue_body,
+    issue_action="opened",
+    issue_user="testuser",
+)
 ```
 
-### 2. Issue 场景专用
+### 2. 扩展新场景（面向对象）
+
+```python
+from api.base import URLChecker
+from utils.models import LinkInfo
+
+class PRChecker(URLChecker):
+    """PR 场景检查器"""
+
+    def analyze(self, text: str, **kwargs) -> dict:
+        # PR 特定的分析逻辑
+        links = self.extract_links(text)
+        net_result = self.check_all_links(links)
+        # ...
+        return result
+```
+
+### 3. Issue 场景命令行
 
 ```bash
 cd scripts/python
@@ -190,6 +224,7 @@ python tests/verify.py
 ```
 utils/models.py (无依赖)
 utils/common.py (无依赖)
+utils/cache.py (依赖 utils/models.py)
 utils/utils.py (无依赖)
     ↓
 core/extractor.py → utils/models.py
@@ -198,7 +233,16 @@ core/converter.py → utils/models.py, utils/common.py
 core/snapshot_parser.py → utils/models.py
 formatter.py → utils/models.py, utils/common.py
     ↓
-api/link_checker.py → utils/models.py, core/*.py
+api/base.py → utils/models.py, utils/cache.py, core/*.py
+api/issue_checker.py → api/base.py, utils/*.py, core/*.py, formatter.py
     ↓
-entry/check_issue.py → utils/*.py, core/*.py, formatter.py
+entry/check_issue.py → api/issue_checker.py, utils/utils.py
+debug_sim.py → api/issue_checker.py, utils/cache.py
 ```
+
+## 架构优势
+
+1. **面向对象**：`URLChecker` 基类支持继承扩展，可轻松添加 PR/Commit 场景
+2. **消除重复**：缓存管理、网络检查逻辑统一在基类中
+3. **易于测试**：每个模块职责单一，可独立测试
+4. **并发支持**：`check_urls_concurrent()` 支持批量并发检查
