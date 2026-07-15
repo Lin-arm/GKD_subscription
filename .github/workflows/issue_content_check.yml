@@ -93,7 +93,7 @@ jobs:
         run: |
           # 1. 尝试读取旧 Bot 评论（已解析成功的快照链接）
           old_bot=$(gh api "repos/$GH_REPO/issues/$ISSUE_NUMBER/comments" \
-            --jq -r '[.[] | select(.user.login == "github-actions[bot]") | select(.body | contains("gkd-bot-comment")) | .body] | first // empty' 2>/dev/null)
+            --jq -r '[.[] | select(.user.login == "github-actions[bot]") | select(.body | contains("gkd-bot-comment")) | .body] | first // empty' 2>/dev/null || true)
 
           echo "DEBUG old_bot length: ${#old_bot}"
 
