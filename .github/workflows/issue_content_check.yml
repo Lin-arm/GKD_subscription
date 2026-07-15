@@ -96,13 +96,13 @@ jobs:
       - name: 获取历史链接
         id: get-history
         if: github.event_name == 'issue_comment'
+        env:
+          OLD_BOT_CONTENT: ${{ steps.find-old-bot.outputs.comment-body }}
         run: |
-          old_bot="${{ steps.find-old-bot.outputs.comment-body }}"
-
-          if [ -n "$old_bot" ]; then
+          if [ -n "$OLD_BOT_CONTENT" ]; then
             echo "history_source=old_bot" >> "$GITHUB_OUTPUT"
             echo "history_content<<HISTORY_EOF" >> "$GITHUB_OUTPUT"
-            echo "$old_bot" >> "$GITHUB_OUTPUT"
+            echo "$OLD_BOT_CONTENT" >> "$GITHUB_OUTPUT"
             echo "HISTORY_EOF" >> "$GITHUB_OUTPUT"
           else
             echo "history_source=" >> "$GITHUB_OUTPUT"
