@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 # ── 常量 ──
 
 # 快照相关链接类型集合
-SNAPSHOT_KINDS = {"gkd", "github_attachment", "unreachable_snapshot"}
+SNAPSHOT_KINDS = {"gkd", "github_attachment", "unreachable_snapshot", "gkd_proxy"}
 
 # ── URL 处理函数 ──
 

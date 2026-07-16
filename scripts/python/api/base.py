@@ -106,6 +106,8 @@ class URLChecker(ABC):
         """
         if link.kind == "github_attachment":
             return link.url
+        elif link.kind == "gkd_proxy":
+            return gkd_to_gh_attachment_url(link.url)
         elif link.kind == "gkd":
             return gkd_to_gh_attachment_url(link.url)
         return None
@@ -170,6 +172,8 @@ class URLChecker(ABC):
         # 确定转换后的 URL（用于 Bot 评论展示）
         if link.kind == "github_attachment":
             converted_url = GKD_PROXY_TEMPLATE.format(url=link.url)
+        elif link.kind == "gkd_proxy":
+            converted_url = link.url
         else:
             converted_url = link.url
 
@@ -202,6 +206,8 @@ class URLChecker(ABC):
                     # 更新 converted_url
                     if lnk.kind == "github_attachment":
                         snap.converted_url = GKD_PROXY_TEMPLATE.format(url=lnk.url)
+                    elif lnk.kind == "gkd_proxy":
+                        snap.converted_url = lnk.url
                     snapshots.append(snap)
                     continue
 
@@ -214,6 +220,8 @@ class URLChecker(ABC):
                     converted_url = GKD_PROXY_TEMPLATE.format(url=lnk.url)
                     display = lnk.display_text or converted_url.split("/")[-1]
                     gkd_links.append((display, converted_url))
+                elif lnk.kind == "gkd_proxy":
+                    gkd_links.append((lnk.display_text or lnk.url, lnk.url))
                 else:
                     gkd_links.append((lnk.display_text or lnk.url, lnk.url))
                 continue

@@ -23,6 +23,9 @@ if TYPE_CHECKING:
 # 从 GKD 分享链接中提取数字 ID
 _RE_GKD_ID = re.compile(r"https://i\.gkd\.li/i/(\d+)")
 
+# 从 GKD 代理链接中提取真实 GitHub 附件 URL
+_RE_GKD_PROXY = re.compile(r"https://i\.gkd\.li/i\?url=(https://github\.com/user-attachments/files/[^\s]+)")
+
 # GH 附件 URL 模板：{id} 为 GKD 链接中的数字，file.zip 为固定占位符
 _GH_ATTACHMENT_TEMPLATE = "https://github.com/user-attachments/files/{id}/file.zip"
 
@@ -31,11 +34,21 @@ def gkd_to_gh_attachment_url(gkd_url: str) -> str | None:
     """
     将 GKD 分享链接转换为 GitHub 附件 URL，用于网络可访问性检查。
 
-    例如：https://i.gkd.li/i/29722723 → https://github.com/user-attachments/files/29722723/file.zip
+    支持两种格式：
+    1. 标准 GKD 分享链接：https://i.gkd.li/i/29722723 → https://github.com/user-attachments/files/29722723/file.zip
+    2. GKD 代理链接：https://i.gkd.li/i?url=https://github.com/user-attachments/files/... → 提取真实 GitHub 附件 URL
 
-    返回 None 表示 URL 不符合 GKD 分享链接格式。
+    返回 None 表示 URL 不符合已知格式。
     """
-    match = _RE_GKD_ID.search(gkd_url.strip())
+    gkd_url = gkd_url.strip()
+
+    # 优先尝试代理链接格式
+    proxy_match = _RE_GKD_PROXY.search(gkd_url)
+    if proxy_match:
+        return proxy_match.group(1)
+
+    # 标准数字 ID 格式
+    match = _RE_GKD_ID.search(gkd_url)
     if not match:
         return None
     return _GH_ATTACHMENT_TEMPLATE.format(id=match.group(1))

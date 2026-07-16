@@ -84,14 +84,37 @@ class TestExtractLinksFromBotComment(unittest.TestCase):
     """测试 extract_links_from_bot_comment() 函数"""
 
     def test_bot_snapshot_link(self):
-        """[snapshot_id](url) 格式应从 snapshot_id 构造 GKD 链接"""
+        """[snapshot_id](url) 格式（标准 GKD 链接）应分类为 gkd"""
         comment = "[1783704841971](https://i.gkd.li/i/29899905)"
         result = extract_links_from_bot_comment(comment)
         self.assertEqual(len(result), 1)
-        # 函数从 snapshot_id 构造 GKD URL，不是用原始 URL
-        self.assertEqual(result[0].url, "https://i.gkd.li/i/1783704841971")
+        self.assertEqual(result[0].url, "https://i.gkd.li/i/29899905")
         self.assertEqual(result[0].kind, "gkd")
         self.assertEqual(result[0].display_text, "1783704841971")
+
+    def test_bot_proxy_link(self):
+        """[snapshot_id](url) 格式（代理链接）应分类为 gkd_proxy"""
+        comment = "[1773646272170](https://i.gkd.li/i?url=https://github.com/user-attachments/files/26105236/_MainTabActivity-1773646272170.zip)"
+        result = extract_links_from_bot_comment(comment)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(
+            result[0].url,
+            "https://i.gkd.li/i?url=https://github.com/user-attachments/files/26105236/_MainTabActivity-1773646272170.zip",
+        )
+        self.assertEqual(result[0].kind, "gkd_proxy")
+        self.assertEqual(result[0].display_text, "1773646272170")
+
+    def test_bot_mixed_links(self):
+        """代理链接和标准链接混合应正确分类"""
+        comment = (
+            "[1773646272170](https://i.gkd.li/i?url=https://github.com/user-attachments/files/26105236/_MainTabActivity-1773646272170.zip)"
+            " · "
+            "[1783207234571](https://i.gkd.li/i/29666442)"
+        )
+        result = extract_links_from_bot_comment(comment)
+        self.assertEqual(len(result), 2)
+        self.assertEqual(result[0].kind, "gkd_proxy")
+        self.assertEqual(result[1].kind, "gkd")
 
     def test_bot_gkd_link(self):
         """纯 GKD 链接应正确提取"""
