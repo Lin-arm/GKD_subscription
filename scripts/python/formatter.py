@@ -173,8 +173,8 @@ def _render_app_section(
     # App 副标题：设备 + Android + GKD（取第一个快照的设备信息）
     first = snapshots[0]
     subtitle_parts = []
-    if first.device_model:
-        subtitle_parts.append(first.device_model)
+    # if first.device_model:
+    #     subtitle_parts.append(first.device_model)
     if first.device_release:
         subtitle_parts.append(f"Android {first.device_release}")
     if first.gkd_version_name:
@@ -208,13 +208,13 @@ def _render_activity_line(lines: list[str], snap: SnapshotInfo, links: list[tupl
     act_display = short_activity_name(snap.activity_id)
 
     # 统计信息行
-    stats = (
-        f"快查 ID:{snap.id_qf_count} Text:{snap.text_qf_count}"
-        f" · 深度{snap.max_depth}"
-        f" · 可点击{snap.clickable_nodes}"
-        f" · {snap.total_nodes}节点"
-    )
-    lines.append(f"**{act_display}** — {stats}")
+    # stats = (
+    #     f"快查 ID:{snap.id_qf_count} Text:{snap.text_qf_count}"
+    #     f" · 深度{snap.max_depth}"
+    #     f" · 可点击{snap.clickable_nodes}"
+    #     f" · {snap.total_nodes}节点"
+    # )
+    lines.append(f"**{act_display}**")
 
     # 链接行（该 Activity 的所有快照链接）
     if links:
@@ -231,7 +231,7 @@ def _render_detail_section(snapshots: list[SnapshotInfo]) -> list[str]:
     渲染折叠区内容。
 
     包含：
-    - 按 App 分组的详细信息表（可见/分辨率/方向/appVersionCode/GKD/userId）
+    - 按 App 分组的详细信息表（可见/分辨率/方向/APP版本代码/快查ID&Text/深度/可点击/节点数/GKD/userId）
     - 设备信息表（去重）
     """
     if not snapshots:
@@ -248,8 +248,12 @@ def _render_detail_section(snapshots: list[SnapshotInfo]) -> list[str]:
     for app_key, app_snaps in app_groups.items():
         lines.append(f"**{app_key}**")
         lines.append("")
-        lines.append("| Activity | 可见 | 分辨率 | 方向 | appVersionCode | GKD | userId |")
-        lines.append("|----------|------|--------|------|----------------|-----|--------|")
+        lines.append(
+            "| Activity | 可见 | 分辨率 | 方向 | APP版本代码 | 快查ID/Text | 深度 | 可点击 | 节点数 | GKD | userId |"
+        )
+        lines.append(
+            "|----------|------|--------|------|-----------|-------------|------|-------|-------|-----|--------|"
+        )
         for snap in app_snaps:
             orientation = "横屏" if snap.is_landscape else "竖屏"
             resolution = f"{snap.screen_width}×{snap.screen_height}"
@@ -257,7 +261,8 @@ def _render_detail_section(snapshots: list[SnapshotInfo]) -> list[str]:
             act_display = short_activity_name(snap.activity_id)
             lines.append(
                 f"| {act_display} | {snap.visible_nodes} | {resolution} | {orientation} "
-                f"| {snap.app_version_code} | {gkd_info} | {snap.gkd_user_id} |"
+                f"| {snap.app_version_code} | {snap.id_qf_count}/{snap.text_qf_count} | {snap.max_depth} "
+                f"| {snap.clickable_nodes} | {snap.total_nodes} | {gkd_info} | {snap.gkd_user_id} |"
             )
         lines.append("")
 
@@ -304,6 +309,3 @@ def _deduplicate_devices(snapshots: list[SnapshotInfo]) -> list[dict]:
         )
 
     return result
-
-
-# ── 工具函数 ──
