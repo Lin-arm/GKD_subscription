@@ -104,6 +104,9 @@ class SnapshotInfo:
     original_url: str
     converted_url: str
 
+    # 旧版快照标记
+    is_legacy_snapshot: bool = False  # 是否为旧版快照（缺少 appInfo/gkdAppInfo）
+
 
 # ── 检查报告数据结构 ──
 

@@ -101,14 +101,17 @@ def _parse_snapshot(data: dict, original_url: str, converted_url: str) -> Snapsh
     app_version_name = str(app_info.get("versionName") or data.get("appVersionName", ""))
     app_version_code = str(app_info.get("versionCode") or data.get("appVersionCode", ""))
 
-    # GKD 信息：优先 gkdAppInfo，回退顶层字段
+    # 设备信息（需要先获取，因为 gkdVersionName/gkdVersionCode 旧版位于 device 内）
+    device = data.get("device", {}) or {}
+
+    # GKD 信息：优先 gkdAppInfo，回退 device 对象内的字段
     gkd_info = data.get("gkdAppInfo", {}) or {}
-    gkd_version_name = str(gkd_info.get("versionName") or data.get("gkdVersionName", ""))
-    gkd_version_code = str(gkd_info.get("versionCode") or data.get("gkdVersionCode", ""))
+    gkd_version_name = str(gkd_info.get("versionName") or device.get("gkdVersionName", ""))
+    gkd_version_code = str(gkd_info.get("versionCode") or device.get("gkdVersionCode", ""))
     gkd_user_id = str(gkd_info.get("userId", ""))
 
-    # 设备信息
-    device = data.get("device", {}) or {}
+    # 旧版快照标记：检测是否缺少 appInfo/gkdAppInfo（旧版格式）
+    is_legacy_snapshot = "appInfo" not in data or data.get("appInfo") is None
 
     # 节点统计
     nodes = data.get("nodes", []) or []
@@ -124,18 +127,29 @@ def _parse_snapshot(data: dict, original_url: str, converted_url: str) -> Snapsh
 
         if attr.get("visibleToUser", False):
             visible_nodes += 1
-        if attr.get("clickable", False):
+        # 兼容旧版 isClickable 字段
+        if attr.get("clickable", False) or attr.get("isClickable", False):
             clickable_nodes += 1
 
         depth = attr.get("depth", 0)
         if depth > max_depth:
             max_depth = depth
 
-        # idQf / textQf 缺失视为 null，仅 true 时计数
-        if node.get("idQf") is True:
-            id_qf_count += 1
-        if node.get("textQf") is True:
-            text_qf_count += 1
+        # 快速查询标志处理：优先 idQf/textQf，回退 quickFind（2023-10-16 ~ 2024-01 快照）
+        id_qf = node.get("idQf")
+        text_qf = node.get("textQf")
+        if id_qf is not None or text_qf is not None:
+            # 当前版本：直接使用 idQf/textQf
+            if id_qf is True:
+                id_qf_count += 1
+            if text_qf is True:
+                text_qf_count += 1
+        else:
+            # 旧版兼容：使用 quickFind 字段（同时作为 idQf 和 textQf）
+            quick_find = node.get("quickFind")
+            if quick_find is True:
+                id_qf_count += 1
+                text_qf_count += 1
 
     return SnapshotInfo(
         app_name=app_name,
@@ -164,4 +178,5 @@ def _parse_snapshot(data: dict, original_url: str, converted_url: str) -> Snapsh
         text_qf_count=text_qf_count,
         original_url=original_url,
         converted_url=converted_url,
+        is_legacy_snapshot=is_legacy_snapshot,
     )

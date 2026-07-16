@@ -160,12 +160,11 @@ class TestBuildBotComment(unittest.TestCase):
         self.assertIn("## 测试应用 `com.test.app` 1.0.0", result)
         # Activity 行
         self.assertIn("**MainActivity**", result)
-        # 统计信息
-        self.assertIn("快查 ID:2", result)
-        self.assertIn("Text:1", result)
-        self.assertIn("深度10", result)
-        self.assertIn("可点击3", result)
-        self.assertIn("20节点", result)
+        # 统计信息在折叠区域详细信息表中
+        self.assertIn("2/1", result)  # 快查ID:2/Text:1
+        self.assertIn("| 10 |", result)  # 深度10
+        self.assertIn("| 3 |", result)  # 可点击3
+        self.assertIn("| 20 |", result)  # 节点数20
 
     def test_multiple_activities(self):
         """多 Activity 应各有独立行"""

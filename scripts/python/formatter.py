@@ -167,8 +167,10 @@ def _render_app_section(
     if not snapshots:
         return
 
-    # App 标题
-    lines.append(f"## {app_key}")
+    # App 标题（含旧版快照标记）
+    is_legacy = any(s.is_legacy_snapshot for s in snapshots)
+    legacy_tag = " `⚠️旧版快照`" if is_legacy else ""
+    lines.append(f"## {app_key}{legacy_tag}")
 
     # App 副标题：设备 + Android + GKD（取第一个快照的设备信息）
     first = snapshots[0]
@@ -207,13 +209,7 @@ def _render_activity_line(lines: list[str], snap: SnapshotInfo, links: list[tupl
     # Activity 名称取最后一段（类名简写）
     act_display = short_activity_name(snap.activity_id)
 
-    # 统计信息行
-    # stats = (
-    #     f"快查 ID:{snap.id_qf_count} Text:{snap.text_qf_count}"
-    #     f" · 深度{snap.max_depth}"
-    #     f" · 可点击{snap.clickable_nodes}"
-    #     f" · {snap.total_nodes}节点"
-    # )
+    # 统计信息已折叠到详细信息区域
     lines.append(f"**{act_display}**")
 
     # 链接行（该 Activity 的所有快照链接）
@@ -246,7 +242,9 @@ def _render_detail_section(snapshots: list[SnapshotInfo]) -> list[str]:
         app_groups.setdefault(app_key, []).append(snap)
 
     for app_key, app_snaps in app_groups.items():
-        lines.append(f"**{app_key}**")
+        is_legacy = any(s.is_legacy_snapshot for s in app_snaps)
+        legacy_tag = " `⚠️旧版快照`" if is_legacy else ""
+        lines.append(f"**{app_key}{legacy_tag}**")
         lines.append("")
         lines.append(
             "| Activity | 可见 | 分辨率 | 方向 | APP版本代码 | 快查ID/Text | 深度 | 可点击 | 节点数 | GKD | userId |"
