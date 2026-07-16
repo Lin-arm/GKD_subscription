@@ -9,8 +9,6 @@ on:
 permissions:
   contents: read
   issues: write
-  actions: write
-  repository-projects: read
 
 env:
   GH_REPO: ${{ github.repository }}
@@ -72,11 +70,20 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: 安装UV
+        if: >-
+          github.event_name != 'issue_comment' ||
+          steps.pre-check.outputs.needs_analysis != 'false'
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: scripts/python/requirements.txt
+
       - name: 安装 Python 依赖
         if: >-
           github.event_name != 'issue_comment' ||
           steps.pre-check.outputs.needs_analysis != 'false'
-        run: pip install httpx
+        run: uv pip install --system -r scripts/python/requirements.txt
 
       - name: 创建工作流所需标签
         if: >-
@@ -117,6 +124,10 @@ jobs:
 
       # 恢复快照缓存（所有事件都可读取）
       - name: 恢复快照缓存
+        if: >-
+          github.event_name != 'issue_comment' ||
+          steps.pre-check.outputs.needs_analysis != 'false'
+
         uses: actions/cache/restore@v6
         with:
           path: /tmp/snapshot_cache
@@ -151,12 +162,12 @@ jobs:
           comment_bot=
           EOF
           else
-            python3 scripts/python/entry/check_issue.py
+            python scripts/python/entry/check_issue.py
           fi
 
       # 保存快照缓存（仅 issues 事件有写权限，issue_comment 事件只读）
       - name: 保存快照缓存
-        if: github.event_name == 'issues'
+        if: github.event_name == 'issues' && !cancelled()
         uses: actions/cache/save@v6
         with:
           path: /tmp/snapshot_cache
@@ -302,11 +313,7 @@ jobs:
 
   handle-convert:
     name: 处理链接转换
-    needs:
-      [
-        analyze,
-        handle-missing-snapshot,
-      ]
+    needs: [analyze, handle-missing-snapshot]
     if: >-
       always() &&
       needs.handle-missing-snapshot.result == 'skipped' &&
