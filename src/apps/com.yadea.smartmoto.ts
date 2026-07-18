@@ -17,6 +17,9 @@ export default defineGkdApp({
       rules: [
         {
           matches: '[id="com.yadea.smartmoto:id/tv_cancel"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/30144136',
+          ],
         },
       ],
     },
