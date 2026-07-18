@@ -11,10 +11,10 @@ export default defineGkdApp({
       matchTime: 10000,
       resetMatch: 'app',
       fastQuery: true,
-      activityIds: 'com.yadea.smartmoto.ui.home.HomeActivity',
+      activityIds: '.main.view.MainActivity',
       rules: [
         {
-          matches: '[id="com.yadea.smartmoto:id/tv_cancel"]',
+          matches: '[vid="tv_cancel"]',
           snapshotUrls: 'https://i.gkd.li/i/30144136',
         },
       ],
