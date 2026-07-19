@@ -162,5 +162,19 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 15,
+      name: '全屏广告-签到弹窗',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: '.host.activity.MainActivity',
+          matches:
+            'ImageView < @[clickable=true] < [visibleToUser=true] >3 [text="立即签到"]',
+          snapshotUrls: 'https://i.gkd.li/i/30167710',
+          exampleUrls: 'https://e.gkd.li/8b93b8fb-1d31-42d2-95a1-c76dc0186e96',
+        },
+      ],
+    },
   ],
 });
