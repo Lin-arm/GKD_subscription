@@ -259,6 +259,34 @@ export default defineGkdApp({
       ],
     },
     {
+      key: 4,
+      name: '局部广告-游戏类推广',
+      desc: '首页,游戏公测/上线等推广,点击x掉',
+      fastQuery: true,
+      activityIds: '.tblauncher.MainTabActivity',
+      rules: [
+        {
+          key: 0,
+          matches:
+            '@ImageView <2 [childCount=2] <4 [index=0][childCount=4] +(1,2) FrameLayout > [text*="定档" || text*="预约" || text^="测试招募"][text*="《"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/30164473', //定档
+            'https://i.gkd.li/i/30164474', //定档
+            'https://i.gkd.li/i/30164475', //测试招募
+            'https://i.gkd.li/i/30165036', //预约
+          ],
+          exampleUrls: 'https://e.gkd.li/45efc73b-e2e4-4c61-af95-607d500b8ac7',
+        },
+        {
+          key: 1,
+          matches:
+            '@ImageView <2 [childCount=2] <4 [index=0][childCount=4] +n [childCount>3] > [text="权限" || text="隐私" || text="功能"] -(1,2,3) [text*="有限公司"]',
+          snapshotUrls: 'https://i.gkd.li/i/30164269',
+          exampleUrls: 'https://e.gkd.li/602291ca-dd06-4116-8252-65fe8d4e610d',
+        },
+      ],
+    },
+    {
       key: 7,
       name: '更新提示',
       fastQuery: true,
