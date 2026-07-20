@@ -83,28 +83,26 @@ export default defineGkdApp({
       ],
     },
     {
-      key: 10,
-      name: '全屏广告-首页-专辑订阅推荐弹窗',
-      fastQuery: true,
-      matchTime: 10000,
-      actionMaximum: 1,
-      resetMatch: 'app',
-      rules: [
-        {
-          activityIds: '.host.activity.MainActivity',
-          matches: '[text="你可能感兴趣的专辑"] + [vid="main_iv_close"]',
-          snapshotUrls: 'https://i.gkd.li/i/13251713',
-          exampleUrls: 'https://e.gkd.li/8efcd568-13f2-4ac4-872a-fe6fc4affaec',
-        },
-      ],
-    },
-    {
       key: 11,
       name: '全屏广告-弹窗广告',
+      fastQuery: true,
+      activityIds: '.host.activity.MainActivity',
       rules: [
         {
-          fastQuery: true,
-          activityIds: '.host.activity.MainActivity',
+          key: 0,
+          matches: '[vid="main_iv_close"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/13251713', //你可能感兴趣的专辑
+            'https://i.gkd.li/i/29967591', //会员弹窗
+            'https://i.gkd.li/i/30176023', //赠给好友免费听
+          ],
+          exampleUrls: [
+            'https://e.gkd.li/8efcd568-13f2-4ac4-872a-fe6fc4affaec',
+            'https://e.gkd.li/f82ca167-35a0-42b4-b955-c5ef6e5d94dd',
+          ],
+        },
+        {
+          key: 1,
           matches:
             '@[vid="host_close_firework"] +2 [vid="host_firework_ad_tag"]',
           snapshotUrls: 'https://i.gkd.li/i/13263421',
@@ -146,19 +144,6 @@ export default defineGkdApp({
           matches: '[vid="host_iv_close"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/2a7e189b-b935-4bbd-9672-c18f2bf454e9',
           snapshotUrls: 'https://i.gkd.li/i/18326083',
-        },
-      ],
-    },
-    {
-      key: 14,
-      name: '全屏广告-会员弹窗',
-      rules: [
-        {
-          fastQuery: true,
-          activityIds: '.host.activity.MainActivity',
-          matches: '[text*="￥"] -n [vid="main_iv_close"]',
-          snapshotUrls: 'https://i.gkd.li/i/29967591',
-          exampleUrls: 'https://e.gkd.li/f82ca167-35a0-42b4-b955-c5ef6e5d94dd',
         },
       ],
     },
