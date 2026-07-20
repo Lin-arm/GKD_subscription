@@ -252,8 +252,9 @@ export default defineGkdApp({
           key: 1,
           activityIds: 'com.x.android.main.MainActivity',
           matches:
-            '@[clickable=true] > [visibleToUser=true][text="显示更多帖子"]',
+            '@[clickable=true] > [visibleToUser=true][text="显示更多帖子"][left>300]',
           snapshotUrls: 'https://i.gkd.li/i/30151597',
+          excludeSnapshotUrls: 'https://i.gkd.li/i/30175825', // [left=186]
         },
       ],
     },
