@@ -53,9 +53,10 @@ export default defineGkdApp({
         {
           key: 1,
           name: '卡片信息流式',
+          actionCd: 120,
           activityIds: '.SmartMainProxyActivity',
           matches: '[vid="iv_close"][visibleToUser=true]',
-          snapshotUrls: 'https://i.gkd.li/i/17872961',
+          snapshotUrls: 'https://i.gkd.li/i/30197268',
         },
         {
           key: 2,
