@@ -678,8 +678,11 @@ export default defineGkdApp({
           actionDelay: 500,
           activityIds: 'com.luna.biz.live.plugin.LunaDefaultLivePlayerActivity',
           matches:
-            '@Button[desc="关闭"] +n [visibleToUser=true] >5 [text="更多直播"]',
-          snapshotUrls: 'https://i.gkd.li/i/30159254',
+            '@Button[desc="关闭"] -n [visibleToUser=true] >(4,5) [vid="name_layout"][childCount=2]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/30159254',
+            'https://i.gkd.li/i/30266403',
+          ],
         },
       ],
     },
