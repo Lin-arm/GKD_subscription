@@ -238,6 +238,7 @@ export default defineGkdApp({
     {
       key: 7,
       name: '功能类-自动[显示更多帖子]',
+      desc: '只点击居中的,不点击靠左的[显示更多帖子]',
       rules: [
         {
           key: 0,
@@ -252,9 +253,20 @@ export default defineGkdApp({
           key: 1,
           activityIds: 'com.x.android.main.MainActivity',
           matches:
-            '@[clickable=true] > [visibleToUser=true][text="显示更多帖子"][left>300]',
-          snapshotUrls: 'https://i.gkd.li/i/30151597',
-          excludeSnapshotUrls: 'https://i.gkd.li/i/30175825', // [left=186]
+            '@[clickable=true] > TextView[visibleToUser=true][text="显示更多帖子"][right>parent.right.minus(parent.width.div(2))]',
+          /**
+           *  其中 [right>parent.right.minus(parent.width.div(2))] 表示:
+           *  TextView节点的 right 要大于 父节点的 (right-width/2) ,
+           *  无论在小窗模式还是全屏模式, (right-width/2) 都是从父节点中间穿过的 竖中线,
+           *  TextView节点的 right 小于 竖中线的, 即TextView靠左的, 会被排除掉
+           */
+          snapshotUrls: 'https://i.gkd.li/i/30151597', // 文本在中间
+          excludeSnapshotUrls: [
+            // 文本在左边,点击会直接进入帖子详情,而不是展开帖子,故排除 (Lin-arm/GKD_subscription#251)
+            'https://i.gkd.li/i/30175825', // [left=186]
+            'https://i.gkd.li/i/30271020', //平板设备 小窗模式
+            'https://i.gkd.li/i/30271022', //平板设备 全屏
+          ],
         },
       ],
     },
