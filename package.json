@@ -19,7 +19,7 @@
   "simple-git-hooks": {
     "pre-commit": "pnpm exec lint-staged",
     "commit-msg": "pnpm exec commitlint --config commitlint.config.ts --edit ${1}",
-    "pre-push": "pnpm run check"
+    "pre-push": "pnpm run check && bash scripts/python/tests/run_tests.sh"
   },
   "lint-staged": {
     "*.{js,cjs,mjs,ts,jsx,tsx}": [
@@ -28,6 +28,10 @@
     ],
     "*.json": [
       "prettier --cache --write"
+    ],
+    "*.py": [
+      "ruff check --fix",
+      "ruff format"
     ]
   },
   "publishConfig": {

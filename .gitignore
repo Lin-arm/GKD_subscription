@@ -21,3 +21,7 @@ lerna-debug.log*
 node_modules
 package-lock.json
 yarn.lock
+
+__pycache__/
+*.pyc
+scripts/python/test_results.json

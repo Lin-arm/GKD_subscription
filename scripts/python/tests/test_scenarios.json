@@ -1,0 +1,191 @@
+{
+  "scenarios": [
+    {
+      "name": "正常场景：单个GKD链接",
+      "description": "Issue 包含一个有效的 GKD 分享链接",
+      "input": {
+        "ISSUE_BODY": "## 适配请求\n\n请适配这个应用的广告\n\n快照：https://i.gkd.li/i/29899905",
+        "ISSUE_COMMENT_BODY": "",
+        "ISSUE_USER": "testuser",
+        "ISSUE_ACTION": "opened"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "has_convertible": "true",
+        "warning_type": ""
+      }
+    },
+    {
+      "name": "正常场景：多个GKD链接",
+      "description": "Issue 包含多个有效的 GKD 分享链接",
+      "input": {
+        "ISSUE_BODY": "## 适配请求\n\n请适配这个应用的广告\n\n开屏广告：https://i.gkd.li/i/29899905\n弹窗广告：https://i.gkd.li/i/29899896",
+        "ISSUE_COMMENT_BODY": "",
+        "ISSUE_USER": "testuser",
+        "ISSUE_ACTION": "opened"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "has_convertible": "true",
+        "warning_type": ""
+      }
+    },
+    {
+      "name": "缺失快照：没有链接",
+      "description": "Issue 没有提供任何快照链接",
+      "input": {
+        "ISSUE_BODY": "## 适配请求\n\n请适配这个应用的广告\n\n这个应用有很多广告需要处理",
+        "ISSUE_COMMENT_BODY": "",
+        "ISSUE_USER": "testuser",
+        "ISSUE_ACTION": "opened"
+      },
+      "expected": {
+        "has_snapshot": "false",
+        "has_unreachable": "false",
+        "network_status": "skipped",
+        "has_convertible": "false",
+        "warning_type": "missing"
+      }
+    },
+    {
+      "name": "不可访问快照：包含snapshot链接",
+      "description": "Issue 包含不可访问的快照链接（i.gkd.li/snapshot/）",
+      "input": {
+        "ISSUE_BODY": "## 适配请求\n\n请适配这个应用的广告\n\n快照：https://i.gkd.li/snapshot/abc123",
+        "ISSUE_COMMENT_BODY": "",
+        "ISSUE_USER": "testuser",
+        "ISSUE_ACTION": "opened"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "true",
+        "network_status": "skipped",
+        "has_convertible": "false",
+        "warning_type": ""
+      }
+    },
+    {
+      "name": "链接404：无效链接",
+      "description": "Issue 包含返回 404 的链接",
+      "input": {
+        "ISSUE_BODY": "## 适配请求\n\n请适配这个应用的广告\n\n快照：https://i.gkd.li/i/99999999",
+        "ISSUE_COMMENT_BODY": "",
+        "ISSUE_USER": "testuser",
+        "ISSUE_ACTION": "opened"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "404",
+        "has_convertible": "false",
+        "warning_type": ""
+      }
+    },
+    {
+      "name": "混合场景：有效+不可访问",
+      "description": "Issue 同时包含有效链接和不可访问快照链接",
+      "input": {
+        "ISSUE_BODY": "## 适配请求\n\n请适配这个应用的广告\n\n有效快照：https://i.gkd.li/i/29899905\n不可访问快照：https://i.gkd.li/snapshot/abc123",
+        "ISSUE_COMMENT_BODY": "",
+        "ISSUE_USER": "testuser",
+        "ISSUE_ACTION": "opened"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "true",
+        "network_status": "ok",
+        "has_convertible": "true",
+        "warning_type": ""
+      }
+    },
+    {
+      "name": "评论补充链接",
+      "description": "用户在评论中补充快照链接",
+      "input": {
+        "ISSUE_BODY": "## 适配请求\n\n请适配这个应用的广告",
+        "ISSUE_COMMENT_BODY": "补充快照：https://i.gkd.li/i/29899905",
+        "ISSUE_USER": "testuser",
+        "ISSUE_ACTION": "comment"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "has_convertible": "true",
+        "warning_type": "recovery"
+      }
+    },
+    {
+      "name": "编辑后恢复",
+      "description": "用户编辑 Issue 后补充了有效链接",
+      "input": {
+        "ISSUE_BODY": "## 适配请求\n\n请适配这个应用的广告\n\n快照：https://i.gkd.li/i/29899905",
+        "ISSUE_COMMENT_BODY": "",
+        "ISSUE_USER": "testuser",
+        "ISSUE_ACTION": "edited"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "has_convertible": "true",
+        "warning_type": "recovery"
+      }
+    },
+    {
+      "name": "GitHub附件链接",
+      "description": "Issue 包含 GitHub 附件链接（虚构链接，预期返回404）",
+      "input": {
+        "ISSUE_BODY": "## 适配请求\n\n请适配这个应用的广告\n\n快照：https://github.com/user-attachments/files/12345/snapshot.zip",
+        "ISSUE_COMMENT_BODY": "",
+        "ISSUE_USER": "testuser",
+        "ISSUE_ACTION": "opened"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "404",
+        "has_convertible": "false",
+        "warning_type": ""
+      }
+    },
+    {
+      "name": "Markdown格式链接",
+      "description": "Issue 使用 Markdown 格式提供链接",
+      "input": {
+        "ISSUE_BODY": "## 适配请求\n\n请适配这个应用的广告\n\n[开屏广告快照](https://i.gkd.li/i/29899905)\n[弹窗广告快照](https://i.gkd.li/i/29899896)",
+        "ISSUE_COMMENT_BODY": "",
+        "ISSUE_USER": "testuser",
+        "ISSUE_ACTION": "opened"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "has_convertible": "true",
+        "warning_type": ""
+      }
+    },
+    {
+      "name": "Issue失效链接+评论补充有效链接",
+      "description": "Issue 原始链接失效（404），用户在评论中补充有效 GKD 链接，应触发 recovery",
+      "input": {
+        "ISSUE_BODY": "## 适配请求\n\n请适配这个应用的广告\n\n快照：https://github.com/user-attachments/files/12345/snapshot.zip",
+        "ISSUE_COMMENT_BODY": "补充有效快照：https://i.gkd.li/i/29899905",
+        "ISSUE_USER": "testuser",
+        "ISSUE_ACTION": "comment"
+      },
+      "expected": {
+        "has_snapshot": "true",
+        "has_unreachable": "false",
+        "network_status": "ok",
+        "has_convertible": "true",
+        "warning_type": "recovery"
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+# Ruff 配置
+# 仅检查 scripts/python/ 下的 Python 脚本
+
+target-version = "py310"
+line-length = 120
+
+[lint]
+select = [
+    "E",   # pycodestyle 错误
+    "W",   # pycodestyle 警告
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",   # 行长度（prettier 不处理 Python，放宽限制）
+]
+
+[lint.per-file-ignores]
+"scripts/python/tests/*" = ["B011"]  # 测试中允许 assert False
+
+[format]
+quote-style = "double"
+indent-style = "space"

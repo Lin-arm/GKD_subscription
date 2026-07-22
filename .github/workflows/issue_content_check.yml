@@ -2,113 +2,432 @@ name: issue_content_check
 
 on:
   issues:
-    types: [opened]
+    types: [opened, edited]
+  issue_comment:
+    types: [created]
 
-# 允许修改 Issue（标签、评论、关闭）
 permissions:
+  contents: read
   issues: write
 
+env:
+  GH_REPO: ${{ github.repository }}
+
 jobs:
-  check-issue-content:
+  # ── 分析节点：Python 只运行一次，输出所有原子化标志 ──
+
+  analyze:
+    name: 分析 Issue 快照链接
     runs-on: ubuntu-latest
-
+    # issue_comment 事件仅处理 Issue 作者本人的评论
+    if: >
+      github.event_name != 'issue_comment' ||
+      github.event.comment.user.login == github.event.issue.user.login
+    outputs:
+      has_snapshot: ${{ steps.analyze.outputs.has_snapshot }}
+      has_unreachable: ${{ steps.analyze.outputs.has_unreachable }}
+      network_status: ${{ steps.analyze.outputs.network_status }}
+      network_detail: ${{ steps.analyze.outputs.network_detail }}
+      has_convertible: ${{ steps.analyze.outputs.has_convertible }}
+      warning_type: ${{ steps.analyze.outputs.warning_type }}
+      comment_missing: ${{ steps.analyze.outputs.comment_missing }}
+      comment_unreachable: ${{ steps.analyze.outputs.comment_unreachable }}
+      comment_404: ${{ steps.analyze.outputs.comment_404 }}
+      comment_uncertain: ${{ steps.analyze.outputs.comment_uncertain }}
+      comment_recovery: ${{ steps.analyze.outputs.comment_recovery }}
+      comment_bot: ${{ steps.analyze.outputs.comment_bot }}
     steps:
-      - name: 检查 Issue 内容并自动处理
+      - name: 预检查是否需要分析（仅 issue_comment 事件）
+        id: pre-check
+        if: github.event_name == 'issue_comment'
         env:
-          # GitHub CLI 认证
-          GH_TOKEN: ${{ github.token }}
-
-          # 当前仓库（owner/repo）
-          GH_REPO: ${{ github.repository }}
-
-          # 当前 Issue 信息
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-          ISSUE_BODY: ${{ github.event.issue.body }}
-          ISSUE_USER: ${{ github.event.issue.user.login }}
-
         run: |
-          set -euo pipefail
+          state=$(gh issue view "$ISSUE_NUMBER" --json state -q .state)
+          labels=$(gh issue view "$ISSUE_NUMBER" --json labels -q '.labels[].name')
+          needs="false"
+          [ "$state" = "CLOSED" ] && needs="true"
+          for label in $labels; do
+            case "$label" in
+              "缺失快照(no-snapshot)"|"需补充链接(needs-link)"|"链接失效(broken-link)")
+                needs="true" ;;
+            esac
+          done
+          echo "needs_analysis=$needs" >> "$GITHUB_OUTPUT"
 
-          # ====================
-          # GitHub Issue 操作
-          # ====================
+      - name: 检出代码仓库
+        if: >-
+          github.event_name != 'issue_comment' ||
+          steps.pre-check.outputs.needs_analysis != 'false'
+        uses: actions/checkout@v7
 
-          # 添加 invalid 标签
-          add_invalid_label() {
-            gh issue edit "$ISSUE_NUMBER" \
-              --repo "$GH_REPO" \
-              --add-label invalid
-          }
+      - name: 配置 Python 运行环境
+        if: >-
+          github.event_name != 'issue_comment' ||
+          steps.pre-check.outputs.needs_analysis != 'false'
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
 
-          # 发表评论
-          comment_issue() {
-            gh issue comment "$ISSUE_NUMBER" \
-              --repo "$GH_REPO" \
-              --body "$1"
-          }
+      - name: 安装UV
+        if: >-
+          github.event_name != 'issue_comment' ||
+          steps.pre-check.outputs.needs_analysis != 'false'
+        uses: astral-sh/setup-uv@v8.0.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: scripts/python/requirements.txt
 
-          # 关闭 Issue
-          close_issue() {
-            gh issue close "$ISSUE_NUMBER" \
-              --repo "$GH_REPO"
-          }
+      - name: 安装 Python 依赖
+        if: >-
+          github.event_name != 'issue_comment' ||
+          steps.pre-check.outputs.needs_analysis != 'false'
+        run: uv pip install --system -r scripts/python/requirements.txt
 
-          # ====================
-          # 内容检查规则
-          # ====================
+      - name: 创建工作流所需标签
+        if: >-
+          github.event_name != 'issue_comment' ||
+          steps.pre-check.outputs.needs_analysis != 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create "缺失快照(no-snapshot)" --color "#fd1b4d" --description "Issue缺少快照链接" --force
+          gh label create "需补充链接(needs-link)" --color "#581598" --description "Issue包含不可访问的快照链接" --force
+          gh label create "链接失效(broken-link)" --color "#12f540" --description "Issue中的链接无法访问" --force
 
-          # 判断是否缺少快照
-          #
-          # 满足任意一种情况即可：
-          # - GKD 分享链接
-          # - ZIP 快照附件
-          #
-          # 两者都不存在时返回 true
-          missing_snapshot() {
-            [[ "$ISSUE_BODY" != *"i.gkd.li/"* &&
-               "$ISSUE_BODY" != *".zip"* ]]
-          }
+      # issue_comment 事件时，获取旧 Bot 评论作为历史链接来源
+      - name: 查找旧 Bot 评论
+        id: find-old-bot
+        if: github.event_name == 'issue_comment'
+        uses: peter-evans/find-comment@v4
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '<!-- gkd-bot-comment -->'
 
-          # 判断是否使用了不可分享的本地快照链接
-          #
-          # 例如：
-          # https://i.gkd.li/snapshot/xxx
-          #
-          # 此类链接仅作者可访问
-          unreachable_snapshot_link() {
-            [[ "$ISSUE_BODY" == *"i.gkd.li/snapshot/"* ]]
-          }
-
-          # ====================
-          # 自动处理逻辑
-          # ====================
-
-          # 未提供快照
-          #
-          # 处理方式：
-          # 1. 标记 invalid
-          # 2. 自动回复
-          # 3. 自动关闭
-          if missing_snapshot; then
-            add_invalid_label
-
-            comment_issue \
-              "您好 @${ISSUE_USER}，由于您没有提供快照，此 issue 已被自动关闭。"
-
-            gh issue close "${ISSUE_NUMBER}" --reason "not planned"
-            exit 0
+      - name: 获取历史链接
+        id: get-history
+        if: github.event_name == 'issue_comment'
+        env:
+          OLD_BOT_CONTENT: ${{ steps.find-old-bot.outputs.comment-body }}
+        run: |
+          if [ -n "$OLD_BOT_CONTENT" ]; then
+            echo "history_source=old_bot" >> "$GITHUB_OUTPUT"
+            echo "history_content<<HISTORY_EOF" >> "$GITHUB_OUTPUT"
+            echo "$OLD_BOT_CONTENT" >> "$GITHUB_OUTPUT"
+            echo "HISTORY_EOF" >> "$GITHUB_OUTPUT"
+          else
+            echo "history_source=" >> "$GITHUB_OUTPUT"
+            echo "history_content=" >> "$GITHUB_OUTPUT"
           fi
 
-          # 检测到不可访问的快照链接
-          #
-          # 处理方式：
-          # 1. 标记 invalid
-          # 2. 自动提醒修正
-          #
-          # 不自动关闭，允许用户补充
-          if unreachable_snapshot_link; then
-            add_invalid_label
+      # 恢复快照缓存（所有事件都可读取）
+      - name: 恢复快照缓存
+        if: >-
+          github.event_name != 'issue_comment' ||
+          steps.pre-check.outputs.needs_analysis != 'false'
 
-            comment_issue \
-              "您好 @${ISSUE_USER}，检测到您提供了他人无法访问的链接，请点击查看 [正确的分享快照方式说明](https://gkd.li/guide/snapshot#share-note) 。可在下方评论区补充。"
+        uses: actions/cache/restore@v6
+        with:
+          path: /tmp/snapshot_cache
+          key: snapshots-${{ github.event.issue.number }}
+          restore-keys: |
+            snapshots-
+
+      - name: 分析 Issue 快照链接
+        id: analyze
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_COMMENT_BODY: ${{ github.event.comment.body || '' }}
+          ISSUE_USER: ${{ github.event.issue.user.login }}
+          ISSUE_ACTION: ${{ github.event_name == 'issue_comment' && 'comment' || github.event.action }}
+          SKIP_ANALYSIS: ${{ github.event_name == 'issue_comment' && steps.pre-check.outputs.needs_analysis == 'false' }}
+          HISTORY_CONTENT: ${{ steps.get-history.outputs.history_content || '' }}
+          HISTORY_SOURCE: ${{ steps.get-history.outputs.history_source || '' }}
+        run: |
+          if [ "$SKIP_ANALYSIS" = "true" ]; then
+            cat >> "$GITHUB_OUTPUT" <<EOF
+          has_snapshot=true
+          has_unreachable=false
+          network_status=ok
+          network_detail=
+          has_convertible=false
+          warning_type=
+          comment_missing=
+          comment_unreachable=
+          comment_404=
+          comment_uncertain=
+          comment_recovery=
+          comment_bot=
+          EOF
+          else
+            python scripts/python/entry/check_issue.py
           fi
+
+      # 保存快照缓存（仅 issues 事件有写权限，issue_comment 事件只读）
+      - name: 保存快照缓存
+        if: github.event_name == 'issues' && !cancelled()
+        uses: actions/cache/save@v6
+        with:
+          path: /tmp/snapshot_cache
+          key: snapshots-${{ github.event.issue.number }}
+
+  # ── 线性步骤一：缺失快照 → 打标签 + 评论 + 关闭（致命，阻断后续所有 Job） ──
+
+  handle-missing-snapshot:
+    name: 处理缺失快照
+    needs: analyze
+    if: needs.analyze.outputs.has_snapshot == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 打标签「缺失快照」
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: gh issue edit "$ISSUE_NUMBER" --add-label "缺失快照(no-snapshot)"
+
+      - name: 查找已有警告评论
+        id: find-warning
+        uses: peter-evans/find-comment@v4
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '<!-- gkd-warning-missing -->'
+
+      - name: 发布缺失快照警告评论
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          comment-id: ${{ steps.find-warning.outputs.comment-id }}
+          issue-number: ${{ github.event.issue.number }}
+          body: ${{ needs.analyze.outputs.comment_missing }}
+          edit-mode: replace
+
+      - name: 关闭 Issue（缺失快照）
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: gh issue close "$ISSUE_NUMBER" --reason "not planned"
+
+  # ── 线性步骤二：本地快照链接 → 打标签 + 评论（非致命，不阻断后续） ──
+
+  handle-unreachable-snapshot:
+    name: 处理本地快照链接
+    needs: [analyze, handle-missing-snapshot]
+    if: >-
+      always() &&
+      needs.handle-missing-snapshot.result == 'skipped' &&
+      needs.analyze.outputs.has_unreachable == 'true' &&
+      needs.analyze.outputs.warning_type != 'recovery'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 打标签「需补充链接」
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: gh issue edit "$ISSUE_NUMBER" --add-label "需补充链接(needs-link)"
+
+      - name: 查找已有警告评论
+        id: find-warning
+        uses: peter-evans/find-comment@v4
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '<!-- gkd-warning-unreachable -->'
+
+      - name: 发布本地快照提醒评论
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          comment-id: ${{ steps.find-warning.outputs.comment-id }}
+          issue-number: ${{ github.event.issue.number }}
+          body: ${{ needs.analyze.outputs.comment_unreachable }}
+          edit-mode: replace
+
+  # ── 分支步骤三：链接不可访问（404）→ 打标签 + 评论（非致命，阻断转换） ──
+
+  handle-network-404:
+    name: 处理链接不可访问(404)
+    needs: [analyze, handle-missing-snapshot]
+    if: >-
+      always() &&
+      needs.handle-missing-snapshot.result == 'skipped' &&
+      needs.analyze.outputs.network_status == '404'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 打标签「链接无法访问」
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: gh issue edit "$ISSUE_NUMBER" --add-label "链接失效(broken-link)"
+
+      - name: 查找已有警告评论
+        id: find-warning
+        uses: peter-evans/find-comment@v4
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '<!-- gkd-warning-404 -->'
+
+      - name: 发布链接不可访问提醒评论
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          comment-id: ${{ steps.find-warning.outputs.comment-id }}
+          issue-number: ${{ github.event.issue.number }}
+          body: ${{ needs.analyze.outputs.comment_404 }}
+          edit-mode: replace
+
+  # ── 分支步骤三：网络不确定（403/5xx）→ 打标签 + 折叠评论（非致命，阻断转换） ──
+
+  handle-network-uncertain:
+    name: 处理网络不确定(403/5xx)
+    needs: [analyze, handle-missing-snapshot]
+    if: >-
+      always() &&
+      needs.handle-missing-snapshot.result == 'skipped' &&
+      needs.analyze.outputs.network_status == 'uncertain'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 打标签「链接无法访问」（不确定）
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: gh issue edit "$ISSUE_NUMBER" --add-label "链接失效(broken-link)"
+
+      - name: 查找已有警告评论
+        id: find-warning
+        uses: peter-evans/find-comment@v4
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '<!-- gkd-warning-uncertain -->'
+
+      - name: 发布网络不确定提醒评论
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          comment-id: ${{ steps.find-warning.outputs.comment-id }}
+          issue-number: ${{ github.event.issue.number }}
+          body: ${{ needs.analyze.outputs.comment_uncertain }}
+          edit-mode: replace
+
+  # ── 步骤四：链接转换 + Bot 评论（仅当缺失未触发 + 有可转换链接时） ──
+
+  handle-convert:
+    name: 处理链接转换
+    needs: [analyze, handle-missing-snapshot]
+    if: >-
+      always() &&
+      needs.handle-missing-snapshot.result == 'skipped' &&
+      needs.analyze.outputs.has_convertible == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      # issue_comment 事件时，隐藏旧 Bot 评论（折叠为 OUTDATED）
+      - name: 获取旧 Bot 评论的 Node ID
+        if: github.event_name == 'issue_comment'
+        id: get-old-bot-node
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          ISSUE_NUM: ${{ github.event.issue.number }}
+        run: |
+          node_id=$(gh api graphql -f query='
+          query($owner: String!, $name: String!, $number: Int!) {
+            repository(owner: $owner, name: $name) {
+              issue(number: $number) {
+                comments(first: 100) {
+                  nodes {
+                    id
+                    body
+                    author { login }
+                  }
+                }
+              }
+            }
+          }' -f owner="$REPO_OWNER" -f name="$REPO_NAME" -F number="$ISSUE_NUM" --jq '.data.repository.issue.comments.nodes[] | select(.author.login == "github-actions") | select(.body | contains("gkd-bot-comment")) | .id' 2>/dev/null | head -1)
+          echo "node_id=$node_id" >> "$GITHUB_OUTPUT"
+
+      - name: 隐藏旧 Bot 评论
+        if: github.event_name == 'issue_comment' && steps.get-old-bot-node.outputs.node_id != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_ID: ${{ steps.get-old-bot-node.outputs.node_id }}
+        run: |
+          gh api graphql -f query='
+          mutation MinimizeComment($subjectId: ID!, $classifier: ReportedContentClassifiers!) {
+            minimizeComment(input: { subjectId: $subjectId, classifier: $classifier }) {
+              minimizedComment {
+                isMinimized
+                minimizedReason
+              }
+            }
+          }' -f subjectId="$NODE_ID" -f classifier="OUTDATED"
+
+      - name: 发布快照转换评论
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: ${{ needs.analyze.outputs.comment_bot }}
+
+  # ── 步骤五：编辑/评论恢复（仅当缺失未触发 + 所有检查通过时） ──
+
+  handle-recovery:
+    name: 处理编辑/评论后恢复issue状态
+    needs:
+      [
+        analyze,
+        handle-missing-snapshot,
+        handle-unreachable-snapshot,
+        handle-network-404,
+        handle-network-uncertain,
+        handle-convert,
+      ]
+    if: >-
+      always() &&
+      needs.handle-missing-snapshot.result == 'skipped' &&
+      needs.analyze.outputs.warning_type == 'recovery'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 移除所有本工作流管理的标签
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          for label in \
+            "缺失快照(no-snapshot)" \
+            "需补充链接(needs-link)" \
+            "链接失效(broken-link)"; do
+            gh issue edit "$ISSUE_NUMBER" --remove-label "$label" 2>/dev/null || true
+          done
+
+      - name: 重新打开 Issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: gh issue reopen "$ISSUE_NUMBER" || true
+
+      - name: 查找已有警告评论
+        id: find-warning
+        uses: peter-evans/find-comment@v4
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '<!-- gkd-warning'
+
+      - name: 发布恢复评论
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          comment-id: ${{ steps.find-warning.outputs.comment-id }}
+          issue-number: ${{ github.event.issue.number }}
+          body: ${{ needs.analyze.outputs.comment_recovery }}
+          edit-mode: replace
+
+      - name: 清理残留警告评论
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          comment_ids=$(gh api "repos/$GH_REPO/issues/$ISSUE_NUMBER/comments" \
+            --jq '.[] | select(.user.login == "github-actions[bot]") | select(.body | test("gkd-warning")) | select(.body | test("gkd-warning-recovery") | not) | .id')
+          for id in $comment_ids; do
+            gh api "repos/$GH_REPO/issues/comments/$id" -X DELETE 2>/dev/null || true
+          done
