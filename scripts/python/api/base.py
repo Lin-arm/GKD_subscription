@@ -12,11 +12,10 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 from core.checker import check_network_links, gkd_to_gh_attachment_url
-from core.converter import GKD_PROXY_TEMPLATE
 from core.extractor import extract_links
 from core.snapshot_parser import download_and_parse
 from utils.cache import SnapshotCache
-from utils.common import SNAPSHOT_KINDS
+from utils.common import GKD_PROXY_TEMPLATE, SNAPSHOT_KINDS
 from utils.models import (
     LinkInfo,
     NetworkResult,

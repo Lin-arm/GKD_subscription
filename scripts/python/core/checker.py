@@ -10,7 +10,6 @@
 本模块只返回检查结果，不做任何业务判断（如是否关闭 Issue）。
 """
 
-import re
 from typing import TYPE_CHECKING
 
 import httpx
@@ -20,11 +19,13 @@ if TYPE_CHECKING:
 
 # ── GKD 链接 → GH 附件 URL 转换 ──
 
+from utils.common import gkd_regex  # noqa: E402 — 放在顶部导入之后，避免循环依赖
+
 # 从 GKD 分享链接中提取数字 ID
-_RE_GKD_ID = re.compile(r"https://i\.gkd\.li/i/(\d+)")
+_RE_GKD_ID = gkd_regex(r"/i/(\d+)")
 
 # 从 GKD 代理链接中提取真实 GitHub 附件 URL
-_RE_GKD_PROXY = re.compile(r"https://i\.gkd\.li/i\?url=(https://github\.com/user-attachments/files/[^\s]+)")
+_RE_GKD_PROXY = gkd_regex(r"/i\?url=(https://github\.com/user-attachments/files/[^\s]+)")
 
 # GH 附件 URL 模板：{id} 为 GKD 链接中的数字，file.zip 为固定占位符
 _GH_ATTACHMENT_TEMPLATE = "https://github.com/user-attachments/files/{id}/file.zip"

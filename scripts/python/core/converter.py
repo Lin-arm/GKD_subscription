@@ -11,13 +11,8 @@
 
 import re
 
-from utils.common import extract_github_filename
+from utils.common import GKD_PROXY_TEMPLATE, extract_github_filename
 from utils.models import ConvertedLink, LinkInfo
-
-# ── 常量 ──
-
-# GKD 代理链接模板
-GKD_PROXY_TEMPLATE = "https://i.gkd.li/i?url={url}"
 
 # 文件名模式：{App}_{Activity}-{timestamp}.zip
 _RE_NAME_PATTERN = re.compile(r"^(?P<app>.+?)_(?P<activity>.+?)-(?P<timestamp>\d+)\.zip$")

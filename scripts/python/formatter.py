@@ -10,7 +10,7 @@
 本模块只负责内容生成，不负责评论发布（由 YAML 工作流完成）。
 """
 
-from utils.common import short_activity_name
+from utils.common import GKD_DOMAINS, short_activity_name
 from utils.models import SnapshotInfo
 
 # ── 警告评论生成 ──
@@ -26,11 +26,12 @@ def build_warning_missing(user: str) -> str:
 
 
 def build_warning_unreachable(user: str) -> str:
-    """检测到 i.gkd.li/snapshot/ 时的提醒评论（不关闭）"""
+    """检测到 GKD snapshot 链接时的提醒评论（不关闭）"""
+    domain = GKD_DOMAINS[0] if GKD_DOMAINS else "i.gkd.li"
     return (
         "<!-- gkd-warning-unreachable -->\n"
         f"您好 @{user}，检测到您提供了他人无法访问的快照链接"
-        "（i.gkd.li/snapshot/），请点击查看 "
+        f"（{domain}/snapshot/），请点击查看 "
         "[正确的分享快照方式说明](https://gkd.li/guide/snapshot#share-note) 。"
         "可在下方评论区补充。"
     )

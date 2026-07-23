@@ -16,6 +16,7 @@
 
 import re
 
+from utils.common import gkd_regex
 from utils.models import LinkInfo
 
 # ── 正则模式 ──
@@ -23,24 +24,24 @@ from utils.models import LinkInfo
 # Markdown 格式链接：[显示文字](URL)
 _RE_MD_LINK = re.compile(r"\[([^\]]*)\]\(([^)]+)\)")
 
-# GKD 分享链接：https://i.gkd.li/i/数字
-_RE_GKD_LINK = re.compile(r"https://i\.gkd\.li/i/\d+")
+# GKD 相关正则从域名列表动态构建（新增域名只需修改 GKD_DOMAINS）
+_RE_GKD_LINK = gkd_regex(r"/i/\d+")
 
 # GitHub 附件链接：https://github.com/user-attachments/files/...
 _RE_GITHUB_ATTACHMENT = re.compile(r"https://github\.com/user-attachments/files/[^\s\)]+")
 
 # 不可访问的快照链接：https://i.gkd.li/snapshot/...
-_RE_UNREACHABLE_SNAPSHOT = re.compile(r"https://i\.gkd\.li/snapshot/[^\s\)]*")
+_RE_UNREACHABLE_SNAPSHOT = gkd_regex(r"/snapshot/[^\s\)]*")
 
 # GKD 代理链接：https://i.gkd.li/i?url=...
-_RE_GKD_PROXY_LINK = re.compile(r"https://i\.gkd\.li/i\?url=(https://[^\s\)]+)")
+_RE_GKD_PROXY_LINK = gkd_regex(r"/i\?url=(https://[^\s\)]+)")
 
 # 从旧 Bot 评论中提取快照链接：[snapshot_id](url) 格式
 # snapshot_id 是数字 ID（通常是 10 位以上的时间戳）
 _RE_BOT_SNAPSHOT_LINK = re.compile(r"\[(\d{10,})\]\((https://[^\)]+)\)")
 
 # 从旧 Bot 评论中提取 GKD 链接：纯文本 URL
-_RE_BOT_GKD_LINK = re.compile(r"(https://i\.gkd\.li/i/\d+)")
+_RE_BOT_GKD_LINK = gkd_regex(r"/i/\d+")
 
 
 # ── 分类函数 ──
