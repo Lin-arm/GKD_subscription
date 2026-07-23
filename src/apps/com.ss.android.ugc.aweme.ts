@@ -521,12 +521,13 @@ export default defineGkdApp({
     },
     {
       key: 31,
-      name: '其他-直播间-小黄车',
-      desc: '关闭定时弹出的商品卡片',
+      name: '局部广告-直播间右下角浮窗',
+      desc: '点击x掉',
+      fastQuery: true,
+      activityIds: '.live.LivePlayActivity',
       rules: [
         {
-          fastQuery: true,
-          activityIds: '.live.LivePlayActivity',
+          key: 0,
           matches:
             '[desc="购买"][visibleToUser=true] <n LiveMeasureOnceRelativeLayout < * -2 FrameLayout > [vid="iv_close"][clickable=true]',
           snapshotUrls: [
@@ -534,6 +535,12 @@ export default defineGkdApp({
             'https://i.gkd.li/i/29388290',
           ],
           exampleUrls: 'https://e.gkd.li/8c5e6526-83e5-4ec6-b532-367ff6045bfc',
+        },
+        {
+          key: 1,
+          matches:
+            '@[visibleToUser=true] <3 [childCount=5] >5 [text="打开游戏"]',
+          snapshotUrls: 'https://i.gkd.li/i/30297510',
         },
       ],
     },
