@@ -253,10 +253,10 @@ export default defineGkdApp({
       key: 13,
       name: '全屏广告-弹窗广告',
       desc: '点击关闭',
+      fastQuery: true,
       rules: [
         {
           key: 0,
-          fastQuery: true,
           activityIds: '.AlipayLogin',
           matches:
             '@ImageView[desc="关闭"][clickable=true] < LinearLayout - [id="com.alipay.mobile.advertisement:id/standardlayer_contentview"][desc="推荐广告"]',
@@ -267,7 +267,7 @@ export default defineGkdApp({
         },
         {
           key: 1,
-          fastQuery: true,
+          forcedTime: 10000, //主动查询10秒
           activityIds: [
             'com.alipay.mobile.nebulax.integration.mpaas.activity.NebulaActivity$Main',
             'com.alipay.mobile.nebulax.xriver.activity.XRiverActivity',
@@ -288,7 +288,6 @@ export default defineGkdApp({
         },
         {
           key: 2,
-          fastQuery: true,
           activityIds:
             'com.alipay.mobile.nebulax.xriver.activity.XRiverActivity',
           matches:
@@ -300,12 +299,11 @@ export default defineGkdApp({
           key: 3,
           activityIds:
             'com.alipay.mobile.nebulax.xriver.activity.XRiverActivity',
-          matches: 'Image[text="关闭弹屏"]',
+          matches: 'Image[visibleToUser=true][text="关闭弹屏"]',
           snapshotUrls: 'https://i.gkd.li/i/22531246',
         },
         {
           key: 4,
-          fastQuery: true,
           activityIds: '.AlipayLogin',
           matches:
             '@[text="我知道了"][clickable=true] -n [text^="用碰一下支付"]',
