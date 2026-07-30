@@ -14,6 +14,10 @@ export default defineGkdApp({
       priorityTime: 10000,
       rules: [
         {
+          matches: '[text*="跳过"][text.length<=10]',
+          snapshotUrls: 'https://i.gkd.li/i/30527745',
+        },
+        {
           matches: '[text*="关闭"][text.length<=10]',
           snapshotUrls: 'https://i.gkd.li/i/13407227',
         },
