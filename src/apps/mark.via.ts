@@ -12,7 +12,7 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'mark.via.Shell',
-          matches: '[vid="ed"][text="确定"][clickable=true]',
+          matches: '[vid="ed"]',
         },
       ],
     },
