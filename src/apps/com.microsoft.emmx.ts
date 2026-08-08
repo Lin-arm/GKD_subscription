@@ -105,5 +105,16 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 9,
+      name: '功能类-下载确认',
+      desc: '自动点击下载弹窗中的下载按钮',
+      fastQuery: true,
+      rules: [
+        {
+          matches: '[vid="button1"]',
+        },
+      ],
+    },
   ],
 });
