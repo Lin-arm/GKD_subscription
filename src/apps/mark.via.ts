@@ -12,7 +12,8 @@ export default defineGkdApp({
       rules: [
         {
           activityIds: 'mark.via.Shell',
-          matches: '[vid="ed"]',
+          matches: '[vid="ed" || vid="eo"]',
+          snapshotUrls: 'https://i.gkd.li/i/30865110',
         },
       ],
     },
