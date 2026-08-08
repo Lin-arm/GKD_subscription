@@ -7,6 +7,7 @@ export default defineGkdApp({
     {
       key: 1,
       name: '功能类-下载确认',
+      desc: '自动点击下载弹窗中的确定按钮',
       fastQuery: true,
       rules: [
         {
