@@ -113,6 +113,8 @@ export default defineGkdApp({
       rules: [
         {
           matches: '[vid="button1"]',
+          snapshotUrls: 'https://i.gkd.li/i/30865007',
+          exampleUrls: 'https://e.gkd.li/df8b81cd-1bfa-402a-a317-610f9d713674',
         },
       ],
     },
