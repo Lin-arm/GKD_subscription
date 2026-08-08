@@ -25,3 +25,4 @@ yarn.lock
 __pycache__/
 *.pyc
 
+flightdeck
