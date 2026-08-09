@@ -112,7 +112,8 @@ export default defineGkdApp({
       fastQuery: true,
       rules: [
         {
-          matches: '[vid="button1"]',
+          matches:
+            '[text*="下载" || text*="下載"][visibleToUser=true] +2 [childCount=3] > [vid="button1"]',
           snapshotUrls: 'https://i.gkd.li/i/30865007',
           exampleUrls: 'https://e.gkd.li/df8b81cd-1bfa-402a-a317-610f9d713674',
         },
