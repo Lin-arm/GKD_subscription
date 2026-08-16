@@ -195,7 +195,7 @@ export default defineGkdApp({
           ],
           excludeSnapshotUrls: [
             'https://i.gkd.li/i/28821485', // 用 [name$="ImageView" || getChild(0).name$="ImageView"][visibleToUser=false] 排除
-            'https://i,gkd.li/i/31111672', // 添加 desc!="back_unfold" 条件排除
+            'https://i.gkd.li/i/31111672', // 添加 desc!="back_unfold" 条件排除
           ],
           exampleUrls: 'https://e.gkd.li/3de0d5d9-0c02-4fe7-b5e8-b9fdb6688f8e',
         },
