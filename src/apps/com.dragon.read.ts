@@ -180,7 +180,7 @@ export default defineGkdApp({
         {
           key: 0,
           matches:
-            '@[name$="ImageView" || getChild(0).name$="ImageView"][clickable=true][visibleToUser=true][width<102 && height<102] <n [childCount>1] >(2,3) [text*="查看" || text$="优惠" || text^="立即" || text^="马上" || text*="参与" || text*="免费" || (text*="领" && text*="券") || (text*="返" && text*="金币")][text.length<10]',
+            '@[(name$="ImageView" || getChild(0).name$="ImageView") && desc!="back_unfold"][clickable=true][visibleToUser=true][width<102 && height<102] <n [childCount>1] >(2,3) [text*="查看" || text$="优惠" || text^="立即" || text^="马上" || text*="参与" || text*="免费" || (text*="领" && text*="券") || (text*="返" && text*="金币")][text.length<10]',
           snapshotUrls: [
             'https://i.gkd.li/i/12908734', // 查看详情
             'https://i.gkd.li/i/18138903', // 立享优惠
@@ -193,7 +193,10 @@ export default defineGkdApp({
             'https://i.gkd.li/i/14548657', // 返1098金币
             'https://i.gkd.li/i/14810480', // 返780金币
           ],
-          excludeSnapshotUrls: 'https://i.gkd.li/i/28821485', // 用 [name$="ImageView" || getChild(0).name$="ImageView"][visibleToUser=false] 排除
+          excludeSnapshotUrls: [
+            'https://i.gkd.li/i/28821485', // 用 [name$="ImageView" || getChild(0).name$="ImageView"][visibleToUser=false] 排除
+            'https://i,gkd.li/i/31111672', // 添加 desc!="back_unfold" 条件排除
+          ],
           exampleUrls: 'https://e.gkd.li/3de0d5d9-0c02-4fe7-b5e8-b9fdb6688f8e',
         },
         {
