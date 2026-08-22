@@ -51,17 +51,26 @@ export default defineGkdApp({
             '.pages.main.MainFragmentActivity',
             '.ad.openingscreenad.OpeningScreenADActivity',
           ],
-          matches: [
+          matches:
             '@ImageView[clickable=true][childCount=0][index=0][visibleToUser=true] < [childCount=3] < RelativeLayout < FrameLayout <2 [id="android:id/content"][childCount=3]',
-            '@ImageView[desc="Close Button"] <2 View < View < View < View < ComposeView < [id="android:id/content"]',
-            '@ImageView[clickable=true] + ViewGroup[vid="root_view"] > [text="立即领取"]',
-          ]
           snapshotUrls: [
             'https://i.gkd.li/i/12716506',
             'https://i.gkd.li/i/13318796',
-            'https://i.gkd.li/i/28907537',
-            'https://i.gkd.li/i/31327606',
           ],
+        },
+        {
+          key: 1,
+          activityIds: '.pages.main.MainFragmentActivity',
+          matches:
+            '@ImageView[desc="Close Button"] <2 View < View < View < View < ComposeView < [id="android:id/content"]',
+          snapshotUrls: 'https://i.gkd.li/i/28907537',
+        },
+        {
+          key: 2,
+          activityIds: '.pages.main.MainFragmentActivity',
+          matches:
+            '@ImageView[clickable=true] + ViewGroup[vid="root_view"] > [text="立即领取"]',
+          snapshotUrls: 'https://i.gkd.li/i/31327606',
         },
       ],
     },
