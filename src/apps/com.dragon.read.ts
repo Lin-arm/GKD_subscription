@@ -69,8 +69,11 @@ export default defineGkdApp({
           key: 2,
           activityIds: '.pages.main.MainFragmentActivity',
           matches:
-            '@ImageView[clickable=true] + ViewGroup[vid="root_view"] > [text="立即领取"]',
-          snapshotUrls: 'https://i.gkd.li/i/31327606',
+            '@ImageView[clickable=true][visibleToUser=true] + ViewGroup[vid="root_view"] >n [text$="领取"][visibleToUser=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/31327606',
+            'https://i.gkd.li/i/31410963',
+          ],
         },
       ],
     },
