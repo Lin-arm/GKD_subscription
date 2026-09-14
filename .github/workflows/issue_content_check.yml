@@ -19,7 +19,7 @@ jobs:
 
   analyze:
     name: 分析 Issue 快照链接
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     # 过滤逻辑：
     # 1. 白名单：仅分析通过指定模板创建的 Issue（含 `✅ 请核对以下内容` 标记）
     # 2. 通用豁免：!bot 标签（黑名单，维护者手动豁免）
@@ -176,7 +176,7 @@ jobs:
       github.event_name == 'issues' &&
       needs.analyze.result == 'success'
     continue-on-error: true
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: 还原缓存文件
         if: needs.analyze.outputs.cache_data != ''
@@ -206,7 +206,7 @@ jobs:
     name: 处理缺失快照
     needs: analyze
     if: needs.analyze.outputs.has_snapshot == 'false'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: 打标签「缺失快照」
         env:
@@ -246,7 +246,7 @@ jobs:
       needs.handle-missing-snapshot.result == 'skipped' &&
       needs.analyze.outputs.has_unreachable == 'true' &&
       needs.analyze.outputs.warning_type != 'recovery'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: 打标签「需补充链接」
         env:
@@ -279,7 +279,7 @@ jobs:
       always() &&
       needs.handle-missing-snapshot.result == 'skipped' &&
       needs.analyze.outputs.network_status == '404'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: 打标签「链接无法访问」
         env:
@@ -312,7 +312,7 @@ jobs:
       always() &&
       needs.handle-missing-snapshot.result == 'skipped' &&
       needs.analyze.outputs.network_status == 'uncertain'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: 打标签「链接无法访问」（不确定）
         env:
@@ -345,7 +345,7 @@ jobs:
       always() &&
       needs.handle-missing-snapshot.result == 'skipped' &&
       needs.analyze.outputs.has_convertible == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       # issue_comment 事件时，隐藏旧 Bot 评论（折叠为 OUTDATED）
       - name: 获取旧 Bot 评论的 Node ID
@@ -412,7 +412,7 @@ jobs:
       always() &&
       needs.handle-missing-snapshot.result == 'skipped' &&
       needs.analyze.outputs.warning_type == 'recovery'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: 移除所有本工作流管理的标签
         env:
