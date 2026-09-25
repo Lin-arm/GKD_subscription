@@ -57,10 +57,12 @@ export default defineGkdApp({
 
 节点树每一行的格式：`#id 类名 vid=.. text=.. desc=.. C(可点击) INV(不可见) [left,top,right,bottom] cc=子节点数 i=index`
 
+text/desc 用 Python 的 `repr()` 输出，所以不可见字符会显示成转义形式，例如 `​`（零宽空格）、`\xa0`（不换行空格）。这些字符在网页端和截图上都看不出来，**从 i.gkd.li 属性面板复制文本时也会一起被复制**。有些广告会故意在文字之间插入零宽空格，这时照着页面上看到的文字写 `[text^="应用名称"]` 会匹配不到。写选择器时要避开含这类字符的片段，改用 `^=`、`*=`、`$=` 匹配纯文字的部分，然后用 `test_selector.mjs` 验证。
+
 ## 流程
 
 1. **理解快照**
-   - 快照 zip 里是 `{id}.json` 和 `{id}.png`。id 是抓取时的**毫秒时间戳**；节点数据在 `nodes[]` 里，每个节点有 `id`、`pid`、`attr`。
+   - 快照 zip 里有一个 json 和一张 png，文件名可能是 `{id}.json`/`{id}.png`，也可能是 `snapshot.json`/`screenshot.png`（旧版 GKD），脚本按扩展名查找，两种都支持。快照 ID 以 json 里的 `id` 字段为准，它是抓取时的**毫秒时间戳**；节点数据在 `nodes[]` 里，每个节点有 `id`、`pid`、`attr`。
    - 用 `dump_tree.py` 导出节点树，再用 Read 查看截图，弄清每个快照对应哪一步，以及要点击哪个节点。
    - 按时间戳排序，通常就是操作顺序。
 
