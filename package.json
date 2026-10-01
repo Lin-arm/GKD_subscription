@@ -13,8 +13,8 @@
     "postinstall": "simple-git-hooks",
     "format": "biome format --write .",
     "lint": "biome check --write .",
-    "check": "tsc --noEmit -p tsconfig.jsonc && tsx ./scripts/check.ts",
-    "build": "tsc --noEmit -p tsconfig.jsonc && tsx ./scripts/build.ts"
+    "check": "tsc --noEmit -p tsconfig.json && tsx ./scripts/check.ts",
+    "build": "tsc --noEmit -p tsconfig.json && tsx ./scripts/build.ts"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm exec lint-staged",
@@ -22,7 +22,7 @@
     "pre-push": "pnpm run check && bash scripts/python/tests/run_tests.sh"
   },
   "lint-staged": {
-    "*.{js,cjs,mjs,ts,jsx,tsx,json,jsonc}": [
+    "*.{js,cjs,mjs,ts,jsx,tsx,json}": [
       "biome check --write"
     ],
     "*.py": [

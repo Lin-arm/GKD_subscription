@@ -115,7 +115,7 @@ PR 检查要求每个 PR **最多修改 1 个订阅源文件**，也就是只能
 
 通过 `simple-git-hooks` + `lint-staged` 实现：
 
-- **pre-commit**：对暂存的 `.ts`/`.tsx`/`.js`/`.mjs`/`.cjs`/`.json`/`.jsonc` 文件执行 Biome 检查与格式化；对 `.py` 执行 ruff check + ruff format。
+- **pre-commit**：对暂存的 `.ts`/`.tsx`/`.js`/`.mjs`/`.cjs`/`.json` 文件执行 Biome 检查与格式化；对 `.py` 执行 ruff check + ruff format。
 - **commit-msg**：commitlint。
 - **pre-push**：`pnpm run check`，外加 `scripts/python/tests/run_tests.sh`。后者只在 `scripts/python/` 或 `.github/workflows/` 有变更时，才执行 ruff 和 Python 单元测试。
 
