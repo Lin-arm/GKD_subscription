@@ -22,7 +22,7 @@
     "pre-push": "pnpm run check && bash scripts/python/tests/run_tests.sh"
   },
   "lint-staged": {
-    "*.{js,cjs,mjs,ts,jsx,tsx,json}": [
+    "*.{js,cjs,mjs,ts,jsx,tsx,json,jsonc}": [
       "biome check --write"
     ],
     "*.py": [
