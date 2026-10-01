@@ -9,11 +9,11 @@
 //   idQf/textQf 模拟真机上的快速查询，并标出快速查询找不到的节点。
 import console from 'node:console';
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import process from 'node:process';
-import zlib from 'node:zlib';
-import { createRequire } from 'node:module';
 import { pathToFileURL } from 'node:url';
+import zlib from 'node:zlib';
 
 /** 从 @gkd-kit/tools 的依赖链解析 @gkd-kit/selector 的入口文件 */
 async function loadSelectorLib() {
