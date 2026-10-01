@@ -19,8 +19,8 @@ GKD 订阅规则仓库，为 [GKD](https://gkd.li/) 提供第三方订阅规则�
 pnpm install          # 安装依赖
 pnpm run check        # 类型检查 + 订阅验证
 pnpm run build        # 构建 dist/gkd.json5 并更新 README
-pnpm run lint         # ESLint 自动修复
-pnpm run format       # Prettier 格式化
+pnpm run lint         # Biome 检查与修复
+pnpm run format       # Biome 格式化
 ```
 
 ## 核心流程
@@ -87,13 +87,13 @@ dist/                # 构建输出（由脚本生成，不要手动修改）
 - 具体改动（可选，用中文）
 ```
 
-| 场景             | type                                                          | 示例                                                      |
-| ---------------- | ------------------------------------------------------------- | --------------------------------------------------------- |
-| 新增规则或规则组 | `feat`                                                        | `feat: 一个木函 功能类-[关闭]保存成功弹窗`                |
+| 场景             | type                                                          | 示例                                             |
+| ---------------- | ------------------------------------------------------------- | ------------------------------------------------ |
+| 新增规则或规则组 | `feat`                                                        | `feat: 一个木函 功能类-[关闭]保存成功弹窗`       |
 | 修复失效规则     | 看情况：新增了规则或流程用 `feat`，只调整了原有选择器用 `fix` | `feat: 运动世界 全屏广告` / `fix: 酷安 开屏广告` |
-| 修复旧规则误触   | `fix`                                                         | `fix: <应用名> <规则组名>`                                |
-| 优化规则         | `perf`                                                        | `perf: 番茄免费小说 分段广告-阅读页面广告`                |
-| 发版             | `chore`                                                       | `chore: v594`                                             |
+| 修复旧规则误触   | `fix`                                                         | `fix: <应用名> <规则组名>`                       |
+| 优化规则         | `perf`                                                        | `perf: 番茄免费小说 分段广告-阅读页面广告`       |
+| 发版             | `chore`                                                       | `chore: v594`                                    |
 
 不是规则相关的改动（文档、脚本、CI 等），使用常规的 `docs:`、`ci:`、`chore:` 等 type，后面用中文概括改动。
 
@@ -115,11 +115,11 @@ PR 检查要求每个 PR **最多修改 1 个订阅源文件**，也就是只能
 
 通过 `simple-git-hooks` + `lint-staged` 实现：
 
-- **pre-commit**：对暂存的 `.ts`/`.tsx`/`.js`/`.mjs`/`.cjs` 文件执行 ESLint + Prettier；对 `.json` 执行 Prettier；对 `.py` 执行 ruff check + ruff format。
+- **pre-commit**：对暂存的 `.ts`/`.tsx`/`.js`/`.mjs`/`.cjs`/`.json`/`.jsonc` 文件执行 Biome 检查与格式化；对 `.py` 执行 ruff check + ruff format。
 - **commit-msg**：commitlint。
 - **pre-push**：`pnpm run check`，外加 `scripts/python/tests/run_tests.sh`。后者只在 `scripts/python/` 或 `.github/workflows/` 有变更时，才执行 ruff 和 Python 单元测试。
 
 ## 代码风格
 
-- TypeScript：遵循 ESLint + Prettier 配置，使用 `@gkd-kit/define` 提供的类型安全 API。
+- TypeScript：遵循 Biome 配置，使用 `@gkd-kit/define` 提供的类型安全 API。
 - Python：UTF-8 编码，类型注解使用 Python 3.10+ 语法，必须通过 `scripts/python/ruff.toml` 的检查。
