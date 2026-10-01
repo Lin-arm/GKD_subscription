@@ -1,6 +1,6 @@
 import { updateDist } from '@gkd-kit/tools';
-import { updateReadMeMd } from './updateReadMeMd';
 import subscription from './check';
+import { updateReadMeMd } from './updateReadMeMd';
 
 await updateDist(subscription);
 

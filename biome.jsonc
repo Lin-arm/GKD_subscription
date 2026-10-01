@@ -1,0 +1,56 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.14/schema.json",
+  // VCS 集成：启用 git 感知，自动使用 .gitignore 排除文件
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  // 文件处理
+  "files": {
+    // 不忽略未知文件类型（报错提示而非静默跳过）
+    "ignoreUnknown": false
+  },
+  // 格式化器（替代 Prettier）
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 80
+  },
+  // JavaScript/TypeScript 专属规则
+  "javascript": {
+    "formatter": {
+      // 单引号 + 尾逗号（对齐原 Prettier 配置）
+      "quoteStyle": "single",
+      "trailingCommas": "all"
+    }
+  },
+  // JSON 专属规则（package.json 等标准 JSON 不能有尾逗号）
+  "json": {
+    "formatter": {
+      "trailingCommas": "none"
+    }
+  },
+  // Linter（替代 ESLint）
+  "linter": {
+    "enabled": true,
+    "rules": {
+      // 使用推荐规则集 + 未使用变量/导入检测
+      "preset": "recommended",
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error"
+      }
+    }
+  },
+  // 辅助功能：保存时自动整理 import
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  }
+}

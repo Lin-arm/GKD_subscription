@@ -1,0 +1,28 @@
+// GKD 订阅项目的 TypeScript 配置
+// https://www.typescriptlang.org/tsconfig
+{
+  "compilerOptions": {
+    // 输出
+    "outDir": "dist",
+    "declaration": false,
+    "sourceMap": false,
+
+    // 语言与环境
+    "target": "ESNext",
+    "module": "ESNext",
+
+    // 模块解析
+    "moduleResolution": "Bundler",
+    "esModuleInterop": true,
+    "isolatedModules": true,
+
+    // 类型检查
+    "strict": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+
+    // 类型声明
+    "types": ["node"]
+  },
+  "include": ["src", "scripts"]
+}

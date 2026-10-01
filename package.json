@@ -11,10 +11,10 @@
   },
   "scripts": {
     "postinstall": "simple-git-hooks",
-    "format": "prettier --cache --write ./**/*.{js,cjs,mjs,ts,jsx,tsx,json}",
-    "lint": "eslint --cache --fix ./**/*.{js,cjs,mjs,ts,jsx,tsx}",
-    "check": "tsc --noEmit && tsx ./scripts/check.ts",
-    "build": "tsc --noEmit && tsx ./scripts/build.ts"
+    "format": "biome format --write .",
+    "lint": "biome check --write .",
+    "check": "tsc --noEmit -p tsconfig.jsonc && tsx ./scripts/check.ts",
+    "build": "tsc --noEmit -p tsconfig.jsonc && tsx ./scripts/build.ts"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm exec lint-staged",
@@ -22,12 +22,8 @@
     "pre-push": "pnpm run check && bash scripts/python/tests/run_tests.sh"
   },
   "lint-staged": {
-    "*.{js,cjs,mjs,ts,jsx,tsx}": [
-      "eslint --cache --fix",
-      "prettier --cache --write"
-    ],
-    "*.json": [
-      "prettier --cache --write"
+    "*.{js,cjs,mjs,ts,jsx,tsx,json,jsonc}": [
+      "biome check --write"
     ],
     "*.py": [
       "ruff check --fix",
@@ -42,24 +38,18 @@
     "./dist"
   ],
   "dependencies": {
-    "@commitlint/cli": "21.0.2",
-    "@commitlint/config-conventional": "21.0.2",
-    "@commitlint/types": "21.0.1",
-    "@eslint/js": "10.0.1",
+    "@commitlint/cli": "21.2.3",
+    "@commitlint/config-conventional": "21.2.3",
+    "@commitlint/types": "21.2.3",
     "@gkd-kit/api": "0.9.3",
     "@gkd-kit/define": "0.0.1",
     "@gkd-kit/tools": "0.8.0",
-    "@types/node": "26.0.0",
-    "eslint": "10.5.0",
-    "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-unused-imports": "4.4.1",
+    "@types/node": "26.6.3",
     "json5": "2.2.3",
-    "lint-staged": "17.0.8",
-    "prettier": "3.8.4",
-    "simple-git-hooks": "2.13.1",
-    "tsx": "4.22.4",
-    "typescript": "6.0.3",
-    "typescript-eslint": "8.61.1"
+    "lint-staged": "17.6.0",
+    "simple-git-hooks": "2.14.0",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
   },
   "volta": {
     "node": "24.17.0"
@@ -68,5 +58,8 @@
   "engineStrict": true,
   "engines": {
     "node": ">=22"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.15"
   }
 }
