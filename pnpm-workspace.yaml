@@ -1,3 +1,4 @@
-allowBuilds:
-  esbuild: true
-  simple-git-hooks: true
+# pnpm install 时默认禁止所有包的构建脚本（postinstall），防止恶意脚本执行
+allowBuilds: # 白名单
+  esbuild: true # tsx 底层依赖
+  simple-git-hooks: true # git 钩子依赖
