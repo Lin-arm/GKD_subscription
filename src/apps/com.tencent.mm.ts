@@ -371,6 +371,7 @@ export default defineGkdApp({
       activityIds: [
         '.plugin.appbrand.ui.AppBrandUI',
         '.plugin.appbrand.launching.AppBrandLaunchProxyUI',
+        '.plugin.appbrand.ui.AppBrandPluginUI',
       ],
       rules: [
         {
