@@ -33,6 +33,12 @@ export default defineGkdApp({
           matches:
             '[id="com.pcncn.jj:id/ad_close"][desc="关闭"][clickable=true]',
         },
+        {
+          key: 3,
+          activityIds: 'com.yfanads.ads.uw.base.inner.YdInterstitialActivity',
+          matches:
+            '[id="com.pcncn.jj:id/iv_close"][clickable=true][visibleToUser=true]',
+        },
       ],
     },
   ],
