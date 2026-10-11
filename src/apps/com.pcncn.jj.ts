@@ -12,40 +12,30 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: '.act.AnswerDetail2Activity',
+          activityIds: [
+            '.act.AnswerDetail2Activity',
+            'com.yfanads.ads.uw.base.inner.YdInterstitialActivity',
+          ],
           matches: '[vid="iv_close"]',
-          snapshotUrls: 'https://i.gkd.li/i/13695874',
+          snapshotUrls: [
+            'https://i.gkd.li/i/13695874',
+            'https://i.gkd.li/i/33297531',
+          ],
         },
         {
           key: 1,
-          fastQuery: true,
-          matchTime: 10000,
-          actionMaximum: 1,
-          resetMatch: 'app',
-          activityIds: '.act.HomeNewActivity',
-          matches: '[vid="ad_close"][visibleToUser=true]',
-          exampleUrls: 'https://e.gkd.li/b83aa566-8105-4877-abcd-800abfe7634e',
-          snapshotUrls: 'https://i.gkd.li/i/17265140',
-        },
-        {
-          key: 2,
           activityIds: [
+            '.act.HomeNewActivity',
             'com.qingxia.common.homework.ui.HomeworkRecord4Activity',
             'net.liucong.camera.ext.ScanningQrActivity',
           ],
-          matches:
-            '[id="com.pcncn.jj:id/ad_close"][desc="关闭"][clickable=true]',
+          matches: '[vid="ad_close"][clickable=true]',
           snapshotUrls: [
+            'https://i.gkd.li/i/17265140',
             'https://i.gkd.li/i/33297507',
             'https://i.gkd.li/i/33297555',
           ],
-        },
-        {
-          key: 3,
-          activityIds: 'com.yfanads.ads.uw.base.inner.YdInterstitialActivity',
-          matches:
-            '[id="com.pcncn.jj:id/iv_close"][clickable=true][visibleToUser=true]',
-          snapshotUrls: 'https://i.gkd.li/i/33297531',
+          exampleUrls: 'https://e.gkd.li/b83aa566-8105-4877-abcd-800abfe7634e',
         },
       ],
     },
