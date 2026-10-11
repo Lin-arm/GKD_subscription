@@ -29,7 +29,10 @@ export default defineGkdApp({
         },
         {
           key: 2,
-          activityIds: 'com.qingxia.common.homework.ui.HomeworkRecord4Activity',
+          activityIds: [
+            'com.qingxia.common.homework.ui.HomeworkRecord4Activity',
+            'net.liucong.camera.ext.ScanningQrActivity',
+          ],
           matches:
             '[id="com.pcncn.jj:id/ad_close"][desc="关闭"][clickable=true]',
         },
