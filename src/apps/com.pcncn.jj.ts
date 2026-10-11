@@ -27,6 +27,12 @@ export default defineGkdApp({
           exampleUrls: 'https://e.gkd.li/b83aa566-8105-4877-abcd-800abfe7634e',
           snapshotUrls: 'https://i.gkd.li/i/17265140',
         },
+        {
+          key: 2,
+          activityIds: 'com.qingxia.common.homework.ui.HomeworkRecord4Activity',
+          matches:
+            '[id="com.pcncn.jj:id/ad_close"][desc="关闭"][clickable=true]',
+        },
       ],
     },
   ],
