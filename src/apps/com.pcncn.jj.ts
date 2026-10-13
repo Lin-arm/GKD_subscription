@@ -29,6 +29,7 @@ export default defineGkdApp({
             'com.qingxia.common.homework.ui.HomeworkRecord4Activity',
             'net.liucong.camera.ext.ScanningQrActivity',
             'com.qingxia.common.book.ui.Collection2Activity',
+            'com.qingxia.common.search.ui.Search2Activity',
           ],
           matches: '[vid="ad_close"][clickable=true]',
           snapshotUrls: [
@@ -36,6 +37,7 @@ export default defineGkdApp({
             'https://i.gkd.li/i/33297507',
             'https://i.gkd.li/i/33297555',
             'https://i.gkd.li/i/33315721',
+            'https://i.gkd.li/i/33372920',
           ],
           exampleUrls: 'https://e.gkd.li/b83aa566-8105-4877-abcd-800abfe7634e',
         },
