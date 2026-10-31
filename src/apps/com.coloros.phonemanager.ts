@@ -13,8 +13,12 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          matches: '@[text="取消"] < [vid="buttonPanel"] > [text="更新"]',
-          snapshotUrls: 'https://i.gkd.li/i/13194979',
+          matches:
+            '@[text="取消"] <<(1,2) [vid="buttonPanel"] >(1,2) [text="更新"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/13194979',
+            'https://i.gkd.li/i/34210785',
+          ],
         },
       ],
     },
