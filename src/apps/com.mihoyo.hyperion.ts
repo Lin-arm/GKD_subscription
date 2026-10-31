@@ -72,8 +72,8 @@ export default defineGkdApp({
           name: '点击签到',
           excludeMatches: '[text^="请在此绑定你的"][visibleToUser=true]', // 未绑定角色前排除匹配
           anyMatches: [
-            'WebView[text*="签到"] >4 View[childCount=11] > @View[childCount=3][visibleToUser=true] > Image[index=0][text!=null]', // 崩坏3、绝区零、原神
-            'WebView[text*="签到"] >4 View[childCount=10] > View + TextView[childCount=0][visibleToUser=true]', // 星穹铁道、崩坏学园2、未定事件簿
+            '[getChild(0).getChild(1).text*="签到"] + View >2 View[childCount=11] > @View[childCount=3][visibleToUser=true] > Image[index=0][text!=null]', // 崩坏3、绝区零、原神
+            '[getChild(0).getChild(1).text*="签到"] + View >2 View[childCount=10] > View + TextView[childCount=0][visibleToUser=true]', // 星穹铁道、崩坏学园2、未定事件簿
           ],
           exampleUrls: 'https://e.gkd.li/53d22dc7-b368-46c0-85d2-fe132b0832a9',
           snapshotUrls: [
@@ -84,6 +84,7 @@ export default defineGkdApp({
             'https://i.gkd.li/i/14967627', // 签到节点 clickable=false
             'https://i.gkd.li/i/19586048', // 崩坏学园2签到前
             'https://i.gkd.li/i/19586142', // 未定事件簿签到前
+            'https://i.gkd.li/i/34215019', // 原神
           ],
           excludeSnapshotUrls: [
             'https://i.gkd.li/i/17601295', // 崩坏3签到后
