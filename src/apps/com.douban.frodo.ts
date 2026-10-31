@@ -9,8 +9,9 @@ export default defineGkdApp({
       name: '开屏广告',
       desc: '⚠️[跳过]广告前可能有多次无效点击,属于正常现象',
       fastQuery: true,
+      matchRoot: true,
       matchTime: 10000,
-      // actionMaximum: 2,
+      actionMaximum: 2,
       resetMatch: 'app',
       // actionMaximumKey: 0,
       priorityTime: 10000,
@@ -42,21 +43,25 @@ export default defineGkdApp({
         {
           key: 3,
           matches:
-            '@View[width<130 && height<130] <3 FrameLayout <2 FrameLayout < [vid="sdk_view"]',
-          snapshotUrls: 'https://i.gkd.li/i/29440951',
+            '@View[width<170 && height<170] <3 FrameLayout <2 FrameLayout < [vid="sdk_view"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/29440951',
+            'https://i.gkd.li/i/34211578',
+          ],
         },
 
         // 坐标点击的放后面, 从上往下依次点击按钮[跳过]附近的坐标, 总有一个能点中[跳过]
         {
           key: 10,
           name: '点击坐标①',
-          // actionMaximum: 1, // 打开豆瓣-->启动白屏-->显示开屏广告, 只点1次会在白屏阶段被触发掉, 导致后续不再触发
           position: {
             left: 'width * 0.875',
             top: 'width * 0.10', // 目标节点的height变化太大，不建议使用
           },
-          matches:
-            '[vid="ad_view" || vid="sdk_view"][visibleToUser=true][width>=720][childCount!=0]',
+          anyMatches: [
+            '[vid="ad_view"][visibleToUser=true][width>=720][childCount!=0]',
+            '[vid="sdk_view"] >n [vid="animation_view"][visibleToUser=true][width>=720]',
+          ],
           snapshotUrls: 'https://i.gkd.li/i/23283060', // 按钮[跳过]的位置的top在 (0.05 ~ 0.12) * 宽度1216 范围内
           excludeSnapshotUrls: 'https://i.gkd.li/i/29440952', // 白屏阶段 [vid="ad_loading_view"]
         },
@@ -68,8 +73,11 @@ export default defineGkdApp({
             left: 'width * 0.875',
             top: 'width * 0.135',
           },
-          matches:
-            '[vid="ad_view" || vid="sdk_view"][visibleToUser=true][width>=720][childCount!=0]', // 选择器跟前面一样,只是点击位置不同
+          anyMatches: [
+            // 选择器跟前面 key10 一样,只是点击位置不同
+            '[vid="ad_view"][visibleToUser=true][width>=720][childCount!=0]',
+            '[vid="sdk_view"] >n [vid="animation_view"][visibleToUser=true][width>=720]',
+          ],
           snapshotUrls: [
             'https://i.gkd.li/i/13575257', // (旧快照) top在 (0.10 ~ 0.17) * 1080 内
             'https://i.gkd.li/i/18423724', // (0.11 ~ 0.16) * 1080
@@ -85,14 +93,16 @@ export default defineGkdApp({
             left: 'width * 0.875',
             top: 'width * 0.17',
           },
-          matches:
-            '[vid="ad_view" || vid="sdk_view"][visibleToUser=true][width>=720][childCount!=0]',
+          anyMatches: [
+            '[vid="ad_view"][visibleToUser=true][width>=720][childCount!=0]',
+            '[vid="sdk_view"] >n [vid="animation_view"][visibleToUser=true][width>=720]', //2️⃣
+          ],
           snapshotUrls: [
             'https://i.gkd.li/i/13601755', // (旧快照) top在 (0.11 ~ 0.18) * 1200 内
             'https://i.gkd.li/i/23324118', // (0.13 ~ 0.20) * 1280
             'https://i.gkd.li/i/23324139', // (0.14 ~ 0.20) * 1220
             'https://i.gkd.li/i/23652259', // (0.12 ~ 0.19) * 1216
-            'https://i.gkd.li/i/24191638', // (0.13 ~ 0.19) * 1260
+            'https://i.gkd.li/i/24191638', // (0.13 ~ 0.19) * 1260    2️⃣ (仅用[vid="sdk_view"]的话,可能误触key3漏掉的)
             'https://i.gkd.li/i/24362806', // (0.13 ~ 0.20) * 1440
           ],
         },
@@ -104,8 +114,10 @@ export default defineGkdApp({
             left: 'width * 0.875',
             top: 'width * 0.20',
           },
-          matches:
-            '[vid="ad_view" || vid="sdk_view"][visibleToUser=true][width>=720][childCount!=0]',
+          anyMatches: [
+            '[vid="ad_view"][visibleToUser=true][width>=720][childCount!=0]',
+            '[vid="sdk_view"] >n [vid="animation_view"][visibleToUser=true][width>=720]',
+          ],
           snapshotUrls: 'https://i.gkd.li/i/16054268', // (0.15 ~ 0.22) * 1200
         },
       ],
