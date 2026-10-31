@@ -54,11 +54,12 @@ export default defineGkdApp({
           key: 1,
           name: '①点击签到',
           matches:
-            '[childCount=1][getChild(0).getChild(1).text="《鸣潮》每日签到工具"] +(2,3) View >3 @View[childCount=3][getChild(2).width<150][visibleToUser=true] + View[childCount=2]',
+            '[childCount=1][getChild(0).getChild(1).text="《鸣潮》每日签到工具"] +(2,3) View >3 @View[childCount=3][height>250][getChild(2).width<150][visibleToUser=true]',
           snapshotUrls: [
-            'https://i.gkd.li/i/15632005',
+            'https://i.gkd.li/i/15632005', // [height>250]
             'https://i.gkd.li/i/32262391',
             'https://i.gkd.li/i/34076762',
+            'https://i.gkd.li/i/34198526',
           ],
           excludeSnapshotUrls: 'https://i.gkd.li/i/15632902', //已签到,用 [getChild(2).width<150] 避免误触
         },
