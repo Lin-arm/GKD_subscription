@@ -92,5 +92,22 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 5,
+      name: '功能类-应用更新页面-点击[查看更多]',
+      fastQuery: true,
+      actionMaximum: 3, // 界面内共有两个"查看更多"按钮，可能在滑动界面的时候触发点击，设置3次更加保险
+      resetMatch: 'app',
+      rules: [
+        {
+          matches: [
+              '[text="查看更多"]',
+          ],
+          activityIds: [
+              '.appupdate.UpdateManagerActivity',
+          ],
+        },
+      ],
+    },
   ],
 });
