@@ -100,12 +100,8 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          matches: [
-              '[text="查看更多"]',
-          ],
-          activityIds: [
-              '.appupdate.UpdateManagerActivity',
-          ],
+          matches: ['[text="查看更多"]'],
+          activityIds: ['.appupdate.UpdateManagerActivity'],
         },
       ],
     },
