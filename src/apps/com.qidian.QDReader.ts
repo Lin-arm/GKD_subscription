@@ -413,5 +413,29 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 18,
+      name: '全屏广告-追更至最新章节弹窗',
+      desc: '①[取消勾选]提醒 ②x掉弹窗',
+      fastQuery: true,
+      actionMaximum: 1,
+      activityIds: '.ui.activity.QDReaderActivity',
+      rules: [
+        {
+          key: 1,
+          name: '①[取消勾选]提醒',
+          matches: '[vid="switchUpdate"][checkable=true][checked=true]',
+          snapshotUrls: 'https://i.gkd.li/i/34316607',
+        },
+        {
+          key: 2,
+          name: '②x掉弹窗',
+          matches:
+            '@[vid="ivClose"] +2 [visibleToUser=true] >2 [text="追更至最新章节"]',
+          snapshotUrls: 'https://i.gkd.li/i/34316605', // [checked=false] 已取消勾选
+          exampleUrls: 'https://e.gkd.li/f969ad39-da92-458f-95f6-e2939857c808',
+        },
+      ],
+    },
   ],
 });
