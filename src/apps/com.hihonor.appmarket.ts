@@ -92,5 +92,21 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 5,
+      name: '功能类-自动[查看更多]应用更新',
+      desc: '点击[查看更多]',
+      rules: [
+        {
+          fastQuery: true,
+          actionMaximum: 3, // 界面内共有两个"查看更多"按钮，可能在滑动界面的时候触发点击，设置3次更加保险
+          resetMatch: 'app',
+          activityIds: '.appupdate.UpdateManagerActivity',
+          matches: '@[clickable=true] > [text="查看更多"]',
+          snapshotUrls: 'https://i.gkd.li/i/34304183',
+          exampleUrls: 'https://e.gkd.li/f7626132-4702-4cd4-b036-88935f45734d',
+        },
+      ],
+    },
   ],
 });
