@@ -102,6 +102,7 @@ export default defineGkdApp({
         {
           matches: ['[text="查看更多"]'],
           activityIds: ['.appupdate.UpdateManagerActivity'],
+          snapshotUrls: 'https://i.gkd.li/i/34301086',
         },
       ],
     },
