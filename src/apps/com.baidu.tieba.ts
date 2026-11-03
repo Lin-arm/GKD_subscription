@@ -48,21 +48,30 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          activityIds: '.pb.pb.main.PbActivity',
+          fastQuery: true,
+          activityIds: '.tblauncher.MainTabActivity',
           matches:
-            '@ImageView[clickable=true] -2 LinearLayout > [text^="打开通知"]',
-          snapshotUrls: 'https://i.gkd.li/i/13536170',
+            '@View[clickable=true] < [childCount=2] -2 [text="开启互动消息通知"]',
+          snapshotUrls: 'https://i.gkd.li/i/34249649',
+          exampleUrls: 'https://e.gkd.li/7fa4aebb-42a7-47f7-bb23-e43fbac7e03b',
         },
         {
           key: 1,
+          activityIds: '.pb.pb.main.PbActivity',
+          matches:
+            '@ImageView[clickable=true] -2 LinearLayout > [visibleToUser=true][text^="打开通知"]',
+          snapshotUrls: 'https://i.gkd.li/i/13536170',
+        },
+        {
+          key: 2,
           activityIds: '.immessagecenter.mention.reply.ReplyMeActivity',
           matches: 'TextView[text="开启消息推送"] +2 TextView[text="不开启"]',
           snapshotUrls: 'https://i.gkd.li/i/13675694',
         },
         {
-          key: 2,
+          key: 3,
           activityIds: 'com.baidu.tbadk.browser.TBWebContainerActivity',
-          matches: '[text="开启通知"] <n * > [text="暂不开启"]',
+          matches: '[text="开启通知"] <n * > [clickable=true][text="暂不开启"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13804455',
             'https://i.gkd.li/i/20918198',
