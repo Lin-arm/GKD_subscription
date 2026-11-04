@@ -951,5 +951,21 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 34,
+      name: '功能类-直播间抽奖弹窗',
+      desc: '自动关闭直播间抽奖(福袋)结果',
+      rules: [
+        {
+          activityIds:
+            'com.bilibili.bililive.room.ui.roomv3.LiveRoomActivityV3',
+          fastQuery: true,
+          matches:
+            '[text^="中奖名单"][visibleToUser=true] <(6-n) * <3 * - * -> @Image[desc=null][vid=null][text!=null][width<105 && height<104] <2 View[childCount=2] <<(1n-4) [id="app"] < WebView <<(1n-4) [vid="browser"]',
+          snapshotUrls: 'https://i.gkd.li/i/34363614',
+          exampleUrls: 'https://e.gkd.li/6559f724-c2e9-4f29-b13e-474ff78ead5d',
+        },
+      ],
+    },
   ],
 });
