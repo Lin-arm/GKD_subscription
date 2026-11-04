@@ -71,12 +71,18 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: '.notify.ui.NoticeBodyActivity',
+          activityIds: [
+            '.notify.ui.NoticeBodyActivity',
+            '.webapp.ui.WebAppCommonViewer',
+          ],
           matches: [
             '[text*="剪贴板内容已更新"][visibleToUser=true]',
             '[text="知道了"][clickable=true]',
           ],
-          snapshotUrls: 'https://i.gkd.li/i/33947533',
+          snapshotUrls: [
+            'https://i.gkd.li/i/33947533',
+            'https://i.gkd.li/i/34332781',
+          ],
           exampleUrls: 'https://e.gkd.li/c5a068c5-33ee-4911-a1a8-238b73097f53',
         },
       ],
