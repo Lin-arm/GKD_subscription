@@ -810,6 +810,26 @@ export default defineGkdApp({
       ],
     },
     {
+      key: 40,
+      name: '功能类-自动开启[自动连播]',
+      desc: '播放设置页的[自动连播]开关未开启时自动点击开启，已开启时不点击',
+      matchRoot: true,
+      forcedTime: 86400000,
+      actionMaximum: 1,
+      resetMatch: 'match',
+      activityIds: '.main.MainActivity',
+      rules: [
+        {
+          key: 0,
+          // 不设 fastQuery：末尾属性选择器 Switch[checked=false] 以 checked 开头，
+          // 不符合快速查询格式（要求首个属性为 id/vid/text）。目标节点虽可快速查询
+          // （vid 为混淆 id "1td"），但混淆 id 会随抖音版本变化而失效，故不采用。
+          matches:
+            '[text="自动连播"][visibleToUser=true] + Switch[checked=false][visibleToUser=true]',
+        },
+      ],
+    },
+    {
       key: 39,
       name: '功能类-横屏直播时自动[关闭]弹幕',
       desc: '点击1次[关闭弹幕]图标',
