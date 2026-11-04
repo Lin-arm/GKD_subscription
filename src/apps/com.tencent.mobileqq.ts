@@ -193,31 +193,44 @@ export default defineGkdApp({
     },
     {
       key: 7,
-      name: '功能类-登录授权',
-      desc: '自动点击登录',
+      name: '功能类-设备登录授权',
+      desc: '自动点击登录(登录 <设备> QQ)',
+      matchRoot: true,
+      actionMaximum: 3,
+      actionCd: 500,
+      activityIds: [
+        'com.tencent.biz.qrcode.activity.QRLoginAuthActivity',
+        '.activity.DevlockQuickLoginActivity', // 异常二次确认
+      ],
       rules: [
         {
           key: 1,
+          name: '快查',
           fastQuery: true,
-          matchRoot: true,
-          actionMaximum: 3,
-          actionCd: 500,
-          activityIds: [
-            'com.tencent.biz.qrcode.activity.QRLoginAuthActivity',
-            'com.tencent.open.agent.PublicFragmentActivityForOpenSDK',
-            'com.tencent.open.agent.QuickLoginAuthorityActivity',
-          ],
-          matches: [
-            '[text="登录确认" || text$="申请使用"][visibleToUser=true]',
-            'Button[text="登录" || text="同意" || text="确认"][clickable=true][visibleToUser=true]',
-          ],
+          matches:
+            'TextView[text^="登录 "][text$="QQ"][visibleToUser=true] +(6-n) LinearLayout > Button[text="登录" || text="确认"][clickable=true]',
           snapshotUrls: [
             'https://i.gkd.li/i/20737721',
             'https://i.gkd.li/i/20737651',
-            'https://i.gkd.li/i/20737675',
-            'https://i.gkd.li/i/20737673',
-            'https://i.gkd.li/i/22631619',
           ],
+          exampleUrls: 'https://e.gkd.li/425a34a7-d32e-4df1-9216-7276d883768a',
+        },
+        {
+          key: 2,
+          name: '无快查',
+          actionMaximumKey: 1, // 共享key1的执行次数
+          actionCdKey: 1, // // 共享key1的冷却状态
+          matches:
+            'TextView[text^="登录 "][text$="QQ"][visibleToUser=true] +(6-n) LinearLayout > Button[text="登录" || text="确认"][clickable=true]',
+          snapshotUrls: 'https://i.gkd.li/i/12789287',
+        },
+        {
+          preKeys: [1, 2],
+          name: '异常二次确认',
+          matches:
+            'Button[text="允许登录QQ"][clickable=true][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/13063027', // 无快查
+          exampleUrls: 'https://e.gkd.li/821aeac0-8e87-425d-a660-139c13dc4e50',
         },
       ],
     },
@@ -658,6 +671,61 @@ export default defineGkdApp({
           matches:
             '@ImageView[clickable=true][width<87] <2 [visibleToUser=true] - [childCount=3] >2 [text="广告"]',
           snapshotUrls: 'https://i.gkd.li/i/30869035',
+        },
+      ],
+    },
+    {
+      key: 40,
+      name: '功能类-App申请信息/登录授权',
+      desc: 'App申请使用qq登录/用户信息',
+      matchRoot: true,
+      actionMaximum: 3,
+      actionCd: 500,
+      rules: [
+        {
+          key: 1,
+          name: '信息授权',
+          activityIds: [
+            'com.tencent.open.agent.PublicFragmentActivityForOpenSDK',
+            'com.tencent.open.agent.QuickLoginAuthorityActivity',
+          ],
+          fastQuery: true,
+          matches:
+            '@Button[text="同意" || text="确认"][clickable=true] < LinearLayout -(4-n) * >(4-n) [text$="申请使用"][visibleToUser=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/20737673',
+            'https://i.gkd.li/i/22631619',
+          ],
+          exampleUrls: [
+            'https://e.gkd.li/5d5e24b7-178b-4afb-b2df-2fa55c49575f',
+            'https://e.gkd.li/8a79aed5-3651-40ae-a68c-f17813b03183',
+          ],
+        },
+        {
+          key: 2,
+          name: '登录',
+          activityIds: [
+            'com.tencent.biz.qrcode.activity.QRLoginAuthActivity',
+            '.activity.DevLockQuickVerifyActivity',
+          ],
+          fastQuery: true,
+          matches:
+            'TextView[text^="登录 "][visibleToUser=true] +(6-n) LinearLayout > Button[text="登录" || text="确认"][clickable=true]',
+          snapshotUrls: 'https://i.gkd.li/i/20737675', // 登录,
+          exampleUrls: 'https://e.gkd.li/c1258db1-97f2-4ee5-90ed-50b73669d68d',
+        },
+        {
+          key: 3,
+          name: '登录(无快查)',
+          activityIds: [
+            'com.tencent.biz.qrcode.activity.QRLoginAuthActivity',
+            '.activity.DevLockQuickVerifyActivity',
+          ],
+          actionMaximumKey: 2, // 共享key2的执行次数
+          actionCdKey: 2, // // 共享key2的冷却状态
+          matches:
+            'TextView[text^="登录 "][visibleToUser=true] +(6-n) Button[text="登录" || text="确认"][clickable=true]',
+          snapshotUrls: 'https://i.gkd.li/i/20737675', //QQ互联
         },
       ],
     },
