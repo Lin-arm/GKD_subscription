@@ -347,6 +347,7 @@ export default defineGkdApp({
           activityIds: [
             '.tblauncher.MainTabActivity',
             'com.baidu.tbadk.browser.TBWebContainerActivity',
+            '.forum.ForumActivity',
           ],
           matches:
             'WebView[text!=null] > View[childCount=1] > View[childCount=3] > @[visibleToUser=true][index=2][width<150]',
@@ -354,6 +355,7 @@ export default defineGkdApp({
           snapshotUrls: [
             'https://i.gkd.li/i/13060891',
             'https://i.gkd.li/i/16703244',
+            'https://i.gkd.li/i/34382812',
           ],
           excludeSnapshotUrls: 'https://i.gkd.li/i/29640529', // [width<150]
         },
