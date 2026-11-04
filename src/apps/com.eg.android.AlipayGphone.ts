@@ -525,8 +525,9 @@ export default defineGkdApp({
           excludeActivityIds:
             'com.alipay.mobile.nebulax.xriver.activity.XRiverActivity$', //排除小游戏、子小程序的, 防止阻塞
           matches:
-            '@TextView[width<50 && height<50] -n [visibleToUser=true][text="去看看"]',
+            '[childCount=4] > @TextView[width<50 && height<50] -n [visibleToUser=true][text="去看看"]',
           snapshotUrls: 'https://i.gkd.li/i/23054580',
+          excludeSnapshotUrls: 'https://i.gkd.li/i/34356908', //用 [childCount=4] 排除
         },
         {
           key: 3,
