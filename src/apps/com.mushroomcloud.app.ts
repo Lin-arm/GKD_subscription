@@ -16,8 +16,11 @@ export default defineGkdApp({
         {
           key: 0,
           matches:
-            '@View[clickable=true][width<150 && height<150] - FrameLayout[childCount=3][getChild(2).name$="TextView"] >7 [text*="三方应用" || text*="扭动手机" || text*="上滑" || text*="扭一扭"][visibleToUser=true]',
-          snapshotUrls: 'https://i.gkd.li/i/34136348',
+            '@View[clickable=true][width<150 && height<150] - FrameLayout[childCount=3][getChild(2).name$="TextView"] >(n+5) [text*="三方应用" || text*="扭动手机" || text*="上滑" || text*="扭一扭"][visibleToUser=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/34136348',
+            'https://i.gkd.li/i/34367435',
+          ],
         },
       ],
     },
