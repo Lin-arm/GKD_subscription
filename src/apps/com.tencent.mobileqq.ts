@@ -209,10 +209,7 @@ export default defineGkdApp({
           fastQuery: true,
           matches:
             'TextView[text^="登录 "][text$="QQ"][visibleToUser=true] +(6-n) LinearLayout > Button[text="登录" || text="确认"][clickable=true]',
-          snapshotUrls: [
-            'https://i.gkd.li/i/20737721',
-            'https://i.gkd.li/i/20737651',
-          ],
+          snapshotUrls: 'https://i.gkd.li/i/20737721',
           exampleUrls: 'https://e.gkd.li/425a34a7-d32e-4df1-9216-7276d883768a',
         },
         {
@@ -711,7 +708,7 @@ export default defineGkdApp({
           fastQuery: true,
           matches:
             'TextView[text^="登录 "][visibleToUser=true] +(6-n) LinearLayout > Button[text="登录" || text="确认"][clickable=true]',
-          snapshotUrls: 'https://i.gkd.li/i/20737675', // 登录,
+          snapshotUrls: 'https://i.gkd.li/i/20737651',
           exampleUrls: 'https://e.gkd.li/c1258db1-97f2-4ee5-90ed-50b73669d68d',
         },
         {
