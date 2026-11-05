@@ -520,5 +520,32 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 20,
+      name: '功能类-刷短剧时半自动[不喜听书]',
+      desc: '前提需手动长按小说标签的视频, ①点击[不感兴趣] ②选择[不喜欢听书]',
+      activityIds: '.pages.main.MainFragmentActivity',
+      fastQuery: true,
+      // forcedTime: 10000, // 弹层切换可能没有无障碍事件，开始匹配后主动查询10秒
+      rules: [
+        {
+          key: 0,
+          name: '①点击[不感兴趣]',
+          matches:
+            '@[clickable=true] > TextView[vid="action_text"][text="不感兴趣"][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/34419649',
+          exampleUrls: 'https://e.gkd.li/77dca54c-86b8-40a6-b00a-44e4f8adedf8',
+        },
+        {
+          key: 1,
+          preKeys: [0],
+          name: '②点击[不喜欢听书]',
+          matches:
+            '[text="不喜欢听书"] < @[clickable=true][childCount=1] <n * - [text="选择不喜欢的理由"] <2 View < ComposeView < * < * < [id="android:id/content"]',
+          snapshotUrls: 'https://i.gkd.li/i/34419676',
+          exampleUrls: 'https://e.gkd.li/77dca54c-86b8-40a6-b00a-44e4f8adedf8',
+        },
+      ],
+    },
   ],
 });
