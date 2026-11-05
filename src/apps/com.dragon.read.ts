@@ -530,6 +530,8 @@ export default defineGkdApp({
           name: '①点击[不感兴趣]',
           matches:
             '@[clickable=true] > TextView[vid="action_text"][text="不感兴趣"][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/34419649',
+          exampleUrls: 'https://e.gkd.li/77dca54c-86b8-40a6-b00a-44e4f8adedf8',
         },
         {
           key: 1,
@@ -537,6 +539,8 @@ export default defineGkdApp({
           name: '②点击[不喜欢听书]',
           matches:
             '@[clickable=true] > TextView[text="不喜欢听书"][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/34419676',
+          exampleUrls: 'https://e.gkd.li/77dca54c-86b8-40a6-b00a-44e4f8adedf8',
         },
       ],
     },
