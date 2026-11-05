@@ -847,10 +847,10 @@ export default defineGkdApp({
               x: 'screenWidth/2', // 水平居中
               y: 'screenHeight/2',// 垂直居中
           },
-          snapshotUrls: 'https://i.gkd.li/i/34400931, //视频播放
+          snapshotUrls: 'https://i.gkd.li/i/34400931', //视频播放
         },
         {
-          prekeys: [0],
+          preKeys: [0],
           key: 1,
           name: '上滑菜单',
           matches:
@@ -872,8 +872,9 @@ export default defineGkdApp({
           prekeys: [1],
           name: '点击<自动联播>开关',
           matches:
-            '@Switch[clickable=true] - [text="自动连播"][visibleToUser=true]',
+            '@Switch[clickable=true][checked=false] - [text="自动连播"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/34400219', //自动联播
+          excludeSnapshotUrls: 'https://i.gkd.li/i/34400216',
         },
       ],
     },
