@@ -869,7 +869,7 @@ export default defineGkdApp({
           snapshotUrls: 'https://i.gkd.li/i/34400221', //菜单
         },        
         {
-          prekeys: [1],
+          preKeys: [1],
           name: '点击<自动联播>开关',
           matches:
             '@Switch[clickable=true][checked=false] - [text="自动连播"][visibleToUser=true]',
