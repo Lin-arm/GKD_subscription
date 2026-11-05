@@ -179,7 +179,6 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          action: 'clickCenter',
           matches: [
             'TextView[text*="未查询到此应用的 ICP 核准信息"]',
             '@Button[text="知道了"] -n Button[text="取消安装"]',
