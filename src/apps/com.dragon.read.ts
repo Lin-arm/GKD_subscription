@@ -520,5 +520,25 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 20,
+      name: '功能类-不感兴趣后点击不喜欢听书',
+      forcedTime: 10000, // 弹层切换可能没有无障碍事件，开始匹配后主动查询10秒
+      rules: [
+        {
+          key: 0,
+          name: '①点击[不感兴趣]',
+          matches:
+            '@[clickable=true] > TextView[vid="action_text"][text="不感兴趣"][visibleToUser=true]',
+        },
+        {
+          key: 1,
+          preKeys: [0], // 先选中“不感兴趣”后，再点击具体原因
+          name: '②点击[不喜欢听书]',
+          matches:
+            '@[clickable=true] > TextView[text="不喜欢听书"][visibleToUser=true]',
+        },
+      ],
+    },
   ],
 });
