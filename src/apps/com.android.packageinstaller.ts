@@ -171,5 +171,22 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 6,
+      name: '功能类-确认[未查询到此应用的 ICP 核准信息]',
+      matchTime: 10000,
+      resetMatch: 'app',
+      rules: [
+        {
+          fastQuery: true,
+          matches: [
+            'TextView[text*="未查询到此应用的 ICP 核准信息"]',
+            '@Button[text="知道了"] -n Button[text="取消安装"]',
+          ],
+          snapshotUrls: 'https://i.gkd.li/i/34431696',
+          activityIds: '.PackageInstallerActivity',
+        },
+      ],
+    },
   ],
 });
