@@ -835,7 +835,6 @@ export default defineGkdApp({
       desc: '仅在刚进抖音时第1个视频生效, ①[长按]视频 ②开启[自动联播]',
       fastQuery: true,
       matchRoot: true,
-      actionDelay: 500,
       actionMaximum: 1,
       resetMatch: 'app',
       activityIds: '.main.MainActivity',
