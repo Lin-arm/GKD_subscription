@@ -111,8 +111,12 @@ export default defineGkdApp({
           fastQuery: true,
           activityIds: '.webapp.ui.WebAppViewerActivity',
           matches:
-            'TextView[text="登录"] < @View[clickable=true][desc="登录"] < * - * > View[childCount=0][text="电脑端学习通登录确认"] <<n [vid="web_view_fragment_refresh_layout"]',
-          snapshotUrls: 'https://i.gkd.li/i/23280198',
+            'TextView[text="登录"] < @View[clickable=true][desc="登录"] <(4-n)  * <2 * ->2 View[childCount=0][text="电脑端学习通登录确认"] - * <<2 * < WebView <(4-n) [vid="web_view_fragment_refresh_layout"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/23280198', // [childCount=2]
+            'https://i.gkd.li/i/34427110', // [childCount=3][text="下次登录无需手机确认"]
+          ],
+          exampleUrls: 'https://e.gkd.li/cb345983-44d1-4997-9906-0ff0b8c8f50d',
         },
       ],
     },
