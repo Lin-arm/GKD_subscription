@@ -810,26 +810,6 @@ export default defineGkdApp({
       ],
     },
     {
-      key: 40,
-      name: '功能类-自动开启[自动连播]',
-      desc: '播放设置页的[自动连播]开关未开启时自动点击开启，已开启时不点击',
-      matchRoot: true,
-      forcedTime: 86400000,
-      actionMaximum: 1,
-      resetMatch: 'match',
-      activityIds: '.main.MainActivity',
-      rules: [
-        {
-          key: 0,
-          // 不设 fastQuery：末尾属性选择器 Switch[checked=false] 以 checked 开头，
-          // 不符合快速查询格式（要求首个属性为 id/vid/text）。目标节点虽可快速查询
-          // （vid 为混淆 id "1td"），但混淆 id 会随抖音版本变化而失效，故不采用。
-          matches:
-            '[text="自动连播"][visibleToUser=true] + Switch[checked=false][visibleToUser=true]',
-        },
-      ],
-    },
-    {
       key: 39,
       name: '功能类-横屏直播时自动[关闭]弹幕',
       desc: '点击1次[关闭弹幕]图标',
@@ -846,6 +826,54 @@ export default defineGkdApp({
           ],
           excludeSnapshotUrls: 'https://i.gkd.li/i/33672707', //竖屏
           exampleUrls: 'https://e.gkd.li/27cd54c6-0398-4e01-8b42-9fd9b963c514',
+        },
+      ],
+    },
+    {
+      key: 40,
+      name: '功能类-自动开启[自动连播]',
+      desc: '启动后长按 -> 上滑菜单 -> 打开自动连播',
+      actionMaximum: 1,
+      resetMatch: 'app',
+      activityIds: '.main.MainActivity',
+      rules: [
+        {
+          key: 0,
+          name: '长按视频',
+          matches:
+            '[text="推荐"][visibleToUser=true]',
+          action: 'longClickCenter',
+            position: {
+              x: 'screenWidth/2', // 水平居中
+              y: 'screenHeight/2',// 垂直居中
+          },
+          snapshotUrls: 'https://i.gkd.li/i/34400931, //视频播放
+        },
+        {
+          prekeys: [0],
+          key: 1,
+          name: '上滑菜单',
+          matches:
+            '[text="投屏"][visibleToUser=true]',
+          swipeArg: { 
+            start: { // 滑动起点坐标
+             x: 'screenWidth/2', // 起点X：屏幕宽度的一半（水平居中）
+             y: 'screenHeight * 0.8', // 起点Y：屏幕高度的80%处
+            },
+            end: { // 滑动终点坐标
+              x: 'screenWidth/2', // 终点X：屏幕宽度的一半（水平居中）
+              y: 'screenHeight * 0.6', // 终点Y：屏幕高度的60%处
+            },
+           duration: 200, // 滑动时长：200毫秒
+         },
+          snapshotUrls: 'https://i.gkd.li/i/34400221', //菜单
+        },        
+        {
+          prekeys: [1],
+          name: '点击<自动联播>开关',
+          matches:
+            '@Switch[clickable=true] - [text="自动连播"][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/34400219', //自动联播
         },
       ],
     },
