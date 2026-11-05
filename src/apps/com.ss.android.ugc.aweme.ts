@@ -829,5 +829,42 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 40,
+      name: '功能类-自动开启[自动连播]',
+      desc: '仅在刚进抖音时第1个视频生效, ①[长按]视频 ②开启[自动联播]',
+      fastQuery: true,
+      matchRoot: true,
+      actionMaximum: 1,
+      resetMatch: 'app',
+      activityIds: '.main.MainActivity',
+      rules: [
+        {
+          key: 1,
+          name: '①[长按]视频',
+          action: 'longClickCenter',
+          matches:
+            '[vid="viewpager"][desc="视频"][childCount=2][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/34400931', //刚打开抖音,未上滑过视频 [childCount=2]
+          excludeSnapshotUrls: 'https://i.gkd.li/i/34424096', //已经上滑刷过视频了 [childCount=3]
+        },
+        {
+          key: 2,
+          preKeys: [1],
+          name: '②开启[自动联播]',
+          matches: '@Switch[clickable=true][checked=false] - [text="自动连播"]',
+          snapshotUrls: 'https://i.gkd.li/i/34400219',
+        },
+        {
+          key: 3,
+          preKeys: [1],
+          name: '③已开-按[返回键]', //下拉任务栏/后台回来规则重置,增加[返回]操作
+          action: 'back',
+          actionMaximumKey: 2,
+          matches: '@Switch[clickable=true][checked=true] - [text="自动连播"]',
+          snapshotUrls: 'https://i.gkd.li/i/34400216',
+        },
+      ],
+    },
   ],
 });
