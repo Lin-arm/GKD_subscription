@@ -832,49 +832,38 @@ export default defineGkdApp({
     {
       key: 40,
       name: '功能类-自动开启[自动连播]',
-      desc: '启动后长按 -> 上滑菜单 -> 打开自动连播',
+      desc: '仅在刚进抖音时第1个视频生效, ①[长按]视频 ②开启[自动联播]',
+      fastQuery: true,
+      matchRoot: true,
+      actionDelay: 500,
       actionMaximum: 1,
       resetMatch: 'app',
       activityIds: '.main.MainActivity',
       rules: [
         {
-          key: 0,
-          name: '长按视频',
-          matches:
-            '[text="推荐"][visibleToUser=true]',
+          key: 1,
+          name: '①[长按]视频',
           action: 'longClickCenter',
-            position: {
-              x: 'screenWidth/2', // 水平居中
-              y: 'screenHeight/2',// 垂直居中
-          },
-          snapshotUrls: 'https://i.gkd.li/i/34400931', //视频播放
+          matches:
+            '[vid="viewpager"][desc="视频"][childCount=2][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/34400931', //刚打开抖音,未上滑过视频 [childCount=2]
+          excludeSnapshotUrls: 'https://i.gkd.li/i/34424096', //已经上滑刷过视频了 [childCount=3]
         },
         {
-          preKeys: [0],
-          key: 1,
-          name: '上滑菜单',
-          matches:
-            '[text="投屏"][visibleToUser=true]',
-          swipeArg: { 
-            start: { // 滑动起点坐标
-             x: 'screenWidth/2', // 起点X：屏幕宽度的一半（水平居中）
-             y: 'screenHeight * 0.8', // 起点Y：屏幕高度的80%处
-            },
-            end: { // 滑动终点坐标
-              x: 'screenWidth/2', // 终点X：屏幕宽度的一半（水平居中）
-              y: 'screenHeight * 0.6', // 终点Y：屏幕高度的60%处
-            },
-           duration: 200, // 滑动时长：200毫秒
-         },
-          snapshotUrls: 'https://i.gkd.li/i/34400221', //菜单
-        },        
-        {
+          key: 2,
           preKeys: [1],
-          name: '点击<自动联播>开关',
-          matches:
-            '@Switch[clickable=true][checked=false] - [text="自动连播"][visibleToUser=true]',
-          snapshotUrls: 'https://i.gkd.li/i/34400219', //自动联播
-          excludeSnapshotUrls: 'https://i.gkd.li/i/34400216',
+          name: '②开启[自动联播]',
+          matches: '@Switch[clickable=true][checked=false] - [text="自动连播"]',
+          snapshotUrls: 'https://i.gkd.li/i/34400219',
+        },
+        {
+          key: 3,
+          preKeys: [1],
+          name: '③已开-按[返回键]', //下拉任务栏/后台回来规则重置,增加[返回]操作
+          action: 'back',
+          actionMaximumKey: 2,
+          matches: '@Switch[clickable=true][checked=true] - [text="自动连播"]',
+          snapshotUrls: 'https://i.gkd.li/i/34400216',
         },
       ],
     },
