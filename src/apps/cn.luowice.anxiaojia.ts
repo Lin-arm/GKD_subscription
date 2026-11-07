@@ -123,11 +123,12 @@ export default defineGkdApp({
         {
           key: 3, //无快查
           matches:
-            'ImageView[width>parent.width.minus(120)] - @ImageView[clickable=true][width<91 && height<91] -(1,2) TextView[text.length>9] <(1,2,3) FrameLayout[childCount>4][visibleToUser=true]',
+            '[width>parent.width.minus(120)] - @ImageView[clickable=true][width<91 && height<91] -(1,2) TextView[text.length>6] <(1,2,3) FrameLayout[childCount>4][visibleToUser=true]',
           snapshotUrls: [
             'https://i.gkd.li/i/32418084',
             'https://i.gkd.li/i/32418087',
             'https://i.gkd.li/i/32418478',
+            'https://i.gkd.li/i/34518515',
           ],
         },
       ],
