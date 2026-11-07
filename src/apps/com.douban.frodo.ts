@@ -49,6 +49,15 @@ export default defineGkdApp({
             'https://i.gkd.li/i/34211578',
           ],
         },
+        {
+          key: 4,
+          matches:
+            '@View[width<170 && height<170] <3 FrameLayout[childCount=3] < [vid="sdk_view"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/34494192',
+            'https://i.gkd.li/i/34514159',
+          ],
+        },
 
         // 坐标点击的放后面, 从上往下依次点击按钮[跳过]附近的坐标, 总有一个能点中[跳过]
         {
