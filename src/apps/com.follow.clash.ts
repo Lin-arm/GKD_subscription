@@ -11,14 +11,21 @@ export default defineGkdApp({
       matchTime: 5000,
       actionMaximum: 1,
       resetMatch: 'app',
+      activityIds: '.MainActivity',
       rules: [
         {
-          activityIds: '.MainActivity',
+          key: 0,
           matches: '@Button[clickable=true] -4 * > [desc="代理"]',
           snapshotUrls: [
             'https://i.gkd.li/i/26210674',
             'https://i.gkd.li/i/29658034',
           ],
+        },
+        {
+          key: 1,
+          matches:
+            '[desc="代理"] + [visibleToUser=true] > [desc="延迟测试"][clickable=true]',
+          snapshotUrls: 'https://i.gkd.li/i/34530552',
         },
       ],
     },
