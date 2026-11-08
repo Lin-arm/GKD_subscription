@@ -188,5 +188,23 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 7,
+      name: '功能类-[开启安全模式]提示弹窗',
+      desc: '点击[取消]',
+      matchTime: 10000,
+      resetMatch: 'app',
+      rules: [
+        {
+          fastQuery: true,
+          matches: [
+            'TextView[text*="为了安全着想，请开启安全模式"]',
+            '@Button[text="取消"]',
+          ],
+          snapshotUrls: 'https://i.gkd.li/i/34540653',
+          activityIds: '.InstallSuccess',
+        },
+      ],
+    },
   ],
 });
