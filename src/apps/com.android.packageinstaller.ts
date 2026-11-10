@@ -197,12 +197,10 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          matches: [
-            'TextView[text*="为了安全着想，请开启安全模式"]',
-            '@Button[text="取消"]',
-          ],
-          snapshotUrls: 'https://i.gkd.li/i/34540653',
           activityIds: '.InstallSuccess',
+          matches: ['TextView[text*="开启安全模式"]', 'Button[text="取消"]'],
+          snapshotUrls: 'https://i.gkd.li/i/34540653',
+          exampleUrls: 'https://e.gkd.li/0f96ada2-22a5-4220-9e8a-54a5d43df254',
         },
       ],
     },
