@@ -402,7 +402,7 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          actionCd: 300,
+          actionCd: 1200, //cd太短可能在[自动化]模式下多滑一次
           actionDelay: 200, //刷视频时,让下一个视频完整显示才触发[上滑]
           swipeArg: {
             start: {
@@ -448,7 +448,6 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          actionCd: 300,
           actionDelay: 200,
           swipeArg: {
             start: {
@@ -477,7 +476,6 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          actionCd: 300,
           actionDelay: 200, //刷视频时,让下一个视频完整显示才触发[上滑]
           swipeArg: {
             start: {

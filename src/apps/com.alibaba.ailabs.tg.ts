@@ -21,11 +21,20 @@ export default defineGkdApp({
     },
     {
       key: 2,
-      name: '全屏广告-超级会员弹窗',
+      name: '全屏广告-会员弹窗',
       desc: '点击关闭',
+      fastQuery: true,
       rules: [
         {
-          fastQuery: true,
+          key: 0,
+          activityIds:
+            '.oneservice.cluster.services.h5alert.MarketingPopupWebViewActivity',
+          matches:
+            '[text*="会员"] -n @View[clickable=true][getChild(0).name$="Image"] < View <2 View <2 View < View < WebView < WebView < [vid="webview"]',
+          snapshotUrls: 'https://i.gkd.li/i/34570686',
+        },
+        {
+          key: 1,
           position: {
             left: 'width * 0.9444',
             top: 'width * 1.0583',
@@ -33,9 +42,9 @@ export default defineGkdApp({
           activityIds:
             'com.alibaba.ailabs.flutter.container.FlutterPaymentActivity',
           matches: 'FrameLayout > LinearLayout > [id="android:id/content"]',
+          snapshotUrls: 'https://i.gkd.li/i/14443874',
           exampleUrls:
             'https://m.gkd.li/57941037/4a823639-f400-4249-81ea-f920d09317f4',
-          snapshotUrls: 'https://i.gkd.li/i/14443874',
         },
       ],
     },

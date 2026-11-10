@@ -74,5 +74,20 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 6,
+      name: '功能类-下载完自动[打开]文件',
+      desc: '点击[打开]',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: 'org.chromium.chrome.browser.ChromeTabbedActivity',
+          matches:
+            '@[text="打开"] < FrameLayout - [visibleToUser=true] > [text$="文件已下载完毕"]',
+          snapshotUrls: 'https://i.gkd.li/i/34482455',
+          exampleUrls: 'https://e.gkd.li/e83bcee8-2540-4b99-8077-fe18378f5ac5',
+        },
+      ],
+    },
   ],
 });

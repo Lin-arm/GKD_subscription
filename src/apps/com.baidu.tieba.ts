@@ -367,17 +367,22 @@ export default defineGkdApp({
       matchDelay: 500,
       matchTime: 10000,
       actionMaximum: 1,
-      activityIds: ['.pb.pb.main.PbActivity', '.tblauncher.MainTabActivity'],
+      activityIds: [
+        '.pb.pb.main.PbActivity',
+        '.tblauncher.MainTabActivity',
+        '.forum.ForumActivity',
+      ],
       rules: [
         {
           key: 0,
           fastQuery: true,
           name: '悬浮广告1',
           matches:
-            '@ImageView[clickable=true][visibleToUser=true][width<77] - [text="广告"]',
+            '@[clickable=true][width<108] <2 [width<350][childCount=2] > [text="广告"]',
           snapshotUrls: [
             'https://i.gkd.li/i/16622395',
             'https://i.gkd.li/i/16632851',
+            'https://i.gkd.li/i/34523272',
           ],
           excludeSnapshotUrls: 'https://i.gkd.li/i/13327933', // 加 [width<77] 排除
         },
