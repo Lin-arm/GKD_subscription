@@ -26,17 +26,26 @@ export default defineGkdApp({
       key: 2,
       name: '全屏广告-弹窗广告',
       desc: '点击关闭',
-      matchTime: 10000,
       actionMaximum: 1,
-      resetMatch: 'app',
+      resetMatch: 'match',
+      activityIds: 'com.huaxiaozhu.sdk.app.MainActivity',
       rules: [
         {
+          key: 0,
           fastQuery: true,
-          activityIds: 'com.huaxiaozhu.sdk.app.MainActivity',
           matches: '[vid="popClose"]',
-          exampleUrls:
-            'https://m.gkd.li/57941037/1555a2be-92cb-4360-b50f-019f30955a22',
           snapshotUrls: 'https://i.gkd.li/i/14233488',
+        },
+        {
+          key: 1,
+          name: '坐标点击x掉',
+          actionCd: 3000,
+          actionDelay: 300,
+          position: { left: 'width/2', top: 'height*0.794' },
+          matches:
+            '@FrameLayout[vid="webview_layout"][visibleToUser=true] >n [id="animation-container-content"] >2 Image[visibleToUser=true][width>700][height>1100]',
+          snapshotUrls: 'https://i.gkd.li/i/34613080',
+          exampleUrls: 'https://e.gkd.li/59049b44-eb7e-4659-94f1-f33c35aeeb4c',
         },
       ],
     },
