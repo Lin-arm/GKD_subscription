@@ -15,12 +15,15 @@
 
 ## 🚀订阅
 
+> [!IMPORTANT]
+> 感谢 CXPLAY 此前提供域名支持。因域名 `gkd667.vv.ax` 即将出售，原 CF 订阅源将停止使用，请及时更换其他订阅源。
+
 复制以下任一链接到 GKD 订阅的右下角 **+** 号那里导入，即可使用
 
-- 感谢由 CXPLAY 提供域名的CF源 (国内可用)
+- CloudFlare源 (国内可用)
 
   ```txt
-  https://gkd667.vv.ax/gkd.json5
+  https://gkd-subscription-667.pages.dev/gkd.json5
   ```
 
 - GitHub源 (国内需要魔法)
@@ -31,12 +34,6 @@
 
 <details>
 <summary>点击展开备用源</summary>
-
-- CloudFlare源 (国内可用)
-
-  ```txt
-  https://gkd-subscription-667.pages.dev/gkd.json5
-  ```
 
 - Xget源 (国内可用)
 
