@@ -94,6 +94,7 @@ export default defineGkdApp({
         },
         {
           key: 4,
+          actionDelay: 500, //太早点击,动画未加载完容易误触
           activityIds: '.activity.QPublicFragmentActivity',
           matches:
             'ImageView[width<62] < [visibleToUser=true][desc="关闭广告"]',
