@@ -40,9 +40,8 @@ export default defineGkdApp({
     },
     {
       key: 6,
-      name: '局部广告-卡片广告',
+      name: '局部广告',
       fastQuery: true,
-      matchTime: 10000,
       rules: [
         {
           key: 0,
@@ -65,9 +64,16 @@ export default defineGkdApp({
         {
           key: 2,
           name: '横幅式2',
-          activityIds: '.smarthome.control.view.CameraControlActivity',
-          matches: '[vid="iv_item_banner_close"][clickable=true]',
-          snapshotUrls: 'https://i.gkd.li/i/25209084',
+          activityIds: [
+            '.smarthome.control.view.CameraControlActivity',
+            '.smarthome.control.view.NewCameraControlActivity',
+          ],
+          matches:
+            '[vid="iv_item_banner_close" || vid="iv_close"][clickable=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/25209084',
+            'https://i.gkd.li/i/34723502',
+          ],
         },
       ],
     },
