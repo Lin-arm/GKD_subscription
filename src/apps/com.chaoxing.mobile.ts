@@ -158,5 +158,24 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 14,
+      name: '功能类-签到失败后弹窗',
+      desc: '点击[知道了]',
+      rules: [
+        {
+          fastQuery: true,
+          actionDelay: 300,
+          activityIds: [
+            '.webapp.ui.WebAppViewerActivity',
+            '.webapp.ui.WebAppCommonViewer',
+          ],
+          matches:
+            '@[text="知道了"] < ListView < View - [text*="签到失败"] < View <3 WebView < WebView <2 [vid="web_view_fragment_refresh_layout"]',
+          snapshotUrls: 'https://i.gkd.li/i/34723729',
+          exampleUrls: 'https://e.gkd.li/e6f3eb7a-3890-4c98-95a6-c09262a2b071',
+        },
+      ],
+    },
   ],
 });
