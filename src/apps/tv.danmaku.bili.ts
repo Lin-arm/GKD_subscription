@@ -470,6 +470,7 @@ export default defineGkdApp({
             'https://i.gkd.li/i/23933925', // vid="bottom_container"
             'https://i.gkd.li/i/17675894', // 直播 vid="live_lottie_layout"
             'https://i.gkd.li/i/18306858', // 直播
+            'https://i.gkd.li/i/34722511', // 纪录片
           ],
           // excludeSnapshotUrls: 'https://i.gkd.li/i/24365466', // [vid="second_to_last_line_area"]
           exampleUrls: 'https://e.gkd.li/f7a90a07-6c8e-4986-8306-f64db4412e36',
@@ -496,11 +497,21 @@ export default defineGkdApp({
             'https://i.gkd.li/i/30885647', // 减少直播推荐、和当前视频无关
           ],
         },
+        {
+          key: 51,
+          preKeys: [0, 1],
+          name: '②点击[不感兴趣]2', //无快查版
+          actionCdKey: 50,
+          actionMaximumKey: 50,
+          matches:
+            '@[clickable=true] > [visibleToUser=true][text*="不感兴趣" || text="相似内容过多" || text*="不想看" || text$="质量差" || text="减少直播推荐" || text="和当前视频无关"]',
+          snapshotUrls: ['https://i.gkd.li/i/34722513'],
+        },
 
         // 第三段
         {
           key: 70,
-          preKeys: [50],
+          preKeys: [50, 51],
           name: '③点击[关闭]',
           anyMatches: [
             '[vid="close_dislike"][visibleToUser=true]',
