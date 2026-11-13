@@ -590,11 +590,12 @@ export default defineGkdApp({
           key: 1,
           name: '①点击[跳过]',
           matches:
-            '@View[id=null][text=null][childCount=0][visibleToUser=true] < ViewGroup[id=null][text=null][childCount=1][index=parent.childCount.minus(1)] <(7,8) ViewGroup <2 ViewGroup < ViewGroup < LinearLayout < RelativeLayout <(1,2) [id="android:id/content"]',
+            '@View[id=null][text=null][childCount=0][visibleToUser=true] < ViewGroup[id=null][text=null][childCount=1][index=parent.childCount.minus(1)] <(5+n) ViewGroup <2 ViewGroup < ViewGroup < LinearLayout < RelativeLayout <(1,2) [id="android:id/content"]',
           exampleUrls: 'https://e.gkd.li/a243e31f-f1b5-4689-8d1a-c53250be651e',
           snapshotUrls: [
             'https://i.gkd.li/i/17141999',
             'https://i.gkd.li/i/28130319',
+            'https://i.gkd.li/i/34788907',
           ],
         },
         {
