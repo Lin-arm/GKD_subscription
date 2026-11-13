@@ -89,6 +89,14 @@ jobs:
         run: |
           cp dist/gkd.json5 "dist/gkd-subscription-offline-id667-v${{ steps.version.outputs.version }}.json5"
 
+      - name: 组装发行版说明
+        run: |
+          {
+            cat dist/CHANGELOG.md
+            printf '\n\n---\n\n'
+            cat .github/release-extra.md
+          } > dist/RELEASE_NOTES.md
+
       - name: 创建 GitHub 发行版
         id: create_release
         if: ${{ steps.commit.outcome == 'success' }}
@@ -98,8 +106,7 @@ jobs:
         with:
           tag_name: v${{ steps.version.outputs.version }}
           name: v${{ steps.version.outputs.version }}
-          body_path: ./dist/CHANGELOG.md
+          body_path: ./dist/RELEASE_NOTES.md
           generate_release_notes: true
-          append_body: true
           files: |
             dist/gkd-subscription-offline-id667-v${{ steps.version.outputs.version }}.json5
