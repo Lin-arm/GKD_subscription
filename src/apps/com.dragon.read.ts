@@ -246,12 +246,15 @@ export default defineGkdApp({
             left: 'width * 0.77',
             top: 'height * 0.64',
           },
-          matches:
+          anyMatches: [
             '@ViewGroup[visibleToUser=true][height<150][width=prev.width] < [childCount=2] <(2,3) FrameLayout[childCount<4] >7 [vid="ttlive_player_render_view"]',
+            '@ViewGroup[visibleToUser=true][height<150][width=prev.width] -2 [index=0] < FrameLayout[childCount<5] >7 [vid="ttlive_player_render_view"]', //②
+          ],
           snapshotUrls: [
             'https://i.gkd.li/i/27706770',
             'https://i.gkd.li/i/28834344',
             'https://i.gkd.li/i/32435385',
+            'https://i.gkd.li/i/34807130', //②
           ],
           exampleUrls: 'https://e.gkd.li/aef38288-d84b-4e13-8161-ebebc27b822b',
         },
