@@ -287,5 +287,21 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 18,
+      name: '功能类-自动领取VIP成长值',
+      desc: '自动点击[一键领取]领取VIP成长值',
+      fastQuery: true,
+      actionMaximum: 1,
+      resetMatch: 'app',
+      rules: [
+        {
+          key: 0,
+          activityIds: '.music.biz.rn.activity.MainProcessRNActivity',
+          matches: '@[clickable=true] >2 [text^="一键领取"]',
+          snapshotUrls: 'https://i.gkd.li/i/34813013',
+        },
+      ],
+    },
   ],
 });
