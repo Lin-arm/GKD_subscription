@@ -303,5 +303,32 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 19,
+      name: '功能类-自动打卡并关闭黑胶乐签',
+      desc: '1.点击[打卡] 2.关闭黑胶乐签弹窗',
+      fastQuery: true,
+      rules: [
+        {
+          key: 0,
+          name: '1.点击[打卡]',
+          actionMaximum: 1,
+          resetMatch: 'app',
+          activityIds: '.music.biz.rn.activity.MainProcessRNActivity',
+          matches: '@[clickable=true] >2 [text="打卡"]',
+          snapshotUrls: 'https://i.gkd.li/i/34813013',
+        },
+        {
+          key: 1,
+          name: '2.关闭黑胶乐签弹窗',
+          preKeys: [0],
+          actionMaximum: 1,
+          resetMatch: 'app',
+          activityIds: '.music.biz.rn.activity.MainProcessLayerReactNativeActivity',
+          matches: '@[clickable=true] - [text="黑胶乐签"]',
+          snapshotUrls: 'https://i.gkd.li/i/34813443',
+        },
+      ],
+    },
   ],
 });
