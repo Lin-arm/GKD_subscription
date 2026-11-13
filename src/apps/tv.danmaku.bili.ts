@@ -363,17 +363,17 @@ export default defineGkdApp({
             'com.bilibili.vip.web.VipWebActivity',
           ],
           matches:
-            'ComposeView > View[childCount=7] > @View[clickable=true][childCount=0] <<n [vid="vip_panel"]',
-          exampleUrls:
-            'https://m.gkd.li/57941037/a78a7719-b148-4df2-a225-f7a24be0c413',
+            '@View[clickable=true][right>getPrev(1).right.minus(20)] -(1,2) [index=0][text*="套餐"] <<n [vid="vip_panel"][height>500]',
           snapshotUrls: [
             'https://i.gkd.li/i/15523975',
             'https://i.gkd.li/i/15814146',
+            'https://i.gkd.li/i/34776793',
           ],
+          excludeSnapshotUrls: 'https://i.gkd.li/i/34777480', //已折叠, [vid="vip_panel"][height=243]
+          exampleUrls: 'https://e.gkd.li/41a7f3ae-c01d-4f1e-a90a-5fefa4606393',
         },
         {
           key: 5,
-          fastQuery: true,
           activityIds: 'com.bilibili.vip.web.VipWebActivity',
           matches:
             '@TextView[width<130 && height<130] - TextView[childCount=0][id="dialog-canvas"] <<n [vid="webview"]',
