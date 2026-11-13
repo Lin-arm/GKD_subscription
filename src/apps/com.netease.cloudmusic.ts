@@ -296,7 +296,6 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          key: 0,
           activityIds: '.music.biz.rn.activity.MainProcessRNActivity',
           matches: '@[clickable=true] >2 [text^="一键领取"]',
           snapshotUrls: 'https://i.gkd.li/i/34813013',
@@ -324,7 +323,8 @@ export default defineGkdApp({
           preKeys: [0],
           actionMaximum: 1,
           resetMatch: 'app',
-          activityIds: '.music.biz.rn.activity.MainProcessLayerReactNativeActivity',
+          activityIds:
+            '.music.biz.rn.activity.MainProcessLayerReactNativeActivity',
           matches: '@[clickable=true] - [text="黑胶乐签"]',
           snapshotUrls: 'https://i.gkd.li/i/34813443',
         },
