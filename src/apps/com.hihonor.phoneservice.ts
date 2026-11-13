@@ -5,6 +5,22 @@ export default defineGkdApp({
   name: '我的荣耀',
   groups: [
     {
+      key: 0,
+      name: '开屏广告',
+      fastQuery: true,
+      matchTime: 10000,
+      actionMaximum: 1,
+      resetMatch: 'app',
+      priorityTime: 10000,
+      rules: [
+        {
+          key: 0,
+          matches: '[text*="跳过"][clickable=true][text.length<10]',
+          snapshotUrls: 'https://i.gkd.li/i/34807611',
+        },
+      ],
+    },
+    {
       key: 1,
       name: '全屏广告-弹窗广告',
       desc: '点击关闭',
