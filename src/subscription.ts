@@ -19,7 +19,7 @@ export default defineGkdSubscription({
   id: 667,
   name: 'id667的GKD订阅🚀',
   version: 1,
-  author: 'gkd667.vv.ax源即将停用,建议更换', //👻
+  author: '👻',
   checkUpdateUrl: './gkd.version.json5',
   supportUri: 'https://github.com/Lin-arm/GKD_subscription/issues/new/choose',
   categories,
