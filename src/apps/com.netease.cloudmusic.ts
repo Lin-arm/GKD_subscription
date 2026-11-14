@@ -287,5 +287,48 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 18,
+      name: '功能类-自动领取VIP成长值',
+      desc: '自动点击[一键领取]领取VIP成长值',
+      rules: [
+        {
+          fastQuery: true,
+          actionMaximum: 1,
+          resetMatch: 'app',
+          activityIds: '.music.biz.rn.activity.MainProcessRNActivity',
+          matches: '@[clickable=true] >2 [text^="一键领取"]',
+          snapshotUrls: 'https://i.gkd.li/i/34813013',
+          exampleUrls: 'https://e.gkd.li/69bfc2ea-b438-4fb4-9682-a641a35ada9b',
+        },
+      ],
+    },
+    {
+      key: 19,
+      name: '功能类-自动打卡并关闭黑胶乐签',
+      desc: '①点击[打卡] ②关闭黑胶乐签弹窗',
+      fastQuery: true,
+      actionMaximum: 1,
+      resetMatch: 'app',
+      rules: [
+        {
+          key: 0,
+          name: '①点击[打卡]',
+          activityIds: '.music.biz.rn.activity.MainProcessRNActivity',
+          matches: '@[clickable=true] >2 [text="打卡"]',
+          snapshotUrls: 'https://i.gkd.li/i/34813013',
+          exampleUrls: 'https://e.gkd.li/69bfc2ea-b438-4fb4-9682-a641a35ada9b',
+        },
+        {
+          key: 1,
+          name: '②关闭黑胶乐签弹窗',
+          preKeys: [0],
+          activityIds:
+            '.music.biz.rn.activity.MainProcessLayerReactNativeActivity',
+          matches: '@[clickable=true] - [text="黑胶乐签"]',
+          snapshotUrls: 'https://i.gkd.li/i/34813443',
+        },
+      ],
+    },
   ],
 });
