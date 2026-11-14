@@ -280,20 +280,19 @@ export default defineGkdApp({
         {
           preKeys: [0, 1],
           key: 50,
-          name: '点击[不感兴趣]/[相似内容过多]',
+          name: '②点击[不感兴趣/内容过多]等',
           matches:
-            '@[clickable=true] > [text="此类内容过多" || text="相似内容过多" || text="不感兴趣" || text="up主不感兴趣" || text="对该up的直播不感兴趣" || text="我不想看" || text="引人不适"]',
+            '@[clickable=true] > [text="此类内容过多" || text="相似内容过多" || text="不感兴趣" || text="up主不感兴趣" || text="对该up的直播不感兴趣" || text="我不想看" || text="引人不适" || text="不喜欢此商品"]',
           snapshotUrls: [
-            'https://i.gkd.li/i/13625309',
-            'https://i.gkd.li/i/13742257',
-            'https://i.gkd.li/i/14155801',
-            'https://i.gkd.li/i/14155272',
-            'https://i.gkd.li/i/17428471',
-            'https://i.gkd.li/i/18274380',
-            'https://i.gkd.li/i/18292926',
-            'https://i.gkd.li/i/20710223',
-            'https://i.gkd.li/i/23687208',
-            'https://i.gkd.li/i/24836772',
+            'https://i.gkd.li/i/13625309', //up主不感兴趣
+            'https://i.gkd.li/i/13742257', //不感兴趣
+            'https://i.gkd.li/i/14155801', //不感兴趣、相似内容过多
+            'https://i.gkd.li/i/18274380', //相似内容过多、up主不感兴趣
+            'https://i.gkd.li/i/18292926', //对该up的直播不感兴趣
+            'https://i.gkd.li/i/20710223', //我不想看
+            'https://i.gkd.li/i/23687208', //引人不适
+            'https://i.gkd.li/i/24836772', //此类内容过多
+            'https://i.gkd.li/i/34849877', //不喜欢此商品
           ],
           excludeSnapshotUrls: [
             'https://i.gkd.li/i/18292929',
@@ -303,6 +302,7 @@ export default defineGkdApp({
         {
           preKeys: [50],
           key: 70,
+          name: '③点击[xx内容过多]',
           matches:
             '@FrameLayout[clickable=true] > [text="此类内容过多" || text="相似内容过多"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/2aba6082-1047-464e-959c-82ee62e492aa',
