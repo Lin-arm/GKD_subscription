@@ -304,12 +304,11 @@ export default defineGkdApp({
           preKeys: [50],
           key: 70,
           matches:
-            '@[clickable=true] > [text$="内容过多" || text="不喜欢此商品" || text^="不想看"][visibleToUser=true]',
+            '@FrameLayout[clickable=true] > [text="此类内容过多" || text="相似内容过多"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/2aba6082-1047-464e-959c-82ee62e492aa',
           snapshotUrls: [
             'https://i.gkd.li/i/20718890',
             'https://i.gkd.li/i/20720187',
-            'https://i.gkd.li/i/34799465',
           ],
         },
       ],
