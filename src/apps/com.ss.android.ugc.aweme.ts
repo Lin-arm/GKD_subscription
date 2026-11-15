@@ -235,12 +235,14 @@ export default defineGkdApp({
         {
           key: 0,
           matches:
-            '@[clickable=true][text="不感兴趣"] +(1,2) FlattenUIText[text="不感兴趣"]',
+            '@[clickable=true][text="不感兴趣"] +(1,2,5) FlattenUIText[text="不感兴趣"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13800207',
             'https://i.gkd.li/i/13996724',
             'https://i.gkd.li/i/20035670',
+            'https://i.gkd.li/i/34876101',
           ],
+          exampleUrls: 'https://e.gkd.li/f967dcd3-2196-4095-b5f0-a2cae15bdf23',
         },
         {
           key: 1,
