@@ -457,20 +457,24 @@ export default defineGkdApp({
         },
       ],
     },
-    // 存在`执行选择器`可用,但规则里就不可用问题
-    // {
-    //   key: 18,
-    //   name: '功能类-评论自动翻译',
-    //   rules: [
-    //     {
-    //       fastQuery: true,
-    //       activityIds: 'com.xingin.matrix.notedetail.NoteDetailActivity',
-    //       matches: '[text$="回复 翻译"][visibleToUser=true]',
-    //       snapshotUrls: 'https://i.gkd.li/i/26643975',
-    //       exampleUrls: 'https://e.gkd.li/fc8d70d4-f743-45df-a9d2-f343e419ccd9',
-    //     },
-    //   ],
-    // },
+    {
+      key: 18,
+      name: '功能类-评论自动翻译',
+      desc: '⚠️有可能触发[回复评论]情况,新版app暂无问题',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: 'com.xingin.matrix.notedetail.NoteDetailActivity',
+          matches:
+            '[vid="newTimePoiIpTransTv"][text$="回复 翻译"][visibleToUser=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/26643975',
+            'https://i.gkd.li/i/34877018',
+          ],
+          exampleUrls: 'https://e.gkd.li/fc8d70d4-f743-45df-a9d2-f343e419ccd9',
+        },
+      ],
+    },
     {
       key: 19,
       name: '功能类-自动关闭截屏弹窗',
