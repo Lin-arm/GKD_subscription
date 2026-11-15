@@ -155,8 +155,12 @@ export default defineGkdApp({
           name: '首页',
           matchRoot: true, // 截取快照才触发，加上试试
           activityIds: 'com.taobao.tao.welcome.Welcome',
-          matches: '[desc.length=4] < * + @[clickable=true] > [text="뉜"]', // 实机测试过，"뉜"韩语？是关闭按钮有作用
-          snapshotUrls: 'https://i.gkd.li/i/25658605',
+          matches:
+            'FrameLayout[childCount=4] > ImageView + LinearLayout[childCount=2] + [childCount=1] + @[clickable=true] > [text="뉜"]', // 实机测试过，"뉜"韩语？是关闭按钮有作用
+          snapshotUrls: [
+            'https://i.gkd.li/i/25658605',
+            'https://i.gkd.li/i/34881835',
+          ],
           exampleUrls: 'https://e.gkd.li/97345886-418c-4a43-a5e2-014ee822b6a2',
         },
       ],
