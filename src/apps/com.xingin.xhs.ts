@@ -495,5 +495,22 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 20,
+      name: '权限提示-定位权限',
+      fastQuery: true,
+      actionMaximum: 1,
+      resetMatch: 'app',
+      rules: [
+        {
+          key: 0,
+          activityIds: ['.index.v2.IndexActivityV2'],
+          matches:
+            '[vid="homepageNearbyPermissionTitle"][visibleToUser=true] +3 [vid="homepageNearbyPermissionCancel"][clickable=true]',
+          snapshotUrls: 'https://i.gkd.li/i/34877280',
+          exampleUrls: 'https://e.gkd.li/515fd995-ed06-4508-b1fb-a55cdd8c7888',
+        },
+      ],
+    },
   ],
 });
