@@ -479,5 +479,18 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 25,
+      name: '评价提示-商品评论区评价满意度',
+      desc: '评论插入满意度卡片 -> 关闭',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: 'com.taobao.android.detail.alittdetail.TTDetailActivity',
+          matches:
+            '@Button[desc="关闭"][clickable=true] - View[desc="你对看到的评价内容满意吗？"] <n View[childCount>8] <<(5-n) View[childCount=3] <<(5-n) [vid="dialog_fragment_layout_container"]',
+        },
+      ],
+    },
   ],
 });
