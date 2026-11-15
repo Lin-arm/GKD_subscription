@@ -7,10 +7,6 @@ body:
       value: |
         ## ⚠️ 在提交 issue 之前，请您务必确认以下信息，否则此 issue 可能会被关闭❗❗❗
 
-        > [!WARNING]
-        > - 不要提供截图，截图对编写规则**没有任何作用❗**
-        > - 不要使用**截屏快照**
-
   - type: checkboxes
     id: base-info-confirm
     attributes:
@@ -37,7 +33,7 @@ body:
     id: snapshot
     attributes:
       label: |
-        📸 需要适配界面的快照
+        📸 需要适配界面的**快照**（不要提供截图！！！不要使用截屏快照！！！）
       description: |
         快照是一个 zip 文件，快照链接是类似 "https://i.gkd.li/i/XXXXXXXX" 的文本，按照如下方式可获得快照信息
 
@@ -50,8 +46,10 @@ body:
     id: user-demand
     attributes:
       label: |
-        ✍ 请准确地描述你的需求
+        ✍ 请详细描述你希望实现的自动化操作
       description: |
-        例如，想要用 GKD 自动帮你做什么操作....
+        GKD 支持以下操作：点击、长按、滑动和按返回键。
+        请尽可能描述具体的操作目标、触发条件及预期行为。
+        例如：帮我点击「确定」按钮；当页面出现 xxx 时自动按返回键；当出现 xxx 时向上滑动。
     validations:
       required: true

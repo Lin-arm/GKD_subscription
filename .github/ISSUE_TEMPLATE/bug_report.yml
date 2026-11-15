@@ -7,10 +7,6 @@ body:
       value: |
         ## ⚠️ 在提交 issue 之前，请您务必确认以下信息，否则此 issue 可能会被关闭❗❗❗
 
-        > [!WARNING]
-        >   - 不要提供截图，截图对编写规则**没有任何作用❗**
-        >   - 不要使用**截屏快照**
-
   - type: checkboxes
     id: base-info-confirm
     attributes:
@@ -49,6 +45,8 @@ body:
     id: rule
     attributes:
       label: |
-        ✍ 请说明是哪一条规则 误触/出现问题（文字/触发记录界面截图）
+        ✍ 请说明是哪一条规则 误触/出现问题（文字/触发记录截图）
+      description: |
+        若是误触，最好带上触发记录截图
     validations:
       required: true
