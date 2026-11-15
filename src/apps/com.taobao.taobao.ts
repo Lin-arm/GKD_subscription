@@ -465,5 +465,19 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 24,
+      name: '功能类-删除订单直接确认',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: 'com.taobao.tao.welcome.Welcome',
+          matches:
+            '@[desc="确定"][clickable=true] <2 [childCount=2] -3 [desc="确认删除订单?"][visibleToUser=true] < [childCount=4] <<(6-n) [id="android:id/content"]',
+          snapshotUrls: 'https://i.gkd.li/i/34883506',
+          exampleUrls: 'https://e.gkd.li/144c8e02-239b-4a68-904b-5a923a6408dd',
+        },
+      ],
+    },
   ],
 });
