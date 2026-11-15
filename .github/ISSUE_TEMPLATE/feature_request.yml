@@ -33,7 +33,7 @@ body:
     id: snapshot
     attributes:
       label: |
-        📸 需要适配界面的**快照**（不要提供截图！！！不要使用截屏快照！！！）
+        📸 需要适配界面的快照（不要提供截图！！！不要使用截屏快照！！！）
       description: |
         快照是一个 zip 文件，快照链接是类似 "https://i.gkd.li/i/XXXXXXXX" 的文本，按照如下方式可获得快照信息
 
