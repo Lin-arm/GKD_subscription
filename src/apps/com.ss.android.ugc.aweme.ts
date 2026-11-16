@@ -234,13 +234,19 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          matches:
+          anyMatches: [
             '@[clickable=true][text="不感兴趣"] +(1,2,5) FlattenUIText[text="不感兴趣"]',
+            '@[clickable=true][width<580 && height<170] > TextView[text="不感兴趣"][visibleToUser=true]',
+          ],
           snapshotUrls: [
-            'https://i.gkd.li/i/13800207',
+            // +1
             'https://i.gkd.li/i/13996724',
+            // +2
+            'https://i.gkd.li/i/13800207',
             'https://i.gkd.li/i/20035670',
             'https://i.gkd.li/i/34876101',
+            // 父子关系
+            'https://i.gkd.li/i/34942616',
           ],
           exampleUrls: 'https://e.gkd.li/f967dcd3-2196-4095-b5f0-a2cae15bdf23',
         },
