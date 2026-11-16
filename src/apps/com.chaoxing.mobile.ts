@@ -75,6 +75,7 @@ export default defineGkdApp({
             '.notify.ui.NoticeBodyActivity',
             '.webapp.ui.WebAppCommonViewer',
             '.group.ui.TopicBodyActivity',
+            'com.chaoxing.android.scan.ScannerActivity',
           ],
           matches: [
             '[text*="剪贴板内容已更新"][visibleToUser=true]',
@@ -84,6 +85,7 @@ export default defineGkdApp({
             'https://i.gkd.li/i/33947533',
             'https://i.gkd.li/i/34332781',
             'https://i.gkd.li/i/34748077',
+            'https://i.gkd.li/i/34897863',
           ],
           exampleUrls: 'https://e.gkd.li/c5a068c5-33ee-4911-a1a8-238b73097f53',
         },
