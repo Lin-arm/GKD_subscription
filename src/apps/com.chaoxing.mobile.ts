@@ -71,12 +71,13 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: [
-            '.notify.ui.NoticeBodyActivity',
-            '.webapp.ui.WebAppCommonViewer',
-            '.group.ui.TopicBodyActivity',
-            'com.chaoxing.android.scan.ScannerActivity',
-          ],
+          // activityIds: [  //界面太多,懒得挨个适配
+          //   '.notify.ui.NoticeBodyActivity',
+          //   '.webapp.ui.WebAppCommonViewer',
+          //   '.group.ui.TopicBodyActivity',
+          //   'com.chaoxing.android.scan.ScannerActivity',
+          //   '.main.ui.MainTabActivity',
+          // ],
           matches: [
             '[text*="剪贴板内容已更新"][visibleToUser=true]',
             '[text="知道了"][clickable=true]',
@@ -86,6 +87,7 @@ export default defineGkdApp({
             'https://i.gkd.li/i/34332781',
             'https://i.gkd.li/i/34748077',
             'https://i.gkd.li/i/34897863',
+            'https://i.gkd.li/i/34901303',
           ],
           exampleUrls: 'https://e.gkd.li/c5a068c5-33ee-4911-a1a8-238b73097f53',
         },
