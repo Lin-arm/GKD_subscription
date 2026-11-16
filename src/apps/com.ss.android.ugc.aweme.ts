@@ -419,10 +419,11 @@ export default defineGkdApp({
           },
           activityIds: '.main.MainActivity',
           matches:
-            '([visibleToUser=true] > [text$="广告" || text$="（推广）"][vid="desc" || desc="广告"]) || ([text="应用" || text="购物" || text="咨询" || text="服务" || text="预约" || text="子薇剧场"][text.length<6][index=1][visibleToUser=true]) || (ViewGroup[childCount=5] > ImageView +3 [text^="已售" || text^=" 已售"] - TextView - [text="讲解中 丨 "][index=1][visibleToUser=true])', // (选择器A) || (选择器B) || (选择器C)
+            '([visibleToUser=true] > [text*="广告" || text$="（推广）"][vid="desc" || desc="广告"]) || ([text="应用" || text="购物" || text="咨询" || text="服务" || text="预约" || text="子薇剧场"][text.length<6][index=1][visibleToUser=true]) || (ViewGroup[childCount=5] > ImageView +3 [text^="已售" || text^=" 已售"] - TextView - [text="讲解中 丨 "][index=1][visibleToUser=true])', // (选择器A) || (选择器B) || (选择器C)
           snapshotUrls: [
             // 选择器A
             'https://i.gkd.li/i/21142063', // [text$="广告"][vid="desc"]
+            'https://i.gkd.li/i/34942307', // [text*="广告"][vid="desc"]
             'https://i.gkd.li/i/29403811', // [text$="（推广）"][vid="desc"]
             'https://i.gkd.li/i/29403704', // [text$="广告"][desc="广告"]
             'https://i.gkd.li/i/29403301', // [text$="广告"][desc="广告"] [visibleToUser=false]
