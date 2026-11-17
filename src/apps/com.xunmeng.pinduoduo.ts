@@ -677,5 +677,20 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 34,
+      name: '功能类-搜索页-长按词条直接删除',
+      desc: '你的搜索商品历史,长按一个词条-> x掉',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: '.activity.NewPageActivity',
+          matches:
+            '[desc^="清除"][clickable=true] - [text="最近搜索"] - [vid="icon"] < RelativeLayout[childCount=3] + ViewGroup > [text=""][clickable=true][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/34990299',
+          exampleUrls: 'https://e.gkd.li/fbb6437e-63fe-4b6e-8685-8ec5b5d32353',
+        },
+      ],
+    },
   ],
 });
