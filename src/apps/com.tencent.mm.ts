@@ -372,8 +372,8 @@ export default defineGkdApp({
           key: 0,
           fastQuery: true,
           anyMatches: [
-            'Button[text^="查看"][clickable=true][visibleToUser=true]',
-            'Button[clickable=true][text^="查看"][visibleToUser=true]',
+            'Button[text^="查看"][text!$="0K"][clickable=true][visibleToUser=true]',
+            'Button[clickable=true][text^="查看"][text!$="0K"][visibleToUser=true]',
           ],
           exampleUrls:
             'https://m.gkd.li/57941037/6bb9e68a-43f5-4482-96b1-899cc86fef32',
@@ -383,11 +383,12 @@ export default defineGkdApp({
             'https://i.gkd.li/i/19515095',
             'https://i.gkd.li/i/19645122', // 无法快速查询
           ],
+          excludeSnapshotUrls: 'https://i.gkd.li/i/34987211', // 0Kb原图
         },
         {
           key: 1,
-          activityIds: '.ui.LauncherUI',
-          matches: '[text^="原图"][clickable=true][visibleToUser=true]',
+          matches:
+            '[text^="原图"][text!$="0K"][clickable=true][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/25009442',
         },
       ],
