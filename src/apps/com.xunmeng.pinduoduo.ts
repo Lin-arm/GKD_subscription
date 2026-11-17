@@ -300,13 +300,16 @@ export default defineGkdApp({
           ],
           action: 'clickCenter',
           matches:
-            '@Button[text="关闭弹窗" || desc="关闭弹窗"][clickable=true] <n View[childCount>1] <<(1,2) View[id="main"] <<2 WebView[text="拼多多"] <<3 FrameLayout[vid!=null] <2 ViewGroup <2 FrameLayout <<3 [id="android:id/content"]',
+            '@Button[text="关闭弹窗" || desc="关闭弹窗"][clickable=true] <n View[childCount>1] <<(1,2) View[id="main"] <<2 WebView[text="拼多多" || text=""] <<3 FrameLayout[vid!=null] <2 ViewGroup <2 FrameLayout <<3 [id="android:id/content"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13308175', // 老快照无vid
+            // WebView[text="拼多多"]
             'https://i.gkd.li/i/13927594',
             'https://i.gkd.li/i/14434154',
             'https://i.gkd.li/i/14456017',
             'https://i.gkd.li/i/23256823',
+            // WebView[text=""]
+            'https://i.gkd.li/i/34986289',
           ],
         },
         {
