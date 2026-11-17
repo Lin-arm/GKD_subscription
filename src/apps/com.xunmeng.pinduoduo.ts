@@ -478,7 +478,10 @@ export default defineGkdApp({
           fastQuery: true,
           action: 'clickCenter', // 不响应无障碍事件
           matches: '[text="展开"][visibleToUser=true]',
+          excludeMatches:
+            '[text="轻触照亮" || text$="相册"][clickable=true][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/29405868',
+          excludeSnapshotUrls: 'https://i.gkd.li/i/34986764', // 拍照搜商品
         },
         {
           key: 1,
