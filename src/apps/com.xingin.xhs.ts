@@ -121,7 +121,10 @@ export default defineGkdApp({
       name: '分段广告-信息流广告',
       desc: '①长按[赞助/广告]卡片 ②点击[不喜欢]',
       fastQuery: true,
-      activityIds: '.index.v2.IndexActivityV2',
+      activityIds: [
+        '.index.v2.IndexActivityV2',
+        'com.xingin.alioth.search.GlobalSearchHalfScreenActivity',
+      ],
       rules: [
         {
           key: 0,
@@ -135,6 +138,7 @@ export default defineGkdApp({
             'https://i.gkd.li/i/13470690',
             'https://i.gkd.li/i/27015032',
             'https://i.gkd.li/i/27015306',
+            'https://i.gkd.li/i/34992416',
           ],
           excludeSnapshotUrls: 'https://i.gkd.li/i/14392171', // 防止反复触发规则
           exampleUrls: [
