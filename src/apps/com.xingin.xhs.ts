@@ -465,11 +465,12 @@ export default defineGkdApp({
     {
       key: 18,
       name: '功能类-自动[翻译]评论',
-      // desc: '⚠️有可能触发[回复评论]情况,新版app暂无问题',
+      desc: '⚠️上滑太快可能有误触[收藏]情况',
       rules: [
         {
           fastQuery: true,
           actionCd: 500,
+          actionDelay: 50,
           activityIds: [
             'com.xingin.matrix.notedetail.NoteDetailActivity',
             'com.xingin.matrix.detail.activity.DetailFeedActivity',
