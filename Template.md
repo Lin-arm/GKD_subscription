@@ -41,7 +41,13 @@
   https://xget.xi-xu.me/gh/Lin-arm/GKD_subscription/raw/main/dist/gkd.json5
   ```
 
-- jsdelivr源 (国内可用但可能不稳定,更新滞后24h)
+- jsdelivr源一 (国内可用但可能不稳定)
+
+  ```txt
+  https://fastly.jsdelivr.net/gh/Lin-arm/GKD_subscription@main/dist/gkd.json5
+  ```
+
+- jsdelivr源二 (国内可用但可能不稳定,更新滞后24h)
 
   ```txt
   https://cdn.jsdelivr.net/gh/Lin-arm/GKD_subscription@main/dist/gkd.json5
