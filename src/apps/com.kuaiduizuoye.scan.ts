@@ -17,10 +17,12 @@ export default defineGkdApp({
         {
           key: 1,
           name: '①点击[关闭]',
-          matches: '[width>700][height<300] >3 [text="关闭"][clickable=true]',
+          matches:
+            '[width>700][height<300] >(2,3) [text="关闭"][clickable=true]',
           snapshotUrls: [
             'https://i.gkd.li/i/33854308',
             'https://i.gkd.li/i/34192315',
+            'https://i.gkd.li/i/35073276',
           ],
           exampleUrls: 'https://e.gkd.li/e81f7bbd-a5ce-4b57-b09a-185bd9529c9d',
         },
