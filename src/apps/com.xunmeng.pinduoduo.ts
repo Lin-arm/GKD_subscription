@@ -248,26 +248,35 @@ export default defineGkdApp({
     },
     {
       key: 10,
-      name: '全屏广告-多多视频划到广告自动跳过',
-      desc: '点击返回自动刷新，从而跳过广告',
-      fastQuery: true,
-      activityIds: '.ui.activity.HomeActivity',
+      name: '功能类-[上滑]继续看视频',
+      desc: '刷视频刷到 广告/直播 时自动[上滑]',
       rules: [
         {
           key: 0,
-          matches: [
-            'TextView[text="正在直播"]',
-            '@ImageView[desc="返回"] <4 ViewGroup < * < * < [id="android:id/content"]',
+          fastQuery: true,
+          activityIds: [
+            '.ui.activity.HomeActivity',
+            '.ui.activity.MainFrameActivity',
           ],
-          snapshotUrls: 'https://i.gkd.li/i/13446291',
-        },
-        {
-          key: 1,
-          matches: [
-            'TextView[text="查看更多低价商品"]',
-            '@ImageView[desc="返回"] <4 ViewGroup < * < * < [id="android:id/content"]',
+          swipeArg: {
+            start: {
+              x: 'screenWidth/2',
+              y: 'screenHeight * 0.7',
+            },
+            end: {
+              x: 'screenWidth/2',
+              y: 'screenHeight * 0.3',
+            },
+            duration: 200,
+          },
+          matches:
+            '[text="上滑继续看视频" || text="点击进入直播间"][visibleToUser=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/13791119',
+            'https://i.gkd.li/i/13446291',
+            'https://i.gkd.li/i/35063484',
           ],
-          snapshotUrls: 'https://i.gkd.li/i/13791119',
+          exampleUrls: 'https://e.gkd.li/136b0844-1d93-4192-95c7-ad42129e86b9',
         },
       ],
     },
