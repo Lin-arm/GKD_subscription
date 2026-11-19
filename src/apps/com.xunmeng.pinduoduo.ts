@@ -486,11 +486,14 @@ export default defineGkdApp({
           name: '通用[展开]_fastQ',
           fastQuery: true,
           action: 'clickCenter', // 不响应无障碍事件
+          excludeMatches: '[text$="相册" || text="追剧"][visibleToUser=true]',
           matches: '[text="展开"][visibleToUser=true]',
-          excludeMatches:
-            '[text="轻触照亮" || text$="相册"][clickable=true][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/29405868',
-          excludeSnapshotUrls: 'https://i.gkd.li/i/34986764', // 拍照搜商品
+          excludeSnapshotUrls: [
+            'https://i.gkd.li/i/34986764', // 我的相册
+            'https://i.gkd.li/i/35064077', // 追剧
+            'https://i.gkd.li/i/35064076', // 追剧
+          ],
         },
         {
           key: 1,
@@ -514,7 +517,7 @@ export default defineGkdApp({
           fastQuery: true,
           activityIds: '.activity.NewPageActivity',
           matches:
-            '@[desc="展开"][clickable=true] - FrameLayout > ViewGroup[vid="pdd"][childCount>5] >2 [text^="全部("]',
+            '@[desc="展开"][clickable=true] - FrameLayout > ViewGroup[childCount>5][vid="pdd"] >2 [text^="全部("]',
           snapshotUrls: 'https://i.gkd.li/i/29604643',
         },
       ],
