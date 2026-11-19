@@ -39,38 +39,44 @@ export default defineGkdApp({
     {
       key: 2,
       name: '局部广告-直播间悬浮广告',
+      fastQuery: true,
       activityIds: '.liveroom.ChannelPage',
       rules: [
         {
           key: 0,
-          fastQuery: true,
-          matches: '[vid="ad_close"]',
+          matches:
+            '[vid="ad_close" || vid="game_header_close" || vid="iv_vertical_close"][clickable=true]',
           snapshotUrls: [
-            'https://i.gkd.li/i/12901045',
-            'https://i.gkd.li/i/12901044',
+            'https://i.gkd.li/i/12901045', //旧, ad_close
+            'https://i.gkd.li/i/12901044', //旧, ad_close
+            'https://i.gkd.li/i/13395604', //旧, game_header_close
+            'https://i.gkd.li/i/13395606', //旧, game_header_close
+            'https://i.gkd.li/i/35090738', // iv_vertical_close
           ],
+          exampleUrls: 'https://e.gkd.li/8a375b99-4905-476c-8ff6-c27f4ef7a613',
         },
         {
           key: 1,
-          fastQuery: true,
-          matches: '[vid="game_header_close"]',
-          snapshotUrls: [
-            'https://i.gkd.li/i/13395604',
-            'https://i.gkd.li/i/13395606',
-          ],
+          matches:
+            '@[desc="关闭"] <n ViewGroup +2 FrameLayout >3 [text="广告"]',
+          snapshotUrls: 'https://i.gkd.li/i/35090752',
+          exampleUrls: 'https://e.gkd.li/178268bf-af87-45b2-a41b-707b3bb5461a',
         },
         {
           key: 2,
-          fastQuery: true,
           matches: '[vid="popup_banner"] >2 [vid="ui_count_down"]',
-          snapshotUrls: ['https://i.gkd.li/i/13417245'],
+          snapshotUrls: 'https://i.gkd.li/i/13417245',
         },
         {
           key: 3,
-          fastQuery: true,
+          activityIds: ['.liveroom.ChannelPage', '.homepage.Homepage'],
           matches:
-            '@ViewGroup[clickable=true][visibleToUser=true] <2 ViewGroup < FrameLayout <2 FrameLayout < [vid="miniapp_content_container"]',
-          snapshotUrls: 'https://i.gkd.li/i/13401266',
+            '@[id=null][visibleToUser=true][width<72 && height<72][right>prev.right.minus(20)] <<n [vid="miniapp_content_container"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/13401266', //无vid旧快照
+            'https://i.gkd.li/i/35090761',
+          ],
+          exampleUrls: 'https://e.gkd.li/fdb69898-e142-4bcb-be1c-408d6a9fd392',
         },
       ],
     },
