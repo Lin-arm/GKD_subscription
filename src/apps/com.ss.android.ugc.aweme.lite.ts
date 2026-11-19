@@ -293,68 +293,6 @@ export default defineGkdApp({
       ],
     },
     {
-      key: 17,
-      name: '功能类-评论区-自动展开评论',
-      desc: '只展开一级评论，不点击展示更多',
-      fastQuery: true,
-      activityIds: [
-        '.detail.ui.DetailActivity',
-        '.com.ss.android.ugc.aweme.main.MainActivity',
-        '.com.bytedance.ies.ugc.aweme.photos.detail.flow.page.FlowPageActivity',
-        '.searcharticle.detail.ArticleDetailActivity',
-        '.search.activity.SearchResultActivity',
-        '.detail.ultra.ui.UltraDetailActivity',
-        '.playlet.videodetail.PlayletVideoPlayActivity',
-      ],
-      rules: [
-        {
-          key: 0,
-          matches: '@[clickable=true] > [text^="展开"][text$="回复"]',
-          snapshotUrls: 'https://i.gkd.li/i/32755488',
-          excludeSnapshotUrls: 'https://i.gkd.li/i/32755811', // 排除 [展开更多]
-          exampleUrls: [
-            'https://e.gkd.li/a2be5c9e-afe9-4992-8c83-bbe191d68d76',
-            'https://e.gkd.li/1609405d-5a20-445d-bb2f-5de5a9b1237d', // 排除 [展开更多]
-          ],
-        },
-        // {
-        //   key: 1,
-        //   matches:
-        //     '[text^="展开"][text$="回复"] <2 @[clickable=true][childCount=3] <<n ViewPager <(3,4) LinearLayout + [childCount=2] > [desc$="评论区"] + [vid="back_btn"]',
-        //   snapshotUrls: 'null', // 此情况勘查未遇到,碰上再说
-        // },
-      ],
-    },
-    {
-      key: 18,
-      name: '功能类-评论区-自动展开评论_全部',
-      desc: '基于上面追加点击展开更多',
-      fastQuery: true,
-      activityIds: [
-        '.detail.ui.DetailActivity',
-        '.com.ss.android.ugc.aweme.main.MainActivity',
-        '.com.bytedance.ies.ugc.aweme.photos.detail.flow.page.FlowPageActivity',
-        '.searcharticle.detail.ArticleDetailActivity',
-        '.search.activity.SearchResultActivity',
-        '.detail.ultra.ui.UltraDetailActivity',
-        '.playlet.videodetail.PlayletVideoPlayActivity',
-      ],
-      rules: [
-        {
-          key: 0,
-          matches: '@[clickable=true] > [text^="展开更多"]',
-          snapshotUrls: 'https://i.gkd.li/i/32755811',
-          exampleUrls: 'https://e.gkd.li/1609405d-5a20-445d-bb2f-5de5a9b1237d',
-        },
-        // {
-        //   key: 2,
-        //   matches:
-        //     '[text^="展开更多"] <2 @[clickable=true][childCount=3] <<n ViewPager <(3,4) LinearLayout + [childCount=2] > [desc$="评论区"] + [vid="back_btn"]',
-        //   snapshotUrls: 'null',
-        // },
-      ],
-    },
-    {
       key: 19,
       name: '功能类-自动开启[自动连播]',
       desc: '仅在刚进抖极时第1个视频生效, ①[长按]视频 ②开启[自动联播]',
