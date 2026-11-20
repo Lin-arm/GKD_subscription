@@ -558,22 +558,32 @@ export default defineGkdApp({
     {
       key: 21,
       name: '功能类-自动[展开更多]评论',
-      desc: '点击[展开更多/展开n条回复]',
+      desc: '小说段评区/短剧评论区, 点击[展开更多/展开n条回复]',
       rules: [
         {
           fastQuery: true,
           actionCd: 500,
-          activityIds: '.reader.ui.ReaderActivity',
+          activityIds: [
+            '.reader.ui.ReaderActivity', //A 小说阅读界面
+            '.pages.main.MainFragmentActivity', //B 短剧界面
+          ],
           matches: [
-            '[id="android:id/content"][height>prev.height.plus(100)] >2 [id="android:id/content"]', //出现评论区的可快查特征, 防阻塞同界面的其他规则
+            '[id="android:id/content"][height>prev.height.plus(100)] >n [id="android:id/content"][height>500]', //出现评论区的可快查特征, 防阻塞同界面的其他规则
             '@[clickable=true] > [visibleToUser=true][text^="展开"][text$="回复" || text$="更多"]', //无快查
           ],
           snapshotUrls: [
-            'https://i.gkd.li/i/35147917', //展开...条回复
-            'https://i.gkd.li/i/35147919', //展开更多
+            'https://i.gkd.li/i/35147917', //A 展开...条回复
+            'https://i.gkd.li/i/35147919', //A 展开更多
+            'https://i.gkd.li/i/35173217', //B 展开...条回复
           ],
-          excludeSnapshotUrls: 'https://i.gkd.li/i/35165101', //阅读界面,未出现评论区
-          exampleUrls: 'https://e.gkd.li/e0c12712-4b1e-4b75-a9ec-d1a8042156f6',
+          excludeSnapshotUrls: [
+            'https://i.gkd.li/i/35165101', //A 阅读界面,未出现评论区
+            'https://i.gkd.li/i/35173220', //B 短剧界面,未出现评论区
+          ],
+          exampleUrls: [
+            'https://e.gkd.li/e0c12712-4b1e-4b75-a9ec-d1a8042156f6',
+            'https://e.gkd.li/0d2d257a-abda-4255-b971-faf06b565cb7',
+          ],
         },
       ],
     },
