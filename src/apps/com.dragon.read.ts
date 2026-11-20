@@ -555,5 +555,28 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 22,
+      name: '功能类-自动展开评论回复',
+      desc: '自动点击[展开X条回复]和[展开更多]',
+      actionCd: 1000,
+      rules: [
+        {
+          key: 0,
+          name: '点击[展开X条回复]',
+          matches:
+            '@[clickable=true][visibleToUser=true] > TextView[text^="展开"][text*="条回复"][visibleToUser=true] + [desc="arrow_footer"]',
+          snapshotUrls: 'https://i.gkd.li/i/35147917',
+        },
+        {
+          key: 1,
+          name: '点击[展开更多]',
+          activityIds: '.reader.ui.ReaderActivity',
+          matches:
+            '@[clickable=true][visibleToUser=true] > TextView[text="展开更多"][visibleToUser=true] + [desc="arrow_footer"]',
+          snapshotUrls: 'https://i.gkd.li/i/35147919',
+        },
+      ],
+    },
   ],
 });
