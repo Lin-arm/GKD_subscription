@@ -260,5 +260,22 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 10,
+      name: '权限提示-通讯录权限',
+      desc: '点击[以后再说]',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: 'com.yxcorp.gifshow.HomeActivity',
+          matches: [
+            '[text*="通讯录"][visibleToUser=true]',
+            '[text="以后再说"][clickable=true]',
+          ],
+          snapshotUrls: 'https://i.gkd.li/i/35119491',
+          exampleUrls: 'https://e.gkd.li/3c25da6d-bc0d-420d-9362-c8bb1edf322b',
+        },
+      ],
+    },
   ],
 });
