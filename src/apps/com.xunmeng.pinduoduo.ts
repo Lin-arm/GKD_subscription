@@ -224,24 +224,29 @@ export default defineGkdApp({
       fastQuery: true,
       matchTime: 10000,
       actionMaximum: 1,
-      activityIds: '.ui.activity.HomeActivity',
+      activityIds: [
+        '.ui.activity.HomeActivity',
+        'com.bbk.launcher2.Launcher',
+        '.ui.activity.MainFrameActivity',
+      ],
       rules: [
         {
           key: 0,
-          name: '自动签到',
+          name: '①自动签到',
           matches:
-            '@[clickable=true] >2 [text="领取今日现金"][visibleToUser=true]',
+            '@[clickable=true] >(1,2) [text="领取今日现金"][visibleToUser=true]',
           snapshotUrls: [
             'https://i.gkd.li/i/13201422',
             'https://i.gkd.li/i/13372677',
+            'https://i.gkd.li/i/35172532',
           ],
         },
         {
           preKeys: [0],
           key: 1,
-          name: '在签到后关闭弹窗',
+          name: '②签到后关闭弹窗',
           matches:
-            '@[clickable=true] >2 [text="明日继续来领"][visibleToUser=true]',
+            '@[clickable=true] >(1,2) [text="明日继续来领"][visibleToUser=true]',
           snapshotUrls: 'https://i.gkd.li/i/13205634',
         },
       ],
