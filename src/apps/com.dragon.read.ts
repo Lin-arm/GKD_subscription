@@ -573,6 +573,7 @@ export default defineGkdApp({
             'https://i.gkd.li/i/35147919', //展开更多
           ],
           excludeSnapshotUrls: 'https://i.gkd.li/i/35165101', //阅读界面,未出现评论区
+          exampleUrls: 'https://e.gkd.li/e0c12712-4b1e-4b75-a9ec-d1a8042156f6',
         },
       ],
     },
