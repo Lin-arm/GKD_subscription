@@ -556,25 +556,23 @@ export default defineGkdApp({
       ],
     },
     {
-      key: 22,
-      name: '功能类-自动展开评论回复',
-      desc: '自动点击[展开X条回复]和[展开更多]',
-      actionCd: 1000,
+      key: 21,
+      name: '功能类-自动[展开更多]评论',
+      desc: '点击[展开更多/展开n条回复]',
       rules: [
         {
-          key: 0,
-          name: '点击[展开X条回复]',
-          matches:
-            '@[clickable=true][visibleToUser=true] > TextView[text^="展开"][text*="条回复"][visibleToUser=true] + [desc="arrow_footer"]',
-          snapshotUrls: 'https://i.gkd.li/i/35147917',
-        },
-        {
-          key: 1,
-          name: '点击[展开更多]',
+          fastQuery: true,
+          actionCd: 500,
           activityIds: '.reader.ui.ReaderActivity',
-          matches:
-            '@[clickable=true][visibleToUser=true] > TextView[text="展开更多"][visibleToUser=true] + [desc="arrow_footer"]',
-          snapshotUrls: 'https://i.gkd.li/i/35147919',
+          matches: [
+            '[id="android:id/content"][height>prev.height.plus(100)] >2 [id="android:id/content"]', //出现评论区的可快查特征, 防阻塞同界面的其他规则
+            '@[clickable=true] > [visibleToUser=true][text^="展开"][text$="回复" || text$="更多"]', //无快查
+          ],
+          snapshotUrls: [
+            'https://i.gkd.li/i/35147917', //展开...条回复
+            'https://i.gkd.li/i/35147919', //展开更多
+          ],
+          excludeSnapshotUrls: 'https://i.gkd.li/i/35165101', //阅读界面,未出现评论区
         },
       ],
     },
