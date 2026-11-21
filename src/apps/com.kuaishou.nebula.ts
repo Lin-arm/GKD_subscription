@@ -39,17 +39,17 @@ export default defineGkdApp({
     },
     {
       key: 3,
-      name: '全屏广告-红包弹窗',
+      name: '全屏广告',
       fastQuery: true,
+      activityIds: [
+        'com.yxcorp.gifshow.HomeActivity',
+        'com.yxcorp.plugin.search.SearchActivity',
+      ],
       rules: [
         {
           key: 0,
-          activityIds: [
-            'com.yxcorp.gifshow.HomeActivity',
-            'com.yxcorp.plugin.search.SearchActivity',
-          ],
           matches:
-            '@[clickable=true][width<128][index=parent.childCount.minus(1)] -(1,2) ViewGroup > [text="点击立得奖励" || text^="邀请" || text="红包"]',
+            '@[clickable=true][width<128][index=parent.childCount.minus(1)] -(1,2) ViewGroup > [text="点击立得奖励" || text^="邀请" || text="红包"][visibleToUser=true]',
           exampleUrls:
             'https://m.gkd.li/101449500/f7bbd1db-f519-4ff9-96cb-4cb5b2f483a2',
           snapshotUrls: [
@@ -62,13 +62,23 @@ export default defineGkdApp({
         },
         {
           key: 1,
-          activityIds: 'com.yxcorp.gifshow.HomeActivity',
           matches:
             '@ImageView[clickable=true][width<107 && height<107][index=0] + TextView[text$="红包"][text.length<10]',
           snapshotUrls: [
             'https://i.gkd.li/i/26678562', //邀好友得大额红包
             'https://i.gkd.li/i/28514398', //恭喜获得免费红包
           ],
+        },
+        {
+          key: 2,
+          position: {
+            left: 'width * 1.0557',
+            top: 'height * -0.0569',
+          },
+          matches:
+            '[height=0] < @ViewGroup[childCount=4] >3 [text="口令已复制"][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/35203973',
+          exampleUrls: 'https://e.gkd.li/6030f5cb-9d9d-4b0c-81f6-8b3912f90842',
         },
       ],
     },
