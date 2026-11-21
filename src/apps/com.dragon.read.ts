@@ -566,6 +566,8 @@ export default defineGkdApp({
           activityIds: [
             '.reader.ui.ReaderActivity', //A 小说阅读界面
             '.pages.main.MainFragmentActivity', //B 短剧界面
+            '.ad.openingscreenad.OpeningScreenADActivity', //C
+            '.component.shortvideo.impl.ShortSeriesActivity', //D
           ],
           matches: [
             '[id="android:id/content"][height>prev.height.plus(100)] >n [id="android:id/content"][height>500]', //出现评论区的可快查特征, 防阻塞同界面的其他规则
@@ -575,6 +577,8 @@ export default defineGkdApp({
             'https://i.gkd.li/i/35147917', //A 展开...条回复
             'https://i.gkd.li/i/35147919', //A 展开更多
             'https://i.gkd.li/i/35173217', //B 展开...条回复
+            'https://i.gkd.li/i/35203330', //C
+            'https://i.gkd.li/i/35203316', //D
           ],
           excludeSnapshotUrls: [
             'https://i.gkd.li/i/35165101', //A 阅读界面,未出现评论区
