@@ -19,5 +19,22 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 2,
+      name: '通知提示-更新提示',
+      matchTime: 20000,
+      actionMaximum: 1,
+      resetMatch: 'app',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: 'com.remote.app.ui.activity.ComposeMainActivity',
+          matches:
+            '@View[getChild(0).text$="不更新"][clickable=true][visibleToUser=true] -n TextView[text$="更新"] < [childCount=4] < * <2 View < ComposeView < [id="android:id/content"]',
+          snapshotUrls: 'https://i.gkd.li/i/35130030',
+          exampleUrls: 'https://e.gkd.li/427b504d-30f3-4e18-b525-5be6a6787801',
+        },
+      ],
+    },
   ],
 });
