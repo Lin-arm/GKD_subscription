@@ -14,12 +14,14 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          activityIds: '.MainActivity',
+          activityIds: ['.MainActivity', '.AppActivity'],
           matches:
-            '@Button[desc="知道了"][visibleToUser=true] <3 View < View < View < View < FrameLayout < [id="android:id/content"]',
-          exampleUrls:
-            'https://m.gkd.li/57941037/ae1792dd-210b-4ac2-bfce-c2081ed03498',
-          snapshotUrls: 'https://i.gkd.li/i/14559882',
+            'View[desc="公告"] +n @Button[desc="知道了"][clickable=true][visibleToUser=true] <<n [id="android:id/content"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/14559882',
+            'https://i.gkd.li/i/35229398',
+          ],
+          exampleUrls: 'https://e.gkd.li/a3782695-5b94-4588-9c82-24989d4e04bd',
         },
       ],
     },
