@@ -21,7 +21,8 @@ export default defineGkdApp({
     },
     {
       key: 2,
-      name: '通知提示-更新提示',
+      name: '更新提示',
+      desc: '点击[暂不更新]',
       matchTime: 20000,
       actionMaximum: 1,
       resetMatch: 'app',

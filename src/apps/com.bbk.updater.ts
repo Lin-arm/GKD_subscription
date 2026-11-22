@@ -6,7 +6,8 @@ export default defineGkdApp({
   groups: [
     {
       key: 1,
-      name: '通知提示-系统更新提示',
+      name: '更新提示',
+      desc: '按[返回键]',
       rules: [
         {
           fastQuery: true,

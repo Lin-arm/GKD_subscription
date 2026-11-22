@@ -404,7 +404,7 @@ export const updateBlackListAppIDs = new Set([
 
   'info.muge.appshare', // AppShare
   'com.jingdong.app.mall', // 京东
-  'com.netease.uuremote', // UU远程（不更新会强制退出）
+  'com.netease.uuremote', // UU远程（不更新会强制退出） （存疑,可能特定版本才会强制退出）
   'com.zhjy.study', // 智慧职教（不更新会强制退出）
   'com.cmri.universalapp', // 移动爱家 在 https://i.gkd.li/i/26874543 误触(局部广告)了
   'com.hihonor.appmarket', // 荣耀应用市场
