@@ -36,5 +36,20 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 2,
+      name: '局部广告-讲解视频浮窗',
+      desc: 'x掉',
+      rules: [
+        {
+          activityIds:
+            '.activity.manyquestionsearch.activity.PicManySearchActivity',
+          matches:
+            '@TextView[visibleToUser=true][width<126] - [childCount=3] > TextView + Image[text.length>50][width<143 && height>82]',
+          snapshotUrls: 'https://i.gkd.li/i/35228963',
+          exampleUrls: 'https://e.gkd.li/e37a46fe-9464-405e-9a93-608a865a519f',
+        },
+      ],
+    },
   ],
 });
