@@ -25,5 +25,23 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 2,
+      name: '更新提示',
+      desc: '点击[下次提醒]',
+      matchTime: 10000,
+      actionMaximum: 1,
+      resetMatch: 'app',
+      rules: [
+        {
+          activityIds: '.MainActivity',
+          matches: [
+            '[visibleToUser=true][desc*="更新" || desc*="新版本"]',
+            '[clickable=true][desc="下次提醒"]',
+          ],
+          snapshotUrls: 'https://i.gkd.li/i/35263945',
+        },
+      ],
+    },
   ],
 });
