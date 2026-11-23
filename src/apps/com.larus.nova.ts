@@ -38,5 +38,18 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 2,
+      name: '全屏广告',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: 'com.larus.home.impl.MainActivity',
+          matches: '[text*="去体验"] -n [vid="close_btn"][clickable=true]',
+          snapshotUrls: 'https://i.gkd.li/i/35264582',
+          exampleUrls: 'https://e.gkd.li/ea9d7744-425d-416d-913d-28e32e89c189',
+        },
+      ],
+    },
   ],
 });
