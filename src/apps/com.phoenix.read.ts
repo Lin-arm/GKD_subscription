@@ -81,12 +81,14 @@ export default defineGkdApp({
     {
       key: 2,
       name: '权限提示-通知权限',
-      desc: '点击[取消]',
+      desc: '点击[取消/暂不开启]',
       matchTime: 10000,
       actionMaximum: 1,
+      actionMaximumKey: 0,
       resetMatch: 'app',
       rules: [
         {
+          key: 0,
           fastQuery: true,
           // activityIds: null,
           matches: [
@@ -94,6 +96,13 @@ export default defineGkdApp({
             '[text="取消"]',
           ],
           snapshotUrls: 'https://i.gkd.li/i/33926663',
+        },
+        {
+          key: 1,
+          activityIds: 'com.dragon.read.pages.main.MainFragmentActivity',
+          matches:
+            '[text="暂不开启"] < @[clickable=true] -n [visibleToUser=true][text*="提醒" || text*="通知"]',
+          snapshotUrls: 'https://i.gkd.li/i/35252162',
         },
       ],
     },
