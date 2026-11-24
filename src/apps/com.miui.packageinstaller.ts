@@ -216,5 +216,22 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 20,
+      name: '功能类-关闭[未验证应用]提示',
+      desc: '点击[仍然安装]',
+      fastQuery: true,
+      activityIds: 'com.miui.packageInstaller.NewInstallerPrepareActivity',
+      rules: [
+        {
+          matches: [
+            '[text="未验证应用提醒"] + [text^="该应用未通过"]',
+            '[text="仍然安装"]',
+          ],
+          snapshotUrls: 'https://i.gkd.li/i/35331944',
+          exampleUrls: 'https://e.gkd.li/8838fcbd-1967-481b-9a1f-7bf3f8264c74',
+        },
+      ],
+    },
   ],
 });
