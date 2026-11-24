@@ -7,7 +7,7 @@ export default defineGkdApp({
     {
       key: 0,
       name: '开屏广告', // 该软件会屏蔽无障碍事件，需使用坐标点击方式并在高级设置里开启[启用优化]才能跳过
-      desc: '该规则需要在高级设置中开启[启用优化]才能生效',
+      desc: '⚠️该规则需在工作模式中开启[触摸优化],点击才能生效',
       matchTime: 10000,
       actionMaximum: 1,
       resetMatch: 'app',
