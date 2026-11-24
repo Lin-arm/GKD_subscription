@@ -111,6 +111,14 @@ export default defineGkdApp({
             'Image[text*=".jpg"][width<150 && height<150] < [visibleToUser=true] < @View[clickable=true][childCount=1] <<n FrameLayout[id=null] - [vid="layermanager_penetrate_webview_container_id"]',
           snapshotUrls: 'https://i.gkd.li/i/30710740',
         },
+        {
+          key: 6,
+          fastQuery: true,
+          activityIds: 'com.taobao.tao.welcome.Welcome',
+          matches:
+            '@Image[text*=".jpg"][width<150][visibleToUser=true] < [childCount=1][height<150] - [height>500] <<n [vid="poplayer_inner_view"]',
+          snapshotUrls: 'https://i.gkd.li/i/35306359',
+        },
       ],
     },
     {
