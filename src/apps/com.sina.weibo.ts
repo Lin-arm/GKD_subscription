@@ -42,13 +42,15 @@ export default defineGkdApp({
     },
     {
       key: 28,
-      name: '其他-关闭[添加热搜小组件]弹窗',
-      desc: '点击[暂不添加]跳过小组件引导',
+      name: '其他-添加小组件弹窗',
+      desc: '点击[暂不添加/取消]跳过组件引导',
+      fastQuery: true,
       activityIds:
         'com.sina.weibo.extlibui.appwidget.business.install.WidgetInstallDialogActivity',
       rules: [
         {
-          matches: '@[vid="tv_refuse"][text="暂不添加"]',
+          matches:
+            '@[vid="tv_refuse" || vid="btn_refuse" || vid="tv_cancel" || text="暂不添加" || text="取消" || text="暂不" || text="以后再说" || text="稍后再说"][clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/35392812',
         },
       ],
