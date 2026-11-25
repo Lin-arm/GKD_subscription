@@ -331,5 +331,40 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 28,
+      name: '全屏广告-小组件弹窗',
+      desc: '点击[暂不添加]跳过组件引导',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds:
+            '.extlibui.appwidget.business.install.WidgetInstallDialogActivity',
+          matches: [
+            '[text*="小组件"][visibleToUser=true]',
+            '[vid="tv_refuse"][clickable=true]',
+          ],
+          snapshotUrls: 'https://i.gkd.li/i/35392812',
+          exampleUrls: 'https://e.gkd.li/41feacfb-053c-410f-880f-ac8b8d31d607',
+        },
+      ],
+    },
+    {
+      key: 29,
+      name: '全屏广告-发现页弹窗',
+      desc: '点击×关闭发现页的发布会/直播推广弹窗',
+      rules: [
+        {
+          matchRoot: true,
+          actionMaximum: 1,
+          resetMatch: 'match',
+          activityIds: '.MainTabActivity',
+          matches:
+            '@[clickable=true][childCount=0] <1 [childCount=2] <2 * <1 * >2 [desc="广告"]',
+          snapshotUrls: 'https://i.gkd.li/i/35392878',
+          exampleUrls: 'https://e.gkd.li/6156ade7-09c6-48f6-897e-4e701f648b2e',
+        },
+      ],
+    },
   ],
 });
