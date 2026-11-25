@@ -366,5 +366,22 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 30,
+      name: '其他-关闭关注提示',
+      desc: '点击×关闭推荐关注横幅和铁粉关系提示',
+      fastQuery: true,
+      activityIds: [
+        '.feed.detailrefactor.DetailPageActivity',
+        '.search.searchv3.SearchActivityV2',
+      ],
+      rules: [
+        {
+          key: 0,
+          matches: '@[vid="ivClose"]',
+          snapshotUrls: 'https://i.gkd.li/i/35419581',
+        },
+      ],
+    },
   ],
 });
