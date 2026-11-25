@@ -16,10 +16,11 @@ export default defineGkdApp({
         {
           key: 0,
           matches:
-            '@LinearLayout[clickable=true] - [text^="互动广告"][visibleToUser=true]',
+            '@LinearLayout[clickable=true] -(1,2) [text^="互动广告" || text="广告"][visibleToUser=true]',
           snapshotUrls: [
             'https://i.gkd.li/i/13198082',
             'https://i.gkd.li/i/23557410',
+            'https://i.gkd.li/i/35394224',
           ],
         },
       ],
