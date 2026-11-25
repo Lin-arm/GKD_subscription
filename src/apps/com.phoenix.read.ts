@@ -7,7 +7,7 @@ export default defineGkdApp({
     {
       key: 1,
       name: '功能类-[上滑]继续看短剧',
-      desc: '①读秒结束后[上滑] ②未显示[选集]时,每5秒[上滑]1次',
+      desc: '出现 广告/直播间 时上滑跳过, ①读秒结束后[上滑] ②未显示[选集]时,每5秒[上滑]1次',
       fastQuery: true,
       activityIds: [
         'com.dragon.read.component.shortvideo.impl.ShortSeriesActivity', //A
