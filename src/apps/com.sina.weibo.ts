@@ -27,13 +27,18 @@ export default defineGkdApp({
             '@Image[text="close"] < View[childCount=4] <2 * <<n [vid="container"]',
           snapshotUrls: 'https://i.gkd.li/i/14033735',
         },
+      ],
+    },
+    {
+      key: 29,
+      name: '全屏广告-发现页弹窗',
+      desc: '点击×关闭发现页的发布会/直播推广弹窗',
+      activityIds: 'com.sina.weibo.MainTabActivity',
+      matchRoot: true,
+      actionMaximum: 1,
+      resetMatch: 'match',
+      rules: [
         {
-          key: 5,
-          name: '发布会/直播弹窗',
-          activityIds: 'com.sina.weibo.MainTabActivity',
-          matchRoot: true,
-          actionMaximum: 1,
-          resetMatch: 'match',
           matches:
             '@[clickable=true][childCount=0] <1 [childCount=2] <2 * <1 * >2 [desc="广告"]',
           snapshotUrls: 'https://i.gkd.li/i/35392878',
