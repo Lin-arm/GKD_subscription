@@ -30,36 +30,6 @@ export default defineGkdApp({
       ],
     },
     {
-      key: 29,
-      name: '全屏广告-发现页弹窗',
-      desc: '点击×关闭发现页的发布会/直播推广弹窗',
-      activityIds: 'com.sina.weibo.MainTabActivity',
-      matchRoot: true,
-      actionMaximum: 1,
-      resetMatch: 'match',
-      rules: [
-        {
-          matches:
-            '@[clickable=true][childCount=0] <1 [childCount=2] <2 * <1 * >2 [desc="广告"]',
-          snapshotUrls: 'https://i.gkd.li/i/35392878',
-        },
-      ],
-    },
-    {
-      key: 28,
-      name: '其他-添加小组件弹窗',
-      desc: '点击[暂不添加]跳过组件引导',
-      fastQuery: true,
-      activityIds:
-        'com.sina.weibo.extlibui.appwidget.business.install.WidgetInstallDialogActivity',
-      rules: [
-        {
-          matches: '@[vid="tv_refuse"][text="暂不添加"]',
-          snapshotUrls: 'https://i.gkd.li/i/35392812',
-        },
-      ],
-    },
-    {
       key: 9,
       name: '权限提示-通知权限',
       desc: '自动点击暂不开启',
@@ -358,6 +328,41 @@ export default defineGkdApp({
           matches: '[text$="不感兴趣"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/4d35d427-f6ab-42bf-a369-65c5b602fcdf',
           snapshotUrls: 'https://i.gkd.li/i/21828292',
+        },
+      ],
+    },
+    {
+      key: 28,
+      name: '全屏广告-小组件弹窗',
+      desc: '点击[暂不添加]跳过组件引导',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds:
+            '.extlibui.appwidget.business.install.WidgetInstallDialogActivity',
+          matches: [
+            '[text*="小组件"][visibleToUser=true]',
+            '[vid="tv_refuse"][clickable=true]',
+          ],
+          snapshotUrls: 'https://i.gkd.li/i/35392812',
+          exampleUrls: 'https://e.gkd.li/41feacfb-053c-410f-880f-ac8b8d31d607',
+        },
+      ],
+    },
+    {
+      key: 29,
+      name: '全屏广告-发现页弹窗',
+      desc: '点击×关闭发现页的发布会/直播推广弹窗',
+      rules: [
+        {
+          matchRoot: true,
+          actionMaximum: 1,
+          resetMatch: 'match',
+          activityIds: '.MainTabActivity',
+          matches:
+            '@[clickable=true][childCount=0] <1 [childCount=2] <2 * <1 * >2 [desc="广告"]',
+          snapshotUrls: 'https://i.gkd.li/i/35392878',
+          exampleUrls: 'https://e.gkd.li/6156ade7-09c6-48f6-897e-4e701f648b2e',
         },
       ],
     },
