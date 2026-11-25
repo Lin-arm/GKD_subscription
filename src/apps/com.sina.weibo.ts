@@ -27,6 +27,30 @@ export default defineGkdApp({
             '@Image[text="close"] < View[childCount=4] <2 * <<n [vid="container"]',
           snapshotUrls: 'https://i.gkd.li/i/14033735',
         },
+        {
+          key: 5,
+          name: '发布会/直播弹窗',
+          activityIds: 'com.sina.weibo.MainTabActivity',
+          matchRoot: true,
+          actionMaximum: 1,
+          resetMatch: 'match',
+          matches:
+            '@[clickable=true][childCount=0] <1 [childCount=2] <2 * <1 * >2 [desc="广告"]',
+          snapshotUrls: 'https://i.gkd.li/i/35392878',
+        },
+      ],
+    },
+    {
+      key: 28,
+      name: '其他-关闭[添加热搜小组件]弹窗',
+      desc: '点击[暂不添加]跳过小组件引导',
+      activityIds:
+        'com.sina.weibo.extlibui.appwidget.business.install.WidgetInstallDialogActivity',
+      rules: [
+        {
+          matches: '@[vid="tv_refuse"][text="暂不添加"]',
+          snapshotUrls: 'https://i.gkd.li/i/35392812',
+        },
       ],
     },
     {
