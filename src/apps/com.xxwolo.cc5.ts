@@ -11,7 +11,7 @@ export default defineGkdApp({
       rules: [
         {
           key: 0,
-          name: '①关闭横幅',
+          name: '关闭横幅',
           activityIds: 'com.cece.app.MainActivity',
           matchRoot: true,
           actionCd: 3000,
@@ -21,7 +21,7 @@ export default defineGkdApp({
         },
         {
           key: 1,
-          name: '②每日运势弹窗',
+          name: '每日运势弹窗',
           activityIds: 'com.cece.app.MainActivity',
           matchTime: 10000,
           actionMaximum: 3,
@@ -41,7 +41,7 @@ export default defineGkdApp({
       resetMatch: 'app',
       rules: [
         {
-          name: '①关闭',
+          name: '关闭',
           activityIds: 'com.cece.app.MainActivity',
           matches:
             '[desc^="添加小组件"] > @[desc="关闭"][clickable=true] + [desc="查看教程"][clickable=true]',
@@ -58,7 +58,7 @@ export default defineGkdApp({
       actionCd: 3000,
       rules: [
         {
-          name: '①关闭浮窗',
+          name: '关闭浮窗',
           activityIds: 'com.cece.app.MainActivity',
           matches:
             '@ImageView[clickable=true][childCount=0][width<80][height<80][visibleToUser=true] < [childCount=2][clickable=true][width<350][height<350][visibleToUser=true]',
