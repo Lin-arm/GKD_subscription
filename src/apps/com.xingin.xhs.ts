@@ -55,30 +55,44 @@ export default defineGkdApp({
       fastQuery: true,
       actionMaximum: 1,
       resetMatch: 'app',
+      activityIds: [
+        '.index.v2.IndexActivityV2',
+        '.notification.NotificationAuthorizationTranslucentActivity',
+        'com.xingin.matrix.notedetail.r10.comment.r10.NoteCommentActivity',
+        'com.xingin.authorization.NotificationAuthorizationTranslucentActivity',
+      ],
       rules: [
         {
           key: 0,
-          activityIds: [
-            '.index.v2.IndexActivityV2',
-            '.notification.NotificationAuthorizationTranslucentActivity',
-            'com.xingin.matrix.notedetail.r10.comment.r10.NoteCommentActivity',
-            'com.xingin.authorization.NotificationAuthorizationTranslucentActivity',
-          ],
+          name: '全屏弹窗1',
           matches:
             '@ImageView[clickable=true][visibleToUser=true] - LinearLayout > [text^="打开通知" || text^="Enable notifications"]',
           snapshotUrls: [
             'https://i.gkd.li/i/13195753',
             'https://i.gkd.li/i/13222356',
             'https://i.gkd.li/i/13255627',
-            'https://i.gkd.li/i/16918033',
             'https://i.gkd.li/i/18417785',
+            'https://i.gkd.li/i/16918033', // English
           ],
+          exampleUrls: 'https://e.gkd.li/09ce8f07-c7b6-4ce5-bd85-c8082295f7d9',
         },
         {
           key: 1,
+          name: '底部横幅',
           activityIds: '.index.v2.IndexActivityV2',
           matches: '@ImageView <2 FrameLayout - [text^="打开通知"]',
           snapshotUrls: 'https://i.gkd.li/i/13250418',
+          exampleUrls: 'https://e.gkd.li/e390e4d3-3101-46a2-9496-27a6bc1c89cd',
+        },
+        {
+          key: 2,
+          name: '全屏弹窗2',
+          matches: [
+            '[text="打开推送通知"][visibleToUser=true]',
+            '[text="取消"][clickable=true]',
+          ],
+          snapshotUrls: 'https://i.gkd.li/i/35457404',
+          exampleUrls: 'https://e.gkd.li/2cc4ec49-84b8-45fc-922c-2de4317cf26c',
         },
       ],
     },
