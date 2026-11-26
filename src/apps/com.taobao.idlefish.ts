@@ -189,13 +189,26 @@ export default defineGkdApp({
     {
       key: 6,
       name: '功能类-自动点击[查看原图]',
+      activityIds: [
+        'com.idlefish.flutterbridge.flutterboost.boost.FishFlutterBoostTransparencyActivity',
+        'com.idlefish.flutterbridge.flutterboost.boost.FishFlutterBoostActivity',
+        '.photo.DetailPhotoGalleryActivity',
+      ],
       rules: [
         {
-          activityIds: [
-            'com.idlefish.flutterbridge.flutterboost.boost.FishFlutterBoostTransparencyActivity',
-            'com.idlefish.flutterbridge.flutterboost.boost.FishFlutterBoostActivity',
-          ],
-          matches: '[desc="查看原图"][visibleToUser=true]',
+          key: 0,
+          name: '直接',
+          matches:
+            '@[vid="origin_image_btn"][clickable=true] > TextView[vid="origin_image_text"][text!=null][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/35469352',
+          exampleUrls: 'https://e.gkd.li/0da230d0-77ed-45a1-b366-c193ef7f8c3c',
+        },
+        {
+          key: 1,
+          name: '反射法',
+          actionCdKey: 0, // key0触发1休眠
+          matches:
+            '@[desc="查看原图"][clickable=true] <2 View[childCount>4] <<(8-n) FrameLayout + [vid="fish_layer_container_id"]',
           snapshotUrls: [
             'https://i.gkd.li/i/15463399',
             'https://i.gkd.li/i/27207770',
