@@ -11,14 +11,12 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          matchTime: 5000, //由其他app调用系统api唤起的 荣耀桌面 弹窗, 并非一直处于荣耀桌面, 因此加上执行限制
-          actionMaximum: 1,
+          matchTime: 12000, //由其他app调用系统api唤起的 荣耀桌面 弹窗, 并非一直处于荣耀桌面, 因此加上执行限制
+          actionMaximum: 2, //冗余一次
           resetMatch: 'app',
           activityIds: '.dragndrop.AddItemActivity',
-          matches: [
-            '[text="添加到主屏幕"][visibleToUser=true]',
-            '[text="取消"][clickable=true]',
-          ],
+          matches:
+            '[id="android:id/title_template"][getChild(0).text="添加到主屏幕" && visibleToUser=true] < [id="android:id/topPanel"] +(4-n) [id="android:id/buttonPanel"] > [childCount=2] > [id="android:id/button2"][text="取消"][clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/34847270',
           exampleUrls: 'https://e.gkd.li/ed73cb4e-4985-4960-a653-d7df9d473f4e',
         },
