@@ -51,6 +51,7 @@ export default defineGkdApp({
         },
         {
           key: 4,
+          actionCdKey: 3,
           matches:
             '@View[width<170 && height<170] <3 FrameLayout[childCount=3] < [vid="sdk_view"]',
           snapshotUrls: [
@@ -63,14 +64,13 @@ export default defineGkdApp({
         {
           key: 10,
           name: '点击坐标①',
+          actionCdKey: 3, //防止 key3、key4已经点击跳过了,短时间内进行坐标点击而导致误触
           position: {
             left: 'width * 0.875',
             top: 'width * 0.10', // 目标节点的height变化太大，不建议使用
           },
-          anyMatches: [
-            '[vid="ad_view"][visibleToUser=true][width>=720][childCount!=0]',
-            '[vid="sdk_view"] >n [vid="animation_view"][visibleToUser=true][width>=720]',
-          ],
+          matches:
+            '[vid="ad_view" || vid="sdk_view"][visibleToUser=true][width>=720][childCount!=0]',
           snapshotUrls: 'https://i.gkd.li/i/23283060', // 按钮[跳过]的位置的top在 (0.05 ~ 0.12) * 宽度1216 范围内
           excludeSnapshotUrls: 'https://i.gkd.li/i/29440952', // 白屏阶段 [vid="ad_loading_view"]
         },
@@ -82,11 +82,8 @@ export default defineGkdApp({
             left: 'width * 0.875',
             top: 'width * 0.135',
           },
-          anyMatches: [
-            // 选择器跟前面 key10 一样,只是点击位置不同
-            '[vid="ad_view"][visibleToUser=true][width>=720][childCount!=0]',
-            '[vid="sdk_view"] >n [vid="animation_view"][visibleToUser=true][width>=720]',
-          ],
+          matches:
+            '[vid="ad_view" || vid="sdk_view"][visibleToUser=true][width>=720][childCount!=0]', // 选择器跟前面一样,只是点击位置不同
           snapshotUrls: [
             'https://i.gkd.li/i/13575257', // (旧快照) top在 (0.10 ~ 0.17) * 1080 内
             'https://i.gkd.li/i/18423724', // (0.11 ~ 0.16) * 1080
@@ -102,10 +99,8 @@ export default defineGkdApp({
             left: 'width * 0.875',
             top: 'width * 0.17',
           },
-          anyMatches: [
-            '[vid="ad_view"][visibleToUser=true][width>=720][childCount!=0]',
-            '[vid="sdk_view"] >n [vid="animation_view"][visibleToUser=true][width>=720]', //2️⃣
-          ],
+          matches:
+            '[vid="ad_view" || vid="sdk_view"][visibleToUser=true][width>=720][childCount!=0]',
           snapshotUrls: [
             'https://i.gkd.li/i/13601755', // (旧快照) top在 (0.11 ~ 0.18) * 1200 内
             'https://i.gkd.li/i/23324118', // (0.13 ~ 0.20) * 1280
@@ -113,6 +108,7 @@ export default defineGkdApp({
             'https://i.gkd.li/i/23652259', // (0.12 ~ 0.19) * 1216
             'https://i.gkd.li/i/24191638', // (0.13 ~ 0.19) * 1260    2️⃣ (仅用[vid="sdk_view"]的话,可能误触key3漏掉的)
             'https://i.gkd.li/i/24362806', // (0.13 ~ 0.20) * 1440
+            'https://i.gkd.li/i/35417943', // (0.13 ~ 0.19) * 1080      (可能误触key3漏掉的)
           ],
         },
         {
@@ -123,10 +119,8 @@ export default defineGkdApp({
             left: 'width * 0.875',
             top: 'width * 0.20',
           },
-          anyMatches: [
-            '[vid="ad_view"][visibleToUser=true][width>=720][childCount!=0]',
-            '[vid="sdk_view"] >n [vid="animation_view"][visibleToUser=true][width>=720]',
-          ],
+          matches:
+            '[vid="ad_view" || vid="sdk_view"][visibleToUser=true][width>=720][childCount!=0]',
           snapshotUrls: 'https://i.gkd.li/i/16054268', // (0.15 ~ 0.22) * 1200
         },
       ],
