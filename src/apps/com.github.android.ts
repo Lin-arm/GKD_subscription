@@ -9,19 +9,22 @@ export default defineGkdApp({
       name: '功能类-自动批准授权验证',
       desc: '输入2位数字后-> 批准-> 关闭',
       activityIds: '.twofactor.TwoFactorActivity',
+      fastQuery: true,
       rules: [
         {
           key: 0,
-          matchRoot: true, // 输入数字后未响应
+          name: '①点击[批准]',
+          // matchRoot: true, // 输入数字后未响应
           matches:
-            '[text*="@"] + EditText[text.length=2][visibleToUser=true] +2 @View[clickable=true] > [text="批准"]',
+            '@View[clickable=true][getChild(0).text="批准"] -2 EditText[text.length>=2] -2 [text="身份验证请求"] < View <<5 [id="android:id/content"]',
           snapshotUrls: 'https://i.gkd.li/i/28906388',
           exampleUrls: 'https://e.gkd.li/86a9d677-6f59-4a3a-81d0-8bb0d6847ca9',
         },
         {
           preKeys: [0],
+          name: '②点击[关闭]',
           matches:
-            '[text="登录已批准" || text="无法批准" || text="未找到登录请求"] +n @[clickable=true] > [text="关闭"][visibleToUser=true]',
+            '@View[clickable=true][getChild(0).text="关闭" && visibleToUser=true] -(1,2) [text="登录已批准" || text="无法批准" || text="未找到登录请求"] < * <<5 [id="android:id/content"]',
           snapshotUrls: [
             'https://i.gkd.li/i/25366553', // 已批准
             'https://i.gkd.li/i/25366549', // 未批准
