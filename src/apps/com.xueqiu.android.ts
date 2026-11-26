@@ -172,5 +172,20 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 7,
+      name: '其他-关闭关注Tip',
+      desc: '某人主页,底部弹出[关注TA...] -> x掉',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: '.community.UserProfileActivity',
+          matches:
+            '[vid="designContentContainer"] > @[vid="designImageClose"][clickable=true] + [childCount=2] + [vid="designRightText"][text="关注"]',
+          exampleUrls: 'https://e.gkd.li/c0f2825f-ee37-4324-a479-db705300c9f1',
+          snapshotUrls: 'https://i.gkd.li/i/35475314',
+        },
+      ],
+    },
   ],
 });
