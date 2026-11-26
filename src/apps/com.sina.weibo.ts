@@ -352,7 +352,7 @@ export default defineGkdApp({
     {
       key: 29,
       name: '全屏广告-发现页弹窗',
-      desc: '点击×关闭发现页的发布会/直播推广弹窗',
+      desc: '点击×关闭发现页的弹窗',
       rules: [
         {
           matchRoot: true,
@@ -360,8 +360,11 @@ export default defineGkdApp({
           resetMatch: 'match',
           activityIds: '.MainTabActivity',
           matches:
-            '@[clickable=true][childCount=0] <1 [childCount=2] <2 * <1 * >2 [desc="广告"]',
-          snapshotUrls: 'https://i.gkd.li/i/35392878',
+            '@[clickable=true][childCount=0][width<120][height<120] <<n * >(1,2,3) [desc="广告"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/35392878',
+            'https://i.gkd.li/i/35441180',
+          ],
           exampleUrls: 'https://e.gkd.li/6156ade7-09c6-48f6-897e-4e701f648b2e',
         },
       ],
