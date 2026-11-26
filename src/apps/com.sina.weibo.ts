@@ -352,7 +352,7 @@ export default defineGkdApp({
     {
       key: 29,
       name: '全屏广告-发现页弹窗',
-      desc: '点击×关闭发现页的发布会/直播推广弹窗',
+      desc: '点击×关闭发现页的弹窗',
       rules: [
         {
           matchRoot: true,
@@ -360,9 +360,35 @@ export default defineGkdApp({
           resetMatch: 'match',
           activityIds: '.MainTabActivity',
           matches:
-            '@[clickable=true][childCount=0] <1 [childCount=2] <2 * <1 * >2 [desc="广告"]',
-          snapshotUrls: 'https://i.gkd.li/i/35392878',
+            '@[clickable=true][width<114 && height<114] < [index=parent.childCount.minus(1)] <n * -> FrameLayout[childCount=1][getChild(childCount.minus(1)).desc="广告"][visibleToUser=true] -n * <<(10-n) [id="android:id/content"]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/35392878',
+            'https://i.gkd.li/i/35441180',
+          ],
           exampleUrls: 'https://e.gkd.li/6156ade7-09c6-48f6-897e-4e701f648b2e',
+        },
+      ],
+    },
+    {
+      key: 30,
+      name: '其他-关闭关注提示',
+      desc: '点击×关闭推荐关注横幅和铁粉关系提示',
+      fastQuery: true,
+      activityIds: '.search.searchv3.SearchActivityV2',
+      rules: [
+        {
+          key: 0,
+          name: '推荐关注',
+          matches:
+            '[vid="btnFollow"][clickable=true] - [childCount=2] - [vid="wbAvatar"][visibleToUser=true] < [childCount=3] + [vid="close_layout"][clickable=true]',
+          snapshotUrls: 'https://i.gkd.li/i/35419581',
+          exampleUrls: 'https://e.gkd.li/aeacd3ec-8c8a-44ed-9908-a466c7067046',
+        },
+        {
+          key: 1,
+          name: '铁粉关系',
+          matches:
+            '[vid="ivTipIcon"] + [vid="tvTipMsg"][text*="铁粉关系" && text$="查看详情"][visibleToUser=true] + [vid="ivClose"][clickable=true]',
         },
       ],
     },
