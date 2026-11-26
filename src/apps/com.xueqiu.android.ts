@@ -10,11 +10,21 @@ export default defineGkdApp({
       rules: [
         {
           fastQuery: true,
-          activityIds: '.mainnesting.view.MainNestingActivity',
+          activityIds: [
+            '.mainnesting.view.MainNestingActivity',
+            '.stockmodule.stockdetail.RipplingStockDetailActivity',
+          ],
           matches: '[vid="ad_close"]',
-          exampleUrls:
+          exampleUrls: [
             'https://m.gkd.li/33366298/d05d1eec-cda5-4d37-a494-8eef7b7871dd',
-          snapshotUrls: 'https://i.gkd.li/i/13388227',
+            'https://e.gkd.li/bc586461-bc96-4fbc-8b7c-3d65578c84d9',
+            'https://e.gkd.li/004d55b4-5f93-4bae-95b3-b2404e9e5594',
+          ],
+          snapshotUrls: [
+            'https://i.gkd.li/i/13388227',
+            'https://i.gkd.li/i/35474041',
+            'https://i.gkd.li/i/35474228',
+          ],
         },
       ],
     },
@@ -59,11 +69,11 @@ export default defineGkdApp({
       name: '局部广告',
       desc: '卡片/横幅/AI_Tooltip',
       fastQuery: true,
-      activityIds: '.mainnesting.view.MainNestingActivity',
       rules: [
         {
           key: 0,
           name: '首页顶部卡片',
+          activityIds: '.mainnesting.view.MainNestingActivity',
           matches:
             '[text="点击领取"] <<(6-n) [vid="tv_fund_obtain"] + [vid="iv_fund_big_card_close"][clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/35472886',
@@ -72,14 +82,30 @@ export default defineGkdApp({
         {
           key: 1,
           name: '横幅',
-          matches:
+          activityIds: [
+            '.mainnesting.view.MainNestingActivity',
+            '.stockmodule.stockdetail.RipplingStockDetailActivity',
+            '.common.search.USearchActivity',
+          ],
+          anyMatches: [
             '[vid="btn_ad_bee_action"] + [vid="iv_ad_bee_close"][clickable=true]',
-          snapshotUrls: 'https://i.gkd.li/i/35473208',
-          exampleUrls: 'https://e.gkd.li/354a3d80-979b-40cd-a7f0-d491220ee07e',
+            '[vid="ivIcon"] +2 [vid="tvSubDesc"] + [vid="btn_go_open"] + [vid="iv_close"][clickable=true]',
+          ],
+          snapshotUrls: [
+            'https://i.gkd.li/i/35473208', // 首页-> 自选 顶部
+            'https://i.gkd.li/i/35474651', // 股票详情页
+            'https://i.gkd.li/i/35474361', // 搜索结果页
+          ],
+          exampleUrls: [
+            'https://e.gkd.li/354a3d80-979b-40cd-a7f0-d491220ee07e',
+            'https://e.gkd.li/dd3310db-e561-4ee0-aefa-f3322ca6410b',
+            'https://e.gkd.li/d207e603-dfaf-4c87-9ca2-5f5271f6e3be',
+          ],
         },
         {
           key: 2,
           name: 'AI_Tooltip',
+          activityIds: '.mainnesting.view.MainNestingActivity',
           matches:
             '[vid="home_ai_guide_tip"][visibleToUser=true] + [vid="home_ai_guide_close_img"][clickable=true]',
           exampleUrls: 'https://e.gkd.li/f1004a22-94d9-4b8a-99e2-a572921a0ffc',
@@ -87,10 +113,23 @@ export default defineGkdApp({
         {
           key: 3,
           name: '文章尾部卡片',
+          activityIds: '.community.StatusDetailActivityWithNewWeb',
           matches:
             '[vid="ad_image"][visibleToUser=true] +2 [vid="iv_close"][clickable=true]',
-          snapshotUrls: 'https://i.gkd.li/i/35473510',
+          snapshotUrls: [
+            'https://i.gkd.li/i/35473510',
+            'https://i.gkd.li/i/35474156',
+          ],
           exampleUrls: 'https://e.gkd.li/707d9e43-52f9-42b7-9a37-82fb66f27e4e',
+        },
+        {
+          key: 4,
+          name: '搜索页卡片',
+          activityIds: '.common.search.USearchActivity',
+          matches:
+            '[vid="mark_ad"][visibleToUser=true] - [vid="ib_close_ad"][clickable=true]',
+          snapshotUrls: 'https://i.gkd.li/i/35473705',
+          exampleUrls: 'https://e.gkd.li/a9905b8f-109f-41ca-bd8b-a21a88a20199',
         },
       ],
     },
