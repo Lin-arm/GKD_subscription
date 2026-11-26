@@ -51,16 +51,27 @@ export default defineGkdApp({
       key: 3,
       name: '全屏广告',
       desc: '点击关闭',
-      matchTime: 10000,
-      actionMaximum: 1,
-      resetMatch: 'app',
+      fastQuery: true,
       rules: [
         {
-          fastQuery: true,
+          key: 0,
+          name: '首页',
           activityIds: '.mainnesting.view.MainNestingActivity',
+          matchTime: 10000,
+          actionMaximum: 1,
+          resetMatch: 'app',
           matches: '[vid="image_cancel"][visibleToUser=true]',
           exampleUrls: 'https://e.gkd.li/5229142b-49d5-4985-ab75-104e46ede45e',
           snapshotUrls: 'https://i.gkd.li/i/22995479',
+        },
+        {
+          key: 1,
+          name: '小雪理财课',
+          activityIds: '.community.guide.PaddyUserGuideActivity',
+          matches:
+            '[vid="xue_video_container"] + [vid="tv_skip"][clickable=true]',
+          exampleUrls: 'https://e.gkd.li/389ced96-2385-4349-8ef3-87cb71c0cb88',
+          snapshotUrls: 'https://i.gkd.li/i/35474964',
         },
       ],
     },
@@ -130,6 +141,21 @@ export default defineGkdApp({
             '[vid="mark_ad"][visibleToUser=true] - [vid="ib_close_ad"][clickable=true]',
           snapshotUrls: 'https://i.gkd.li/i/35473705',
           exampleUrls: 'https://e.gkd.li/a9905b8f-109f-41ca-bd8b-a21a88a20199',
+        },
+      ],
+    },
+    {
+      key: 5,
+      name: '全屏广告-开通股票账户',
+      desc: '进入某股票 -> 股票开通股票账户 -> x掉',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: '.stockmodule.stockdetail.RipplingStockDetailActivity',
+          matches:
+            '[text="开通股票账户"] - [vid="image_close"][clickable=true]',
+          snapshotUrls: 'https://i.gkd.li/i/35475071',
+          exampleUrls: 'https://e.gkd.li/d4323015-34d0-473c-b2a9-334f0cb6a22c',
         },
       ],
     },
