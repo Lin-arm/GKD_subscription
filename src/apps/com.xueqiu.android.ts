@@ -84,6 +84,14 @@ export default defineGkdApp({
             '[vid="home_ai_guide_tip"][visibleToUser=true] + [vid="home_ai_guide_close_img"][clickable=true]',
           exampleUrls: 'https://e.gkd.li/f1004a22-94d9-4b8a-99e2-a572921a0ffc',
         },
+        {
+          key: 3,
+          name: '文章尾部卡片',
+          matches:
+            '[vid="ad_image"][visibleToUser=true] +2 [vid="iv_close"][clickable=true]',
+          snapshotUrls: 'https://i.gkd.li/i/35473510',
+          exampleUrls: 'https://e.gkd.li/707d9e43-52f9-42b7-9a37-82fb66f27e4e',
+        },
       ],
     },
   ],
