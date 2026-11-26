@@ -159,5 +159,18 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 6,
+      name: '功能类-自动点击[查看原图]',
+      rules: [
+        {
+          fastQuery: true,
+          activityIds: '.common.imagebrowse.inner.ui.ImageBrowseActivity',
+          matches: '[text="查看原图"][clickable=true]',
+          snapshotUrls: 'https://i.gkd.li/i/35474051',
+          exampleUrls: 'https://e.gkd.li/b9848418-42d3-4fa7-abb5-75f363c9b7dc',
+        },
+      ],
+    },
   ],
 });
