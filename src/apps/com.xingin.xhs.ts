@@ -80,6 +80,13 @@ export default defineGkdApp({
           matches: '@ImageView <2 FrameLayout - [text^="打开通知"]',
           snapshotUrls: 'https://i.gkd.li/i/13250418',
         },
+        {
+          key: 2,
+          activityIds:
+            'com.xingin.authorization.NotificationAuthorizationTranslucentActivity',
+          matches: '@[text="取消"][clickable=true][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/35457404',
+        },
       ],
     },
     {
