@@ -331,5 +331,21 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 18,
+      name: '功能类-自动进入[快速验证]',
+      desc: '一般查看 购物车/订单 时会弹验证, 点击1次[快速验证]',
+      rules: [
+        {
+          fastQuery: true,
+          actionMaximum: 1,
+          resetMatch: 'match',
+          activityIds: '.bundle.jdrhsdk.JDRiskHandleActivity',
+          matches: '[text="快速验证"][clickable=true]',
+          snapshotUrls: 'https://i.gkd.li/i/35494504',
+          exampleUrls: 'https://e.gkd.li/a8907154-923b-4957-918f-2323e2fa767a',
+        },
+      ],
+    },
   ],
 });
