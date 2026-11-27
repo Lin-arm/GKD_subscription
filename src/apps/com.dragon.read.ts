@@ -558,11 +558,31 @@ export default defineGkdApp({
     {
       key: 21,
       name: '功能类-自动[展开更多]评论',
-      desc: '小说段评区/短剧评论区, 点击[展开更多/展开n条回复]',
+      desc: '小说段评区/评分区; 短剧评论区/剧评区, 点击[展开/展开更多/展开n条回复]',
+      fastQuery: true,
+      actionCd: 500,
       rules: [
         {
-          fastQuery: true,
-          actionCd: 500,
+          key: 1,
+          name: '①[展开]点评',
+          activityIds: [
+            'com.dragon.community.impl.comment.playlet.list.page.CSSPlayletCommentListActivity',
+            'com.dragon.community.impl.list.page.CSSBookCommentListActivity',
+          ],
+          matches:
+            '[text$="后点评"] < LinearLayout -2 ViewGroup > [text="展开"][clickable=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/35494357', //有一个未显示的 [text="展开"][clickable=true] 也可点击
+            'https://i.gkd.li/i/35494382',
+          ],
+          exampleUrls: [
+            'https://e.gkd.li/5ffee787-dca6-4e91-b908-96bf8f896e47',
+            'https://e.gkd.li/f81b3c2e-5b56-4dab-8eac-ba38396ab972',
+          ],
+        },
+        {
+          key: 2,
+          name: '②[展开]评论/回复',
           activityIds: [
             '.reader.ui.ReaderActivity', //A 小说阅读界面
             '.pages.main.MainFragmentActivity', //B 短剧界面
@@ -571,12 +591,13 @@ export default defineGkdApp({
           ],
           matches: [
             '[id="android:id/content"][height>prev.height.plus(100)] >n [id="android:id/content"][height>500]', //出现评论区的可快查特征, 防阻塞同界面的其他规则
-            '@[clickable=true] > [visibleToUser=true][text^="展开"][text$="回复" || text$="更多"]', //无快查
+            '(@[clickable=true] > [visibleToUser=true][text^="展开"][text$="回复" || text$="更多"]) || ([clickable=true][text="展开"])', //无快查
           ],
           snapshotUrls: [
             'https://i.gkd.li/i/35147917', //A 展开...条回复
             'https://i.gkd.li/i/35147919', //A 展开更多
             'https://i.gkd.li/i/35173217', //B 展开...条回复
+            'https://i.gkd.li/i/35494237', //B 展开
             'https://i.gkd.li/i/35203330', //C
             'https://i.gkd.li/i/35203316', //D
           ],
@@ -587,7 +608,45 @@ export default defineGkdApp({
           exampleUrls: [
             'https://e.gkd.li/e0c12712-4b1e-4b75-a9ec-d1a8042156f6',
             'https://e.gkd.li/0d2d257a-abda-4255-b971-faf06b565cb7',
+            'https://e.gkd.li/4fc71629-5b01-4c60-a356-0b89c3b7e162',
           ],
+        },
+      ],
+    },
+    {
+      key: 22,
+      name: '功能类-自动[展开]简介',
+      desc: '小说/短剧简介, 点击1次[展开]',
+      actionMaximum: 1,
+      resetMatch: 'match',
+      rules: [
+        {
+          key: 1,
+          name: '①[展开]短剧简介',
+          fastQuery: true,
+          activityIds: [
+            '.reader.ui.ReaderActivity',
+            '.component.shortvideo.impl.ShortSeriesActivity',
+          ],
+          matches:
+            '[vid="title"][text$="简介"] + ViewGroup > [text="展开"][clickable=true][visibleToUser=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/35494458',
+            'https://i.gkd.li/i/35494462',
+          ],
+          exampleUrls: [
+            'https://e.gkd.li/20fe96c0-f378-4a0d-8146-7bc089b7c864',
+            'https://e.gkd.li/e4e767e6-5d15-46af-8065-dffdcd42da09',
+          ],
+        },
+        {
+          key: 2,
+          name: '②[展开]小说简介',
+          activityIds: '.reader.detail.BookDetailActivity',
+          matches:
+            'TextView[text="简介"] +n View[childCount=2] > TextView[clickable=true][text="展开"][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/35494527',
+          exampleUrls: 'https://e.gkd.li/c88a8d15-fb17-44d3-b350-7d73df73e566',
         },
       ],
     },
