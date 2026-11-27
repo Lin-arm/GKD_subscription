@@ -591,5 +591,68 @@ export default defineGkdApp({
         },
       ],
     },
+    {
+      key: 22,
+      name: '功能类-自动点击 [展开]',
+      desc: '短剧评论区/小说简介/短剧简介/书评 折叠的内容，自动点击 [展开]',
+      fastQuery: false,
+      actionCd: 500,
+      rules: [
+        {
+          key: 0,
+          name: '展开短剧评论正文',
+          activityIds: '.pages.main.MainFragmentActivity',
+          matches:
+            'TextView[text="回复"][visibleToUser=true] <n View[clickable=true] > View > @TextView[text="展开"][clickable=true][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/35494237',
+          exampleUrls: 'https://e.gkd.li/4fc71629-5b01-4c60-a356-0b89c3b7e162',
+        },
+        {
+          key: 1,
+          name: '展开书评或剧评正文',
+          activityIds: [
+            'com.dragon.community.impl.comment.playlet.list.page.CSSPlayletCommentListActivity',
+            'com.dragon.community.impl.list.page.CSSBookCommentListActivity',
+          ],
+          matches:
+            '[vid="root_layout"] > ViewGroup[vid="content_text"] > @TextView[text="展开"][clickable=true][visibleToUser=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/35494357',
+            'https://i.gkd.li/i/35494382',
+          ],
+          exampleUrls: [
+            'https://e.gkd.li/5ffee787-dca6-4e91-b908-96bf8f896e47',
+            'https://e.gkd.li/f81b3c2e-5b56-4dab-8eac-ba38396ab972',
+          ],
+        },
+        {
+          key: 2,
+          name: '展开短剧简介',
+          activityIds: [
+            '.reader.ui.ReaderActivity',
+            '.component.shortvideo.impl.ShortSeriesActivity',
+          ],
+          matches:
+            'TextView[vid="title"][text="简介" || text="剧情简介"] + ViewGroup > @TextView[text="展开"][clickable=true][visibleToUser=true]',
+          snapshotUrls: [
+            'https://i.gkd.li/i/35494458',
+            'https://i.gkd.li/i/35494462',
+          ],
+          exampleUrls: [
+            'https://e.gkd.li/20fe96c0-f378-4a0d-8146-7bc089b7c864',
+            'https://e.gkd.li/e4e767e6-5d15-46af-8065-dffdcd42da09',
+          ],
+        },
+        {
+          key: 3,
+          name: '展开小说简介',
+          activityIds: '.reader.detail.BookDetailActivity',
+          matches:
+            'TextView[text="简介"] +n View[clickable=true][childCount=2] > @TextView[text="展开"][clickable=true][visibleToUser=true]',
+          snapshotUrls: 'https://i.gkd.li/i/35494527',
+          exampleUrls: 'https://e.gkd.li/c88a8d15-fb17-44d3-b350-7d73df73e566',
+        },
+      ],
+    },
   ],
 });
