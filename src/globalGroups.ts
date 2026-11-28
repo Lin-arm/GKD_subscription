@@ -27,14 +27,16 @@ export default defineGkdGlobalGroups([
         excludeMatches:
           '([text="Submit" || text="书签" || text="NEXT" || text="覆盖" || text*="阅读并同意" || text="跳过空白"][visibleToUser=true]) || ([text*="搜索" || text="历史记录" || text$="在搜"][text.length>3 && text.length<7][visibleToUser=true]) || ([text$="设置" || text*="跳过片"][text.length<10][visibleToUser=true]) || ([text^="选择"][text*="偏好" || text*="兴趣" || text*="喜好" || text*="行业"][text.length<10][visibleToUser=true])',
         anyMatches: [
-          '[text*="跳过"][text.length<10][width<500 && height<300][visibleToUser=true]',
-          '@[name$="View" || name$="LinearLayout"][clickable=true][childCount<2][width<300 && height<200] - [text="互动广告"][visibleToUser=true]',
-          '[childCount=0][visibleToUser=true][width<500 && height<300][(text.length<10 && (text*="跳过" || text*="跳 过" || text*="跳過" || text~="(?is).*skip.*") && text!*="视频" && text!*="片头" && text!*="片尾") || (vid~="(?is).*skip.*" && vid!~="(?is).*video.*" && vid!~="(?is).*head.*" && vid!~="(?is).*tail.*" && !(text="帮助") && !(text="取消") && !(text*="退出")) || id$="tt_splash_skip_btn" || (desc.length<10 && (desc*="跳过" || desc*="跳過" || desc~="(?is).*skip.*"))]',
+          '[text*="跳过"][text.length<10][width<500 && height<300][visibleToUser=true]', //1️⃣
+          '@[name$="View" || name$="LinearLayout"][clickable=true][childCount<3][width<300 && height<200] -(1,2) [text^="互动广告" || text="广告"][visibleToUser=true]', //2️⃣
+          '[childCount=0][visibleToUser=true][width<500 && height<300][(text.length<10 && (text*="跳过" || text*="跳 过" || text*="跳過" || text~="(?is).*skip.*") && text!*="视频" && text!*="片头" && text!*="片尾") || (vid~="(?is).*skip.*" && vid!~="(?is).*video.*" && vid!~="(?is).*head.*" && vid!~="(?is).*tail.*" && !(text="帮助") && !(text="取消") && !(text*="退出")) || id$="tt_splash_skip_btn" || (desc.length<10 && (desc*="跳过" || desc*="跳過" || desc~="(?is).*skip.*"))]', //3️⃣
         ],
         snapshotUrls: [
-          // 互动开屏广告
+          //2️⃣ 互动开屏广告
           'https://i.gkd.li/i/21617612',
           'https://i.gkd.li/i/23557410',
+          'https://i.gkd.li/i/13198082', // [text="互动广告 | 已Wi-Fi预加载"]
+          'https://i.gkd.li/i/35394224', // [text="广告"]
 
           // text*="跳 过"
           'https://i.gkd.li/i/13421452',
@@ -73,7 +75,7 @@ export default defineGkdGlobalGroups([
         ],
       },
       {
-        key: 1, // 字节SDK
+        key: 1, // 字节(穿山甲)SDK
         anyMatches: [
           '@View[text=null][clickable=true][childCount=0][visibleToUser=true][width<200&&height<200] +(1,2) TextView[index=parent.childCount.minus(1)][childCount=0] <n FrameLayout[childCount>2][text=null][desc=null] >(n+6) [text*="第三方应用" || text*="扭动手机" || text*="点击或上滑" || text*="省钱好物" || text*="扭一扭"][visibleToUser=true]',
           'FrameLayout > FrameLayout[childCount>2][text=null][desc=null] > @View[text=null][clickable=true][childCount=0][visibleToUser=true][width<200&&height<200] +(1,2) TextView[index=parent.childCount.minus(1)][childCount=0][visibleToUser=true]',

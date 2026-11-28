@@ -36,7 +36,7 @@
     {
       "id": "8995eaa8-4a37-4f91-9b4c-f65de29d3777",
       "name": "互动开屏",
-      "selector": "@[name$=\"View\" || name$=\"LinearLayout\"][clickable=true][childCount<2][width<300 && height<200] - [text=\"互动广告\"][visibleToUser=true]",
+      "selector": "@[name$=\"View\" || name$=\"LinearLayout\"][clickable=true][childCount<3][width<300 && height<200] -(1,2) [text^=\"互动广告\" || text=\"广告\"][visibleToUser=true]",
       "description": "互动开屏广告",
       "tags": ["667"],
       "scope": "global"
